@@ -1,0 +1,29 @@
+# Git & version control
+.git
+.gitignore
+
+# Python cache & virtual environments
+__pycache__
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Testing & Coverage
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database (will be seeded freshly during build)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

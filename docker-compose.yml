@@ -1,0 +1,20 @@
+services:
+  nusa-matra-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nusa-matra-data-hub:latest
+    container_name: nusa-matra-data-hub
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - NM_DEFAULT_MODE=DEMO
+      - NM_DEBUG=false
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
