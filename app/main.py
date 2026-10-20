@@ -6,13 +6,19 @@ Serves /api/v1 endpoints for the Nusa Matra 3D map frontend.
 """
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import init_db
 from app.middleware.mode_selector import ModeSelector
 from app.routers import regions, indicators, boundaries, datasets, snapshots, health
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 
 @asynccontextmanager
@@ -32,10 +38,43 @@ app = FastAPI(
         "berbasis peta 3D. Mode saat ini: DEMO."
     ),
     lifespan=lifespan,
-    docs_url=f"{settings.api_prefix}/docs",
-    redoc_url=f"{settings.api_prefix}/redoc",
+    docs_url=None,
+    redoc_url=None,
     openapi_url=f"{settings.api_prefix}/openapi.json",
 )
+
+# --- Static files & Favicon ---
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    """Serve custom favicon for the browser."""
+    ico_path = STATIC_DIR / "favicon.ico"
+    if ico_path.exists():
+        return FileResponse(ico_path)
+    return FileResponse(STATIC_DIR / "favicon.png")
+
+
+@app.get(f"{settings.api_prefix}/docs", include_in_schema=False)
+async def custom_swagger_ui_html():
+    """Swagger UI with custom Nusa Matra favicon."""
+    return get_swagger_ui_html(
+        openapi_url=app.openapi_url,
+        title=f"{app.title} - Swagger UI",
+        swagger_favicon_url="/static/favicon.png",
+    )
+
+
+@app.get(f"{settings.api_prefix}/redoc", include_in_schema=False)
+async def custom_redoc_html():
+    """ReDoc with custom Nusa Matra favicon."""
+    return get_redoc_html(
+        openapi_url=app.openapi_url,
+        title=f"{app.title} - ReDoc",
+        redoc_favicon_url="/static/favicon.png",
+    )
 
 # --- Middleware ---
 # CORS (permissive for development)

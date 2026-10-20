@@ -17,6 +17,17 @@ async def test_root_endpoint(client):
 
 
 @pytest.mark.asyncio
+async def test_favicon_and_docs_custom_icon(client):
+    """GET /favicon.ico and /api/v1/docs should serve custom favicon."""
+    resp = await client.get("/favicon.ico")
+    assert resp.status_code == 200
+
+    docs_resp = await client.get("/api/v1/docs")
+    assert docs_resp.status_code == 200
+    assert "/static/favicon.png" in docs_resp.text
+
+
+@pytest.mark.asyncio
 async def test_boundaries_kabupaten_default_geojson(client):
     """GET /boundaries/kabupaten should default to GeoJSON format."""
     resp = await client.get("/api/v1/boundaries/kabupaten")
