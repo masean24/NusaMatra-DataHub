@@ -43,6 +43,21 @@ async def compute_composite_scores(
             f"Weights must sum to 10000 basis points, got {weight_sum}"
         )
 
+    # Validate that all indicator_ids exist in the catalog
+    placeholders_check = ",".join("?" for _ in indicator_ids)
+    cursor_check = await db.execute(
+        f"SELECT indicator_id FROM dim_indicators WHERE indicator_id IN ({placeholders_check})",
+        indicator_ids,
+    )
+    found_rows = await cursor_check.fetchall()
+    found_ids = {r["indicator_id"] for r in found_rows}
+    unknown_ids = [iid for iid in indicator_ids if iid not in found_ids]
+    if unknown_ids:
+        raise ValueError(
+            f"Unknown indicator_id(s): {', '.join(unknown_ids)}. "
+            "Check GET /indicators for valid IDs."
+        )
+
     # Build query to fetch normalized scores for requested indicators
     placeholders = ",".join("?" for _ in indicator_ids)
 
