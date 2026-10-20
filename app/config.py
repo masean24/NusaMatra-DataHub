@@ -4,6 +4,7 @@ Uses pydantic-settings for typed config with .env file support.
 """
 
 from pathlib import Path
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
 
 
@@ -23,9 +24,14 @@ class Settings(BaseSettings):
     default_snapshot_id: str = "2026.10.0-wia-demo"
     boundary_version: str = "BIG-Kepmendagri-300.2.2-2430-2025"
 
-    # API settings
+    # API settings & documentation
     api_prefix: str = "/api/v1"
     cors_origins: list[str] = ["*"]
+    enable_docs: bool = Field(
+        default=True,
+        validation_alias=AliasChoices("ENABLE_DOCS", "NM_ENABLE_DOCS", "enable_docs"),
+        description="Toggle API documentation (/docs, /redoc, /scalar, and openapi.json)",
+    )
 
     model_config = {"env_prefix": "NM_", "env_file": ".env", "extra": "ignore"}
 

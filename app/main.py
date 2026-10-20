@@ -11,7 +11,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 from fastapi.responses import FileResponse
+from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from scalar_fastapi import get_scalar_api_reference
 
 from app.config import settings
 from app.database import init_db
@@ -19,6 +21,11 @@ from app.middleware.mode_selector import ModeSelector
 from app.routers import regions, indicators, boundaries, datasets, snapshots, health
 
 STATIC_DIR = Path(__file__).parent / "static"
+
+
+def custom_generate_unique_id(route: APIRoute) -> str:
+    """Use the endpoint function name as the OpenAPI operation ID."""
+    return route.endpoint.__name__
 
 
 @asynccontextmanager
@@ -33,14 +40,16 @@ app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description=(
-        "Nusa Matra Data Hub API — Menyajikan data indikator pembangunan "
-        "514 Kabupaten/Kota Indonesia untuk sistem pendukung keputusan "
-        "berbasis peta 3D. Mode saat ini: DEMO."
+        "Nusa Matra Data Hub API — Geographic Decision-Support Backend API (WIA 2026).\n\n"
+        "Menyajikan data indikator pembangunan 514 Kabupaten/Kota Indonesia "
+        "untuk sistem pendukung keputusan berbasis peta 3D. "
+        f"Mode default: {settings.default_mode}."
     ),
+    generate_unique_id_function=custom_generate_unique_id,
     lifespan=lifespan,
     docs_url=None,
     redoc_url=None,
-    openapi_url=f"{settings.api_prefix}/openapi.json",
+    openapi_url=f"{settings.api_prefix}/openapi.json" if settings.enable_docs else None,
 )
 
 # --- Static files & Favicon ---
@@ -57,24 +66,37 @@ async def favicon():
     return FileResponse(STATIC_DIR / "favicon.png")
 
 
-@app.get(f"{settings.api_prefix}/docs", include_in_schema=False)
-async def custom_swagger_ui_html():
-    """Swagger UI with custom Nusa Matra favicon."""
-    return get_swagger_ui_html(
-        openapi_url=app.openapi_url,
-        title=f"{app.title} - Swagger UI",
-        swagger_favicon_url="/static/favicon.png",
-    )
+# --- Documentation routes (conditioned on ENABLE_DOCS) ---
+if settings.enable_docs:
+    @app.get("/scalar", include_in_schema=False)
+    @app.get(f"{settings.api_prefix}/scalar", include_in_schema=False)
+    async def scalar_html():
+        """Interactive API documentation powered by Scalar."""
+        return get_scalar_api_reference(
+            openapi_url=app.openapi_url,
+            title=app.title,
+            scalar_favicon_url="/static/favicon.png",
+        )
 
+    @app.get("/docs", include_in_schema=False)
+    @app.get(f"{settings.api_prefix}/docs", include_in_schema=False)
+    async def custom_swagger_ui_html():
+        """Swagger UI with custom Nusa Matra favicon."""
+        return get_swagger_ui_html(
+            openapi_url=app.openapi_url,
+            title=f"{app.title} - Swagger UI",
+            swagger_favicon_url="/static/favicon.png",
+        )
 
-@app.get(f"{settings.api_prefix}/redoc", include_in_schema=False)
-async def custom_redoc_html():
-    """ReDoc with custom Nusa Matra favicon."""
-    return get_redoc_html(
-        openapi_url=app.openapi_url,
-        title=f"{app.title} - ReDoc",
-        redoc_favicon_url="/static/favicon.png",
-    )
+    @app.get("/redoc", include_in_schema=False)
+    @app.get(f"{settings.api_prefix}/redoc", include_in_schema=False)
+    async def custom_redoc_html():
+        """ReDoc with custom Nusa Matra favicon."""
+        return get_redoc_html(
+            openapi_url=app.openapi_url,
+            title=f"{app.title} - ReDoc",
+            redoc_favicon_url="/static/favicon.png",
+        )
 
 # --- Middleware ---
 # CORS (permissive for development)
@@ -101,11 +123,10 @@ app.include_router(snapshots.router, prefix=settings.api_prefix)
 @app.get("/", tags=["Root"])
 async def root():
     """Root endpoint — API info and links."""
-    return {
+    res = {
         "service": settings.app_name,
         "version": settings.app_version,
         "mode": settings.default_mode,
-        "docs": f"{settings.api_prefix}/docs",
         "health": f"{settings.api_prefix}/health",
         "endpoints": {
             "regions": f"{settings.api_prefix}/regions",
@@ -120,6 +141,10 @@ async def root():
             "Not sourced from verified LIVE measurements."
         ),
     }
+    if settings.enable_docs:
+        res["docs"] = f"{settings.api_prefix}/docs"
+        res["scalar_docs"] = "/scalar"
+    return res
 
 
 if __name__ == "__main__":
