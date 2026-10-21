@@ -25,7 +25,11 @@ random.seed(42)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = REPO_ROOT / "data" / "nusa_matra_demo.db"
 MIGRATION_PATH = REPO_ROOT / "migrations" / "001_init_schema.sql"
-CSV_PATH = REPO_ROOT / "INDICATOR_MAPPING.csv"
+CSV_PATH = (
+    REPO_ROOT / "data" / "INDICATOR_MAPPING.csv"
+    if (REPO_ROOT / "data" / "INDICATOR_MAPPING.csv").exists()
+    else REPO_ROOT / "INDICATOR_MAPPING.csv"
+)
 
 # ─── Province Master Data ─────────────────────────────────────────────────────
 # (code, name, short_name, island_group, num_kab, num_kota, center_lat, center_lng)
