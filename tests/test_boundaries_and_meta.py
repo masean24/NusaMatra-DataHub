@@ -18,26 +18,25 @@ async def test_root_endpoint(client):
 
 @pytest.mark.asyncio
 async def test_favicon_and_docs_custom_icon(client):
-    """GET /favicon.ico and /api/v1/docs should serve custom favicon and dark makeover."""
+    """GET /favicon.ico and /api/v1/docs should serve custom favicon and Scalar docs."""
     resp = await client.get("/favicon.ico")
     assert resp.status_code == 200
 
     docs_resp = await client.get("/api/v1/docs")
     assert docs_resp.status_code == 200
     assert "/static/favicon.png" in docs_resp.text
-    assert "nm-header" in docs_resp.text
-    assert "Swagger UI" in docs_resp.text
+    assert "@scalar/api-reference" in docs_resp.text
 
 
 @pytest.mark.asyncio
-async def test_stoplight_elements_endpoint(client):
-    """GET /elements and /api/v1/elements should serve Stoplight Elements UI."""
-    for path in ("/elements", "/api/v1/elements"):
+async def test_scalar_docs_endpoints(client):
+    """GET /docs, /api/v1/docs, /scalar should all serve Scalar API Reference."""
+    for path in ("/docs", "/api/v1/docs", "/scalar", "/api/v1/scalar"):
         resp = await client.get(path)
         assert resp.status_code == 200
-        assert "<elements-api" in resp.text
-        assert "@stoplight/elements" in resp.text
-        assert "Nusa Matra Data Hub" in resp.text
+        assert "api-reference" in resp.text
+        assert "@scalar/api-reference" in resp.text
+        assert "deepSpace" in resp.text
 
 
 @pytest.mark.asyncio
@@ -72,8 +71,8 @@ async def test_docs_disabled_when_enable_docs_is_false(monkeypatch):
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         assert (await ac.get("/docs")).status_code == 404
         assert (await ac.get("/api/v1/docs")).status_code == 404
-        assert (await ac.get("/elements")).status_code == 404
-        assert (await ac.get("/api/v1/elements")).status_code == 404
+        assert (await ac.get("/scalar")).status_code == 404
+        assert (await ac.get("/api/v1/scalar")).status_code == 404
         assert (await ac.get("/redoc")).status_code == 404
         assert (await ac.get("/api/v1/redoc")).status_code == 404
         assert (await ac.get("/api/v1/openapi.json")).status_code == 404
