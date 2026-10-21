@@ -77,6 +77,69 @@ async def test_live_mode_composite_post_returns_503(client):
 
 
 # ---------------------------------------------------------------------------
+# CORS verification — preflight & error responses (including 503 LIVE)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_cors_options_preflight_for_frontend_dev(client):
+    """OPTIONS preflight with Origin and X-Data-Mode header must succeed (200)."""
+    resp = await client.options(
+        "/api/v1/health",
+        headers={
+            "Origin": "http://localhost:5173",
+            "Access-Control-Request-Method": "GET",
+            "Access-Control-Request-Headers": "X-Data-Mode",
+        },
+    )
+    assert resp.status_code == 200
+    assert resp.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    assert "GET" in resp.headers.get("access-control-allow-methods", "")
+    assert "X-Data-Mode" in resp.headers.get("access-control-allow-headers", "")
+
+
+@pytest.mark.asyncio
+async def test_cors_headers_present_on_live_503_error(client):
+    """503 LIVE response must include CORS headers for browser frontends."""
+    resp = await client.get(
+        "/api/v1/health",
+        headers={
+            "Origin": "http://localhost:5173",
+            "X-Data-Mode": "LIVE",
+        },
+    )
+    assert resp.status_code == 503
+    assert resp.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    assert resp.headers.get("x-data-fallback") == "UNAVAILABLE"
+
+    # Verify custom headers are exposed to browser JavaScript
+    exposed = resp.headers.get("access-control-expose-headers", "")
+    assert "X-Data-Fallback" in exposed
+    assert "X-NusaMatra-Mode" in exposed
+
+
+@pytest.mark.asyncio
+async def test_cors_headers_present_on_post_live_503_error(client):
+    """POST 503 LIVE response must also include CORS headers."""
+    resp = await client.post(
+        "/api/v1/indicators/composite-query",
+        headers={
+            "Origin": "http://localhost:5173",
+            "X-Data-Mode": "LIVE",
+        },
+        json={
+            "weights": {
+                "dis_multihazard_index": 5000,
+                "soc_poverty_rate": 5000,
+            }
+        },
+    )
+    assert resp.status_code == 503
+    assert resp.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    assert resp.headers.get("x-data-fallback") == "UNAVAILABLE"
+
+
+# ---------------------------------------------------------------------------
 # Composite query — weight validation (422)
 # ---------------------------------------------------------------------------
 

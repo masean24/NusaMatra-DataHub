@@ -88,17 +88,36 @@ if settings.enable_docs:
         )
 
 # --- Middleware ---
-# CORS (permissive for development)
+# In Starlette, middleware added LAST executes FIRST (outermost wrapper).
+# ModeSelector is registered first (inner), and CORSMiddleware is registered
+# last (outermost) so that even short-circuited error responses (e.g. 503 LIVE
+# fail-closed) receive full CORS headers (Access-Control-Allow-Origin, etc.).
+app.add_middleware(ModeSelector)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=[
+        "X-Data-Mode",
+        "X-NusaMatra-Mode",
+        "X-NusaMatra-Snapshot",
+        "Content-Type",
+        "Authorization",
+        "Accept",
+        "Origin",
+        "X-Requested-With",
+        "*",
+    ],
+    expose_headers=[
+        "X-NusaMatra-Mode",
+        "X-NusaMatra-Snapshot",
+        "X-Data-Fallback",
+        "Content-Length",
+    ],
 )
-
-# Data mode selector (DEMO/LIVE) — must be added after CORS
-app.add_middleware(ModeSelector)
 
 # --- Routers ---
 app.include_router(health.router, prefix=settings.api_prefix)
