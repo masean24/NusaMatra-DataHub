@@ -1,0 +1,527 @@
+kemendikdasmen_prov_code,region_name,edu_schools_sd,edu_schools_smp,edu_schools_sma,edu_schools_smk,edu_schools_slb,edu_schools_total,source
+010000,Kab. Adm. Kep. Seribu,15,8,2,1,0,26,Kemendikdasmen Referensi 2026
+010000,Kota Adm. Jakarta Pusat,272,121,65,56,6,520,Kemendikdasmen Referensi 2026
+010000,Kota Adm. Jakarta Utara,409,231,112,76,10,838,Kemendikdasmen Referensi 2026
+010000,Kota Adm. Jakarta Barat,679,328,143,122,21,1293,Kemendikdasmen Referensi 2026
+010000,Kota Adm. Jakarta Selatan,601,293,143,122,26,1185,Kemendikdasmen Referensi 2026
+010000,Kota Adm. Jakarta Timur,738,371,170,183,25,1487,Kemendikdasmen Referensi 2026
+020000,Kab. Bogor,2532,1175,410,380,6,4503,Kemendikdasmen Referensi 2026
+020000,Kab. Sukabumi,1581,737,261,165,11,2755,Kemendikdasmen Referensi 2026
+020000,Kab. Cianjur,1483,642,196,187,11,2519,Kemendikdasmen Referensi 2026
+020000,Kab. Bandung,1612,645,278,141,46,2722,Kemendikdasmen Referensi 2026
+020000,Kab. Sumedang,684,223,61,90,36,1094,Kemendikdasmen Referensi 2026
+020000,Kab. Garut,1878,750,295,167,37,3127,Kemendikdasmen Referensi 2026
+020000,Kab. Tasikmalaya,1293,537,183,135,16,2164,Kemendikdasmen Referensi 2026
+020000,Kab. Ciamis,920,263,97,65,25,1370,Kemendikdasmen Referensi 2026
+020000,Kab. Kuningan,756,195,75,44,16,1086,Kemendikdasmen Referensi 2026
+020000,Kab. Majalengka,760,224,70,51,14,1119,Kemendikdasmen Referensi 2026
+020000,Kab. Cirebon,1030,377,133,110,15,1665,Kemendikdasmen Referensi 2026
+020000,Kab. Indramayu,1025,317,86,139,7,1574,Kemendikdasmen Referensi 2026
+020000,Kab. Subang,997,259,99,111,10,1476,Kemendikdasmen Referensi 2026
+020000,Kab. Purwakarta,492,190,76,61,6,825,Kemendikdasmen Referensi 2026
+020000,Kab. Karawang,1159,310,93,118,5,1685,Kemendikdasmen Referensi 2026
+020000,Kab. Bekasi,1361,600,191,193,10,2355,Kemendikdasmen Referensi 2026
+020000,Kab. Bandung Barat,927,378,158,98,19,1580,Kemendikdasmen Referensi 2026
+020000,Kab. Pangandaran,350,94,30,30,7,511,Kemendikdasmen Referensi 2026
+020000,Kota Bandung,569,321,180,107,44,1221,Kemendikdasmen Referensi 2026
+020000,Kota Bogor,336,186,81,102,11,716,Kemendikdasmen Referensi 2026
+020000,Kota Sukabumi,156,76,43,29,4,308,Kemendikdasmen Referensi 2026
+020000,Kota Cirebon,187,69,37,28,6,327,Kemendikdasmen Referensi 2026
+020000,Kota Bekasi,790,397,153,136,13,1489,Kemendikdasmen Referensi 2026
+020000,Kota Depok,589,362,120,125,10,1206,Kemendikdasmen Referensi 2026
+020000,Kota Cimahi,143,72,29,22,9,275,Kemendikdasmen Referensi 2026
+020000,Kota Tasikmalaya,284,152,70,49,7,562,Kemendikdasmen Referensi 2026
+020000,Kota Banjar,116,45,16,16,5,198,Kemendikdasmen Referensi 2026
+030000,Kab. Cilacap,1235,277,87,67,7,1673,Kemendikdasmen Referensi 2026
+030000,Kab. Banyumas,1005,248,76,81,5,1415,Kemendikdasmen Referensi 2026
+030000,Kab. Purbalingga,656,120,28,34,2,840,Kemendikdasmen Referensi 2026
+030000,Kab. Banjarnegara,826,143,32,27,3,1031,Kemendikdasmen Referensi 2026
+030000,Kab. Kebumen,865,208,54,66,6,1199,Kemendikdasmen Referensi 2026
+030000,Kab. Purworejo,539,105,34,41,3,722,Kemendikdasmen Referensi 2026
+030000,Kab. Wonosobo,562,178,51,30,3,824,Kemendikdasmen Referensi 2026
+030000,Kab. Magelang,910,219,74,45,3,1251,Kemendikdasmen Referensi 2026
+030000,Kab. Boyolali,796,154,55,42,11,1058,Kemendikdasmen Referensi 2026
+030000,Kab. Klaten,799,144,44,49,13,1049,Kemendikdasmen Referensi 2026
+030000,Kab. Sukoharjo,540,108,41,32,7,728,Kemendikdasmen Referensi 2026
+030000,Kab. Wonogiri,810,144,33,45,10,1042,Kemendikdasmen Referensi 2026
+030000,Kab. Karanganyar,565,116,32,33,15,761,Kemendikdasmen Referensi 2026
+030000,Kab. Sragen,641,131,39,55,7,873,Kemendikdasmen Referensi 2026
+030000,Kab. Grobogan,932,250,89,57,4,1332,Kemendikdasmen Referensi 2026
+030000,Kab. Blora,660,162,41,55,7,925,Kemendikdasmen Referensi 2026
+030000,Kab. Rembang,433,116,45,27,2,623,Kemendikdasmen Referensi 2026
+030000,Kab. Pati,825,240,107,48,4,1224,Kemendikdasmen Referensi 2026
+030000,Kab. Kudus,570,131,64,29,5,799,Kemendikdasmen Referensi 2026
+030000,Kab. Jepara,773,231,101,50,1,1156,Kemendikdasmen Referensi 2026
+030000,Kab. Demak,634,226,117,58,1,1036,Kemendikdasmen Referensi 2026
+030000,Kab. Semarang,669,156,54,43,9,931,Kemendikdasmen Referensi 2026
+030000,Kab. Temanggung,582,130,42,21,1,776,Kemendikdasmen Referensi 2026
+030000,Kab. Kendal,670,160,61,49,6,946,Kemendikdasmen Referensi 2026
+030000,Kab. Batang,580,120,43,29,1,773,Kemendikdasmen Referensi 2026
+030000,Kab. Pekalongan,632,129,39,35,2,837,Kemendikdasmen Referensi 2026
+030000,Kab. Pemalang,848,177,46,51,2,1124,Kemendikdasmen Referensi 2026
+030000,Kab. Tegal,868,200,52,64,2,1186,Kemendikdasmen Referensi 2026
+030000,Kab. Brebes,1108,288,74,92,2,1564,Kemendikdasmen Referensi 2026
+030000,Kota Magelang,77,23,15,19,4,138,Kemendikdasmen Referensi 2026
+030000,Kota Surakarta,218,82,42,48,17,407,Kemendikdasmen Referensi 2026
+030000,Kota Salatiga,93,37,14,19,7,170,Kemendikdasmen Referensi 2026
+030000,Kota Semarang,617,245,111,87,12,1072,Kemendikdasmen Referensi 2026
+030000,Kota Pekalongan,147,42,21,13,2,225,Kemendikdasmen Referensi 2026
+030000,Kota Tegal,158,40,12,20,2,232,Kemendikdasmen Referensi 2026
+040000,Kab. Bantul,413,134,64,46,20,677,Kemendikdasmen Referensi 2026
+040000,Kab. Sleman,563,176,97,57,30,923,Kemendikdasmen Referensi 2026
+040000,Kab. Gunungkidul,548,140,39,45,14,786,Kemendikdasmen Referensi 2026
+040000,Kab. Kulon Progo,366,87,26,30,8,517,Kemendikdasmen Referensi 2026
+040000,Kota Yogyakarta,163,67,51,27,9,317,Kemendikdasmen Referensi 2026
+050000,Kab. Gresik,847,291,139,62,8,1347,Kemendikdasmen Referensi 2026
+050000,Kab. Sidoarjo,848,270,119,87,31,1355,Kemendikdasmen Referensi 2026
+050000,Kab. Mojokerto,629,228,100,64,15,1036,Kemendikdasmen Referensi 2026
+050000,Kab. Jombang,803,286,150,72,16,1327,Kemendikdasmen Referensi 2026
+050000,Kab. Bojonegoro,1006,263,123,61,13,1466,Kemendikdasmen Referensi 2026
+050000,Kab. Tuban,814,221,92,44,6,1177,Kemendikdasmen Referensi 2026
+050000,Kab. Lamongan,1178,353,162,79,10,1782,Kemendikdasmen Referensi 2026
+050000,Kab. Madiun,486,95,38,25,11,655,Kemendikdasmen Referensi 2026
+050000,Kab. Ngawi,631,137,47,41,6,862,Kemendikdasmen Referensi 2026
+050000,Kab. Magetan,493,105,40,31,8,677,Kemendikdasmen Referensi 2026
+050000,Kab. Ponorogo,698,189,100,41,6,1034,Kemendikdasmen Referensi 2026
+050000,Kab. Pacitan,524,127,40,31,5,727,Kemendikdasmen Referensi 2026
+050000,Kab. Kediri,921,253,87,54,27,1342,Kemendikdasmen Referensi 2026
+050000,Kab. Nganjuk,748,178,71,60,11,1068,Kemendikdasmen Referensi 2026
+050000,Kab. Blitar,881,181,55,33,11,1161,Kemendikdasmen Referensi 2026
+050000,Kab. Tulungagung,762,156,52,35,12,1017,Kemendikdasmen Referensi 2026
+050000,Kab. Trenggalek,563,113,40,36,4,756,Kemendikdasmen Referensi 2026
+050000,Kab. Malang,1513,595,175,143,14,2440,Kemendikdasmen Referensi 2026
+050000,Kab. Pasuruan,1033,360,143,69,8,1613,Kemendikdasmen Referensi 2026
+050000,Kab. Probolinggo,1035,438,215,55,5,1748,Kemendikdasmen Referensi 2026
+050000,Kab. Lumajang,767,289,120,41,8,1225,Kemendikdasmen Referensi 2026
+050000,Kab. Bondowoso,590,257,100,60,5,1012,Kemendikdasmen Referensi 2026
+050000,Kab. Situbondo,522,209,97,49,3,880,Kemendikdasmen Referensi 2026
+050000,Kab. Jember,1488,605,203,183,12,2491,Kemendikdasmen Referensi 2026
+050000,Kab. Banyuwangi,1071,368,148,89,43,1719,Kemendikdasmen Referensi 2026
+050000,Kab. Pamekasan,813,416,206,109,7,1551,Kemendikdasmen Referensi 2026
+050000,Kab. Sampang,1117,575,197,93,2,1984,Kemendikdasmen Referensi 2026
+050000,Kab. Sumenep,1202,545,257,75,4,2083,Kemendikdasmen Referensi 2026
+050000,Kab. Bangkalan,829,413,146,71,4,1463,Kemendikdasmen Referensi 2026
+050000,Kota Surabaya,830,395,177,106,41,1549,Kemendikdasmen Referensi 2026
+050000,Kota Malang,348,158,74,51,14,645,Kemendikdasmen Referensi 2026
+050000,Kota Madiun,85,29,17,28,7,166,Kemendikdasmen Referensi 2026
+050000,Kota Kediri,167,52,32,24,5,280,Kemendikdasmen Referensi 2026
+050000,Kota Mojokerto,66,23,15,9,5,118,Kemendikdasmen Referensi 2026
+050000,Kota Blitar,75,28,14,15,5,137,Kemendikdasmen Referensi 2026
+050000,Kota Pasuruan,94,44,19,13,3,173,Kemendikdasmen Referensi 2026
+050000,Kota Probolinggo,115,52,27,20,4,218,Kemendikdasmen Referensi 2026
+050000,Kota Batu,95,38,15,13,2,163,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Besar,273,127,83,11,2,496,Kemendikdasmen Referensi 2026
+060000,Kab. Pidie,346,122,57,15,3,543,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Utara,415,221,107,28,6,777,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Timur,345,145,73,17,2,582,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Tengah,237,86,39,6,8,376,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Barat,195,81,37,11,3,327,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Selatan,243,100,57,12,2,414,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Tenggara,226,112,59,16,2,415,Kemendikdasmen Referensi 2026
+060000,Kab. Simeulue,128,60,33,8,1,230,Kemendikdasmen Referensi 2026
+060000,Kab. Bireuen,295,163,85,15,6,564,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Singkil,123,67,24,9,1,224,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Tamiang,195,91,43,9,1,339,Kemendikdasmen Referensi 2026
+060000,Kab. Nagan Raya,157,56,23,4,2,242,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Jaya,118,49,22,7,1,197,Kemendikdasmen Referensi 2026
+060000,Kab. Aceh Barat Daya,132,41,20,5,1,199,Kemendikdasmen Referensi 2026
+060000,Kab. Gayo Lues,108,64,25,3,2,202,Kemendikdasmen Referensi 2026
+060000,Kab. Bener Meriah,159,84,37,6,5,291,Kemendikdasmen Referensi 2026
+060000,Kab. Pidie Jaya,120,63,36,9,2,230,Kemendikdasmen Referensi 2026
+060000,Kota Sabang,32,12,4,1,2,51,Kemendikdasmen Referensi 2026
+060000,Kota Banda Aceh,115,56,44,9,8,232,Kemendikdasmen Referensi 2026
+060000,Kota Lhokseumawe,84,58,26,13,3,184,Kemendikdasmen Referensi 2026
+060000,Kota Langsa,79,43,22,9,4,157,Kemendikdasmen Referensi 2026
+060000,Kota Subulussalam,94,55,26,6,2,183,Kemendikdasmen Referensi 2026
+070000,Kab. Deli Serdang,1174,549,238,126,9,2096,Kemendikdasmen Referensi 2026
+070000,Kab. Langkat,830,328,143,73,1,1375,Kemendikdasmen Referensi 2026
+070000,Kab. Karo,298,81,30,11,3,423,Kemendikdasmen Referensi 2026
+070000,Kab. Simalungun,813,230,77,44,3,1167,Kemendikdasmen Referensi 2026
+070000,Kab. Dairi,274,67,30,16,1,388,Kemendikdasmen Referensi 2026
+070000,Kab. Asahan,551,218,101,38,3,911,Kemendikdasmen Referensi 2026
+070000,Kab. Labuhanbatu,339,143,71,30,1,584,Kemendikdasmen Referensi 2026
+070000,Kab. Tapanuli Utara,391,84,28,21,1,525,Kemendikdasmen Referensi 2026
+070000,Kab. Tapanuli Tengah,355,111,44,19,1,530,Kemendikdasmen Referensi 2026
+070000,Kab. Tapanuli Selatan,300,93,42,15,1,451,Kemendikdasmen Referensi 2026
+070000,Kab. Nias,163,54,14,17,0,248,Kemendikdasmen Referensi 2026
+070000,Kab. Mandailing Natal,421,135,59,22,2,639,Kemendikdasmen Referensi 2026
+070000,Kab. Toba,224,53,18,15,2,312,Kemendikdasmen Referensi 2026
+070000,Kab. Nias Selatan,367,152,67,48,0,634,Kemendikdasmen Referensi 2026
+070000,Kab. Pakpak Bharat,70,32,8,4,1,115,Kemendikdasmen Referensi 2026
+070000,Kab. Humbang Hasundutan,221,52,19,12,1,305,Kemendikdasmen Referensi 2026
+070000,Kab. Samosir,196,34,16,5,0,251,Kemendikdasmen Referensi 2026
+070000,Kab. Serdang Bedagai,498,177,79,37,2,793,Kemendikdasmen Referensi 2026
+070000,Kab. Batu Bara,299,121,44,23,1,488,Kemendikdasmen Referensi 2026
+070000,Kab. Padang Lawas Utara,258,99,56,10,1,424,Kemendikdasmen Referensi 2026
+070000,Kab. Padang Lawas,215,95,53,19,0,382,Kemendikdasmen Referensi 2026
+070000,Kab. Labuhanbatu Utara,327,115,44,23,1,510,Kemendikdasmen Referensi 2026
+070000,Kab. Labuhanbatu Selatan,233,109,54,24,0,420,Kemendikdasmen Referensi 2026
+070000,Kab. Nias Barat,108,40,18,13,1,180,Kemendikdasmen Referensi 2026
+070000,Kab. Nias Utara,169,61,17,23,0,270,Kemendikdasmen Referensi 2026
+070000,Kota Medan,937,516,265,137,12,1867,Kemendikdasmen Referensi 2026
+070000,Kota Binjai,190,81,42,23,4,340,Kemendikdasmen Referensi 2026
+070000,Kota Tebing Tinggi,121,38,22,14,3,198,Kemendikdasmen Referensi 2026
+070000,Kota Pematangsiantar,129,52,31,29,2,243,Kemendikdasmen Referensi 2026
+070000,Kota Tanjung Balai,94,38,21,9,1,163,Kemendikdasmen Referensi 2026
+070000,Kota Sibolga,42,20,12,8,1,83,Kemendikdasmen Referensi 2026
+070000,Kota Padang Sidempuan,109,47,31,17,2,206,Kemendikdasmen Referensi 2026
+070000,Kota Gunungsitoli,113,39,15,12,3,182,Kemendikdasmen Referensi 2026
+080000,Kab. Agam,456,135,64,16,16,687,Kemendikdasmen Referensi 2026
+080000,Kab. Pasaman,261,59,28,8,6,362,Kemendikdasmen Referensi 2026
+080000,Kab. Lima Puluh Kota,387,94,32,11,16,540,Kemendikdasmen Referensi 2026
+080000,Kab. Solok,386,112,43,11,13,565,Kemendikdasmen Referensi 2026
+080000,Kab. Padang Pariaman,429,93,38,14,13,587,Kemendikdasmen Referensi 2026
+080000,Kab. Pesisir Selatan,436,116,43,17,17,629,Kemendikdasmen Referensi 2026
+080000,Kab. Tanah Datar,318,106,46,11,10,491,Kemendikdasmen Referensi 2026
+080000,Kab. Sijunjung,224,75,19,11,5,334,Kemendikdasmen Referensi 2026
+080000,Kab. Kepulauan Mentawai,137,39,17,3,3,199,Kemendikdasmen Referensi 2026
+080000,Kab. Solok Selatan,159,57,22,6,4,248,Kemendikdasmen Referensi 2026
+080000,Kab. Dharmasraya,184,63,32,10,3,292,Kemendikdasmen Referensi 2026
+080000,Kab. Pasaman Barat,289,133,63,21,9,515,Kemendikdasmen Referensi 2026
+080000,Kota Bukittinggi,69,27,18,12,7,133,Kemendikdasmen Referensi 2026
+080000,Kota Padang,368,126,71,41,39,645,Kemendikdasmen Referensi 2026
+080000,Kota Padang Panjang,42,19,16,4,6,87,Kemendikdasmen Referensi 2026
+080000,Kota Sawahlunto,69,16,6,3,6,100,Kemendikdasmen Referensi 2026
+080000,Kota Solok,51,14,9,6,4,84,Kemendikdasmen Referensi 2026
+080000,Kota Payakumbuh,88,28,20,8,12,156,Kemendikdasmen Referensi 2026
+080000,Kota Pariaman,87,21,13,7,4,132,Kemendikdasmen Referensi 2026
+090000,Kab. Kampar,595,292,144,34,4,1069,Kemendikdasmen Referensi 2026
+090000,Kab. Bengkalis,396,189,94,30,9,718,Kemendikdasmen Referensi 2026
+090000,Kab. Indragiri Hulu,346,120,60,18,1,545,Kemendikdasmen Referensi 2026
+090000,Kab. Indragiri Hilir,719,309,121,20,2,1171,Kemendikdasmen Referensi 2026
+090000,Kab. Pelalawan,253,123,41,21,2,440,Kemendikdasmen Referensi 2026
+090000,Kab. Rokan Hulu,413,203,79,40,4,739,Kemendikdasmen Referensi 2026
+090000,Kab. Rokan Hilir,469,219,103,28,4,823,Kemendikdasmen Referensi 2026
+090000,Kab. Siak,288,174,80,29,3,574,Kemendikdasmen Referensi 2026
+090000,Kab. Kuantan Singingi,292,115,41,14,1,463,Kemendikdasmen Referensi 2026
+090000,Kab. Kepulauan Meranti,185,88,46,7,4,330,Kemendikdasmen Referensi 2026
+090000,Kota Pekanbaru,378,224,106,65,15,788,Kemendikdasmen Referensi 2026
+090000,Kota Dumai,122,67,29,19,8,245,Kemendikdasmen Referensi 2026
+100000,Kab. Batanghari,233,102,43,12,1,391,Kemendikdasmen Referensi 2026
+100000,Kab. Bungo,270,112,51,19,2,454,Kemendikdasmen Referensi 2026
+100000,Kab. Sarolangun,273,129,54,24,2,482,Kemendikdasmen Referensi 2026
+100000,Kab. Tanjung Jabung Barat,242,117,59,12,2,432,Kemendikdasmen Referensi 2026
+100000,Kab. Kerinci,272,79,29,8,3,391,Kemendikdasmen Referensi 2026
+100000,Kab. Tebo,295,131,58,25,2,511,Kemendikdasmen Referensi 2026
+100000,Kab. Muaro Jambi,297,145,70,19,3,534,Kemendikdasmen Referensi 2026
+100000,Kab. Tanjung Jabung Timur,227,91,47,7,1,373,Kemendikdasmen Referensi 2026
+100000,Kab. Merangin,361,140,55,21,2,579,Kemendikdasmen Referensi 2026
+100000,Kota Jambi,261,114,76,32,8,491,Kemendikdasmen Referensi 2026
+100000,Kota Sungai Penuh,86,21,10,5,1,123,Kemendikdasmen Referensi 2026
+110000,Kab. Musi Banyuasin,527,225,81,25,1,859,Kemendikdasmen Referensi 2026
+110000,Kab. Ogan Komering Ilir,555,232,82,30,1,900,Kemendikdasmen Referensi 2026
+110000,Kab. Ogan Komering Ulu,243,101,49,15,1,409,Kemendikdasmen Referensi 2026
+110000,Kab. Muara Enim,413,152,71,19,2,657,Kemendikdasmen Referensi 2026
+110000,Kab. Lahat,327,95,47,13,1,483,Kemendikdasmen Referensi 2026
+110000,Kab. Musi Rawas,341,112,45,9,3,510,Kemendikdasmen Referensi 2026
+110000,Kab. Banyuasin,588,221,112,23,4,948,Kemendikdasmen Referensi 2026
+110000,Kab. Ogan Komering Ulu Timur,489,176,80,44,1,790,Kemendikdasmen Referensi 2026
+110000,Kab. Ogan Komering Ulu Selatan,297,88,41,7,1,434,Kemendikdasmen Referensi 2026
+110000,Kab. Ogan Ilir,292,130,57,18,1,498,Kemendikdasmen Referensi 2026
+110000,Kab. Empat Lawang,195,47,21,4,1,268,Kemendikdasmen Referensi 2026
+110000,Kab. Penukal Abab Lematang Ilir,144,69,31,14,2,260,Kemendikdasmen Referensi 2026
+110000,Kab. Musi Rawas Utara,147,56,27,2,1,233,Kemendikdasmen Referensi 2026
+110000,Kota Palembang,514,270,152,81,15,1032,Kemendikdasmen Referensi 2026
+110000,Kota Prabumulih,113,37,23,13,3,189,Kemendikdasmen Referensi 2026
+110000,Kota Lubuk Linggau,118,52,37,8,2,217,Kemendikdasmen Referensi 2026
+110000,Kota Pagar Alam,93,41,20,5,2,161,Kemendikdasmen Referensi 2026
+120000,Kab. Lampung Selatan,638,286,110,57,4,1095,Kemendikdasmen Referensi 2026
+120000,Kab. Lampung Tengah,859,328,134,76,3,1400,Kemendikdasmen Referensi 2026
+120000,Kab. Lampung Utara,487,188,92,29,1,797,Kemendikdasmen Referensi 2026
+120000,Kab. Lampung Barat,250,91,38,12,1,392,Kemendikdasmen Referensi 2026
+120000,Kab. Tulang Bawang,260,137,42,29,1,469,Kemendikdasmen Referensi 2026
+120000,Kab. Tanggamus,462,138,48,29,2,679,Kemendikdasmen Referensi 2026
+120000,Kab. Lampung Timur,714,290,96,70,1,1171,Kemendikdasmen Referensi 2026
+120000,Kab. Way Kanan,363,135,61,26,1,586,Kemendikdasmen Referensi 2026
+120000,Kab. Pesawaran,385,135,48,15,1,584,Kemendikdasmen Referensi 2026
+120000,Kab. Pringsewu,305,96,33,34,2,470,Kemendikdasmen Referensi 2026
+120000,Kab. Mesuji,152,76,21,19,1,269,Kemendikdasmen Referensi 2026
+120000,Kab. Tulang Bawang Barat,197,84,32,17,1,331,Kemendikdasmen Referensi 2026
+120000,Kab. Pesisir Barat,143,61,19,4,1,228,Kemendikdasmen Referensi 2026
+120000,Kota Bandar Lampung,315,177,89,58,8,647,Kemendikdasmen Referensi 2026
+120000,Kota Metro,75,45,31,20,6,177,Kemendikdasmen Referensi 2026
+130000,Kab. Sambas,463,169,51,24,1,708,Kemendikdasmen Referensi 2026
+130000,Kab. Mempawah,244,102,47,12,1,406,Kemendikdasmen Referensi 2026
+130000,Kab. Sanggau,486,135,41,18,2,682,Kemendikdasmen Referensi 2026
+130000,Kab. Sintang,483,151,52,22,1,709,Kemendikdasmen Referensi 2026
+130000,Kab. Kapuas Hulu,428,121,38,7,1,595,Kemendikdasmen Referensi 2026
+130000,Kab. Ketapang,575,191,60,25,3,854,Kemendikdasmen Referensi 2026
+130000,Kab. Bengkayang,290,97,35,11,2,435,Kemendikdasmen Referensi 2026
+130000,Kab. Landak,472,122,54,11,1,660,Kemendikdasmen Referensi 2026
+130000,Kab. Sekadau,242,69,23,7,1,342,Kemendikdasmen Referensi 2026
+130000,Kab. Melawi,266,123,34,12,2,437,Kemendikdasmen Referensi 2026
+130000,Kab. Kayong Utara,119,51,18,5,1,194,Kemendikdasmen Referensi 2026
+130000,Kab. Kubu Raya,543,275,131,44,3,996,Kemendikdasmen Referensi 2026
+130000,Kota Pontianak,215,125,82,27,5,454,Kemendikdasmen Referensi 2026
+130000,Kota Singkawang,113,52,30,11,4,210,Kemendikdasmen Referensi 2026
+140000,Kab. Kapuas,504,173,48,19,3,747,Kemendikdasmen Referensi 2026
+140000,Kab. Barito Selatan,184,77,35,6,3,305,Kemendikdasmen Referensi 2026
+140000,Kab. Barito Utara,192,49,18,8,3,270,Kemendikdasmen Referensi 2026
+140000,Kab. Kotawaringin Timur,411,138,37,27,7,620,Kemendikdasmen Referensi 2026
+140000,Kab. Kotawaringin Barat,216,91,31,18,3,359,Kemendikdasmen Referensi 2026
+140000,Kab. Katingan,223,95,30,9,6,363,Kemendikdasmen Referensi 2026
+140000,Kab. Seruyan,177,79,19,8,1,284,Kemendikdasmen Referensi 2026
+140000,Kab. Sukamara,52,23,9,3,1,88,Kemendikdasmen Referensi 2026
+140000,Kab. Lamandau,120,53,12,10,2,197,Kemendikdasmen Referensi 2026
+140000,Kab. Gunung Mas,183,62,15,4,1,265,Kemendikdasmen Referensi 2026
+140000,Kab. Pulang Pisau,208,58,27,8,1,302,Kemendikdasmen Referensi 2026
+140000,Kab. Murung Raya,187,75,27,1,2,292,Kemendikdasmen Referensi 2026
+140000,Kab. Barito Timur,157,40,14,6,2,219,Kemendikdasmen Referensi 2026
+140000,Kota Palangka Raya,160,73,44,16,10,303,Kemendikdasmen Referensi 2026
+150000,Kab. Banjar,477,152,66,13,3,711,Kemendikdasmen Referensi 2026
+150000,Kab. Tanah Laut,278,89,36,10,2,415,Kemendikdasmen Referensi 2026
+150000,Kab. Barito Kuala,332,106,47,5,1,491,Kemendikdasmen Referensi 2026
+150000,Kab. Tapin,196,45,18,4,2,265,Kemendikdasmen Referensi 2026
+150000,Kab. Hulu Sungai Selatan,257,65,27,5,2,356,Kemendikdasmen Referensi 2026
+150000,Kab. Hulu Sungai Tengah,299,59,24,8,1,391,Kemendikdasmen Referensi 2026
+150000,Kab. Hulu Sungai Utara,267,70,30,7,2,376,Kemendikdasmen Referensi 2026
+150000,Kab. Tabalong,262,90,26,10,1,389,Kemendikdasmen Referensi 2026
+150000,Kab. Kotabaru,270,88,39,9,1,407,Kemendikdasmen Referensi 2026
+150000,Kab. Balangan,213,44,21,3,1,282,Kemendikdasmen Referensi 2026
+150000,Kab. Tanah Bumbu,218,99,31,19,2,369,Kemendikdasmen Referensi 2026
+150000,Kota Banjarmasin,325,98,42,21,6,492,Kemendikdasmen Referensi 2026
+150000,Kota Banjarbaru,112,50,31,14,2,209,Kemendikdasmen Referensi 2026
+160000,Kab. Paser,241,103,37,10,1,392,Kemendikdasmen Referensi 2026
+160000,Kab. Kutai Kartanegara,534,223,79,46,7,889,Kemendikdasmen Referensi 2026
+160000,Kab. Berau,182,75,27,14,1,299,Kemendikdasmen Referensi 2026
+160000,Kab. Kutai Barat,218,70,29,14,1,332,Kemendikdasmen Referensi 2026
+160000,Kab. Kutai Timur,256,113,37,22,3,431,Kemendikdasmen Referensi 2026
+160000,Kab. Penajam Paser Utara,116,48,19,11,1,195,Kemendikdasmen Referensi 2026
+160000,Kab. Mahakam Ulu,40,17,7,2,1,67,Kemendikdasmen Referensi 2026
+160000,Kota Samarinda,266,147,66,50,11,540,Kemendikdasmen Referensi 2026
+160000,Kota Balikpapan,226,97,42,35,4,404,Kemendikdasmen Referensi 2026
+160000,Kota Bontang,61,36,13,14,6,130,Kemendikdasmen Referensi 2026
+170000,Kab. Bolaang Mongondow,237,84,23,18,2,364,Kemendikdasmen Referensi 2026
+170000,Kab. Minahasa,346,109,40,20,5,520,Kemendikdasmen Referensi 2026
+170000,Kab. Kepulauan Sangihe,220,68,24,9,3,324,Kemendikdasmen Referensi 2026
+170000,Kab. Kepulauan Talaud,117,43,24,10,4,198,Kemendikdasmen Referensi 2026
+170000,Kab. Minahasa Selatan,237,87,20,18,2,364,Kemendikdasmen Referensi 2026
+170000,Kab. Minahasa Utara,198,78,27,18,4,325,Kemendikdasmen Referensi 2026
+170000,Kab. Bolaang Mongondow Utara,104,30,9,6,0,149,Kemendikdasmen Referensi 2026
+170000,Kab. Kep. Siau Tagulandang Biaro,104,26,6,6,1,143,Kemendikdasmen Referensi 2026
+170000,Kab. Minahasa Tenggara,98,44,12,6,2,162,Kemendikdasmen Referensi 2026
+170000,Kab. Bolaang Mongondow Timur,64,30,7,12,3,116,Kemendikdasmen Referensi 2026
+170000,Kab. Bolaang Mongondow Selatan,83,29,7,5,0,124,Kemendikdasmen Referensi 2026
+170000,Kota Manado,244,109,53,35,10,451,Kemendikdasmen Referensi 2026
+170000,Kota Bitung,116,40,18,14,7,195,Kemendikdasmen Referensi 2026
+170000,Kota Tomohon,68,24,13,6,3,114,Kemendikdasmen Referensi 2026
+170000,Kota Kotamobagu,80,22,10,10,1,123,Kemendikdasmen Referensi 2026
+180000,Kab. Banggai Kepulauan,170,75,27,16,2,290,Kemendikdasmen Referensi 2026
+180000,Kab. Donggala,377,127,38,14,1,557,Kemendikdasmen Referensi 2026
+180000,Kab. Poso,249,87,28,17,3,384,Kemendikdasmen Referensi 2026
+180000,Kab. Banggai,397,165,67,26,5,660,Kemendikdasmen Referensi 2026
+180000,Kab. Buol,173,78,18,9,2,280,Kemendikdasmen Referensi 2026
+180000,Kab. Tolitoli,252,100,34,14,1,401,Kemendikdasmen Referensi 2026
+180000,Kab. Morowali,169,56,17,10,1,253,Kemendikdasmen Referensi 2026
+180000,Kab. Parigi Moutong,464,165,60,22,2,713,Kemendikdasmen Referensi 2026
+180000,Kab. Tojo Una Una,197,71,24,7,1,300,Kemendikdasmen Referensi 2026
+180000,Kab. Sigi,282,104,39,10,3,438,Kemendikdasmen Referensi 2026
+180000,Kab. Banggai Laut,87,48,15,8,1,159,Kemendikdasmen Referensi 2026
+180000,Kab. Morowali Utara,161,60,17,9,1,248,Kemendikdasmen Referensi 2026
+180000,Kota Palu,204,85,51,24,12,376,Kemendikdasmen Referensi 2026
+190000,Kab. Maros,281,131,74,17,4,507,Kemendikdasmen Referensi 2026
+190000,Kab. Pangkajene Dan Kepulauan,317,120,52,14,2,505,Kemendikdasmen Referensi 2026
+190000,Kab. Gowa,519,208,101,22,7,857,Kemendikdasmen Referensi 2026
+190000,Kab. Takalar,258,80,47,8,9,402,Kemendikdasmen Referensi 2026
+190000,Kab. Jeneponto,336,136,63,16,5,556,Kemendikdasmen Referensi 2026
+190000,Kab. Barru,228,57,24,8,1,318,Kemendikdasmen Referensi 2026
+190000,Kab. Bone,778,239,96,22,9,1144,Kemendikdasmen Referensi 2026
+190000,Kab. Wajo,434,118,47,12,2,613,Kemendikdasmen Referensi 2026
+190000,Kab. Soppeng,276,73,19,11,7,386,Kemendikdasmen Referensi 2026
+190000,Kab. Bantaeng,172,83,34,12,2,303,Kemendikdasmen Referensi 2026
+190000,Kab. Bulukumba,390,115,41,17,2,565,Kemendikdasmen Referensi 2026
+190000,Kab. Sinjai,279,88,48,9,2,426,Kemendikdasmen Referensi 2026
+190000,Kab. Kepulauan Selayar,156,68,13,8,1,246,Kemendikdasmen Referensi 2026
+190000,Kab. Pinrang,338,85,27,16,1,467,Kemendikdasmen Referensi 2026
+190000,Kab. Sidenreng Rappang,254,81,42,12,2,391,Kemendikdasmen Referensi 2026
+190000,Kab. Enrekang,247,71,29,11,1,359,Kemendikdasmen Referensi 2026
+190000,Kab. Luwu,326,155,50,26,4,561,Kemendikdasmen Referensi 2026
+190000,Kab. Tana Toraja,232,88,25,26,4,375,Kemendikdasmen Referensi 2026
+190000,Kab. Luwu Utara,275,120,41,16,3,455,Kemendikdasmen Referensi 2026
+190000,Kab. Luwu Timur,204,77,33,4,4,322,Kemendikdasmen Referensi 2026
+190000,Kab. Toraja Utara,195,80,17,17,1,310,Kemendikdasmen Referensi 2026
+190000,Kota Makassar,558,284,182,79,24,1127,Kemendikdasmen Referensi 2026
+190000,Kota Parepare,109,38,19,10,2,178,Kemendikdasmen Referensi 2026
+190000,Kota Palopo,88,33,17,15,2,155,Kemendikdasmen Referensi 2026
+200000,Kab. Konawe,295,91,43,11,8,448,Kemendikdasmen Referensi 2026
+200000,Kab. Muna,236,101,50,27,24,438,Kemendikdasmen Referensi 2026
+200000,Kab. Buton,126,63,30,11,2,232,Kemendikdasmen Referensi 2026
+200000,Kab. Kolaka,204,81,33,15,10,343,Kemendikdasmen Referensi 2026
+200000,Kab. Konawe Selatan,345,120,51,11,5,532,Kemendikdasmen Referensi 2026
+200000,Kab. Wakatobi,119,54,27,6,1,207,Kemendikdasmen Referensi 2026
+200000,Kab. Bombana,184,81,39,11,2,317,Kemendikdasmen Referensi 2026
+200000,Kab. Kolaka Utara,123,54,24,5,3,209,Kemendikdasmen Referensi 2026
+200000,Kab. Konawe Utara,104,40,14,5,2,165,Kemendikdasmen Referensi 2026
+200000,Kab. Buton Utara,80,43,16,6,2,147,Kemendikdasmen Referensi 2026
+200000,Kab. Kolaka Timur,152,59,20,9,1,241,Kemendikdasmen Referensi 2026
+200000,Kab. Konawe Kepulauan,51,20,7,4,2,84,Kemendikdasmen Referensi 2026
+200000,Kab. Muna Barat,103,51,17,8,8,187,Kemendikdasmen Referensi 2026
+200000,Kab. Buton Selatan,81,43,24,5,1,154,Kemendikdasmen Referensi 2026
+200000,Kab. Buton Tengah,110,55,27,11,2,205,Kemendikdasmen Referensi 2026
+200000,Kota Kendari,163,69,41,23,10,306,Kemendikdasmen Referensi 2026
+200000,Kota Bau Bau,80,40,18,9,6,153,Kemendikdasmen Referensi 2026
+210000,Kab. Maluku Tengah,436,198,111,15,2,762,Kemendikdasmen Referensi 2026
+210000,Kab. Maluku Tenggara,158,60,25,11,1,255,Kemendikdasmen Referensi 2026
+210000,Kab. Buru,159,78,23,9,1,270,Kemendikdasmen Referensi 2026
+210000,Kab. Kepulauan Tanimbar,120,70,29,9,1,229,Kemendikdasmen Referensi 2026
+210000,Kab. Seram Bagian Barat,237,129,60,17,2,445,Kemendikdasmen Referensi 2026
+210000,Kab. Seram Bagian Timur,173,81,34,9,0,297,Kemendikdasmen Referensi 2026
+210000,Kab. Kepulauan Aru,175,62,16,6,1,260,Kemendikdasmen Referensi 2026
+210000,Kab. Maluku Barat Daya,156,61,21,12,0,250,Kemendikdasmen Referensi 2026
+210000,Kab. Buru Selatan,111,59,21,10,1,202,Kemendikdasmen Referensi 2026
+210000,Kota Ambon,208,64,45,20,6,343,Kemendikdasmen Referensi 2026
+210000,Kota Tual,66,35,18,8,1,128,Kemendikdasmen Referensi 2026
+220000,Kab. Buleleng,489,84,34,30,2,639,Kemendikdasmen Referensi 2026
+220000,Kab. Jembrana,206,37,23,7,1,274,Kemendikdasmen Referensi 2026
+220000,Kab. Tabanan,295,50,15,12,2,374,Kemendikdasmen Referensi 2026
+220000,Kab. Badung,302,72,34,28,2,438,Kemendikdasmen Referensi 2026
+220000,Kab. Gianyar,298,34,12,25,1,370,Kemendikdasmen Referensi 2026
+220000,Kab. Klungkung,136,23,12,6,1,178,Kemendikdasmen Referensi 2026
+220000,Kab. Bangli,166,29,7,12,1,215,Kemendikdasmen Referensi 2026
+220000,Kab. Karangasem,366,54,20,12,1,453,Kemendikdasmen Referensi 2026
+220000,Kota Denpasar,269,98,47,34,5,453,Kemendikdasmen Referensi 2026
+230000,Kab. Lombok Barat,494,252,140,47,6,939,Kemendikdasmen Referensi 2026
+230000,Kab. Lombok Tengah,952,533,300,83,6,1874,Kemendikdasmen Referensi 2026
+230000,Kab. Lombok Timur,1048,584,291,108,9,2040,Kemendikdasmen Referensi 2026
+230000,Kab. Sumbawa,411,155,49,22,3,640,Kemendikdasmen Referensi 2026
+230000,Kab. Dompu,285,127,58,25,10,505,Kemendikdasmen Referensi 2026
+230000,Kab. Bima,499,196,92,33,12,832,Kemendikdasmen Referensi 2026
+230000,Kab. Sumbawa Barat,126,61,19,7,1,214,Kemendikdasmen Referensi 2026
+230000,Kab. Lombok Utara,205,107,46,15,3,376,Kemendikdasmen Referensi 2026
+230000,Kota Mataram,206,80,53,20,4,363,Kemendikdasmen Referensi 2026
+230000,Kota Bima,93,40,27,11,5,176,Kemendikdasmen Referensi 2026
+240000,Kab. Kupang,377,181,72,31,4,665,Kemendikdasmen Referensi 2026
+240000,Kab. Timor Tengah Selatan,551,214,80,38,2,885,Kemendikdasmen Referensi 2026
+240000,Kab. Timor Tengah Utara,275,99,32,29,2,437,Kemendikdasmen Referensi 2026
+240000,Kab. Belu,151,57,30,10,2,250,Kemendikdasmen Referensi 2026
+240000,Kab. Alor,314,139,53,14,3,523,Kemendikdasmen Referensi 2026
+240000,Kab. Flores Timur,299,75,35,16,2,427,Kemendikdasmen Referensi 2026
+240000,Kab. Sikka,346,97,32,22,5,502,Kemendikdasmen Referensi 2026
+240000,Kab. Ende,346,101,31,21,2,501,Kemendikdasmen Referensi 2026
+240000,Kab. Ngada,186,67,26,14,2,295,Kemendikdasmen Referensi 2026
+240000,Kab. Manggarai,262,88,30,21,4,405,Kemendikdasmen Referensi 2026
+240000,Kab. Sumba Timur,276,91,31,12,1,411,Kemendikdasmen Referensi 2026
+240000,Kab. Sumba Barat,99,42,21,7,2,171,Kemendikdasmen Referensi 2026
+240000,Kab. Lembata,184,61,19,13,3,280,Kemendikdasmen Referensi 2026
+240000,Kab. Rote Ndao,153,47,19,5,2,226,Kemendikdasmen Referensi 2026
+240000,Kab. Manggarai Barat,294,111,37,19,1,462,Kemendikdasmen Referensi 2026
+240000,Kab. Nagekeo,181,65,18,8,1,273,Kemendikdasmen Referensi 2026
+240000,Kab. Sumba Tengah,95,36,11,5,1,148,Kemendikdasmen Referensi 2026
+240000,Kab. Sumba Barat Daya,288,144,51,43,1,527,Kemendikdasmen Referensi 2026
+240000,Kab. Manggarai Timur,347,157,51,14,2,571,Kemendikdasmen Referensi 2026
+240000,Kab. Sabu Raijua,81,26,13,3,1,124,Kemendikdasmen Referensi 2026
+240000,Kab. Malaka,211,75,37,7,1,331,Kemendikdasmen Referensi 2026
+240000,Kota Kupang,160,73,49,21,5,308,Kemendikdasmen Referensi 2026
+250000,Kab. Jayapura,151,58,36,8,0,253,Kemendikdasmen Referensi 2026
+250000,Kab. Biak Numfor,168,57,24,8,3,260,Kemendikdasmen Referensi 2026
+250000,Kab. Kepulauan Yapen,126,40,19,5,1,191,Kemendikdasmen Referensi 2026
+250000,Kab. Sarmi,73,24,7,5,0,109,Kemendikdasmen Referensi 2026
+250000,Kab. Keerom,88,22,13,3,0,126,Kemendikdasmen Referensi 2026
+250000,Kab. Waropen,54,21,8,3,1,87,Kemendikdasmen Referensi 2026
+250000,Kab. Supiori,40,14,8,1,0,63,Kemendikdasmen Referensi 2026
+250000,Kab. Mamberamo Raya,87,26,6,1,0,120,Kemendikdasmen Referensi 2026
+250000,Kota Jayapura,111,57,40,15,2,225,Kemendikdasmen Referensi 2026
+260000,Kab. Bengkulu Utara,258,96,30,13,1,398,Kemendikdasmen Referensi 2026
+260000,Kab. Rejang Lebong,195,69,28,15,2,309,Kemendikdasmen Referensi 2026
+260000,Kab. Bengkulu Selatan,136,41,23,7,1,208,Kemendikdasmen Referensi 2026
+260000,Kab. Mukomuko,165,78,30,10,2,285,Kemendikdasmen Referensi 2026
+260000,Kab. Kepahiang,116,42,16,6,1,181,Kemendikdasmen Referensi 2026
+260000,Kab. Lebong,101,33,9,6,1,150,Kemendikdasmen Referensi 2026
+260000,Kab. Kaur,149,52,17,11,2,231,Kemendikdasmen Referensi 2026
+260000,Kab. Seluma,208,62,19,6,1,296,Kemendikdasmen Referensi 2026
+260000,Kab. Bengkulu Tengah,112,45,18,6,1,182,Kemendikdasmen Referensi 2026
+260000,Kota Bengkulu,139,67,39,24,7,276,Kemendikdasmen Referensi 2026
+270000,Kab. Pulau Taliabu,95,51,17,7,1,171,Kemendikdasmen Referensi 2026
+270000,Kab. Halmahera Tengah,73,40,19,11,1,144,Kemendikdasmen Referensi 2026
+270000,Kab. Halmahera Barat,183,77,33,17,2,312,Kemendikdasmen Referensi 2026
+270000,Kab. halmahera Utara,238,110,43,39,2,432,Kemendikdasmen Referensi 2026
+270000,Kab. Halmahera Selatan,325,172,82,25,6,610,Kemendikdasmen Referensi 2026
+270000,Kab. Halmahera Timur,111,61,24,9,2,207,Kemendikdasmen Referensi 2026
+270000,Kab. Kepulauan Sula,117,77,31,16,2,243,Kemendikdasmen Referensi 2026
+270000,Kab. Pulau Morotai,97,52,26,13,1,189,Kemendikdasmen Referensi 2026
+270000,Kota Ternate,131,49,26,9,8,223,Kemendikdasmen Referensi 2026
+270000,Kota Tidore Kepulauan,118,52,36,7,4,217,Kemendikdasmen Referensi 2026
+280000,Kab. Pandeglang,1067,405,148,105,26,1751,Kemendikdasmen Referensi 2026
+280000,Kab. Lebak,1036,506,189,76,14,1821,Kemendikdasmen Referensi 2026
+280000,Kab. Tangerang,1396,732,294,213,23,2658,Kemendikdasmen Referensi 2026
+280000,Kab. Serang,902,430,190,96,14,1632,Kemendikdasmen Referensi 2026
+280000,Kota Cilegon,200,98,46,26,5,375,Kemendikdasmen Referensi 2026
+280000,Kota Tangerang,537,265,127,121,18,1068,Kemendikdasmen Referensi 2026
+280000,Kota Serang,306,152,73,41,10,582,Kemendikdasmen Referensi 2026
+280000,Kota Tangerang Selatan,447,272,125,77,23,944,Kemendikdasmen Referensi 2026
+290000,Kab. Bangka,195,73,35,12,2,317,Kemendikdasmen Referensi 2026
+290000,Kab. Belitung,122,33,11,7,1,174,Kemendikdasmen Referensi 2026
+290000,Kab. Bangka Tengah,109,41,19,6,2,177,Kemendikdasmen Referensi 2026
+290000,Kab. Bangka Barat,144,49,16,9,2,220,Kemendikdasmen Referensi 2026
+290000,Kab. Bangka Selatan,103,46,20,7,1,177,Kemendikdasmen Referensi 2026
+290000,Kab. Belitung Timur,105,25,7,8,1,146,Kemendikdasmen Referensi 2026
+290000,Kota Pangkal Pinang,101,37,20,10,2,170,Kemendikdasmen Referensi 2026
+300000,Kab. Boalemo,149,67,16,12,2,246,Kemendikdasmen Referensi 2026
+300000,Kab. Gorontalo,323,157,40,15,1,536,Kemendikdasmen Referensi 2026
+300000,Kab. Pohuwato,143,61,16,12,1,233,Kemendikdasmen Referensi 2026
+300000,Kab. Bone Bolango,146,56,16,7,2,227,Kemendikdasmen Referensi 2026
+300000,Kab. Gorontalo Utara,151,54,14,6,1,226,Kemendikdasmen Referensi 2026
+300000,Kota Gorontalo,124,33,18,9,1,185,Kemendikdasmen Referensi 2026
+310000,Kab. Bintan,110,51,24,7,4,196,Kemendikdasmen Referensi 2026
+310000,Kab. Karimun,153,68,32,9,5,267,Kemendikdasmen Referensi 2026
+310000,Kab. Natuna,88,45,23,5,1,162,Kemendikdasmen Referensi 2026
+310000,Kab. Lingga,140,44,26,6,1,217,Kemendikdasmen Referensi 2026
+310000,Kab. Kepulauan Anambas,71,31,11,4,1,118,Kemendikdasmen Referensi 2026
+310000,Kota Batam,439,244,112,70,10,875,Kemendikdasmen Referensi 2026
+310000,Kota Tanjung Pinang,80,36,19,9,4,148,Kemendikdasmen Referensi 2026
+320000,Kab. Fak Fak,123,29,11,3,1,167,Kemendikdasmen Referensi 2026
+320000,Kab. Kaimana,98,19,8,5,1,131,Kemendikdasmen Referensi 2026
+320000,Kab. Teluk Wondama,59,19,5,2,1,86,Kemendikdasmen Referensi 2026
+320000,Kab. Teluk Bintuni,94,40,19,1,1,155,Kemendikdasmen Referensi 2026
+320000,Kab. Manokwari,139,47,28,8,1,223,Kemendikdasmen Referensi 2026
+320000,Kab. Pegunungan Arfak,72,16,9,2,0,99,Kemendikdasmen Referensi 2026
+320000,Kab. Manokwari Selatan,43,14,7,2,1,67,Kemendikdasmen Referensi 2026
+330000,Kab. Mamuju,335,111,51,22,5,524,Kemendikdasmen Referensi 2026
+330000,Kab. Pasangkayu,154,71,25,15,2,267,Kemendikdasmen Referensi 2026
+330000,Kab. Polewali Mandar,421,160,55,28,4,668,Kemendikdasmen Referensi 2026
+330000,Kab. Mamasa,274,109,28,33,2,446,Kemendikdasmen Referensi 2026
+330000,Kab. Majene,193,66,22,16,9,306,Kemendikdasmen Referensi 2026
+330000,Kab. Mamuju Tengah,128,60,27,12,3,230,Kemendikdasmen Referensi 2026
+340000,Kab. Malinau,111,42,22,3,1,179,Kemendikdasmen Referensi 2026
+340000,Kab. Bulungan,150,73,27,10,3,263,Kemendikdasmen Referensi 2026
+340000,Kab. Tana Tidung,32,12,5,1,1,51,Kemendikdasmen Referensi 2026
+340000,Kab. Nunukan,160,69,29,11,1,270,Kemendikdasmen Referensi 2026
+340000,Kota Tarakan,81,39,23,9,1,153,Kemendikdasmen Referensi 2026
+350000,Belanda,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Japan,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Mesir,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Malaysia,118,48,2,1,0,169,Kemendikdasmen Referensi 2026
+350000,Myanmar,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Filipina,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Arab Saudi,3,3,3,0,0,9,Kemendikdasmen Referensi 2026
+350000,Singapura,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Thailand,1,1,1,0,0,3,Kemendikdasmen Referensi 2026
+350000,Taiwan,0,0,0,0,0,0,Kemendikdasmen Referensi 2026
+350000,Cina,0,0,0,0,0,0,Kemendikdasmen Referensi 2026
+350000,Brunei Darussalam,0,0,0,0,0,0,Kemendikdasmen Referensi 2026
+360000,Kab. Nabire,136,60,27,20,4,247,Kemendikdasmen Referensi 2026
+360000,Kab. Puncak Jaya,34,7,3,2,0,46,Kemendikdasmen Referensi 2026
+360000,Kab. Paniai,86,19,6,4,1,116,Kemendikdasmen Referensi 2026
+360000,Kab. Mimika,148,67,27,24,1,267,Kemendikdasmen Referensi 2026
+360000,Kab. Puncak,36,10,5,1,0,52,Kemendikdasmen Referensi 2026
+360000,Kab. Dogiyai,67,14,3,2,1,87,Kemendikdasmen Referensi 2026
+360000,Kab. Intan Jaya,39,8,1,0,0,48,Kemendikdasmen Referensi 2026
+360000,Kab. Deiyai,57,13,6,3,1,80,Kemendikdasmen Referensi 2026
+370000,Kab. Merauke,219,69,34,16,2,340,Kemendikdasmen Referensi 2026
+370000,Kab. Boven Digoel,110,22,8,5,0,145,Kemendikdasmen Referensi 2026
+370000,Kab. Mappi,172,35,10,5,0,222,Kemendikdasmen Referensi 2026
+370000,Kab. Asmat,142,27,8,1,0,178,Kemendikdasmen Referensi 2026
+380000,Kab. Jayawijaya,139,52,22,13,0,226,Kemendikdasmen Referensi 2026
+380000,Kab. Pegunungan Bintang,101,29,14,2,0,146,Kemendikdasmen Referensi 2026
+380000,Kab. Yahukimo,186,53,14,4,0,257,Kemendikdasmen Referensi 2026
+380000,Kab. Tolikara,79,27,6,1,0,113,Kemendikdasmen Referensi 2026
+380000,Kab. Mamberamo Tengah,35,9,5,0,0,49,Kemendikdasmen Referensi 2026
+380000,Kab. Yalimo,55,23,9,2,0,89,Kemendikdasmen Referensi 2026
+380000,Kab. Lanny Jaya,76,30,17,2,0,125,Kemendikdasmen Referensi 2026
+380000,Kab. Nduga,32,9,4,1,0,46,Kemendikdasmen Referensi 2026
+390000,Kab. Maybrat,67,13,4,1,0,85,Kemendikdasmen Referensi 2026
+390000,Kab. Raja Ampat,116,45,18,6,1,186,Kemendikdasmen Referensi 2026
+390000,Kab. Sorong Selatan,111,38,14,5,0,168,Kemendikdasmen Referensi 2026
+390000,Kab. Sorong,149,63,28,9,1,250,Kemendikdasmen Referensi 2026
+390000,Kab. Tambrauw,61,18,5,5,0,89,Kemendikdasmen Referensi 2026
+390000,Kota Sorong,96,49,30,14,3,192,Kemendikdasmen Referensi 2026

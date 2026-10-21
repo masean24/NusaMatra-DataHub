@@ -39,6 +39,11 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ENABLE_DOCS", "NM_ENABLE_DOCS", "enable_docs"),
         description="Toggle API documentation (/docs, /redoc, /scalar, and openapi.json)",
     )
+    bps_api_key: str = Field(
+        default="",
+        validation_alias=AliasChoices("BPS_API_KEY", "NM_BPS_API_KEY", "bps_api_key"),
+        description="Official BPS WebAPI Developer Key",
+    )
 
     model_config = {"env_prefix": "NM_", "env_file": ".env", "extra": "ignore"}
 

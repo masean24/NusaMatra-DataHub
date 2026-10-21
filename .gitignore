@@ -32,6 +32,7 @@ Thumbs.db
 *.zip
 *.gdb/
 *.xml
+data/raw/
 data/boundaries/hdx_*
 data/boundaries/big_gdb/
 data/boundaries/big_*
