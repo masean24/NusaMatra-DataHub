@@ -16,11 +16,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code, database migrations, and indicator reference CSV
+# Copy application code, database migrations, and data fixtures (including data/INDICATOR_MAPPING.csv)
 COPY app/ app/
 COPY data/ data/
 COPY migrations/ migrations/
-COPY INDICATOR_MAPPING.csv .
 
 # Pre-seed the DEMO SQLite database during container image build
 # This pre-bakes the 552 regions & 15.934 indicator values into the image
