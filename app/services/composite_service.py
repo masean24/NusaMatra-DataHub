@@ -7,6 +7,7 @@ from typing import Optional
 import aiosqlite
 
 from app.models.indicators import (
+    CompositePreset,
     CompositeQueryRequest,
     CompositeQueryResult,
     CompositeRegionScore,
@@ -125,3 +126,59 @@ async def compute_composite_scores(
         weights_basis_points=weights,
         regions=results,
     )
+
+
+COMPOSITE_PRESETS: list[CompositePreset] = [
+    CompositePreset(
+        preset_id="bencana_infrastruktur",
+        title="Mitigasi Bencana & Ketahanan Infrastruktur",
+        category="disaster_and_infrastructure",
+        description="Menyorot kabupaten/kota rawan multi-bencana (IRBI & banjir) yang memerlukan penguatan infrastruktur jalan dan elektrifikasi.",
+        target_focus="Infrastruktur dan Mitigasi Bencana",
+        weights={
+            "dis_multihazard_index": 3500,
+            "dis_flood_hazard_idx": 1500,
+            "inf_asphalt_road_village_pct": 2500,
+            "inf_electrification_pct": 2500,
+        },
+    ),
+    CompositePreset(
+        preset_id="kemiskinan_stunting",
+        title="Pengentasan Kemiskinan Ekstrem & Stunting",
+        category="social_and_health",
+        description="Fokus pada wilayah prioritas intervensi penanganan stunting balita, kemiskinan (P0), serta penyediaan air minum dan sanitasi layak.",
+        target_focus="Sosial, Kesehatan, dan Sanitasi",
+        weights={
+            "soc_poverty_rate": 3000,
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_water_pct": 2000,
+            "inf_safe_sanitation_pct": 2000,
+        },
+    ),
+    CompositePreset(
+        preset_id="pendidikan_daerah_3t",
+        title="Pemerataan Kualitas Pendidikan Daerah 3T",
+        category="education_access",
+        description="Identifikasi daerah tertinggal dengan kerusakan ruang kelas tinggi, rasio murid-guru belum ideal, dan keterbatasan akses internet.",
+        target_focus="Fasilitas dan Akses Pendidikan",
+        weights={
+            "edu_damaged_classrooms_pct": 3000,
+            "edu_mean_years_schooling": 2500,
+            "edu_student_teacher_ratio_sd": 2500,
+            "inf_internet_household_pct": 2000,
+        },
+    ),
+    CompositePreset(
+        preset_id="indeks_pembangunan_terpadu",
+        title="Prioritas Pembangunan Komprehensif Nasional",
+        category="balanced_development",
+        description="Penilaian menyeluruh lintas 4 pilar: IPM/HDI, harapan lama sekolah, usia harapan hidup, dan ketahanan risiko multi-bencana.",
+        target_focus="Pembangunan Manusia dan Wilayah Holistik",
+        weights={
+            "soc_hdi": 2500,
+            "dis_multihazard_index": 2500,
+            "edu_expected_years_schooling": 2500,
+            "hlt_life_expectancy": 2500,
+        },
+    ),
+]

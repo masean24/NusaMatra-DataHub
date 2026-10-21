@@ -70,3 +70,31 @@ async def test_composite_query_province_filter(client):
     # Province 32 (Jawa Barat) has 27 kab/kota
     assert data["total_regions"] == 27
     assert len(data["regions"]) == 27
+
+
+@pytest.mark.asyncio
+async def test_get_composite_presets(client):
+    """GET /api/v1/indicators/composite-presets must return valid policy presets."""
+    resp = await client.get("/api/v1/indicators/composite-presets")
+    assert resp.status_code == 200
+
+    body = resp.json()
+    assert body["status"] == "success"
+    presets = body["data"]
+    assert len(presets) >= 4
+
+    for p in presets:
+        assert "preset_id" in p
+        assert "title" in p
+        assert "weights" in p
+        # Every preset must have weights summing to exactly 10,000 basis points
+        weights = p["weights"]
+        assert sum(weights.values()) == 10000, f"Preset {p['preset_id']} does not sum to 10000"
+
+        # Verify executing query with this preset succeeds (status 200)
+        query_resp = await client.post(
+            "/api/v1/indicators/composite-query",
+            json={"weights": weights},
+        )
+        assert query_resp.status_code == 200
+        assert query_resp.json()["data"]["total_regions"] == 514

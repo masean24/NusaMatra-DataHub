@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.openapi.docs import get_redoc_html
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRoute
@@ -139,6 +140,7 @@ if settings.enable_docs:
 # last (outermost) so that even short-circuited error responses (e.g. 503 LIVE
 # fail-closed) receive full CORS headers (Access-Control-Allow-Origin, etc.).
 app.add_middleware(ModeSelector)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 app.add_middleware(
     CORSMiddleware,

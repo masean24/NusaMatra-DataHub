@@ -27,3 +27,12 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Large GIS raw datasets & archives
+*.zip
+*.gdb/
+*.xml
+data/boundaries/hdx_*
+data/boundaries/big_gdb/
+data/boundaries/big_*
+data/boundaries/*.gz

@@ -205,7 +205,7 @@ async def test_composite_unknown_indicator_id_returns_422(client):
 
 @pytest.mark.asyncio
 async def test_kabupaten_boundary_has_geometry_status(client):
-    """GET /boundaries/kabupaten must include geometry_status with geometry_available=false."""
+    """GET /boundaries/kabupaten must include geometry_status with geometry_available=True."""
     resp = await client.get("/api/v1/boundaries/kabupaten")
     assert resp.status_code == 200
 
@@ -213,15 +213,15 @@ async def test_kabupaten_boundary_has_geometry_status(client):
     assert "geometry_status" in data, "geometry_status block missing from boundary response"
 
     gs = data["geometry_status"]
-    assert gs["geometry_available"] is False
-    assert gs["source"] == "DEMO_PLACEHOLDER"
+    assert gs["geometry_available"] is True
+    assert gs["geometry_type_returned"] == "MultiPolygon"
+    assert "BIG" in gs["source"]
     assert gs["boundary_version"] == "BIG-Kepmendagri-300.2.2-2430-2025"
-    assert gs["data_mode"] == "DEMO"
 
 
 @pytest.mark.asyncio
 async def test_provinsi_boundary_has_geometry_status(client):
-    """GET /boundaries/provinsi must include geometry_status with geometry_available=false."""
+    """GET /boundaries/provinsi must include geometry_status with geometry_available=True."""
     resp = await client.get("/api/v1/boundaries/provinsi")
     assert resp.status_code == 200
 
@@ -229,8 +229,9 @@ async def test_provinsi_boundary_has_geometry_status(client):
     assert "geometry_status" in data, "geometry_status block missing from province boundary response"
 
     gs = data["geometry_status"]
-    assert gs["geometry_available"] is False
-    assert gs["source"] == "DEMO_PLACEHOLDER"
+    assert gs["geometry_available"] is True
+    assert gs["geometry_type_returned"] == "MultiPolygon"
+    assert "BIG" in gs["source"]
 
 
 # ---------------------------------------------------------------------------

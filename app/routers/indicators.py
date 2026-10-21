@@ -15,13 +15,14 @@ from app.models.common import (
     WeightValidationError,
 )
 from app.models.indicators import (
+    CompositePreset,
     CompositeQueryRequest,
     CompositeQueryResult,
     IndicatorCatalogItem,
     IndicatorValuesData,
 )
 from app.services.indicator_service import list_indicators, get_indicator_values
-from app.services.composite_service import compute_composite_scores
+from app.services.composite_service import compute_composite_scores, COMPOSITE_PRESETS
 
 router = APIRouter(prefix="/indicators", tags=["Indicators"])
 
@@ -177,4 +178,32 @@ async def composite_query(
             mode=request.state.data_mode,
         ),
         data=result,
+    )
+
+
+@router.get(
+    "/composite-presets",
+    response_model=ApiResponse[list[CompositePreset]],
+    responses=_503_responses,
+)
+async def get_composite_presets(
+    request: Request,
+    mode: Optional[str] = _mode_param,
+    snapshot_id: Optional[str] = _snapshot_param,
+):
+    """
+    Get curated policy-weighting presets for composite scoring.
+
+    Provides ready-to-use scenario weights summing to exactly 10,000 basis points (100%).
+    Frontend map clients can send these directly to POST /indicators/composite-query.
+    """
+    _snapshot_id = request.state.snapshot_id
+
+    return ApiResponse(
+        meta=ResponseMeta(
+            snapshot_id=_snapshot_id,
+            mode=request.state.data_mode,
+            total_count=len(COMPOSITE_PRESETS),
+        ),
+        data=COMPOSITE_PRESETS,
     )

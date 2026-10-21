@@ -2,14 +2,17 @@
 Boundaries router — GeoJSON/TopoJSON boundary delivery.
 Matches API_CONTRACT_DRAFT.md Section 3.
 
-For MVP DEMO, boundaries return a placeholder GeoJSON FeatureCollection
-with region metadata but no actual geometry polygons.
-Real geometries require BIG source data and PostGIS processing.
+Backed by official Badan Informasi Geospasial (BIG) 2026 polygon geometries:
+- 38 Provinsi (including 4 new Papua provinces)
+- 514 Kabupaten / Kota
+- Optimized with 'low' (~6MB / ~1.6MB gzipped) and 'high' resolutions.
 """
 
 from fastapi import APIRouter, Depends, Query, Request
+from pathlib import Path
 from typing import Any, Optional
 import aiosqlite
+import json
 
 from app.database import get_db
 from app.models.common import ApiResponse, ResponseMeta, LiveUnavailableError
@@ -27,8 +30,20 @@ _503_responses = {
     }
 }
 
-# Shared geometry status block injected into every boundary response
+# Official geometry status block injected into every boundary response
 _GEOMETRY_STATUS = {
+    "geometry_available": True,
+    "geometry_type_returned": "MultiPolygon",
+    "source": "Badan Informasi Geospasial (BIG) 2026",
+    "boundary_version": "BIG-Kepmendagri-300.2.2-2430-2025",
+    "data_mode": "REAL_OFFICIAL",
+    "note": (
+        "Official 2026 administrative boundary polygons from Badan Informasi Geospasial (BIG). "
+        "Topologically dissolved and simplified for web 3D GIS visualization."
+    ),
+}
+
+_FALLBACK_GEOMETRY_STATUS = {
     "geometry_available": False,
     "geometry_type_returned": "Point",
     "source": "DEMO_PLACEHOLDER",
@@ -36,9 +51,7 @@ _GEOMETRY_STATUS = {
     "data_mode": "DEMO",
     "note": (
         "MVP DEMO returns label-point geometry only (centroid coordinates). "
-        "Actual polygon boundaries require BIG source data "
-        "(Ina-Geoportal / TanahAir Indonesia) and PostGIS processing. "
-        "DO NOT use these geometries for spatial analysis."
+        "Polygon source file missing, fallback in effect."
     ),
 }
 
@@ -56,6 +69,22 @@ _snapshot_param = Query(
     description="Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
     include_in_schema=True,
 )
+
+_BOUNDARIES_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "boundaries"
+_CACHE: dict[str, dict[str, Any]] = {}
+
+
+def _load_boundary_geojson(filename: str) -> Optional[dict[str, Any]]:
+    """Load and cache boundary GeoJSON files in memory."""
+    if filename in _CACHE:
+        return _CACHE[filename]
+    path = _BOUNDARIES_DIR / filename
+    if path.exists():
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            _CACHE[filename] = data
+            return data
+    return None
 
 
 @router.get(
@@ -75,15 +104,45 @@ async def get_kabupaten_boundaries(
     """
     Serve kabupaten/kota boundary geometries.
 
-    Default format is GeoJSON (Blocker #8 — compatible with 3D renderer).
-    TopoJSON available via ``?format=topojson``.
-
-    > **⚠ DEMO MVP**: ``geometry_available: false``.
-    > Returns **label-point** geometry (centroid coordinates), **not** polygon boundaries.
-    > See ``geometry_status`` in the response for details.
+    Default format is GeoJSON (compatible with 3D renderer).
+    Supports 'low' (fast web 3D map) and 'high' (detailed zoom) resolutions.
+    Backed by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.
     """
     _snapshot_id = request.state.snapshot_id
 
+    filename = f"indonesia_kabupaten_{resolution}.geojson"
+    raw_geojson = _load_boundary_geojson(filename)
+
+    if raw_geojson:
+        features = raw_geojson.get("features", [])
+        if province_id:
+            features = [
+                f for f in features
+                if f.get("properties", {}).get("parent_region_id") == province_id
+                or f.get("properties", {}).get("province_id") == province_id
+            ]
+
+        geojson = {
+            "type": "FeatureCollection",
+            "features": features,
+            "geometry_status": _GEOMETRY_STATUS,
+            "request_params": {
+                "format": format,
+                "resolution": resolution,
+            },
+        }
+
+        return ApiResponse(
+            meta=ResponseMeta(
+                snapshot_id=_snapshot_id,
+                mode=request.state.data_mode,
+                boundary_version=settings.boundary_version,
+                total_count=len(features),
+            ),
+            data=geojson,
+        )
+
+    # Fallback to database point query if geojson file not found
     conditions = ["r.level IN ('kabupaten', 'kota')"]
     params: list = []
 
@@ -108,7 +167,6 @@ async def get_kabupaten_boundaries(
     )
     rows = await cursor.fetchall()
 
-    # Build GeoJSON FeatureCollection with placeholder point geometry
     features = []
     for r in rows:
         feature = {
@@ -138,7 +196,7 @@ async def get_kabupaten_boundaries(
     geojson = {
         "type": "FeatureCollection",
         "features": features,
-        "geometry_status": _GEOMETRY_STATUS,
+        "geometry_status": _FALLBACK_GEOMETRY_STATUS,
         "request_params": {
             "format": format,
             "resolution": resolution,
@@ -164,6 +222,7 @@ async def get_kabupaten_boundaries(
 async def get_provinsi_boundaries(
     request: Request,
     format: str = Query("geojson", pattern="^(geojson|topojson)$"),
+    resolution: str = Query("low", pattern="^(low|high)$"),
     mode: Optional[str] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
@@ -171,12 +230,37 @@ async def get_provinsi_boundaries(
     """
     Serve province boundary geometries.
 
-    > **⚠ DEMO MVP**: ``geometry_available: false``.
-    > Returns **label-point** geometry (centroid coordinates), **not** polygon boundaries.
-    > See ``geometry_status`` in the response for details.
+    Default format is GeoJSON (38 provinces including 4 new Papua provinces).
+    Backed by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.
     """
     _snapshot_id = request.state.snapshot_id
 
+    filename = f"indonesia_provinsi_{resolution}.geojson"
+    raw_geojson = _load_boundary_geojson(filename)
+
+    if raw_geojson:
+        features = raw_geojson.get("features", [])
+        geojson = {
+            "type": "FeatureCollection",
+            "features": features,
+            "geometry_status": _GEOMETRY_STATUS,
+            "request_params": {
+                "format": format,
+                "resolution": resolution,
+            },
+        }
+
+        return ApiResponse(
+            meta=ResponseMeta(
+                snapshot_id=_snapshot_id,
+                mode=request.state.data_mode,
+                boundary_version=settings.boundary_version,
+                total_count=len(features),
+            ),
+            data=geojson,
+        )
+
+    # Fallback to database point query if geojson file not found
     cursor = await db.execute(
         """
         SELECT
@@ -213,7 +297,7 @@ async def get_provinsi_boundaries(
     geojson = {
         "type": "FeatureCollection",
         "features": features,
-        "geometry_status": _GEOMETRY_STATUS,
+        "geometry_status": _FALLBACK_GEOMETRY_STATUS,
         "request_params": {
             "format": format,
         },

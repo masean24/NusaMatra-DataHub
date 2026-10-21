@@ -114,3 +114,14 @@ class CompositeQueryResult(BaseModel):
     total_regions: int
     weights_basis_points: dict[str, int]
     regions: list[CompositeRegionScore] = []
+
+
+class CompositePreset(BaseModel):
+    """Pre-defined policy weighting scenario."""
+
+    preset_id: str
+    title: str
+    category: str
+    description: str
+    target_focus: str
+    weights: dict[str, int]
