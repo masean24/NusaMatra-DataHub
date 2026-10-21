@@ -201,10 +201,14 @@ curl -i -X GET "http://127.0.0.1:8000/api/v1/health?mode=live"
 
 ## 📖 Dokumentasi Interaktif API
 
-Server menyertakan dua antarmuka dokumentasi bawaan yang interaktif:
-- **Swagger UI:** [http://127.0.0.1:8000/api/v1/docs](http://127.0.0.1:8000/api/v1/docs) *(atau [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs))*
-- **ReDoc:** [http://127.0.0.1:8000/api/v1/redoc](http://127.0.0.1:8000/api/v1/redoc) *(atau [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc))*
-- **OpenAPI 3.1 JSON Specification:** [http://127.0.0.1:8000/api/v1/openapi.json](http://127.0.0.1:8000/api/v1/openapi.json)
+Server menyertakan tiga antarmuka dokumentasi bawaan yang interaktif dan modern:
+- **⚡ Swagger UI (Modern Dark Mode):** [http://127.0.0.1:8000/api/v1/docs](http://127.0.0.1:8000/api/v1/docs) *(atau [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs))*
+  - Dilengkapi search filter instan, auto *"Try it out"*, latency tracker, dan header navigasi brand Nusa Matra.
+- **🎨 Stoplight Elements (Stripe/GitHub Style):** [http://127.0.0.1:8000/api/v1/elements](http://127.0.0.1:8000/api/v1/elements) *(atau [http://127.0.0.1:8000/elements](http://127.0.0.1:8000/elements))*
+  - Layout 3-kolom modern dengan live interactive request maker dan code examples multi-bahasa.
+- **📖 ReDoc:** [http://127.0.0.1:8000/api/v1/redoc](http://127.0.0.1:8000/api/v1/redoc) *(atau [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc))*
+  - Format dokumentasi formal ala buku panduan standar data kementerian.
+- **📄 OpenAPI 3.1 JSON Specification:** [http://127.0.0.1:8000/api/v1/openapi.json](http://127.0.0.1:8000/api/v1/openapi.json)
 
 > [!TIP]  
 > **Keamanan Lingkungan Produksi:**  
