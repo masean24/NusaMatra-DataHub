@@ -13,7 +13,6 @@ from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 from fastapi.responses import FileResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
-from scalar_fastapi import get_scalar_api_reference
 
 from app.config import settings
 from app.database import init_db
@@ -68,16 +67,6 @@ async def favicon():
 
 # --- Documentation routes (conditioned on ENABLE_DOCS) ---
 if settings.enable_docs:
-    @app.get("/scalar", include_in_schema=False)
-    @app.get(f"{settings.api_prefix}/scalar", include_in_schema=False)
-    async def scalar_html():
-        """Interactive API documentation powered by Scalar."""
-        return get_scalar_api_reference(
-            openapi_url=app.openapi_url,
-            title=app.title,
-            scalar_favicon_url="/static/favicon.png",
-        )
-
     @app.get("/docs", include_in_schema=False)
     @app.get(f"{settings.api_prefix}/docs", include_in_schema=False)
     async def custom_swagger_ui_html():
@@ -143,7 +132,6 @@ async def root():
     }
     if settings.enable_docs:
         res["docs"] = f"{settings.api_prefix}/docs"
-        res["scalar_docs"] = "/scalar"
     return res
 
 

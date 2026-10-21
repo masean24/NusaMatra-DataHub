@@ -28,17 +28,6 @@ async def test_favicon_and_docs_custom_icon(client):
 
 
 @pytest.mark.asyncio
-async def test_scalar_docs_endpoint(client):
-    """GET /scalar and /api/v1/scalar should serve Scalar API Reference."""
-    for path in ("/scalar", "/api/v1/scalar"):
-        resp = await client.get(path)
-        assert resp.status_code == 200
-        text = resp.text
-        assert "@scalar/api-reference" in text or "scalar" in text.lower()
-        assert "Nusa Matra Data Hub" in text
-
-
-@pytest.mark.asyncio
 async def test_unique_operation_id_function(client):
     """OpenAPI schema must use the endpoint function name as operationId."""
     resp = await client.get("/api/v1/openapi.json")
@@ -68,9 +57,9 @@ async def test_docs_disabled_when_enable_docs_is_false(monkeypatch):
     reloaded_main = importlib.reload(app.main)
     transport = ASGITransport(app=reloaded_main.app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        assert (await ac.get("/scalar")).status_code == 404
-        assert (await ac.get("/api/v1/scalar")).status_code == 404
+        assert (await ac.get("/docs")).status_code == 404
         assert (await ac.get("/api/v1/docs")).status_code == 404
+        assert (await ac.get("/redoc")).status_code == 404
         assert (await ac.get("/api/v1/redoc")).status_code == 404
         assert (await ac.get("/api/v1/openapi.json")).status_code == 404
 
