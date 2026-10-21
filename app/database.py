@@ -8,16 +8,20 @@ Production LIVE mode would use asyncpg + PostGIS.
 import aiosqlite
 from pathlib import Path
 from contextlib import asynccontextmanager
+from starlette.requests import Request
 from app.config import settings
 
 
-def _db_path() -> str:
+def _db_path(mode: str = "DEMO") -> str:
+    if mode == "LIVE" and settings.enable_live_mode and Path(settings.live_database_path).exists():
+        return settings.live_database_path
     return settings.database_path
 
 
-async def get_db():
-    """FastAPI dependency — yields an async SQLite connection."""
-    db = await aiosqlite.connect(_db_path())
+async def get_db(request: Request = None):
+    """FastAPI dependency — yields an async SQLite connection matching the resolved mode."""
+    mode = getattr(request.state, "data_mode", settings.default_mode) if request else settings.default_mode
+    db = await aiosqlite.connect(_db_path(mode))
     db.row_factory = aiosqlite.Row
     try:
         yield db
@@ -34,10 +38,10 @@ async def init_db():
         await db.commit()
 
 
-async def check_db_health() -> dict:
+async def check_db_health(mode: str = "DEMO") -> dict:
     """Quick health probe — returns row counts for key tables."""
     try:
-        async with aiosqlite.connect(_db_path()) as db:
+        async with aiosqlite.connect(_db_path(mode)) as db:
             db.row_factory = aiosqlite.Row
             counts = {}
             for table in ("dim_regions", "dim_indicators", "fact_indicator_values", "data_snapshots"):

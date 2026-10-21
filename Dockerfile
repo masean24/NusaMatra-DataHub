@@ -16,14 +16,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code, database migrations, and data fixtures (including data/INDICATOR_MAPPING.csv)
+# Copy application code, database migrations, data fixtures, and seed scripts
 COPY app/ app/
 COPY data/ data/
 COPY migrations/ migrations/
+COPY scripts/ scripts/
 
-# Pre-seed the DEMO SQLite database during container image build
-# This pre-bakes the 552 regions & 15.934 indicator values into the image
+# Pre-seed both DEMO and verified official LIVE databases during container image build
+# This pre-bakes the DEMO dataset (15,934 values) & LIVE dataset (7,648 verified values) into the image
 RUN python data/seed_db.py
+RUN python scripts/seed_live_db.py
 
 # Expose default port (Coolify detects this automatically for port mapping)
 EXPOSE 8000

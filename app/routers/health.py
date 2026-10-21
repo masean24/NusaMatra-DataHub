@@ -16,7 +16,8 @@ router = APIRouter(tags=["System"])
 async def health_check(request: Request):
     """Check API health: database connectivity, mode, and fallback status."""
 
-    db_health = await check_db_health()
+    mode = getattr(request.state, "data_mode", settings.default_mode)
+    db_health = await check_db_health(mode=mode)
 
     overall = "healthy" if db_health["status"] == "connected" else "degraded"
 

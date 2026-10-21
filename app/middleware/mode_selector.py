@@ -16,6 +16,7 @@ If LIVE is requested but unavailable, we return 503.
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
+from pathlib import Path
 from app.config import settings
 
 
@@ -33,30 +34,35 @@ class ModeSelector(BaseHTTPMiddleware):
         if mode not in ("DEMO", "LIVE"):
             mode = settings.default_mode
 
-        # BLOCKER #1: LIVE must fail closed — never substitute DEMO
+        # BLOCKER #1: LIVE must fail closed — unless explicitly enabled with verified database
         if mode == "LIVE":
-            return JSONResponse(
-                status_code=503,
-                content={
-                    "status": "error",
-                    "code": "LIVE_UNAVAILABLE",
-                    "message": (
-                        "LIVE mode is not yet available. "
-                        "LIVE data sources have not been verified and connected. "
-                        "Use mode=demo for the demonstration dataset."
-                    ),
-                },
-                headers={
-                    "X-NusaMatra-Mode": "LIVE",
-                    "X-Data-Fallback": "UNAVAILABLE",
-                },
+            if not settings.enable_live_mode or not Path(settings.live_database_path).exists():
+                return JSONResponse(
+                    status_code=503,
+                    content={
+                        "status": "error",
+                        "code": "LIVE_UNAVAILABLE",
+                        "message": (
+                            "LIVE mode is not yet available. "
+                            "LIVE data sources have not been verified and connected. "
+                            "Use mode=demo for the demonstration dataset."
+                        ),
+                    },
+                    headers={
+                        "X-NusaMatra-Mode": "LIVE",
+                        "X-Data-Fallback": "UNAVAILABLE",
+                    },
+                )
+            snapshot_id = (
+                request.query_params.get("snapshot_id")
+                or settings.live_snapshot_id
             )
-
-        # Resolve snapshot
-        snapshot_id = (
-            request.query_params.get("snapshot_id")
-            or settings.default_snapshot_id
-        )
+        else:
+            # Resolve snapshot
+            snapshot_id = (
+                request.query_params.get("snapshot_id")
+                or settings.default_snapshot_id
+            )
 
         # Store in request state for downstream handlers
         request.state.data_mode = mode

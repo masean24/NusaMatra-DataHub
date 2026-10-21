@@ -24,6 +24,19 @@ class Settings(BaseSettings):
     default_snapshot_id: str = "2026.10.0-wia-demo"
     boundary_version: str = "BIG-Kepmendagri-300.2.2-2430-2025"
 
+    # LIVE mode controls
+    enable_live_mode: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("ENABLE_LIVE_MODE", "NM_ENABLE_LIVE_MODE", "enable_live_mode"),
+        description="Enable verified LIVE mode against official datasets",
+    )
+    live_database_path: str = Field(
+        default=str(Path(__file__).parent.parent / "data" / "nusa_matra_live.db"),
+        validation_alias=AliasChoices("LIVE_DATABASE_PATH", "NM_LIVE_DATABASE_PATH", "live_database_path"),
+        description="Path to verified official LIVE SQLite database",
+    )
+    live_snapshot_id: str = "2026.10.0-official-live"
+
     # API settings & documentation
     api_prefix: str = "/api/v1"
     cors_origins: list[str] = [
