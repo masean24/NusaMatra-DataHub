@@ -5,6 +5,7 @@ Geographic Decision-Support Backend API (WIA 2026).
 Serves /api/v1 endpoints for the Nusa Matra 3D map frontend.
 """
 
+import json
 from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI
@@ -76,6 +77,8 @@ if settings.enable_docs:
         Ultra-modern interactive API reference powered by Scalar.
         Features 3-column split view, deepSpace dark theme, live playground, and multi-language code snippets.
         """
+        spec = app.openapi()
+        spec_json = json.dumps(spec)
         scalar_html = f"""<!doctype html>
 <html lang="en">
   <head>
@@ -84,38 +87,38 @@ if settings.enable_docs:
     <title>{app.title} — API Reference</title>
     <link rel="icon" type="image/png" href="/static/favicon.png" />
     <style>
-      body {{
+      html, body {{
+        height: 100%;
         margin: 0;
         padding: 0;
         background-color: #0b0f19;
       }}
+      #app {{
+        height: 100%;
+      }}
     </style>
   </head>
   <body>
-    <script
-      id="api-reference"
-      type="application/json"
-      data-url="{app.openapi_url}">
-      {{
-        "theme": "deepSpace",
-        "darkMode": true,
-        "forceDarkModeState": "dark",
-        "showSidebar": true,
-        "layout": "modern",
-        "searchHotKey": "k",
-        "defaultHttpClient": {{
-          "targetKey": "javascript",
-          "clientKey": "fetch"
-        }},
-        "hiddenClients": [],
-        "favicon": "/static/favicon.png",
-        "metaData": {{
-          "title": "{app.title} — API Reference",
-          "description": "Nusa Matra Data Hub — Geographic Decision-Support Backend API (WIA 2026)"
-        }}
-      }}
-    </script>
+    <div id="app"></div>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script>
+      Scalar.createApiReference('#app', {{
+        spec: {{
+          content: {spec_json},
+        }},
+        theme: 'deepSpace',
+        darkMode: true,
+        forceDarkModeState: 'dark',
+        showSidebar: true,
+        layout: 'modern',
+        searchHotKey: 'k',
+        defaultHttpClient: {{
+          targetKey: 'javascript',
+          clientKey: 'fetch'
+        }},
+        favicon: '/static/favicon.png'
+      }});
+    </script>
   </body>
 </html>"""
         return HTMLResponse(scalar_html)
