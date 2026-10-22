@@ -28,7 +28,13 @@ async def run_smoke_test(base_url: str = None):
                 "soc_poverty_rate": 2000,
                 "hlt_stunting_prevalence": 2000
             }
-        })
+        }),
+        ("GET", "/api/v1/earthquakes/latest", {}),
+        ("GET", "/api/v1/earthquakes/latest?mode=live", {}),
+        ("GET", "/api/v1/earthquakes/recent?mode=live", {}),
+        ("GET", "/api/v1/earthquakes/felt?mode=live", {}),
+        ("GET", "/api/v1/earthquakes/geojson?mode=live", {}),
+        ("GET", "/api/v1/earthquakes/summary?mode=live", {})
     ]
     
     results = []

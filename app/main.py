@@ -19,7 +19,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import settings
 from app.database import init_db
 from app.middleware.mode_selector import ModeSelector
-from app.routers import regions, indicators, boundaries, datasets, snapshots, health
+from app.routers import regions, indicators, boundaries, datasets, snapshots, health, earthquakes
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -174,6 +174,7 @@ app.include_router(indicators.router, prefix=settings.api_prefix)
 app.include_router(boundaries.router, prefix=settings.api_prefix)
 app.include_router(datasets.router, prefix=settings.api_prefix)
 app.include_router(snapshots.router, prefix=settings.api_prefix)
+app.include_router(earthquakes.router, prefix=settings.api_prefix)
 
 
 @app.get("/", tags=["Root"])
@@ -191,6 +192,11 @@ async def root():
             "boundaries_prov": f"{settings.api_prefix}/boundaries/provinsi",
             "datasets": f"{settings.api_prefix}/datasets",
             "snapshots": f"{settings.api_prefix}/snapshots",
+            "earthquakes_latest": f"{settings.api_prefix}/earthquakes/latest",
+            "earthquakes_recent": f"{settings.api_prefix}/earthquakes/recent",
+            "earthquakes_felt": f"{settings.api_prefix}/earthquakes/felt",
+            "earthquakes_geojson": f"{settings.api_prefix}/earthquakes/geojson",
+            "earthquakes_summary": f"{settings.api_prefix}/earthquakes/summary",
         },
         "notice": (
             "DEMO mode only. All data is illustrative (DEMO_EXAMPLE). "

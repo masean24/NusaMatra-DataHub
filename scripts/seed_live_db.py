@@ -54,6 +54,11 @@ OFFICIAL_DATASETS = [
      "https://geoservices.big.go.id/",
      "https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/",
      "ESRI_GDB", "Geospasial Terbuka BIG", "Semesteran"),
+    ("bmkg_earthquakes_live", "BMKG", "Badan Meteorologi, Klimatologi, dan Geofisika",
+     "Pemantauan Gempabumi Terkini & Dirasakan Indonesia (Auto-Gempa & M >= 5.0)",
+     "https://data.bmkg.go.id/gempabumi/",
+     "https://data.bmkg.go.id/DataMKG/TEWS/",
+     "REST_API", "Data Terbuka BMKG", "Event-Driven"),
 ]
 
 def norm(s):
