@@ -29,11 +29,12 @@ async def run_smoke_test(base_url: str = None):
                 "hlt_stunting_prevalence": 2000
             }
         }),
-        ("GET", "/api/v1/earthquakes/latest", {}),
         ("GET", "/api/v1/earthquakes/latest?mode=live", {}),
         ("GET", "/api/v1/earthquakes/recent?mode=live", {}),
         ("GET", "/api/v1/earthquakes/felt?mode=live", {}),
         ("GET", "/api/v1/earthquakes/geojson?mode=live", {}),
+        ("GET", "/api/v1/earthquakes/geojson?mode=demo", {}),
+        ("GET", "/api/v1/earthquakes/geojson?mode=live&simulate_upstream_failure=true", {}),
         ("GET", "/api/v1/earthquakes/summary?mode=live", {})
     ]
     
@@ -53,6 +54,7 @@ async def run_smoke_test(base_url: str = None):
                     "X-NusaMatra-Mode": resp.headers.get("X-NusaMatra-Mode"),
                     "X-NusaMatra-Snapshot": resp.headers.get("X-NusaMatra-Snapshot"),
                     "X-Data-Fallback": resp.headers.get("X-Data-Fallback"),
+                    "Cache-Control": resp.headers.get("Cache-Control"),
                     "Content-Type": resp.headers.get("Content-Type")
                 }
                 
@@ -87,6 +89,7 @@ async def run_smoke_test(base_url: str = None):
                     "X-NusaMatra-Mode": resp.headers.get("X-NusaMatra-Mode"),
                     "X-NusaMatra-Snapshot": resp.headers.get("X-NusaMatra-Snapshot"),
                     "X-Data-Fallback": resp.headers.get("X-Data-Fallback"),
+                    "Cache-Control": resp.headers.get("Cache-Control"),
                     "Content-Type": resp.headers.get("Content-Type")
                 }
                 

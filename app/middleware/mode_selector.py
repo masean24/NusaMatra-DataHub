@@ -71,10 +71,17 @@ class ModeSelector(BaseHTTPMiddleware):
         # Call the actual endpoint handler
         response = await call_next(request)
 
-        # Inject standard response headers
+        # Inject standard response headers if not explicitly set by the route handler
         response.headers["X-NusaMatra-Snapshot"] = snapshot_id
         response.headers["X-NusaMatra-Mode"] = mode
-        response.headers["X-Data-Fallback"] = "NONE"
-        response.headers["Cache-Control"] = "public, max-age=3600, stale-while-revalidate=86400"
+        if "X-Data-Fallback" not in response.headers:
+            response.headers["X-Data-Fallback"] = "NONE"
+
+        # Apply short/no-cache for dynamic real-time feeds (e.g. earthquakes), long-cache for static datasets
+        if "Cache-Control" not in response.headers:
+            if request.url.path.startswith(f"{settings.api_prefix}/earthquakes"):
+                response.headers["Cache-Control"] = "no-cache, must-revalidate, max-age=0"
+            else:
+                response.headers["Cache-Control"] = "public, max-age=3600, stale-while-revalidate=86400"
 
         return response

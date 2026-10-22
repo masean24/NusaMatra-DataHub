@@ -1,32 +1,45 @@
 """
 Unit tests for BMKG Earthquake Endpoints.
-Covers latest, recent M5+, felt, GeoJSON FeatureCollection, and summary.
+Covers latest, recent M5+, felt, GeoJSON FeatureCollection, summary,
+provenance metadata, cache policies, and fail-closed upstream simulations.
 """
 
 import pytest
 import httpx
 from app.main import app
+from app.config import settings
 from app.services import bmkg_service
 
 
 @pytest.fixture(autouse=True)
 def reset_earthquake_cache():
-    """Ensure clean cache before each test run."""
-    bmkg_service._cache._cache = {}
+    """Ensure clean cache and live mode enabled before each test run."""
+    bmkg_service._cache._live_cache = {}
     bmkg_service._cache._cached_at = None
+    bmkg_service._cache._last_success_at = None
+    original_live = settings.enable_live_mode
+    settings.enable_live_mode = True
+    yield
+    settings.enable_live_mode = original_live
+    bmkg_service._cache._live_cache = {}
+    bmkg_service._cache._cached_at = None
+    bmkg_service._cache._last_success_at = None
 
 
 @pytest.mark.asyncio
 async def test_get_earthquakes_latest():
     """Verify latest earthquake endpoint returns 200 and standard event format."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.get("/api/v1/earthquakes/latest")
+        resp = await client.get("/api/v1/earthquakes/latest?mode=live")
         assert resp.status_code == 200
 
         body = resp.json()
         assert body["status"] == "success"
         assert "meta" in body
         assert "data" in body
+        assert body["meta"]["data_origin"] in ("bmkg_live", "bmkg_cache")
+        assert body["meta"]["is_stale"] is False
+        assert body["meta"]["last_success_at"] is not None
 
         event = body["data"]
         assert event is not None
@@ -45,7 +58,7 @@ async def test_get_earthquakes_latest():
 async def test_get_earthquakes_recent_m5():
     """Verify recent M5+ earthquakes endpoint returns list of significant events."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.get("/api/v1/earthquakes/recent")
+        resp = await client.get("/api/v1/earthquakes/recent?mode=live")
         assert resp.status_code == 200
 
         body = resp.json()
@@ -67,7 +80,7 @@ async def test_get_earthquakes_recent_m5():
 async def test_get_earthquakes_felt():
     """Verify felt earthquakes endpoint returns events with intensity notes."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.get("/api/v1/earthquakes/felt")
+        resp = await client.get("/api/v1/earthquakes/felt?mode=live")
         assert resp.status_code == 200
 
         body = resp.json()
@@ -77,18 +90,23 @@ async def test_get_earthquakes_felt():
         assert len(events) > 0
         assert len(events) <= 15
 
-        # All felt events should have felt intensity description
         for ev in events:
             assert ev["felt"] is not None
             assert len(ev["felt"]) > 0
 
 
 @pytest.mark.asyncio
-async def test_get_earthquakes_geojson():
-    """Verify RFC 7946 GeoJSON FeatureCollection format for 3D map engines."""
+async def test_get_earthquakes_geojson_live_provenance():
+    """Verify GeoJSON FeatureCollection metadata, origin, and headers in LIVE mode."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.get("/api/v1/earthquakes/geojson")
+        resp = await client.get("/api/v1/earthquakes/geojson?mode=live")
         assert resp.status_code == 200
+
+        # Check HTTP Headers
+        assert resp.headers.get("X-NusaMatra-Mode") == "LIVE"
+        assert resp.headers.get("X-Data-Fallback") == "NONE"
+        assert "no-cache" in resp.headers.get("Cache-Control", "")
+        assert "must-revalidate" in resp.headers.get("Cache-Control", "")
 
         geojson = resp.json()
         assert geojson["type"] == "FeatureCollection"
@@ -96,6 +114,13 @@ async def test_get_earthquakes_geojson():
         assert "features" in geojson
         assert isinstance(geojson["features"], list)
         assert len(geojson["features"]) > 0
+
+        # Validate metadata pipeline provenance
+        meta = geojson["metadata"]
+        assert meta["data_origin"] in ("bmkg_live", "bmkg_cache")
+        assert meta["last_success_at"] is not None
+        assert meta["is_stale"] is False
+        assert meta["cache_ttl_seconds"] == 60
 
         first = geojson["features"][0]
         assert first["type"] == "Feature"
@@ -107,6 +132,7 @@ async def test_get_earthquakes_geojson():
         assert "depth_km" in props
         assert "area" in props
         assert "severity" in props
+        assert props["data_origin"] in ("bmkg_live", "bmkg_cache")
         assert props["severity"] in ("LOW", "MODERATE", "HIGH", "SEVERE")
         assert "visual_color" in props
         assert props["visual_color"].startswith("#")
@@ -115,10 +141,67 @@ async def test_get_earthquakes_geojson():
 
 
 @pytest.mark.asyncio
+async def test_get_earthquakes_geojson_demo_fixture():
+    """Verify DEMO mode returns fixture provenance and DEMO_FIXTURE header."""
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
+        resp = await client.get("/api/v1/earthquakes/geojson?mode=demo")
+        assert resp.status_code == 200
+
+        # In DEMO mode:
+        assert resp.headers.get("X-NusaMatra-Mode") == "DEMO"
+        assert resp.headers.get("X-Data-Fallback") == "DEMO_FIXTURE"
+
+        geojson = resp.json()
+        assert geojson["metadata"]["data_origin"] == "fixture"
+        assert geojson["metadata"]["last_success_at"] is None
+        assert geojson["metadata"]["is_stale"] is False
+
+
+@pytest.mark.asyncio
+async def test_earthquakes_live_caching_transition():
+    """Verify transition from bmkg_live to bmkg_cache within 60s window."""
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
+        # First call: fetches fresh
+        resp1 = await client.get("/api/v1/earthquakes/geojson?mode=live")
+        assert resp1.status_code == 200
+        origin1 = resp1.json()["metadata"]["data_origin"]
+        assert origin1 == "bmkg_live"
+        last_success1 = resp1.json()["metadata"]["last_success_at"]
+
+        # Immediate second call: must hit in-memory cache
+        resp2 = await client.get("/api/v1/earthquakes/geojson?mode=live")
+        assert resp2.status_code == 200
+        origin2 = resp2.json()["metadata"]["data_origin"]
+        assert origin2 == "bmkg_cache"
+        last_success2 = resp2.json()["metadata"]["last_success_at"]
+
+        assert last_success1 == last_success2
+        assert resp2.json()["metadata"]["is_stale"] is False
+
+
+@pytest.mark.asyncio
+async def test_earthquakes_live_upstream_failure_simulation():
+    """Verify fail-closed 503 behavior when BMKG live upstream is unreachable."""
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
+        resp = await client.get("/api/v1/earthquakes/geojson?mode=live&simulate_upstream_failure=true")
+        assert resp.status_code == 503
+
+        # Header checks
+        assert resp.headers.get("X-NusaMatra-Mode") == "LIVE"
+        assert resp.headers.get("X-Data-Fallback") == "UNAVAILABLE"
+        assert "no-cache" in resp.headers.get("Cache-Control", "")
+
+        body = resp.json()
+        assert body["status"] == "error"
+        assert body["code"] == "UPSTREAM_UNAVAILABLE"
+        assert "LIVE mode fails closed" in body["message"]
+
+
+@pytest.mark.asyncio
 async def test_get_earthquakes_summary():
     """Verify earthquake activity summary endpoint."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.get("/api/v1/earthquakes/summary")
+        resp = await client.get("/api/v1/earthquakes/summary?mode=live")
         assert resp.status_code == 200
 
         body = resp.json()
@@ -128,21 +211,6 @@ async def test_get_earthquakes_summary():
         assert "felt_count" in summary
         assert "cache_ttl_seconds" in summary
         assert summary["cache_ttl_seconds"] == 60
-        assert "agency" in summary
+        assert summary["data_origin"] in ("bmkg_live", "bmkg_cache")
+        assert summary["is_stale"] is False
         assert "BMKG" in summary["agency"]
-
-
-@pytest.mark.asyncio
-async def test_earthquakes_cache_preserves_rate_limits():
-    """Verify that multiple consecutive calls hit in-memory cache."""
-    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        # First call populates cache
-        resp1 = await client.get("/api/v1/earthquakes/summary")
-        cached_at1 = resp1.json()["data"]["cached_at"]
-
-        # Second call immediately should return identical cached_at
-        resp2 = await client.get("/api/v1/earthquakes/summary")
-        cached_at2 = resp2.json()["data"]["cached_at"]
-
-        assert cached_at1 == cached_at2
-        assert bmkg_service._cache.is_fresh() is True

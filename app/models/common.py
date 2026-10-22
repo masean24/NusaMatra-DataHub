@@ -16,6 +16,9 @@ class ResponseMeta(BaseModel):
     mode: str = Field(..., examples=["DEMO"])
     boundary_version: Optional[str] = None
     total_count: Optional[int] = None
+    data_origin: Optional[str] = Field(None, description="bmkg_live | bmkg_cache | fixture")
+    last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream fetch")
+    is_stale: Optional[bool] = Field(None, description="True if data is beyond cache TTL or upstream is unavailable")
 
 
 class ApiResponse(BaseModel, Generic[T]):

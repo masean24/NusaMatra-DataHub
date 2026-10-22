@@ -46,11 +46,25 @@ class GeoJsonFeature(BaseModel):
     properties: dict[str, Any]
 
 
+class EarthquakeMetadata(BaseModel):
+    """Metadata block for Earthquake GeoJSON FeatureCollection."""
+
+    agency: str = "BMKG"
+    description: str = "Indonesian Seismic Monitoring Epicenters (Unified Live Feed)"
+    total_features: int
+    data_origin: str = Field(..., description="bmkg_live | bmkg_cache | fixture")
+    last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream BMKG fetch")
+    is_stale: bool = Field(False, description="Status whether earthquake data is beyond cache TTL or upstream is unavailable")
+    cached_at: Optional[str] = None
+    cache_ttl_seconds: int = 60
+    source_portal: str = "https://data.bmkg.go.id/gempabumi/"
+
+
 class EarthquakeGeoJsonCollection(BaseModel):
     """RFC 7946 GeoJSON FeatureCollection for direct consumption by 3D map engines."""
 
     type: str = "FeatureCollection"
-    metadata: dict[str, Any]
+    metadata: EarthquakeMetadata
     features: list[GeoJsonFeature]
 
 
@@ -61,6 +75,9 @@ class EarthquakeSummary(BaseModel):
     recent_m5_count: int = Field(..., description="Number of recent earthquakes M >= 5.0")
     felt_count: int = Field(..., description="Number of recent felt earthquakes")
     max_magnitude_recent: Optional[float] = Field(None, description="Highest magnitude among recent events")
+    data_origin: str = Field("bmkg_live", description="bmkg_live | bmkg_cache | fixture")
+    last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream fetch")
+    is_stale: bool = Field(False, description="Whether data is currently stale")
     cached_at: str = Field(..., description="ISO 8601 timestamp when data was fetched/cached")
     cache_ttl_seconds: int = Field(60, description="Cache Time-To-Live in seconds")
     agency: str = "BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)"

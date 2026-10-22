@@ -7,6 +7,7 @@
       "X-NusaMatra-Mode": "DEMO",
       "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -36,6 +37,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -65,6 +67,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -73,7 +76,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 1
+        "total_count": 1,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": [
         {
@@ -82,8 +88,8 @@
           "environment_tag": "LIVE",
           "is_active_default": true,
           "boundary_version": "BIG-20260601",
-          "created_at": "2026-10-21 17:08:15",
-          "published_at": "2026-10-21 17:08:15",
+          "created_at": "2026-10-22 03:02:58",
+          "published_at": "2026-10-22 03:02:58",
           "manifest_checksum": "60c1d0314914ddca1cb41f13180481aecfdda3cc5e88dd6748e20a007f32325e",
           "notes": "100% verified official data compiled from primary government sources.",
           "indicator_completeness_pct": 51.6
@@ -99,6 +105,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -107,7 +114,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 5
+        "total_count": 6,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": [
         {
@@ -120,8 +130,21 @@
           "access_method": "ESRI_GDB",
           "license_name": "Geospasial Terbuka BIG",
           "update_frequency": "Semesteran",
-          "last_ingested_at": "2026-10-21 17:08:15",
+          "last_ingested_at": "2026-10-22 03:02:58",
           "raw_sha256": "632f8574cf68843699ceb3f02386d75da4972508e66027d8937a724d959f1d68"
+        },
+        {
+          "dataset_id": "bmkg_earthquakes_live",
+          "agency_code": "BMKG",
+          "agency_name": "Badan Meteorologi, Klimatologi, dan Geofisika",
+          "dataset_title": "Pemantauan Gempabumi Terkini & Dirasakan Indonesia (Auto-Gempa & M >= 5.0)",
+          "official_portal_url": "https://data.bmkg.go.id/gempabumi/",
+          "api_or_download_url": "https://data.bmkg.go.id/DataMKG/TEWS/",
+          "access_method": "REST_API",
+          "license_name": "Data Terbuka BMKG",
+          "update_frequency": "Event-Driven",
+          "last_ingested_at": "2026-10-22 03:02:58",
+          "raw_sha256": "adbf8bcc74a5e0239affbfc3f221b2ac861d5a921084f5d688313c42316eb53d"
         },
         {
           "dataset_id": "bnpb_irbi_2024",
@@ -133,7 +156,7 @@
           "access_method": "FLIPBOOK_HTML",
           "license_name": "Data Terbuka BNPB",
           "update_frequency": "Tahunan",
-          "last_ingested_at": "2026-10-21 17:08:15",
+          "last_ingested_at": "2026-10-22 03:02:58",
           "raw_sha256": "198684fd660359510a27ce746cc21963c8d8e972983256b5d3e86d27a1081952"
         },
         {
@@ -146,7 +169,7 @@
           "access_method": "REST_API",
           "license_name": "Data Terbuka BPS",
           "update_frequency": "Tahunan",
-          "last_ingested_at": "2026-10-21 17:08:15",
+          "last_ingested_at": "2026-10-22 03:02:58",
           "raw_sha256": "907416015651b2de1989bb03f3534806721c1f56c018f516d18c533cbf36c3b4"
         },
         {
@@ -159,7 +182,7 @@
           "access_method": "WEB_TABLE",
           "license_name": "Data Terbuka Kemendikdasmen",
           "update_frequency": "Semesteran",
-          "last_ingested_at": "2026-10-21 17:08:15",
+          "last_ingested_at": "2026-10-22 03:02:58",
           "raw_sha256": "4ab891a362701fb876140179c68131dca7d49a513fdf7871a1e85010aa094531"
         },
         {
@@ -172,7 +195,7 @@
           "access_method": "PDF_TABLE",
           "license_name": "Data Terbuka Kemenkes",
           "update_frequency": "Tahunan",
-          "last_ingested_at": "2026-10-21 17:08:15",
+          "last_ingested_at": "2026-10-22 03:02:58",
           "raw_sha256": "a7418cc039314b221767883255fd6b9f2c626191e69c7c1a81181d788500f519"
         }
       ]
@@ -186,6 +209,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -194,7 +218,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": "BIG-Kepmendagri-300.2.2-2430-2025",
-        "total_count": 38
+        "total_count": 38,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": [
         {
@@ -1158,6 +1185,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -1166,7 +1194,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": null
+        "total_count": null,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "region": {
@@ -1488,6 +1519,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -1496,7 +1528,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 33
+        "total_count": 33,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "data_reliability": [
@@ -2314,6 +2349,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -2322,7 +2358,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": null
+        "total_count": null,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "indicator": {
@@ -5770,6 +5809,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -5778,7 +5818,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": null
+        "total_count": null,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "indicator": {
@@ -9219,6 +9262,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -9227,7 +9271,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": null
+        "total_count": null,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "indicator": {
@@ -12493,6 +12540,7 @@
       "X-NusaMatra-Mode": "LIVE",
       "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -12501,7 +12549,10 @@
         "snapshot_id": "2026.10.0-official-live",
         "mode": "LIVE",
         "boundary_version": null,
-        "total_count": null
+        "total_count": null,
+        "data_origin": null,
+        "last_success_at": null,
+        "is_stale": null
       },
       "data": {
         "total_regions": 487,
@@ -18335,21 +18386,25 @@
   },
   {
     "method": "GET",
-    "endpoint": "/api/v1/earthquakes/latest",
+    "endpoint": "/api/v1/earthquakes/latest?mode=live",
     "status_code": 200,
     "headers": {
-      "X-NusaMatra-Mode": "DEMO",
-      "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
       "Content-Type": "application/json"
     },
     "payload_sample": {
       "status": "success",
       "meta": {
-        "snapshot_id": "2026.10.0-wia-demo",
-        "mode": "DEMO",
+        "snapshot_id": "2026.10.0-official-live",
+        "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 1
+        "total_count": 1,
+        "data_origin": "bmkg_live",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false
       },
       "data": {
         "id": "bmkg-20261021T115836Z0000--5.40-104.68",
@@ -18375,21 +18430,25 @@
   },
   {
     "method": "GET",
-    "endpoint": "/api/v1/earthquakes/recent",
+    "endpoint": "/api/v1/earthquakes/recent?mode=live",
     "status_code": 200,
     "headers": {
-      "X-NusaMatra-Mode": "DEMO",
-      "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
       "Content-Type": "application/json"
     },
     "payload_sample": {
       "status": "success",
       "meta": {
-        "snapshot_id": "2026.10.0-wia-demo",
-        "mode": "DEMO",
+        "snapshot_id": "2026.10.0-official-live",
+        "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 15
+        "total_count": 15,
+        "data_origin": "bmkg_cache",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false
       },
       "data": [
         {
@@ -18697,21 +18756,25 @@
   },
   {
     "method": "GET",
-    "endpoint": "/api/v1/earthquakes/felt",
+    "endpoint": "/api/v1/earthquakes/felt?mode=live",
     "status_code": 200,
     "headers": {
-      "X-NusaMatra-Mode": "DEMO",
-      "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
       "Content-Type": "application/json"
     },
     "payload_sample": {
       "status": "success",
       "meta": {
-        "snapshot_id": "2026.10.0-wia-demo",
-        "mode": "DEMO",
+        "snapshot_id": "2026.10.0-official-live",
+        "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 15
+        "total_count": 15,
+        "data_origin": "bmkg_cache",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false
       },
       "data": [
         {
@@ -19019,12 +19082,13 @@
   },
   {
     "method": "GET",
-    "endpoint": "/api/v1/earthquakes/geojson",
+    "endpoint": "/api/v1/earthquakes/geojson?mode=live",
     "status_code": 200,
     "headers": {
-      "X-NusaMatra-Mode": "DEMO",
-      "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
       "Content-Type": "application/json"
     },
     "payload_sample": {
@@ -19033,7 +19097,11 @@
         "agency": "BMKG",
         "description": "Indonesian Seismic Monitoring Epicenters (Unified Live Feed)",
         "total_features": 28,
-        "cached_at": "2026-10-22T03:02:18.421907+00:00",
+        "data_origin": "bmkg_cache",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false,
+        "cached_at": "2026-10-22T04:20:15.208736+00:00",
+        "cache_ttl_seconds": 60,
         "source_portal": "https://data.bmkg.go.id/gempabumi/"
       },
       "features": [
@@ -19062,6 +19130,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 7.805186319392561,
             "visual_color": "#3b82f6"
           }
@@ -19091,6 +19160,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 17.378310466568937,
             "visual_color": "#3b82f6"
           }
@@ -19120,6 +19190,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 28.16550717949474,
             "visual_color": "#f97316"
           }
@@ -19149,6 +19220,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 31.217637030372767,
             "visual_color": "#f97316"
           }
@@ -19178,6 +19250,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 15.807178676749924,
             "visual_color": "#3b82f6"
           }
@@ -19207,6 +19280,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 13.57542109227918,
             "visual_color": "#3b82f6"
           }
@@ -19236,6 +19310,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 19.858204638092765,
             "visual_color": "#eab308"
           }
@@ -19265,6 +19340,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 22.484010728594566,
             "visual_color": "#eab308"
           }
@@ -19294,6 +19370,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 24.314615338313907,
             "visual_color": "#eab308"
           }
@@ -19323,6 +19400,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 25.253727292026873,
             "visual_color": "#eab308"
           }
@@ -19352,6 +19430,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 19.01525707325068,
             "visual_color": "#eab308"
           }
@@ -19381,6 +19460,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 30.184766757310406,
             "visual_color": "#f97316"
           }
@@ -19410,6 +19490,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 8.376127614268231,
             "visual_color": "#3b82f6"
           }
@@ -19439,6 +19520,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 23.39135370742776,
             "visual_color": "#eab308"
           }
@@ -19468,6 +19550,7 @@
             "severity": "MODERATE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 19.858204638092765,
             "visual_color": "#eab308"
           }
@@ -19497,6 +19580,7 @@
             "severity": "LOW",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 6.717402381219016,
             "visual_color": "#3b82f6"
           }
@@ -19526,6 +19610,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 34.408520505439164,
             "visual_color": "#f97316"
           }
@@ -19555,6 +19640,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 34.408520505439164,
             "visual_color": "#f97316"
           }
@@ -19584,6 +19670,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 28.16550717949474,
             "visual_color": "#f97316"
           }
@@ -19613,6 +19700,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 35.502721648671724,
             "visual_color": "#f97316"
           }
@@ -19642,6 +19730,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 29.16737045136572,
             "visual_color": "#f97316"
           }
@@ -19671,6 +19760,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 30.184766757310406,
             "visual_color": "#f97316"
           }
@@ -19700,6 +19790,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 36.61212024230336,
             "visual_color": "#f97316"
           }
@@ -19729,6 +19820,7 @@
             "severity": "SEVERE",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 38.87630333465739,
             "visual_color": "#ef4444"
           }
@@ -19758,6 +19850,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 28.16550717949474,
             "visual_color": "#f97316"
           }
@@ -19787,6 +19880,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 29.16737045136572,
             "visual_color": "#f97316"
           }
@@ -19816,6 +19910,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 30.184766757310406,
             "visual_color": "#f97316"
           }
@@ -19845,6 +19940,7 @@
             "severity": "HIGH",
             "tsunami_risk": false,
             "source": "BMKG",
+            "data_origin": "bmkg_cache",
             "visual_radius_px": 30.184766757310406,
             "visual_color": "#f97316"
           }
@@ -19854,21 +19950,911 @@
   },
   {
     "method": "GET",
-    "endpoint": "/api/v1/earthquakes/summary",
+    "endpoint": "/api/v1/earthquakes/geojson?mode=demo",
     "status_code": 200,
     "headers": {
       "X-NusaMatra-Mode": "DEMO",
       "X-NusaMatra-Snapshot": "2026.10.0-wia-demo",
+      "X-Data-Fallback": "DEMO_FIXTURE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
+      "Content-Type": "application/json"
+    },
+    "payload_sample": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "agency": "BMKG",
+        "description": "Indonesian Seismic Monitoring Epicenters (Unified Live Feed)",
+        "total_features": 28,
+        "data_origin": "fixture",
+        "last_success_at": null,
+        "is_stale": false,
+        "cached_at": "2026-10-22T04:20:15.208736+00:00",
+        "cache_ttl_seconds": 60,
+        "source_portal": "https://data.bmkg.go.id/gempabumi/"
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "id": "bmkg-20261021T115836Z0000--5.40-104.68",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              104.68,
+              -5.4
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261021T115836Z0000--5.40-104.68",
+            "datetime": "2026-10-21T11:58:36+00:00",
+            "date": "21 Okt 2026",
+            "time": "18:58:36 WIB",
+            "magnitude": 2.5,
+            "depth": "3 km",
+            "depth_km": 3.0,
+            "area": "Pusat gempa berada di darat 9 km utara Tanggamus",
+            "potency": "Gempa ini dirasakan untuk diteruskan pada masyarakat",
+            "felt": "II Tanggamus",
+            "shakemap_url": "https://data.bmkg.go.id/DataMKG/TEWS/20261021185836.mmi.jpg",
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 7.805186319392561,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261021T110328Z0000--5.39-104.68",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              104.68,
+              -5.39
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261021T110328Z0000--5.39-104.68",
+            "datetime": "2026-10-21T11:03:28+00:00",
+            "date": "21 Okt 2026",
+            "time": "18:03:28 WIB",
+            "magnitude": 3.9,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "Pusat gempa berada di darat 10 km utara Tanggamus",
+            "potency": null,
+            "felt": "III Ulu Belu, Tanggamus, III Pulau Panggung, Tanggamus",
+            "shakemap_url": null,
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 17.378310466568937,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261021T074415Z0000--7.75-128.18",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              128.18,
+              -7.75
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261021T074415Z0000--7.75-128.18",
+            "datetime": "2026-10-21T07:44:15+00:00",
+            "date": "21 Okt 2026",
+            "time": "14:44:15 WIB",
+            "magnitude": 5.1,
+            "depth": "96 km",
+            "depth_km": 96.0,
+            "area": "62 km TimurLaut MALUKUBRTDAYA",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 28.16550717949474,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261020T162935Z0000-3.79-95.72",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              95.72,
+              3.79
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261020T162935Z0000-3.79-95.72",
+            "datetime": "2026-10-20T16:29:35+00:00",
+            "date": "20 Okt 2026",
+            "time": "23:29:35 WIB",
+            "magnitude": 5.4,
+            "depth": "74 km",
+            "depth_km": 74.0,
+            "area": "59 km BaratDaya MEULABOH-ACEHBARAT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": "III Kab. Aceh Selatan, III Kab. Simeulue, III-IV Kab. Aceh Barat, III-IV Kab. Aceh Barat Daya, II Kab. Bener Meriah, II-III Kota Banda Aceh, II-III Kab. Aceh Besar , III-IV Kab. Nagan Raya",
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 31.217637030372767,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261020T112811Z0000--8.37-116.99",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              116.99,
+              -8.37
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261020T112811Z0000--8.37-116.99",
+            "datetime": "2026-10-20T11:28:11+00:00",
+            "date": "20 Okt 2026",
+            "time": "18:28:11 WIB",
+            "magnitude": 3.7,
+            "depth": "15 km",
+            "depth_km": 15.0,
+            "area": "Pusat gempa berada di laut 6 km Barat Laut Pulau Saringi",
+            "potency": null,
+            "felt": "III Kab. Sumbawa",
+            "shakemap_url": null,
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 15.807178676749924,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261020T095638Z0000--10.19-123.71",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              123.71,
+              -10.19
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261020T095638Z0000--10.19-123.71",
+            "datetime": "2026-10-20T09:56:38+00:00",
+            "date": "20 Okt 2026",
+            "time": "16:56:38 WIB",
+            "magnitude": 3.4,
+            "depth": "4 km",
+            "depth_km": 4.0,
+            "area": "Pusat gempa berada di darat 30km Barat Daya Kab. Kupang",
+            "potency": null,
+            "felt": "III Kab. Kupang, III Kota Kupang",
+            "shakemap_url": null,
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 13.57542109227918,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261019T134611Z0000-4.16-97.51",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              97.51,
+              4.16
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261019T134611Z0000-4.16-97.51",
+            "datetime": "2026-10-19T13:46:11+00:00",
+            "date": "19 Okt 2026",
+            "time": "20:46:11 WIB",
+            "magnitude": 4.2,
+            "depth": "5 km",
+            "depth_km": 5.0,
+            "area": "Pusat gempa berada di darat 26 km Timur Laut Kab. Gayo Lues",
+            "potency": null,
+            "felt": "III Kab. Gayo Lues, II Aceh Timur",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 19.858204638092765,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261019T120602Z0000--7.99-120.09",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.09,
+              -7.99
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261019T120602Z0000--7.99-120.09",
+            "datetime": "2026-10-19T12:06:02+00:00",
+            "date": "19 Okt 2026",
+            "time": "19:06:02 WIB",
+            "magnitude": 4.5,
+            "depth": "6 km",
+            "depth_km": 6.0,
+            "area": "Pusat gempa berada di laut 60 km Utara Labuanbajo",
+            "potency": null,
+            "felt": "II Kab. Manggarai",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 22.484010728594566,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261019T101056Z0000--7.97-120.06",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.06,
+              -7.97
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261019T101056Z0000--7.97-120.06",
+            "datetime": "2026-10-19T10:10:56+00:00",
+            "date": "19 Okt 2026",
+            "time": "17:10:56 WIB",
+            "magnitude": 4.7,
+            "depth": "5 km",
+            "depth_km": 5.0,
+            "area": "Pusat gempa berada di laut 61 km utara Labuan Bajo",
+            "potency": null,
+            "felt": "II Kab. Manggarai",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 24.314615338313907,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261019T094557Z0000--8.12-120.05",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.05,
+              -8.12
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261019T094557Z0000--8.12-120.05",
+            "datetime": "2026-10-19T09:45:57+00:00",
+            "date": "19 Okt 2026",
+            "time": "16:45:57 WIB",
+            "magnitude": 4.8,
+            "depth": "19 km",
+            "depth_km": 19.0,
+            "area": "Pusat gempa berada di laut 45 km timur laut Labuan Bajo",
+            "potency": null,
+            "felt": "I-II Kab. Manggarai",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 25.253727292026873,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261018T080246Z0000--8.14-120.29",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.29,
+              -8.14
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261018T080246Z0000--8.14-120.29",
+            "datetime": "2026-10-18T08:02:46+00:00",
+            "date": "18 Okt 2026",
+            "time": "15:02:46 WIB",
+            "magnitude": 4.1,
+            "depth": "5 km",
+            "depth_km": 5.0,
+            "area": "Pusat gempa berada di laut 56 km utara Ruteng",
+            "potency": null,
+            "felt": "II-III Kab. Manggarai",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 19.01525707325068,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261018T080008Z0000--8.09-120.26",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.26,
+              -8.09
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261018T080008Z0000--8.09-120.26",
+            "datetime": "2026-10-18T08:00:08+00:00",
+            "date": "18 Okt 2026",
+            "time": "15:00:08 WIB",
+            "magnitude": 5.3,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "60 km TimurLaut LABUANBAJO-NTT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": "IV-V Kab. Manggarai, III Kab. Manggarai Barat, II-III Kab. Bima, II-III Kota Bima, I-II Kab. Nagekeo",
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 30.184766757310406,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261017T154527Z0000--1.98-121.33",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              121.33,
+              -1.98
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261017T154527Z0000--1.98-121.33",
+            "datetime": "2026-10-17T15:45:27+00:00",
+            "date": "17 Okt 2026",
+            "time": "22:45:27 WIB",
+            "magnitude": 2.6,
+            "depth": "5 km",
+            "depth_km": 5.0,
+            "area": "Pusat gempa berada di darat 39 km selatan Morowali Utara",
+            "potency": null,
+            "felt": "II - III Kolonodale",
+            "shakemap_url": null,
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 8.376127614268231,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261017T124617Z0000--9.52-118.54",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.54,
+              -9.52
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261017T124617Z0000--9.52-118.54",
+            "datetime": "2026-10-17T12:46:17+00:00",
+            "date": "17 Okt 2026",
+            "time": "19:46:17 WIB",
+            "magnitude": 4.6,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "Pusat gempa berada di laut 49 km Barat KODI-SUMBABARATDAYA",
+            "potency": null,
+            "felt": "III Sumba Barat Daya, III Kota Bima, III Kab. Bima, III Sumbawa, III Sumba Barat",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 23.39135370742776,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261017T082052Z0000--0.75-131.38",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              131.38,
+              -0.75
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261017T082052Z0000--0.75-131.38",
+            "datetime": "2026-10-17T08:20:52+00:00",
+            "date": "17 Okt 2026",
+            "time": "15:20:52 WIB",
+            "magnitude": 4.2,
+            "depth": "3 km",
+            "depth_km": 3.0,
+            "area": "Pusat gempa berada di Laut 11 km TimurLaut Kota Sorong",
+            "potency": null,
+            "felt": "III Sorong",
+            "shakemap_url": null,
+            "severity": "MODERATE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 19.858204638092765,
+            "visual_color": "#eab308"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261016T142204Z0000--6.76-106.63",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              106.63,
+              -6.76
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261016T142204Z0000--6.76-106.63",
+            "datetime": "2026-10-16T14:22:04+00:00",
+            "date": "16 Okt 2026",
+            "time": "21:22:04 WIB",
+            "magnitude": 2.3,
+            "depth": "18 km",
+            "depth_km": 18.0,
+            "area": "Pusat gempa berada di darat 26 km Barat Daya Kota Bogor",
+            "potency": null,
+            "felt": "II Leuwiliang",
+            "shakemap_url": null,
+            "severity": "LOW",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 6.717402381219016,
+            "visual_color": "#3b82f6"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261011T213453Z0000-0.64-121.75",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              121.75,
+              0.64
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261011T213453Z0000-0.64-121.75",
+            "datetime": "2026-10-11T21:34:53+00:00",
+            "date": "12 Okt 2026",
+            "time": "04:34:53 WIB",
+            "magnitude": 5.7,
+            "depth": "76 km",
+            "depth_km": 76.0,
+            "area": "29 km BaratLaut POHUWATO-GORONTALO",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 34.408520505439164,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261011T033020Z0000--8.73-106.47",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              106.47,
+              -8.73
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261011T033020Z0000--8.73-106.47",
+            "datetime": "2026-10-11T03:30:20+00:00",
+            "date": "11 Okt 2026",
+            "time": "10:30:20 WIB",
+            "magnitude": 5.7,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "193 km BaratDaya KAB-SUKABUMI-JABAR",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 34.408520505439164,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261009T051104Z0000-0.77-126.03",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              126.03,
+              0.77
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261009T051104Z0000-0.77-126.03",
+            "datetime": "2026-10-09T05:11:04+00:00",
+            "date": "09 Okt 2026",
+            "time": "12:11:04 WIB",
+            "magnitude": 5.1,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "125 km Tenggara BITUNG-SULUT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 28.16550717949474,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261008T080756Z0000-5.66-125.19",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              125.19,
+              5.66
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261008T080756Z0000-5.66-125.19",
+            "datetime": "2026-10-08T08:07:56+00:00",
+            "date": "08 Okt 2026",
+            "time": "15:07:56 WIB",
+            "magnitude": 5.8,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "230 km BaratLaut TAHUNA-KEP.SANGIHE-SULUT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 35.502721648671724,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261006T201526Z0000--8.77-116.14",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              116.14,
+              -8.77
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261006T201526Z0000--8.77-116.14",
+            "datetime": "2026-10-06T20:15:26+00:00",
+            "date": "07 Okt 2026",
+            "time": "03:15:26 WIB",
+            "magnitude": 5.2,
+            "depth": "92 km",
+            "depth_km": 92.0,
+            "area": "9 km Tenggara LOMBOKBARAT-NTB",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 29.16737045136572,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261006T131123Z0000-4.94-118.77",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.77,
+              4.94
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261006T131123Z0000-4.94-118.77",
+            "datetime": "2026-10-06T13:11:23+00:00",
+            "date": "06 Okt 2026",
+            "time": "20:11:23 WIB",
+            "magnitude": 5.3,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "219 km TimurLaut TARAKAN-KALTARA",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 30.184766757310406,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261003T233731Z0000-4.56-94.97",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              94.97,
+              4.56
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261003T233731Z0000-4.56-94.97",
+            "datetime": "2026-10-03T23:37:31+00:00",
+            "date": "04 Okt 2026",
+            "time": "06:37:31 WIB",
+            "magnitude": 5.9,
+            "depth": "26 km",
+            "depth_km": 26.0,
+            "area": "68 km BaratDaya CALANG-ACEHJAYA",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 36.61212024230336,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261003T225552Z0000--9.70-118.92",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.92,
+              -9.7
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261003T225552Z0000--9.70-118.92",
+            "datetime": "2026-10-03T22:55:52+00:00",
+            "date": "04 Okt 2026",
+            "time": "05:55:52 WIB",
+            "magnitude": 6.1,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "14 km BaratDaya KODI-SUMBABARATDAYA-NTT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "SEVERE",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 38.87630333465739,
+            "visual_color": "#ef4444"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20261001T142000Z0000--7.07-120.80",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.8,
+              -7.07
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20261001T142000Z0000--7.07-120.80",
+            "datetime": "2026-10-01T14:20:00+00:00",
+            "date": "01 Okt 2026",
+            "time": "21:20:00 WIB",
+            "magnitude": 5.1,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "111 km Tenggara SELAYAR-SULSEL",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 28.16550717949474,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20260921T234813Z0000-4.74-125.30",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              125.3,
+              4.74
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20260921T234813Z0000-4.74-125.30",
+            "datetime": "2026-09-21T23:48:13+00:00",
+            "date": "22 Sep 2026",
+            "time": "06:48:13 WIB",
+            "magnitude": 5.2,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "127 km BaratLaut TAHUNA-KEP.SANGIHE-SULUT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 29.16737045136572,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20260921T073107Z0000--0.70-122.45",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              122.45,
+              -0.7
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20260921T073107Z0000--0.70-122.45",
+            "datetime": "2026-09-21T07:31:07+00:00",
+            "date": "21 Sep 2026",
+            "time": "14:31:07 WIB",
+            "magnitude": 5.3,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "26 km BaratDaya PULAUPUAH-SULTENG",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 30.184766757310406,
+            "visual_color": "#f97316"
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "bmkg-20260921T014137Z0000--8.33-120.59",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              120.59,
+              -8.33
+            ]
+          },
+          "properties": {
+            "id": "bmkg-20260921T014137Z0000--8.33-120.59",
+            "datetime": "2026-09-21T01:41:37+00:00",
+            "date": "21 Sep 2026",
+            "time": "08:41:37 WIB",
+            "magnitude": 5.3,
+            "depth": "10 km",
+            "depth_km": 10.0,
+            "area": "34 km TimurLaut RUTENG-MANGGARAI-NTT",
+            "potency": "Tidak berpotensi tsunami",
+            "felt": null,
+            "shakemap_url": null,
+            "severity": "HIGH",
+            "tsunami_risk": false,
+            "source": "BMKG",
+            "data_origin": "fixture",
+            "visual_radius_px": 30.184766757310406,
+            "visual_color": "#f97316"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/v1/earthquakes/geojson?mode=live&simulate_upstream_failure=true",
+    "status_code": 503,
+    "headers": {
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
+      "X-Data-Fallback": "UNAVAILABLE",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Content-Type": "application/json"
+    },
+    "payload_sample": {
+      "status": "error",
+      "code": "UPSTREAM_UNAVAILABLE",
+      "message": "BMKG live earthquake upstream service is currently unreachable. LIVE mode fails closed to prevent presenting unverified or synthetic data as official events.",
+      "detail": "Simulated upstream BMKG failure for fail-closed verification."
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/v1/earthquakes/summary?mode=live",
+    "status_code": 200,
+    "headers": {
+      "X-NusaMatra-Mode": "LIVE",
+      "X-NusaMatra-Snapshot": "2026.10.0-official-live",
       "X-Data-Fallback": "NONE",
+      "Cache-Control": "no-cache, must-revalidate, max-age=0",
       "Content-Type": "application/json"
     },
     "payload_sample": {
       "status": "success",
       "meta": {
-        "snapshot_id": "2026.10.0-wia-demo",
-        "mode": "DEMO",
+        "snapshot_id": "2026.10.0-official-live",
+        "mode": "LIVE",
         "boundary_version": null,
-        "total_count": 1
+        "total_count": 1,
+        "data_origin": "bmkg_cache",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false
       },
       "data": {
         "latest": {
@@ -19894,7 +20880,10 @@
         "recent_m5_count": 15,
         "felt_count": 15,
         "max_magnitude_recent": 6.1,
-        "cached_at": "2026-10-22T03:02:18.421907+00:00",
+        "data_origin": "bmkg_cache",
+        "last_success_at": "2026-10-22T04:20:15.208736+00:00",
+        "is_stale": false,
+        "cached_at": "2026-10-22T04:20:15.208736+00:00",
         "cache_ttl_seconds": 60,
         "agency": "BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)",
         "official_portal": "https://data.bmkg.go.id/gempabumi/"
