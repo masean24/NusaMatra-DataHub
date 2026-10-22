@@ -187,6 +187,7 @@ app.add_middleware(
 
 # --- Routers ---
 app.include_router(health.router, prefix=settings.api_prefix)
+app.include_router(health.router, include_in_schema=False)
 app.include_router(regions.router, prefix=settings.api_prefix)
 app.include_router(indicators.router, prefix=settings.api_prefix)
 app.include_router(boundaries.router, prefix=settings.api_prefix)

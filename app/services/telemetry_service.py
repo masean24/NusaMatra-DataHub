@@ -18,6 +18,33 @@ from typing import Any, Optional
 class TelemetryCollector:
     """Thread-safe in-memory metrics collector with zero performance overhead."""
 
+    SYSTEM_PATHS = {
+        "/",
+        "/health",
+        "/stats",
+        "/docs",
+        "/redoc",
+        "/scalar",
+        "/openapi.json",
+        "/favicon.ico",
+        "/favicon.png",
+        "/apple-touch-icon.png",
+    }
+
+    SYSTEM_PREFIXES = (
+        "/static",
+        "/health",
+        "/stats",
+        "/docs",
+        "/redoc",
+        "/scalar",
+        "/api/v1/health",
+        "/api/v1/stats",
+        "/api/v1/docs",
+        "/api/v1/redoc",
+        "/api/v1/scalar",
+    )
+
     def __init__(self, max_recent: int = 20):
         self.start_time = time.time()
         self.total_requests = 0
@@ -31,6 +58,17 @@ class TelemetryCollector:
         
         self.recent_requests: deque[dict[str, Any]] = deque(maxlen=max_recent)
 
+    @classmethod
+    def is_system_path(cls, path: str) -> bool:
+        """
+        Check if a request path belongs to internal infrastructure, health checks,
+        or telemetry polling that should not pollute business domain metrics.
+        """
+        clean = path.split("?")[0].rstrip("/") or "/"
+        if clean in cls.SYSTEM_PATHS:
+            return True
+        return any(clean == p or clean.startswith(p + "/") for p in cls.SYSTEM_PREFIXES)
+
     def record_request(
         self,
         method: str,
@@ -39,7 +77,10 @@ class TelemetryCollector:
         latency_ms: float,
         mode: str = "DEMO",
     ) -> None:
-        """Record an incoming request observation."""
+        """Record an incoming request observation (skips system/health/telemetry paths)."""
+        if self.is_system_path(path):
+            return
+
         self.total_requests += 1
         self.total_latency_ms += latency_ms
         

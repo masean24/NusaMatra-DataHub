@@ -62,7 +62,7 @@
     .card { transition: border-color .2s; }
     .card:hover { border-color: #3f3f46; }
     .tick { position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: #a1a1aa; opacity: .7; }
-    .tick.run { animation: tick 3s linear forwards; }
+    .tick.run { animation: tick 5s linear forwards; }
     @keyframes tick { to { width: 100%; } }
     .skel { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #18181b, #27272a, #18181b); background-size: 200% 100%; animation: shim 1.4s infinite; }
     @keyframes shim { to { background-position: -200% 0; } }
@@ -107,7 +107,7 @@
 
         <button id="toggle-pause-btn" aria-pressed="false" onclick="togglePolling()" class="px-2.5 py-1.5 rounded-md bg-subtle hover:bg-zinc-800 border border-border text-zinc-300 text-xs font-medium flex items-center gap-1.5 transition" title="Jeda atau lanjutkan pembaruan otomatis">
           <span id="poll-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span id="poll-label" class="font-mono text-[11px]">Auto 3s</span>
+          <span id="poll-label" class="font-mono text-[11px]">Auto 5s</span>
         </button>
 
         <div class="h-4 w-px bg-border hidden sm:block"></div>
@@ -437,7 +437,7 @@
     const $ = id => document.getElementById(id);
     const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const nf = n => Number(n).toLocaleString('id-ID');
-    const POLL_MS = 3000;
+    const POLL_MS = 5000;
     let sessMin = Infinity, sessMax = 0, prevAt = 0, lastOk = 0;
     let realOk = false, inflight = false, seen = new Set(), firstRender = true, toastT;
     const HTTP_LABEL = { 200: 'OK', 201: 'Created', 304: 'Not modified', 400: 'Bad request', 401: 'Unauthorized', 404: 'Not found', 422: 'Input tidak valid', 429: 'Rate limited', 500: 'Server error', 502: 'Bad gateway', 503: 'Tidak tersedia' };
@@ -461,7 +461,7 @@
       if (!kind) { b.className = 'hidden'; return; }
       const m = {
         sim: ['Mode pratinjau: API tidak terjangkau, jadi angka di bawah adalah data simulasi, bukan trafik sebenarnya.', 'border-amber-500/20 bg-amber-500/5 text-amber-300'],
-        down: ['Koneksi ke API terputus. Menampilkan data terakhir yang berhasil diterima, mencoba lagi setiap 3 detik.', 'border-rose-500/20 bg-rose-500/5 text-rose-300']
+        down: ['Koneksi ke API terputus. Menampilkan data terakhir yang berhasil diterima, mencoba lagi setiap 5 detik.', 'border-rose-500/20 bg-rose-500/5 text-rose-300']
       }[kind];
       $('banner-text').textContent = m[0];
       b.className = 'flex items-start gap-3 rounded-lg border px-4 py-3 text-xs ' + m[1];
@@ -611,7 +611,7 @@
       isPolling = !isPolling;
       $('toggle-pause-btn').setAttribute('aria-pressed', String(!isPolling));
       $('poll-dot').className = 'w-1.5 h-1.5 rounded-full ' + (isPolling ? 'bg-emerald-400' : 'bg-zinc-500');
-      $('poll-label').innerText = isPolling ? 'Auto 3s' : 'Dijeda';
+      $('poll-label').innerText = isPolling ? 'Auto 5s' : 'Dijeda';
       if (isPolling) { updateStats(); startTimer(); }
       else { clearInterval(pollTimer); $('tick').classList.remove('run'); setHealth('paused'); }
     }

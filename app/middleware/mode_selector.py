@@ -129,14 +129,15 @@ class ModeSelector(BaseHTTPMiddleware):
         response = await call_next(request)
         latency_ms = (time.perf_counter() - start_t) * 1000.0
 
-        # Record telemetry metric
-        telemetry.record_request(
-            method=request.method,
-            path=request.url.path,
-            status_code=response.status_code,
-            latency_ms=latency_ms,
-            mode=mode,
-        )
+        # Record telemetry metric for business/domain data endpoints only (Option A: skip health/stats/probes)
+        if not telemetry.is_system_path(request.url.path):
+            telemetry.record_request(
+                method=request.method,
+                path=request.url.path,
+                status_code=response.status_code,
+                latency_ms=latency_ms,
+                mode=mode,
+            )
 
         # Inject standard response headers if not explicitly set by the route handler
         response.headers["X-NusaMatra-Snapshot"] = snapshot_id

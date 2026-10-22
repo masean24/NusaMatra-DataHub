@@ -50,6 +50,34 @@ async def test_stats_api_json(client):
 
 
 @pytest.mark.asyncio
+async def test_telemetry_excludes_system_and_health_paths(client):
+    """Telemetry must filter out internal infrastructure, health probes, and /stats calls."""
+    # Get baseline count
+    baseline_resp = await client.get("/api/v1/stats")
+    assert baseline_resp.status_code == 200
+    baseline_count = baseline_resp.json()["data"]["total_requests"]
+
+    # Execute system / infrastructure / health requests
+    await client.get("/api/v1/health")
+    await client.get("/health")
+    await client.get("/api/v1/stats")
+    await client.get("/stats")
+    await client.get("/favicon.ico")
+
+    # Baseline must NOT change from internal requests
+    check_resp = await client.get("/api/v1/stats")
+    assert check_resp.json()["data"]["total_requests"] == baseline_count
+
+    # Execute an actual business domain API request (e.g. /api/v1/regions)
+    region_resp = await client.get("/api/v1/regions")
+    assert region_resp.status_code == 200
+
+    # Total requests should now increment by exactly 1
+    after_resp = await client.get("/api/v1/stats")
+    assert after_resp.json()["data"]["total_requests"] == baseline_count + 1
+
+
+@pytest.mark.asyncio
 async def test_favicon_and_docs_custom_icon(client):
     """GET /favicon.ico and /api/v1/docs should serve custom favicon and Scalar docs."""
     resp = await client.get("/favicon.ico")
