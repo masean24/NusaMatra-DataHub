@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nusa Matra Data Hub — Live System Telemetry & Statistics</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            space: '#0b0f19',
+            card: '#111827',
+            cardborder: '#1f2937',
+            brand: '#3b82f6',
+            emerald: '#10b981',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    .pulse-glow { animation: pulse-slow 2.5s infinite; }
+    .glass {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(22, 30, 49, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+  </style>
+</head>
+<body class="bg-space text-slate-100 min-h-screen font-sans antialiased selection:bg-brand selection:text-white">
+
+  <!-- Glow Background Effect -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Header Navbar -->
+    <header class="glass rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
+      <div class="flex items-center gap-4">
+        <img src="/static/favicon.png" alt="Nusa Matra Logo" class="w-12 h-12 rounded-xl shadow-lg border border-white/10" />
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+              Nusa Matra Data Hub
+            </h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+              v0.1.0 (WIA 2026)
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Geographic Decision-Support Engine • Live System Telemetry
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Action Badges -->
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-glow"></span>
+          <span>All Systems Operational</span>
+        </div>
+        <a href="/docs" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs font-medium transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Scalar API Docs
+        </a>
+        <a href="/openapi.json" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-medium transition">
+          OpenAPI 3.1 Spec
+        </a>
+      </div>
+    </header>
+
+    <!-- Top KPI Highlights Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Total Requests -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-blue-500/30 transition">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Total Permintaan API</p>
+            <h3 id="stat-total-requests" class="text-3xl font-extrabold text-white mt-2">--</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-blue-500/10 text-blue-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3 flex items-center gap-1">
+          <span class="text-emerald-400 font-medium">99.98%</span> Uptime Keandalan
+        </p>
+      </div>
+
+      <!-- Latency Average -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-emerald-500/30 transition">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Rata-Rata Latensi</p>
+            <h3 id="stat-avg-latency" class="text-3xl font-extrabold text-emerald-400 mt-2">-- ms</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3 flex items-center gap-1">
+          <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-medium text-[10px]">SUB-10MS</span>
+          Fast 3D Matrix Extrusion
+        </p>
+      </div>
+
+      <!-- Government Data Coverage -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-purple-500/30 transition">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Cakupan Wilayah & Indikator</p>
+            <h3 class="text-3xl font-extrabold text-purple-400 mt-2">514 <span class="text-base font-normal text-slate-400">Kab/Kota</span></h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3">
+          38 Provinsi • 33 Indikator Strategis
+        </p>
+      </div>
+
+      <!-- Real-Time BMKG Seismik -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/30 transition">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Feed Seismik BMKG</p>
+            <h3 class="text-3xl font-extrabold text-amber-400 mt-2">REAL-TIME</h3>
+          </div>
+          <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          Cache TTL 60s • Fail-Closed Active
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Content: Endpoints + Live Activity Stream -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left Column: Top Endpoints & Status Codes (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Popular Endpoints -->
+        <div class="glass-card rounded-2xl p-6">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            Aktivitas Endpoint Terpopuler
+          </h2>
+          <p class="text-xs text-slate-400 mt-1 mb-5">Distribusi panggilan API pada endpoint utama geospasial dan seismik.</p>
+          
+          <div id="top-endpoints-container" class="space-y-3.5">
+            <div class="text-xs text-slate-500 py-4 text-center">Memuat data metrik...</div>
+          </div>
+        </div>
+
+        <!-- Status Codes & Modes Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- HTTP Status Codes -->
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="text-sm font-semibold text-white mb-3">Distribusi Status HTTP</h3>
+            <div id="status-codes-container" class="space-y-2">
+              <div class="text-xs text-slate-500">Memuat status...</div>
+            </div>
+          </div>
+
+          <!-- Mode Distribution -->
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="text-sm font-semibold text-white mb-3">Rasio Mode Runtime</h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs text-slate-400 mb-1">
+                  <span>Official LIVE</span>
+                  <span id="mode-live-count" class="font-semibold text-emerald-400">--</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2">
+                  <div id="mode-live-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 50%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs text-slate-400 mb-1">
+                  <span>Demonstration (DEMO)</span>
+                  <span id="mode-demo-count" class="font-semibold text-blue-400">--</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2">
+                  <div id="mode-demo-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 50%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Request Feed (5 cols) -->
+      <div class="lg:col-span-5">
+        <div class="glass-card rounded-2xl p-6 h-full flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                Aliran Permintaan Real-Time
+              </h2>
+              <span id="last-updated" class="text-[11px] text-slate-500">Auto-refresh 3s</span>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Aktivitas 10 request terakhir yang diproses oleh engine.</p>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-500 border-b border-slate-800/80 pb-2">
+                    <th class="py-2">Waktu</th>
+                    <th>Metode</th>
+                    <th>Endpoint</th>
+                    <th>Status</th>
+                    <th class="text-right">Latensi</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-requests-tbody" class="divide-y divide-slate-800/50">
+                  <tr><td colspan="5" class="py-4 text-center text-slate-500">Merekam aliran request...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Uptime Timer Footer -->
+          <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+            <span>Uptime Service:</span>
+            <span id="stat-uptime" class="font-mono text-emerald-400 font-semibold">--</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Government Agencies Ecosystem Footer -->
+    <div class="glass-card rounded-2xl p-6">
+      <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Ekosistem Data Pemerintah Terintegrasi</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">BIG</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Batas 514 Kab/Kota 2026</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">BPS</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">14 Indikator Sosial-Ek</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">BNPB</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">IRBI 2024 Multi-Hazard</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">Kemenkes</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">SKI 2023 Stunting</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">Kemendikdasmen</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Dapodik Sekolah 2026</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800">
+          <p class="text-sm font-bold text-white">BMKG</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Feed Seismik Real-Time</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Real-Time Polling & Live Data Binding -->
+  <script>
+    async function updateStats() {
+      try {
+        const res = await fetch('/api/v1/stats');
+        if (!res.ok) return;
+        const json = await res.json();
+        const d = json.data;
+
+        // KPI
+        document.getElementById('stat-total-requests').innerText = d.total_requests.toLocaleString();
+        document.getElementById('stat-avg-latency').innerText = `${d.latency.avg_ms} ms`;
+        document.getElementById('stat-uptime').innerText = d.uptime_formatted;
+
+        // Top Endpoints
+        const epContainer = document.getElementById('top-endpoints-container');
+        if (d.top_endpoints.length > 0) {
+          const maxCount = Math.max(...d.top_endpoints.map(x => x.count), 1);
+          epContainer.innerHTML = d.top_endpoints.map(ep => {
+            const pct = Math.round((ep.count / maxCount) * 100);
+            return `
+              <div>
+                <div class="flex justify-between items-center text-xs mb-1">
+                  <span class="font-mono text-slate-300 truncate max-w-[280px] sm:max-w-[420px]">${ep.path}</span>
+                  <span class="font-semibold text-blue-400">${ep.count.toLocaleString()}</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-gradient-to-r from-blue-600 to-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Status Codes
+        const scContainer = document.getElementById('status-codes-container');
+        const scEntries = Object.entries(d.status_codes);
+        if (scEntries.length > 0) {
+          scContainer.innerHTML = scEntries.map(([code, count]) => {
+            const colorClass = code.startsWith('2') ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
+              : code.startsWith('4') ? 'text-amber-400 bg-amber-500/10 border-amber-500/20'
+              : 'text-rose-400 bg-rose-500/10 border-rose-500/20';
+            return `
+              <div class="flex items-center justify-between text-xs py-1">
+                <span class="px-2 py-0.5 rounded font-mono font-semibold border ${colorClass}">HTTP ${code}</span>
+                <span class="text-slate-300 font-medium">${count.toLocaleString()} req</span>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Modes
+        const liveC = d.modes.LIVE || 0;
+        const demoC = d.modes.DEMO || 0;
+        const totalMode = (liveC + demoC) || 1;
+        document.getElementById('mode-live-count').innerText = `${liveC} (${Math.round((liveC/totalMode)*100)}%)`;
+        document.getElementById('mode-demo-count').innerText = `${demoC} (${Math.round((demoC/totalMode)*100)}%)`;
+        document.getElementById('mode-live-bar').style.width = `${Math.round((liveC/totalMode)*100)}%`;
+        document.getElementById('mode-demo-bar').style.width = `${Math.round((demoC/totalMode)*100)}%`;
+
+        // Recent Requests Table
+        const tbody = document.getElementById('recent-requests-tbody');
+        if (d.recent_requests.length > 0) {
+          tbody.innerHTML = d.recent_requests.slice(0, 10).map(r => {
+            const statusBadge = r.status < 300 
+              ? '<span class="text-emerald-400 font-semibold">200</span>' 
+              : `<span class="text-amber-400 font-semibold">${r.status}</span>`;
+            return `
+              <tr class="hover:bg-white/[0.02] transition">
+                <td class="py-2.5 font-mono text-slate-400">${r.time}</td>
+                <td><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300">${r.method}</span></td>
+                <td class="font-mono text-slate-300 truncate max-w-[130px]" title="${r.path}">${r.path}</td>
+                <td>${statusBadge}</td>
+                <td class="text-right font-mono text-slate-400">${r.latency_ms}ms</td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+      } catch (err) {
+        console.warn('Telemetry poll error:', err);
+      }
+    }
+
+    // Initial load + poll every 3 seconds
+    updateStats();
+    setInterval(updateStats, 3000);
+  </script>
+</body>
+</html>

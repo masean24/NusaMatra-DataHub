@@ -17,6 +17,39 @@ async def test_root_endpoint(client):
 
 
 @pytest.mark.asyncio
+async def test_root_content_negotiation_html(client):
+    """GET / with Accept: text/html should return the interactive visual HTML dashboard."""
+    resp = await client.get("/", headers={"Accept": "text/html"})
+    assert resp.status_code == 200
+    assert "<!DOCTYPE html>" in resp.text
+    assert "Nusa Matra Data Hub" in resp.text
+
+
+@pytest.mark.asyncio
+async def test_stats_html_dashboard(client):
+    """GET /stats should return the interactive HTML telemetry dashboard."""
+    resp = await client.get("/stats")
+    assert resp.status_code == 200
+    assert "<!DOCTYPE html>" in resp.text
+    assert "All Systems Operational" in resp.text
+
+
+@pytest.mark.asyncio
+async def test_stats_api_json(client):
+    """GET /api/v1/stats should return real-time usage metrics in JSON."""
+    resp = await client.get("/api/v1/stats")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "success"
+    data = body["data"]
+    assert "total_requests" in data
+    assert "latency" in data
+    assert "uptime_seconds" in data
+    assert "status_codes" in data
+    assert "modes" in data
+
+
+@pytest.mark.asyncio
 async def test_favicon_and_docs_custom_icon(client):
     """GET /favicon.ico and /api/v1/docs should serve custom favicon and Scalar docs."""
     resp = await client.get("/favicon.ico")

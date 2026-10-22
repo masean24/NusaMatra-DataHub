@@ -17,7 +17,9 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 from pathlib import Path
+import time
 from app.config import settings
+from app.services.telemetry_service import telemetry
 
 
 class ModeSelector(BaseHTTPMiddleware):
@@ -27,10 +29,11 @@ class ModeSelector(BaseHTTPMiddleware):
         # Bypass validation for docs and static assets
         path = request.url.path
         if (
-            path in ("/docs", "/redoc", "/scalar", "/openapi.json", "/favicon.ico", "/favicon.png", "/apple-touch-icon.png")
+            path in ("/docs", "/redoc", "/scalar", "/openapi.json", "/favicon.ico", "/favicon.png", "/apple-touch-icon.png", "/stats")
             or path.startswith(f"{settings.api_prefix}/docs")
             or path.startswith(f"{settings.api_prefix}/scalar")
             or path.startswith(f"{settings.api_prefix}/redoc")
+            or path.startswith(f"{settings.api_prefix}/stats/ui")
             or path.startswith("/static")
         ):
             return await call_next(request)
@@ -121,8 +124,19 @@ class ModeSelector(BaseHTTPMiddleware):
         request.state.data_mode = mode
         request.state.snapshot_id = snapshot_id
 
-        # Call the actual endpoint handler
+        # Call the actual endpoint handler and measure execution latency
+        start_t = time.perf_counter()
         response = await call_next(request)
+        latency_ms = (time.perf_counter() - start_t) * 1000.0
+
+        # Record telemetry metric
+        telemetry.record_request(
+            method=request.method,
+            path=request.url.path,
+            status_code=response.status_code,
+            latency_ms=latency_ms,
+            mode=mode,
+        )
 
         # Inject standard response headers if not explicitly set by the route handler
         response.headers["X-NusaMatra-Snapshot"] = snapshot_id

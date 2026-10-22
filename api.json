@@ -1492,13 +1492,35 @@
         }
       }
     },
+    "/api/v1/stats": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Get real-time system usage and telemetry metrics (JSON)",
+        "description": "Return comprehensive API telemetry:\n- Uptime and total requests\n- Average latency (ms) and status code distribution\n- Most active endpoints and runtime mode ratios (DEMO vs LIVE)\n- Recent requests stream",
+        "operationId": "get_stats_json",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_dict_"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "tags": [
           "Root"
         ],
         "summary": "Root",
-        "description": "Root endpoint \u2014 API info and links.",
+        "description": "Root endpoint \u2014 API info and links (or visual dashboard for browsers).",
         "operationId": "root",
         "responses": {
           "200": {
@@ -1645,6 +1667,28 @@
           "data"
         ],
         "title": "ApiResponse[Union[EarthquakeEvent, NoneType]]"
+      },
+      "ApiResponse_dict_": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[dict]"
       },
       "ApiResponse_dict_str__Any__": {
         "properties": {

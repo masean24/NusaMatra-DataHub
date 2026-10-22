@@ -8,7 +8,7 @@ Serves /api/v1 endpoints for the Nusa Matra 3D map frontend.
 import json
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.openapi.docs import get_redoc_html
@@ -19,7 +19,8 @@ from fastapi.staticfiles import StaticFiles
 from app.config import settings
 from app.database import init_db
 from app.middleware.mode_selector import ModeSelector
-from app.routers import regions, indicators, boundaries, datasets, snapshots, health, earthquakes
+from app.routers import regions, indicators, boundaries, datasets, snapshots, health, earthquakes, stats
+from app.routers.stats import get_stats_html
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -192,19 +193,35 @@ app.include_router(boundaries.router, prefix=settings.api_prefix)
 app.include_router(datasets.router, prefix=settings.api_prefix)
 app.include_router(snapshots.router, prefix=settings.api_prefix)
 app.include_router(earthquakes.router, prefix=settings.api_prefix)
+app.include_router(stats.router, prefix=settings.api_prefix)
+
+
+@app.get("/stats", response_class=HTMLResponse, include_in_schema=False)
+@app.get(f"{settings.api_prefix}/stats/ui", response_class=HTMLResponse, include_in_schema=False)
+async def stats_ui():
+    """Visual real-time interactive telemetry & usage statistics dashboard."""
+    return HTMLResponse(content=get_stats_html())
 
 
 @app.get("/", tags=["Root"])
-async def root():
-    """Root endpoint — API info and links."""
+async def root(request: Request):
+    """Root endpoint — API info and links (or visual dashboard for browsers)."""
+    accept = request.headers.get("accept", "")
+    # If opened by a human in a web browser, serve the interactive visual dashboard
+    if "text/html" in accept and "application/json" not in accept:
+        return HTMLResponse(content=get_stats_html())
+
     res = {
         "service": settings.app_name,
         "version": settings.app_version,
         "mode": settings.default_mode,
         "health": f"{settings.api_prefix}/health",
+        "stats": f"{settings.api_prefix}/stats",
+        "stats_dashboard": "/stats",
         "endpoints": {
             "regions": f"{settings.api_prefix}/regions",
             "indicators": f"{settings.api_prefix}/indicators",
+            "indicators_coverage": f"{settings.api_prefix}/indicators/coverage",
             "boundaries_kab": f"{settings.api_prefix}/boundaries/kabupaten",
             "boundaries_prov": f"{settings.api_prefix}/boundaries/provinsi",
             "datasets": f"{settings.api_prefix}/datasets",
@@ -214,6 +231,7 @@ async def root():
             "earthquakes_felt": f"{settings.api_prefix}/earthquakes/felt",
             "earthquakes_geojson": f"{settings.api_prefix}/earthquakes/geojson",
             "earthquakes_summary": f"{settings.api_prefix}/earthquakes/summary",
+            "stats": f"{settings.api_prefix}/stats",
         },
         "notice": (
             "DEMO and LIVE modes available. "
