@@ -28,6 +28,46 @@ async def test_health_has_standard_headers(client):
 
 
 @pytest.mark.asyncio
+async def test_invalid_mode_returns_422(client):
+    """C1: Invalid mode query param must return 422."""
+    resp = await client.get("/api/v1/health?mode=foo")
+    assert resp.status_code == 422
+    assert resp.json()["code"] == "INVALID_MODE"
+
+
+@pytest.mark.asyncio
+async def test_nonexistent_snapshot_returns_404(client):
+    """C1: Unknown snapshot_id must return 404."""
+    resp = await client.get("/api/v1/health?snapshot_id=does-not-exist")
+    assert resp.status_code == 404
+    assert resp.json()["code"] == "SNAPSHOT_NOT_FOUND"
+
+
+@pytest.mark.asyncio
+async def test_mismatched_snapshot_returns_422(client):
+    """C1: Snapshot mismatch with environment must return 422."""
+    resp = await client.get("/api/v1/health?mode=demo&snapshot_id=2026.10.0-official-live")
+    assert resp.status_code == 422
+    assert resp.json()["code"] == "SNAPSHOT_MODE_MISMATCH"
+
+
+@pytest.mark.asyncio
+async def test_boundary_caching_headers(client):
+    """C2: Boundaries endpoint must return 7-day immutable Cache-Control."""
+    resp = await client.get("/api/v1/boundaries/provinsi")
+    assert resp.status_code == 200
+    assert resp.headers.get("Cache-Control") == "public, max-age=604800, immutable"
+
+
+@pytest.mark.asyncio
+async def test_openapi_alias_endpoint(client):
+    """B3: /openapi.json alias must return valid OpenAPI 3.1 specification."""
+    resp = await client.get("/openapi.json")
+    assert resp.status_code == 200
+    assert "openapi" in resp.json()
+
+
+@pytest.mark.asyncio
 async def test_live_mode_returns_503(client):
     """LIVE mode must fail closed with 503 (Blocker #1)."""
     resp = await client.get("/api/v1/health?mode=live")

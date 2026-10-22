@@ -81,6 +81,11 @@ async def apple_touch_icon():
 
 # --- Documentation routes (conditioned on ENABLE_DOCS) ---
 if settings.enable_docs:
+    @app.get("/openapi.json", include_in_schema=False)
+    async def openapi_alias():
+        """Alias for /api/v1/openapi.json for compatibility."""
+        return app.openapi()
+
     @app.get("/docs", include_in_schema=False)
     @app.get(f"{settings.api_prefix}/docs", include_in_schema=False)
     @app.get("/scalar", include_in_schema=False)

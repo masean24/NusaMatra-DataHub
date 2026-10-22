@@ -76,7 +76,38 @@ async def compute_composite_scores(
     cursor = await db.execute(query, params)
     rows = await cursor.fetchall()
 
-    # Aggregate scores per region
+    found_indicator_ids = {
+        row["indicator_id"] for row in rows if row["normalized_score"] is not None
+    }
+    unavailable_indicators = [
+        iid for iid in indicator_ids if iid not in found_indicator_ids
+    ]
+
+    if unavailable_indicators and not found_indicator_ids:
+        raise ValueError(
+            f"All requested indicators are unavailable in this snapshot: {', '.join(unavailable_indicators)}. "
+            "Check GET /api/v1/indicators/coverage for verified indicators."
+        )
+
+    if unavailable_indicators:
+        # BE-08: Renormalize remaining weights to sum to exactly 10,000 basis points
+        available_list = [iid for iid in indicator_ids if iid in found_indicator_ids]
+        sum_available = sum(weights[iid] for iid in available_list)
+        effective_weights = {}
+        accumulated = 0
+        for i, iid in enumerate(available_list):
+            if i == len(available_list) - 1:
+                effective_weights[iid] = 10000 - accumulated
+            else:
+                w_scaled = round(weights[iid] * 10000 / sum_available)
+                effective_weights[iid] = w_scaled
+                accumulated += w_scaled
+        renormalized = True
+    else:
+        effective_weights = weights
+        renormalized = False
+
+    # Aggregate scores per region using effective_weights
     region_data: dict[str, dict] = {}
     for row in rows:
         rid = row["region_id"]
@@ -89,26 +120,14 @@ async def compute_composite_scores(
         norm = row["normalized_score"]
         iid = row["indicator_id"]
         region_data[rid]["component_scores"][iid] = norm
-        if norm is not None:
-            region_data[rid]["composite"] += norm * (weights[iid] / 10000.0)
+        if norm is not None and iid in effective_weights:
+            region_data[rid]["composite"] += norm * (effective_weights[iid] / 10000.0)
 
     # Sort by composite score descending and assign ranks
     sorted_regions = sorted(
         region_data.items(),
         key=lambda x: x[1]["composite"],
         reverse=True,
-    )
-
-    found_indicator_ids = {
-        row["indicator_id"] for row in rows if row["normalized_score"] is not None
-    }
-    unavailable_indicators = [
-        iid for iid in indicator_ids if iid not in found_indicator_ids
-    ]
-    effective_weights = (
-        {iid: w for iid, w in weights.items() if iid in found_indicator_ids}
-        if unavailable_indicators
-        else weights
     )
 
     results = []
@@ -129,6 +148,7 @@ async def compute_composite_scores(
         regions=results,
         unavailable_indicators=unavailable_indicators,
         effective_weights=effective_weights,
+        renormalized=renormalized,
     )
 
 

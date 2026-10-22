@@ -39,7 +39,7 @@ async def test_composite_query_valid(client):
 
 @pytest.mark.asyncio
 async def test_composite_query_unavailable_indicator_transparency(client):
-    """BE-03: Indicators with no observations must be listed in unavailable_indicators."""
+    """BE-03 & BE-08: Indicators with no observations must be listed in unavailable_indicators and renormalized."""
     body = {
         "weights": {
             "dis_multihazard_index": 5000,
@@ -52,7 +52,32 @@ async def test_composite_query_unavailable_indicator_transparency(client):
     data = resp.json()["data"]
     assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
     assert "edu_school_travel_time_p90" not in data["effective_weights"]
-    assert data["effective_weights"]["dis_multihazard_index"] == 5000
+    assert data["renormalized"] is True
+    # Scaled to full 10,000 bp
+    assert data["effective_weights"]["dis_multihazard_index"] == 10000
+
+    # Also compare with single 10000 query to ensure scores are equal
+    single_resp = await client.post(
+        "/api/v1/indicators/composite-query",
+        json={"weights": {"dis_multihazard_index": 10000}},
+    )
+    assert single_resp.status_code == 200
+    single_data = single_resp.json()["data"]
+    assert data["regions"][0]["composite_score"] == single_data["regions"][0]["composite_score"]
+
+
+@pytest.mark.asyncio
+async def test_composite_query_all_indicators_unavailable_rejected(client):
+    """BE-08: If all requested indicators have no data in snapshot, return 422."""
+    body = {
+        "weights": {
+            "edu_school_travel_time_p90": 5000,
+            "hlt_realtime_icu_occupancy": 5000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
+    assert "unavailable" in resp.json()["detail"]["message"].lower()
 
 
 @pytest.mark.asyncio

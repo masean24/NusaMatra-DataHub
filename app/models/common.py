@@ -9,6 +9,15 @@ from pydantic import BaseModel, Field
 T = TypeVar("T")
 
 
+class CoverageMeta(BaseModel):
+    """Data coverage metadata for regional indicators."""
+
+    available: int = Field(..., description="Number of regions with available values")
+    total_regions: int = Field(514, description="Total national kabupaten/kota count (514)")
+    missing_region_ids: list[str] = Field(default_factory=list, description="Region IDs lacking values")
+    mode: str = Field(..., description="Data mode: DEMO or LIVE")
+
+
 class ResponseMeta(BaseModel):
     """Metadata block included in every API response."""
 
@@ -16,6 +25,7 @@ class ResponseMeta(BaseModel):
     mode: str = Field(..., examples=["DEMO"])
     boundary_version: Optional[str] = None
     total_count: Optional[int] = None
+    coverage: Optional[CoverageMeta] = None
     data_origin: Optional[str] = Field(None, description="bmkg_live | bmkg_cache | fixture")
     last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream fetch")
     is_stale: Optional[bool] = Field(None, description="True if data is beyond cache TTL or upstream is unavailable")

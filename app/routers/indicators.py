@@ -4,12 +4,13 @@ Matches API_CONTRACT_DRAFT.md Sections 4.1, 4.2, 4.3.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from typing import Optional
+from typing import Any, Optional
 import aiosqlite
 
 from app.database import get_db
 from app.models.common import (
     ApiResponse,
+    CoverageMeta,
     ResponseMeta,
     LiveUnavailableError,
     WeightValidationError,
@@ -86,6 +87,78 @@ async def get_indicators(
 
 
 @router.get(
+    "/coverage",
+    response_model=ApiResponse[dict[str, Any]],
+)
+async def get_indicators_coverage(
+    request: Request,
+    mode: Optional[str] = _mode_param,
+    snapshot_id: Optional[str] = _snapshot_param,
+    db: aiosqlite.Connection = Depends(get_db),
+):
+    """
+    Return comprehensive data coverage summary for all 33 indicators in the active snapshot.
+
+    Enables frontend 3D map clients to immediately identify which indicators/layers have verified data.
+    """
+    _snapshot_id = request.state.snapshot_id
+    cursor = await db.execute(
+        """
+        SELECT 
+            i.indicator_id, i.indicator_name, i.category,
+            COUNT(f.region_id) as coverage_count
+        FROM dim_indicators i
+        LEFT JOIN fact_indicator_values f 
+            ON i.indicator_id = f.indicator_id AND f.snapshot_id = ?
+        GROUP BY i.indicator_id
+        ORDER BY i.category, i.indicator_id
+        """,
+        [_snapshot_id],
+    )
+    rows = await cursor.fetchall()
+
+    total_reg = 514
+    indicators_info = {}
+    available_count = 0
+    empty_indicators = []
+
+    for r in rows:
+        cnt = r["coverage_count"]
+        is_avail = cnt > 0
+        if is_avail:
+            available_count += 1
+        else:
+            empty_indicators.append(r["indicator_id"])
+
+        indicators_info[r["indicator_id"]] = {
+            "name": r["indicator_name"],
+            "category": r["category"],
+            "available": is_avail,
+            "coverage_count": cnt,
+            "coverage_pct": round((cnt / total_reg) * 100, 1),
+        }
+
+    data = {
+        "snapshot_id": _snapshot_id,
+        "mode": request.state.data_mode,
+        "total_indicators": len(rows),
+        "available_indicators_count": available_count,
+        "empty_indicators_count": len(empty_indicators),
+        "empty_indicators": empty_indicators,
+        "indicators": indicators_info,
+    }
+
+    return ApiResponse(
+        meta=ResponseMeta(
+            snapshot_id=_snapshot_id,
+            mode=request.state.data_mode,
+            total_count=len(rows),
+        ),
+        data=data,
+    )
+
+
+@router.get(
     "/{indicator_id}/values",
     response_model=ApiResponse[IndicatorValuesData],
     responses=_503_responses,
@@ -97,7 +170,7 @@ async def get_indicator_values_endpoint(
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
-    """Return one indicator's values for all 514 regions (fast dict format)."""
+    """Return one indicator's values for all 514 regions (fast dict format) with coverage metadata."""
     _snapshot_id = request.state.snapshot_id
 
     result = await get_indicator_values(db, indicator_id, snapshot_id=_snapshot_id)
@@ -108,11 +181,28 @@ async def get_indicator_values_endpoint(
             detail=f"Indicator '{indicator_id}' not found.",
         )
 
+    available = len(result.values_by_region)
+    missing_ids = []
+    if available < 514:
+        reg_cursor = await db.execute(
+            "SELECT region_id FROM dim_regions WHERE level IN ('kabupaten', 'kota') ORDER BY region_id"
+        )
+        reg_rows = await reg_cursor.fetchall()
+        missing_ids = [r["region_id"] for r in reg_rows if r["region_id"] not in result.values_by_region]
+
+    coverage_meta = CoverageMeta(
+        available=available,
+        total_regions=514,
+        missing_region_ids=missing_ids,
+        mode=request.state.data_mode,
+    )
+
     return ApiResponse(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
-            total_count=len(result.values_by_region),
+            total_count=available,
+            coverage=coverage_meta,
         ),
         data=result,
     )

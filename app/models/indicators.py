@@ -141,6 +141,10 @@ class CompositeQueryResult(BaseModel):
         None,
         description="Effective weights utilized in the calculation after excluding unavailable indicators.",
     )
+    renormalized: bool = Field(
+        False,
+        description="Whether weights were rescaled because some requested indicators have no observations in this snapshot.",
+    )
 
 
 class CompositePreset(BaseModel):

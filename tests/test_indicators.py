@@ -33,6 +33,11 @@ async def test_get_indicator_values(client):
 
     body = resp.json()
     assert body["meta"]["total_count"] == 514
+    assert "coverage" in body["meta"]
+    cov = body["meta"]["coverage"]
+    assert cov["available"] == 514
+    assert cov["total_regions"] == 514
+    assert cov["missing_region_ids"] == []
     data = body["data"]
     assert "indicator" in data
     assert "values_by_region" in data
@@ -66,6 +71,23 @@ async def test_unavailable_indicator_no_values(client):
 
     data = resp.json()["data"]
     assert len(data["values_by_region"]) == 0
+
+
+@pytest.mark.asyncio
+async def test_get_indicators_coverage_endpoint(client):
+    """B2: GET /api/v1/indicators/coverage must return coverage breakdown for all 33 indicators."""
+    resp = await client.get("/api/v1/indicators/coverage")
+    assert resp.status_code == 200
+
+    body = resp.json()
+    assert body["status"] == "success"
+    data = body["data"]
+    assert data["total_indicators"] == 33
+    assert data["available_indicators_count"] >= 31  # 31 active in DEMO
+    assert "indicators" in data
+    assert "soc_poverty_rate" in data["indicators"]
+    assert data["indicators"]["soc_poverty_rate"]["available"] is True
+    assert data["indicators"]["soc_poverty_rate"]["coverage_count"] == 514
 
 
 @pytest.mark.asyncio

@@ -17,7 +17,7 @@ router = APIRouter(prefix="/snapshots", tags=["Snapshots"])
 _503_responses = {
     503: {
         "model": LiveUnavailableError,
-        "description": "LIVE mode requested but not yet available.",
+        "description": "LIVE mode requested but verified database unavailable.",
     }
 }
 
@@ -33,7 +33,7 @@ async def get_snapshots(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` currently returns **503** (fail-closed)."
+            "``live`` serves verified official government data."
         ),
         include_in_schema=True,
     ),
