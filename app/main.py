@@ -67,6 +67,18 @@ async def favicon():
     return FileResponse(STATIC_DIR / "favicon.png")
 
 
+@app.get("/favicon.png", include_in_schema=False)
+async def favicon_png():
+    """Serve custom favicon PNG."""
+    return FileResponse(STATIC_DIR / "favicon.png")
+
+
+@app.get("/apple-touch-icon.png", include_in_schema=False)
+async def apple_touch_icon():
+    """Serve Apple Touch icon."""
+    return FileResponse(STATIC_DIR / "apple-touch-icon.png")
+
+
 # --- Documentation routes (conditioned on ENABLE_DOCS) ---
 if settings.enable_docs:
     @app.get("/docs", include_in_schema=False)
