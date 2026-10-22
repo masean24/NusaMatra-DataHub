@@ -35,10 +35,8 @@ async def get_regions(
     q: Optional[str] = Query(None, description="Text search on name or code"),
     mode: Optional[Literal["demo", "live"]] = Query(
         None,
-        description=(
-            "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` serves verified official government data."
-        ),
+        pattern="^(demo|live)$",
+        description="Data mode: ``demo`` (default) or ``live``.",
         include_in_schema=True,
     ),
     snapshot_id: Optional[str] = Query(
@@ -76,10 +74,8 @@ async def get_region(
     region_id: str,
     mode: Optional[Literal["demo", "live"]] = Query(
         None,
-        description=(
-            "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` serves verified official government data."
-        ),
+        pattern="^(demo|live)$",
+        description="Data mode: ``demo`` (default) or ``live``.",
         include_in_schema=True,
     ),
     snapshot_id: Optional[str] = Query(

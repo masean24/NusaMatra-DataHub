@@ -54,10 +54,8 @@ _FALLBACK_GEOMETRY_STATUS = {
 
 _mode_param = Query(
     None,
-    description=(
-        "Data mode: ``demo`` (default) or ``live``. "
-        "``live`` serves verified official government data."
-    ),
+    pattern="^(demo|live)$",
+    description="Data mode: ``demo`` (default) or ``live``.",
     include_in_schema=True,
 )
 

@@ -17,6 +17,7 @@ from app.models.indicators import (
 
 async def list_indicators(
     db: aiosqlite.Connection,
+    snapshot_id: str = "2026.10.0-wia-demo",
 ) -> list[IndicatorCatalogItem]:
     """Return the full indicator catalog grouped by category."""
 
@@ -27,11 +28,15 @@ async def list_indicators(
             i.polarity, i.availability_status,
             i.derivation_formula, i.description,
             i.national_mean, i.national_median, i.national_min, i.national_max,
-            d.dataset_id, d.agency_code, d.dataset_title, d.official_portal_url
+            d.dataset_id, d.agency_code, d.dataset_title, d.official_portal_url,
+            COUNT(f.region_id) as coverage_count
         FROM dim_indicators i
         LEFT JOIN dim_datasets d ON i.primary_dataset_id = d.dataset_id
+        LEFT JOIN fact_indicator_values f ON i.indicator_id = f.indicator_id AND f.snapshot_id = ?
+        GROUP BY i.indicator_id
         ORDER BY i.category, i.indicator_id
-        """
+        """,
+        [snapshot_id],
     )
     rows = await cursor.fetchall()
 
@@ -61,6 +66,8 @@ async def list_indicators(
                 if r["dataset_id"]
                 else None
             ),
+            live_available=bool(r["coverage_count"] and r["coverage_count"] > 0),
+            live_coverage_count=r["coverage_count"] or 0,
         )
         for r in rows
     ]

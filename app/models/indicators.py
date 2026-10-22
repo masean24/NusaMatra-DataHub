@@ -40,6 +40,8 @@ class IndicatorCatalogItem(BaseModel):
     description: str
     stats: IndicatorStats
     provenance: Optional[IndicatorProvenance] = None
+    live_available: bool = Field(True, description="Whether data is available in the current snapshot")
+    live_coverage_count: Optional[int] = Field(None, description="Number of regions with available values")
 
 
 class RegionIndicatorValue(BaseModel):

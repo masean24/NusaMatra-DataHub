@@ -16,7 +16,11 @@ router = APIRouter(tags=["System"])
 @router.get("/health", response_model=HealthResponse)
 async def health_check(
     request: Request,
-    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: 'demo' or 'live'"),
+    mode: Optional[Literal["demo", "live"]] = Query(
+        None,
+        pattern="^(demo|live)$",
+        description="Data mode: 'demo' (default) or 'live'",
+    ),
 ):
     """Check API health: database connectivity, mode, and fallback status."""
 

@@ -31,10 +31,8 @@ async def get_datasets(
     request: Request,
     mode: Optional[Literal["demo", "live"]] = Query(
         None,
-        description=(
-            "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` serves verified official government data."
-        ),
+        pattern="^(demo|live)$",
+        description="Data mode: ``demo`` (default) or ``live``.",
         include_in_schema=True,
     ),
     snapshot_id: Optional[str] = Query(

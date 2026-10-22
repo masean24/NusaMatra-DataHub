@@ -36,11 +36,8 @@ _503_responses = {
 
 _mode_param = Query(
     None,
-    description=(
-        "Data mode: ``demo`` (default) or ``live``. "
-        "``live`` serves verified official government data. "
-        "Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
-    ),
+    pattern="^(demo|live)$",
+    description="Data mode: ``demo`` (default) or ``live``.",
     include_in_schema=True,
 )
 
@@ -65,7 +62,7 @@ async def get_indicators(
     """Return the full indicator catalog grouped by category."""
     _snapshot_id = request.state.snapshot_id
 
-    indicators = await list_indicators(db)
+    indicators = await list_indicators(db, snapshot_id=_snapshot_id)
 
     # Group by category
     grouped: dict[str, list] = {}

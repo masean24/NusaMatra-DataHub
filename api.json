@@ -32,10 +32,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: 'demo' or 'live'",
+              "description": "Data mode: 'demo' (default) or 'live'",
               "title": "Mode"
             },
-            "description": "Data mode: 'demo' or 'live'"
+            "description": "Data mode: 'demo' (default) or 'live'"
           }
         ],
         "responses": {
@@ -135,10 +135,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -228,10 +228,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -312,10 +312,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -396,10 +396,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -479,10 +479,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -563,10 +563,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -657,10 +657,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -783,10 +783,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -891,10 +891,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -975,10 +975,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -1059,10 +1059,10 @@
                   "type": "null"
                 }
               ],
-              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "description": "Data mode: ``demo`` (default) or ``live``.",
               "title": "Mode"
             },
-            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+            "description": "Data mode: ``demo`` (default) or ``live``."
           },
           {
             "name": "snapshot_id",
@@ -2705,6 +2705,24 @@
                 "type": "null"
               }
             ]
+          },
+          "live_available": {
+            "type": "boolean",
+            "title": "Live Available",
+            "description": "Whether data is available in the current snapshot",
+            "default": true
+          },
+          "live_coverage_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Coverage Count",
+            "description": "Number of regions with available values"
           }
         },
         "type": "object",
