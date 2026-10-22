@@ -4,7 +4,7 @@ Matches API_CONTRACT_DRAFT.md Sections 4.1, 4.2, 4.3.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 import aiosqlite
 
 from app.database import get_db
@@ -30,10 +30,7 @@ router = APIRouter(prefix="/indicators", tags=["Indicators"])
 _503_responses = {
     503: {
         "model": LiveUnavailableError,
-        "description": (
-            "LIVE mode requested but not yet available. "
-            "Retry with ``?mode=demo``."
-        ),
+        "description": "LIVE mode requested but verified database unavailable.",
     }
 }
 
@@ -61,7 +58,7 @@ _snapshot_param = Query(
 )
 async def get_indicators(
     request: Request,
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
@@ -92,7 +89,7 @@ async def get_indicators(
 )
 async def get_indicators_coverage(
     request: Request,
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
@@ -148,11 +145,19 @@ async def get_indicators_coverage(
         "indicators": indicators_info,
     }
 
+    coverage_meta = CoverageMeta(
+        available=available_count,
+        total_regions=total_reg,
+        missing_region_ids=empty_indicators,
+        mode=request.state.data_mode,
+    )
+
     return ApiResponse(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=len(rows),
+            coverage=coverage_meta,
         ),
         data=data,
     )
@@ -166,7 +171,7 @@ async def get_indicators_coverage(
 async def get_indicator_values_endpoint(
     request: Request,
     indicator_id: str,
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
@@ -226,7 +231,7 @@ async def get_indicator_values_endpoint(
 async def composite_query(
     request: Request,
     body: CompositeQueryRequest,
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
@@ -281,7 +286,7 @@ async def composite_query(
 )
 async def get_composite_presets(
     request: Request,
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
 ):
     """

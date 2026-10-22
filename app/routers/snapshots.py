@@ -4,7 +4,7 @@ Matches API_CONTRACT_DRAFT.md Section 5.
 """
 
 from fastapi import APIRouter, Depends, Query, Request
-from typing import Optional
+from typing import Literal, Optional
 import aiosqlite
 
 from app.database import get_db
@@ -29,7 +29,7 @@ _503_responses = {
 )
 async def get_snapshots(
     request: Request,
-    mode: Optional[str] = Query(
+    mode: Optional[Literal["demo", "live"]] = Query(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "

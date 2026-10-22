@@ -1,0 +1,3509 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Nusa Matra Data Hub",
+    "description": "Nusa Matra Data Hub API \u2014 Geographic Decision-Support Backend API (WIA 2026).\n\nMenyajikan data indikator pembangunan 514 Kabupaten/Kota Indonesia untuk sistem pendukung keputusan berbasis peta 3D. Mode default: DEMO.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Health Check",
+        "description": "Check API health: database connectivity, mode, and fallback status.",
+        "operationId": "health_check",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: 'demo' or 'live'",
+              "title": "Mode"
+            },
+            "description": "Data mode: 'demo' or 'live'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions": {
+      "get": {
+        "tags": [
+          "Regions"
+        ],
+        "summary": "Get Regions",
+        "description": "List all administrative regions with optional filters.",
+        "operationId": "get_regions",
+        "parameters": [
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(kabupaten_kota|provinsi|all)$",
+              "default": "kabupaten_kota",
+              "title": "Level"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "2-digit province code filter",
+              "title": "Parent Id"
+            },
+            "description": "2-digit province code filter"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Text search on name or code",
+              "title": "Q"
+            },
+            "description": "Text search on name or code"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_RegionSummary__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions/{region_id}": {
+      "get": {
+        "tags": [
+          "Regions"
+        ],
+        "summary": "Get Region",
+        "description": "Get full profile for a single region, including all indicator values.",
+        "operationId": "get_region",
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version.",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_RegionDetail_"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/indicators": {
+      "get": {
+        "tags": [
+          "Indicators"
+        ],
+        "summary": "Get Indicators",
+        "description": "Return the full indicator catalog grouped by category.",
+        "operationId": "get_indicators",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_dict_str__list_IndicatorCatalogItem___"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/indicators/coverage": {
+      "get": {
+        "tags": [
+          "Indicators"
+        ],
+        "summary": "Get Indicators Coverage",
+        "description": "Return comprehensive data coverage summary for all 33 indicators in the active snapshot.\n\nEnables frontend 3D map clients to immediately identify which indicators/layers have verified data.",
+        "operationId": "get_indicators_coverage",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/indicators/{indicator_id}/values": {
+      "get": {
+        "tags": [
+          "Indicators"
+        ],
+        "summary": "Get Indicator Values Endpoint",
+        "description": "Return one indicator's values for all 514 regions (fast dict format) with coverage metadata.",
+        "operationId": "get_indicator_values_endpoint",
+        "parameters": [
+          {
+            "name": "indicator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Indicator Id"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_IndicatorValuesData_"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/indicators/composite-query": {
+      "post": {
+        "tags": [
+          "Indicators"
+        ],
+        "summary": "Composite Query",
+        "description": "Calculate weighted composite scores across all regions.\n\n**Weight rules (enforced, returns 422 on violation):**\n- Weights are integer **basis points** (1 bp = 1/10000 = 0.01 %).\n- Sum of all weights **MUST equal exactly 10000** (= 100 %).\n- Every ``indicator_id`` key **must exist** in the indicator catalog.\n\n**Example (sum = 10000):**\n```json\n{\n  \"weights\": {\n    \"dis_multihazard_index\": 3500,\n    \"soc_poverty_rate\": 2500,\n    \"edu_damaged_classrooms_pct\": 2000,\n    \"hlt_stunting_prevalence\": 2000\n  }\n}\n```",
+        "operationId": "composite_query",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompositeQueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_CompositeQueryResult_"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Weight validation failed. Weights must be integer basis points summing to exactly 10000, and all ``indicator_id`` keys must exist in the catalog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeightValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/indicators/composite-presets": {
+      "get": {
+        "tags": [
+          "Indicators"
+        ],
+        "summary": "Get Composite Presets",
+        "description": "Get curated policy-weighting presets for composite scoring.\n\nProvides ready-to-use scenario weights summing to exactly 10,000 basis points (100%).\nFrontend map clients can send these directly to POST /indicators/composite-query.",
+        "operationId": "get_composite_presets",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data. Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_CompositePreset__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boundaries/kabupaten": {
+      "get": {
+        "tags": [
+          "Boundaries"
+        ],
+        "summary": "Get Kabupaten Boundaries",
+        "description": "Serve kabupaten/kota boundary geometries.\n\nDefault format is GeoJSON (compatible with 3D renderer).\nSupports 'low' (fast web 3D map) and 'high' (detailed zoom) resolutions.\nBacked by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.\n\n> **Note:** ``topojson`` format is not yet implemented. Use ``geojson``.",
+        "operationId": "get_kabupaten_boundaries",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(geojson)$",
+              "description": "Output format. Only ``geojson`` is currently supported.",
+              "default": "geojson",
+              "title": "Format"
+            },
+            "description": "Output format. Only ``geojson`` is currently supported."
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(low|high)$",
+              "default": "low",
+              "title": "Resolution"
+            }
+          },
+          {
+            "name": "province_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "2-digit province filter",
+              "title": "Province Id"
+            },
+            "description": "2-digit province filter"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_dict_str__Any__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boundaries/provinsi": {
+      "get": {
+        "tags": [
+          "Boundaries"
+        ],
+        "summary": "Get Provinsi Boundaries",
+        "description": "Serve province boundary geometries.\n\nDefault format is GeoJSON (38 provinces including 4 new Papua provinces).\nBacked by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.\n\n> **Note:** ``topojson`` format is not yet implemented. Use ``geojson``.",
+        "operationId": "get_provinsi_boundaries",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(geojson)$",
+              "description": "Output format. Only ``geojson`` is currently supported.",
+              "default": "geojson",
+              "title": "Format"
+            },
+            "description": "Output format. Only ``geojson`` is currently supported."
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(low|high)$",
+              "default": "low",
+              "title": "Resolution"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``).",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version (e.g. ``2026.10.0-wia-demo``)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_dict_str__Any__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets": {
+      "get": {
+        "tags": [
+          "Datasets"
+        ],
+        "summary": "Get Datasets",
+        "description": "List all registered official government datasets with provenance.",
+        "operationId": "get_datasets",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version.",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_DatasetInfo__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/snapshots": {
+      "get": {
+        "tags": [
+          "Snapshots"
+        ],
+        "summary": "Get Snapshots",
+        "description": "List all available data snapshots (DEMO and LIVE).",
+        "operationId": "get_snapshots",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data.",
+              "title": "Mode"
+            },
+            "description": "Data mode: ``demo`` (default) or ``live``. ``live`` serves verified official government data."
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pin a specific snapshot version.",
+              "title": "Snapshot Id"
+            },
+            "description": "Pin a specific snapshot version."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_SnapshotInfo__"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "LIVE mode requested but verified database unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUnavailableError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/earthquakes/latest": {
+      "get": {
+        "tags": [
+          "Disaster & Climate (BMKG)"
+        ],
+        "summary": "Get single latest earthquake event",
+        "description": "Fetch the latest recorded earthquake event published by BMKG.\nIncludes Shakemap image URL, epicenter coordinates, depth, and tsunami potential.",
+        "operationId": "get_latest",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: demo or live",
+              "title": "Mode"
+            },
+            "description": "Data mode: demo or live"
+          },
+          {
+            "name": "simulate_upstream_failure",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Simulate upstream BMKG outage",
+              "default": false,
+              "title": "Simulate Upstream Failure"
+            },
+            "description": "Simulate upstream BMKG outage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Union_EarthquakeEvent__NoneType__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/earthquakes/recent": {
+      "get": {
+        "tags": [
+          "Disaster & Climate (BMKG)"
+        ],
+        "summary": "Get 15 recent earthquakes with M >= 5.0",
+        "description": "Fetch up to 15 recent significant earthquakes (magnitude >= 5.0) across Indonesia.",
+        "operationId": "get_recent_m5",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: demo or live",
+              "title": "Mode"
+            },
+            "description": "Data mode: demo or live"
+          },
+          {
+            "name": "simulate_upstream_failure",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Simulate upstream BMKG outage",
+              "default": false,
+              "title": "Simulate Upstream Failure"
+            },
+            "description": "Simulate upstream BMKG outage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_EarthquakeEvent__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/earthquakes/felt": {
+      "get": {
+        "tags": [
+          "Disaster & Climate (BMKG)"
+        ],
+        "summary": "Get 15 recent earthquakes felt by communities",
+        "description": "Fetch up to 15 recent earthquakes reported felt by communities,\nincluding Modified Mercalli Intensity (MMI) levels and affected regencies.",
+        "operationId": "get_felt",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: demo or live",
+              "title": "Mode"
+            },
+            "description": "Data mode: demo or live"
+          },
+          {
+            "name": "simulate_upstream_failure",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Simulate upstream BMKG outage",
+              "default": false,
+              "title": "Simulate Upstream Failure"
+            },
+            "description": "Simulate upstream BMKG outage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_list_EarthquakeEvent__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/earthquakes/geojson": {
+      "get": {
+        "tags": [
+          "Disaster & Climate (BMKG)"
+        ],
+        "summary": "Get GeoJSON FeatureCollection of epicenters for 3D maps",
+        "description": "Returns an RFC 7946 standard GeoJSON FeatureCollection merging all recent and felt\nearthquake epicenters.\n\nReady for direct consumption by 3D map engines (Mapbox GL, Deck.gl, MapLibre, Cesium).\nFeatures include visual properties:\n- ``visual_radius_px``: dynamically scaled circle size based on magnitude\n- ``visual_color``: hex color code categorized by severity (yellow to deep red)\n- ``severity``: LOW, MODERATE, HIGH, SEVERE\n- ``depth_km``: numeric depth for 3D extrusion/elevation\n- ``tsunami_risk``: boolean alert indicator",
+        "operationId": "get_geojson",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: demo or live",
+              "title": "Mode"
+            },
+            "description": "Data mode: demo or live"
+          },
+          {
+            "name": "simulate_upstream_failure",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Simulate upstream BMKG outage",
+              "default": false,
+              "title": "Simulate Upstream Failure"
+            },
+            "description": "Simulate upstream BMKG outage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EarthquakeGeoJsonCollection"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/earthquakes/summary": {
+      "get": {
+        "tags": [
+          "Disaster & Climate (BMKG)"
+        ],
+        "summary": "Get executive summary of national earthquake activity",
+        "description": "Get executive summary of current seismic status in Indonesia:\nlatest event, total count of M5+ events, count of felt events, and cache TTL.",
+        "operationId": "get_summary",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "demo",
+                    "live"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Data mode: demo or live",
+              "title": "Mode"
+            },
+            "description": "Data mode: demo or live"
+          },
+          {
+            "name": "simulate_upstream_failure",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Simulate upstream BMKG outage",
+              "default": false,
+              "title": "Simulate Upstream Failure"
+            },
+            "description": "Simulate upstream BMKG outage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_EarthquakeSummary_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Root"
+        ],
+        "summary": "Root",
+        "description": "Root endpoint \u2014 API info and links.",
+        "operationId": "root",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnchorPoint": {
+        "properties": {
+          "lng": {
+            "type": "number",
+            "title": "Lng"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lng",
+          "lat"
+        ],
+        "title": "AnchorPoint",
+        "description": "Centroid / label point guaranteed on land."
+      },
+      "ApiResponse_CompositeQueryResult_": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CompositeQueryResult"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[CompositeQueryResult]"
+      },
+      "ApiResponse_EarthquakeSummary_": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "$ref": "#/components/schemas/EarthquakeSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[EarthquakeSummary]"
+      },
+      "ApiResponse_IndicatorValuesData_": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "$ref": "#/components/schemas/IndicatorValuesData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[IndicatorValuesData]"
+      },
+      "ApiResponse_RegionDetail_": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RegionDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[RegionDetail]"
+      },
+      "ApiResponse_Union_EarthquakeEvent__NoneType__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EarthquakeEvent"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[Union[EarthquakeEvent, NoneType]]"
+      },
+      "ApiResponse_dict_str__Any__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[dict[str, Any]]"
+      },
+      "ApiResponse_dict_str__list_IndicatorCatalogItem___": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/IndicatorCatalogItem"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[dict[str, list[IndicatorCatalogItem]]]"
+      },
+      "ApiResponse_list_CompositePreset__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/CompositePreset"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[list[CompositePreset]]"
+      },
+      "ApiResponse_list_DatasetInfo__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetInfo"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[list[DatasetInfo]]"
+      },
+      "ApiResponse_list_EarthquakeEvent__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/EarthquakeEvent"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[list[EarthquakeEvent]]"
+      },
+      "ApiResponse_list_RegionSummary__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/RegionSummary"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[list[RegionSummary]]"
+      },
+      "ApiResponse_list_SnapshotInfo__": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "success"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/SnapshotInfo"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta",
+          "data"
+        ],
+        "title": "ApiResponse[list[SnapshotInfo]]"
+      },
+      "CompositePreset": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "title": "Preset Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "target_focus": {
+            "type": "string",
+            "title": "Target Focus"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Weights"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "title",
+          "category",
+          "description",
+          "target_focus",
+          "weights"
+        ],
+        "title": "CompositePreset",
+        "description": "Pre-defined policy weighting scenario."
+      },
+      "CompositeQueryRequest": {
+        "properties": {
+          "weights": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Weights",
+            "description": "Map of indicator_id -> weight in basis points (1/10000). Each weight 0\u201310000, sum must equal 10000.",
+            "examples": [
+              {
+                "dis_multihazard_index": 3500,
+                "edu_damaged_classrooms_pct": 2000,
+                "hlt_stunting_prevalence": 2000,
+                "soc_poverty_rate": 2500
+              }
+            ]
+          },
+          "filter_province_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter Province Id",
+            "description": "Optional 2-digit province code to filter results."
+          }
+        },
+        "type": "object",
+        "required": [
+          "weights"
+        ],
+        "title": "CompositeQueryRequest",
+        "description": "Request body for weighted composite score calculation.\nWeights are in integer basis points (sum must equal 10000).\nEach weight must be in the range 0\u201310000 (inclusive).\nBlocker #4: use basis points, not floats."
+      },
+      "CompositeQueryResult": {
+        "properties": {
+          "total_regions": {
+            "type": "integer",
+            "title": "Total Regions"
+          },
+          "weights_basis_points": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Weights Basis Points"
+          },
+          "regions": {
+            "items": {
+              "$ref": "#/components/schemas/CompositeRegionScore"
+            },
+            "type": "array",
+            "title": "Regions",
+            "default": []
+          },
+          "unavailable_indicators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unavailable Indicators",
+            "description": "Indicators requested in weights that have 0 data in this snapshot."
+          },
+          "effective_weights": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective Weights",
+            "description": "Effective weights utilized in the calculation after excluding unavailable indicators."
+          },
+          "renormalized": {
+            "type": "boolean",
+            "title": "Renormalized",
+            "description": "Whether weights were rescaled because some requested indicators have no observations in this snapshot.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_regions",
+          "weights_basis_points"
+        ],
+        "title": "CompositeQueryResult",
+        "description": "Payload for POST /indicators/composite-query."
+      },
+      "CompositeRegionScore": {
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "title": "Region Id"
+          },
+          "region_name": {
+            "type": "string",
+            "title": "Region Name"
+          },
+          "composite_score": {
+            "type": "number",
+            "title": "Composite Score"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "component_scores": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Component Scores",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_id",
+          "region_name",
+          "composite_score",
+          "rank"
+        ],
+        "title": "CompositeRegionScore",
+        "description": "One region's composite score in the query result."
+      },
+      "CompositeScores": {
+        "properties": {
+          "overall_priority_index": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overall Priority Index"
+          },
+          "disaster_risk": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disaster Risk"
+          },
+          "socioeconomic": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Socioeconomic"
+          },
+          "education_access": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Education Access"
+          },
+          "healthcare_access": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Healthcare Access"
+          },
+          "infrastructure": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Infrastructure"
+          },
+          "data_reliability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Reliability"
+          }
+        },
+        "type": "object",
+        "title": "CompositeScores",
+        "description": "Pre-computed composite domain scores for a region."
+      },
+      "CoverageMeta": {
+        "properties": {
+          "available": {
+            "type": "integer",
+            "title": "Available",
+            "description": "Number of regions with available values"
+          },
+          "total_regions": {
+            "type": "integer",
+            "title": "Total Regions",
+            "description": "Total national kabupaten/kota count (514)",
+            "default": 514
+          },
+          "missing_region_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Region Ids",
+            "description": "Region IDs lacking values"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "description": "Data mode: DEMO or LIVE"
+          }
+        },
+        "type": "object",
+        "required": [
+          "available",
+          "mode"
+        ],
+        "title": "CoverageMeta",
+        "description": "Data coverage metadata for regional indicators."
+      },
+      "DatabaseHealth": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "tables": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tables"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "DatabaseHealth",
+        "description": "Database connectivity status."
+      },
+      "DatasetInfo": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "agency_code": {
+            "type": "string",
+            "title": "Agency Code"
+          },
+          "agency_name": {
+            "type": "string",
+            "title": "Agency Name"
+          },
+          "dataset_title": {
+            "type": "string",
+            "title": "Dataset Title"
+          },
+          "official_portal_url": {
+            "type": "string",
+            "title": "Official Portal Url"
+          },
+          "api_or_download_url": {
+            "type": "string",
+            "title": "Api Or Download Url"
+          },
+          "access_method": {
+            "type": "string",
+            "title": "Access Method"
+          },
+          "license_name": {
+            "type": "string",
+            "title": "License Name"
+          },
+          "update_frequency": {
+            "type": "string",
+            "title": "Update Frequency"
+          },
+          "last_ingested_at": {
+            "type": "string",
+            "title": "Last Ingested At"
+          },
+          "raw_sha256": {
+            "type": "string",
+            "title": "Raw Sha256"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "agency_code",
+          "agency_name",
+          "dataset_title",
+          "official_portal_url",
+          "api_or_download_url",
+          "access_method",
+          "license_name",
+          "update_frequency",
+          "last_ingested_at",
+          "raw_sha256"
+        ],
+        "title": "DatasetInfo",
+        "description": "Single dataset in the provenance catalog."
+      },
+      "EarthquakeEvent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Unique event identifier based on datetime and coordinates"
+          },
+          "datetime": {
+            "type": "string",
+            "title": "Datetime",
+            "description": "ISO 8601 UTC timestamp of occurrence"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date",
+            "description": "Indonesian date representation (e.g., '21 Okt 2026')"
+          },
+          "time": {
+            "type": "string",
+            "title": "Time",
+            "description": "Local time representation with timezone (e.g., '18:58:36 WIB')"
+          },
+          "magnitude": {
+            "type": "number",
+            "title": "Magnitude",
+            "description": "Earthquake magnitude on Richter scale"
+          },
+          "depth": {
+            "type": "string",
+            "title": "Depth",
+            "description": "Depth formatted string (e.g., '10 km')"
+          },
+          "depth_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depth Km",
+            "description": "Numeric depth in kilometers"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude",
+            "description": "Latitude coordinate (WGS84)"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude",
+            "description": "Longitude coordinate (WGS84)"
+          },
+          "coordinates": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Coordinates",
+            "description": "Standard GeoJSON [longitude, latitude] coordinates array for direct mapping"
+          },
+          "area": {
+            "type": "string",
+            "title": "Area",
+            "description": "Official narrative location description from BMKG"
+          },
+          "potency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Potency",
+            "description": "Tsunami potential statement or general warning"
+          },
+          "felt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Felt",
+            "description": "Observed MMI shake intensity reports in affected areas"
+          },
+          "shakemap_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shakemap Url",
+            "description": "Absolute URL to official BMKG Shakemap image"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "Originating government agency (Badan Meteorologi, Klimatologi, dan Geofisika)",
+            "default": "BMKG"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "datetime",
+          "date",
+          "time",
+          "magnitude",
+          "depth",
+          "latitude",
+          "longitude",
+          "coordinates",
+          "area"
+        ],
+        "title": "EarthquakeEvent",
+        "description": "Normalized earthquake observation event from BMKG."
+      },
+      "EarthquakeGeoJsonCollection": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "FeatureCollection"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/EarthquakeMetadata"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/components/schemas/GeoJsonFeature"
+            },
+            "type": "array",
+            "title": "Features"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metadata",
+          "features"
+        ],
+        "title": "EarthquakeGeoJsonCollection",
+        "description": "RFC 7946 GeoJSON FeatureCollection for direct consumption by 3D map engines."
+      },
+      "EarthquakeMetadata": {
+        "properties": {
+          "agency": {
+            "type": "string",
+            "title": "Agency",
+            "default": "BMKG"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": "Indonesian Seismic Monitoring Epicenters (Unified Live Feed)"
+          },
+          "total_features": {
+            "type": "integer",
+            "title": "Total Features"
+          },
+          "data_origin": {
+            "type": "string",
+            "title": "Data Origin",
+            "description": "bmkg_live | bmkg_cache | fixture"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At",
+            "description": "ISO 8601 timestamp of last successful upstream BMKG fetch"
+          },
+          "is_stale": {
+            "type": "boolean",
+            "title": "Is Stale",
+            "description": "Status whether earthquake data is beyond cache TTL or upstream is unavailable",
+            "default": false
+          },
+          "cached_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cached At"
+          },
+          "cache_ttl_seconds": {
+            "type": "integer",
+            "title": "Cache Ttl Seconds",
+            "default": 60
+          },
+          "source_portal": {
+            "type": "string",
+            "title": "Source Portal",
+            "default": "https://data.bmkg.go.id/gempabumi/"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_features",
+          "data_origin"
+        ],
+        "title": "EarthquakeMetadata",
+        "description": "Metadata block for Earthquake GeoJSON FeatureCollection."
+      },
+      "EarthquakeSummary": {
+        "properties": {
+          "latest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EarthquakeEvent"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Latest detected seismic event"
+          },
+          "recent_m5_count": {
+            "type": "integer",
+            "title": "Recent M5 Count",
+            "description": "Number of recent earthquakes M >= 5.0"
+          },
+          "felt_count": {
+            "type": "integer",
+            "title": "Felt Count",
+            "description": "Number of recent felt earthquakes"
+          },
+          "max_magnitude_recent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Magnitude Recent",
+            "description": "Highest magnitude among recent events"
+          },
+          "data_origin": {
+            "type": "string",
+            "title": "Data Origin",
+            "description": "bmkg_live | bmkg_cache | fixture",
+            "default": "bmkg_live"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At",
+            "description": "ISO 8601 timestamp of last successful upstream fetch"
+          },
+          "is_stale": {
+            "type": "boolean",
+            "title": "Is Stale",
+            "description": "Whether data is currently stale",
+            "default": false
+          },
+          "cached_at": {
+            "type": "string",
+            "title": "Cached At",
+            "description": "ISO 8601 timestamp when data was fetched/cached"
+          },
+          "cache_ttl_seconds": {
+            "type": "integer",
+            "title": "Cache Ttl Seconds",
+            "description": "Cache Time-To-Live in seconds",
+            "default": 60
+          },
+          "agency": {
+            "type": "string",
+            "title": "Agency",
+            "default": "BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)"
+          },
+          "official_portal": {
+            "type": "string",
+            "title": "Official Portal",
+            "default": "https://data.bmkg.go.id/gempabumi/"
+          }
+        },
+        "type": "object",
+        "required": [
+          "recent_m5_count",
+          "felt_count",
+          "cached_at"
+        ],
+        "title": "EarthquakeSummary",
+        "description": "Executive summary of current national earthquake activity."
+      },
+      "GeoJsonFeature": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "Feature"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeoJsonGeometry"
+          },
+          "properties": {
+            "type": "object",
+            "title": "Properties"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "geometry",
+          "properties"
+        ],
+        "title": "GeoJsonFeature",
+        "description": "RFC 7946 GeoJSON Feature for an earthquake epicenter."
+      },
+      "GeoJsonGeometry": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "default": "Point"
+          },
+          "coordinates": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Coordinates",
+            "description": "[longitude, latitude] array"
+          }
+        },
+        "type": "object",
+        "required": [
+          "coordinates"
+        ],
+        "title": "GeoJsonGeometry",
+        "description": "RFC 7946 GeoJSON Point geometry."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "active_snapshot": {
+            "type": "string",
+            "title": "Active Snapshot"
+          },
+          "database": {
+            "$ref": "#/components/schemas/DatabaseHealth"
+          },
+          "redis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redis",
+            "default": "not_configured"
+          },
+          "static_fallback_ready": {
+            "type": "boolean",
+            "title": "Static Fallback Ready",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "mode",
+          "active_snapshot",
+          "database"
+        ],
+        "title": "HealthResponse",
+        "description": "Full health check payload."
+      },
+      "IndicatorCatalogItem": {
+        "properties": {
+          "indicator_id": {
+            "type": "string",
+            "title": "Indicator Id"
+          },
+          "indicator_name": {
+            "type": "string",
+            "title": "Indicator Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "polarity": {
+            "type": "string",
+            "title": "Polarity"
+          },
+          "availability_status": {
+            "type": "string",
+            "title": "Availability Status"
+          },
+          "derivation_formula": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Derivation Formula"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/IndicatorStats"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/app__models__indicators__IndicatorProvenance"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "indicator_id",
+          "indicator_name",
+          "category",
+          "unit",
+          "polarity",
+          "availability_status",
+          "description",
+          "stats"
+        ],
+        "title": "IndicatorCatalogItem",
+        "description": "Single indicator in the catalog list (GET /indicators)."
+      },
+      "IndicatorMeta": {
+        "properties": {
+          "indicator_id": {
+            "type": "string",
+            "title": "Indicator Id"
+          },
+          "indicator_name": {
+            "type": "string",
+            "title": "Indicator Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "polarity": {
+            "type": "string",
+            "title": "Polarity"
+          },
+          "availability_status": {
+            "type": "string",
+            "title": "Availability Status"
+          },
+          "reference_year": {
+            "type": "integer",
+            "title": "Reference Year"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/IndicatorStats"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/app__models__indicators__IndicatorProvenance"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "indicator_id",
+          "indicator_name",
+          "category",
+          "unit",
+          "polarity",
+          "availability_status",
+          "reference_year",
+          "stats"
+        ],
+        "title": "IndicatorMeta",
+        "description": "Indicator metadata in the values response."
+      },
+      "IndicatorStats": {
+        "properties": {
+          "min": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min"
+          },
+          "p25": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P25"
+          },
+          "median": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median"
+          },
+          "mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean"
+          },
+          "p75": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P75"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max"
+          }
+        },
+        "type": "object",
+        "title": "IndicatorStats",
+        "description": "National-level distribution statistics."
+      },
+      "IndicatorValuesData": {
+        "properties": {
+          "indicator": {
+            "$ref": "#/components/schemas/IndicatorMeta"
+          },
+          "values_by_region": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/app__models__indicators__RegionIndicatorValue"
+            },
+            "type": "object",
+            "title": "Values By Region",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "indicator"
+        ],
+        "title": "IndicatorValuesData",
+        "description": "Payload for GET /indicators/{id}/values."
+      },
+      "LiveUnavailableError": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "error"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "default": "LIVE_UNAVAILABLE"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": "LIVE mode is not yet available. LIVE data sources have not been verified and connected. Use mode=demo for the demonstration dataset."
+          }
+        },
+        "type": "object",
+        "title": "LiveUnavailableError",
+        "description": "503 response returned when ``mode=live`` (or ``X-Data-Mode: LIVE``) is\nrequested but LIVE data sources are not yet connected.\n\nHeaders set alongside this body:\n- ``X-NusaMatra-Mode: LIVE``\n- ``X-Data-Fallback: UNAVAILABLE``"
+      },
+      "RegionCodes": {
+        "properties": {
+          "kemendagri": {
+            "type": "string",
+            "title": "Kemendagri",
+            "examples": [
+              "32.01"
+            ]
+          },
+          "bps": {
+            "type": "string",
+            "title": "Bps",
+            "examples": [
+              "3201"
+            ]
+          },
+          "kemendikdasmen": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kemendikdasmen",
+            "examples": [
+              "020500"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "kemendagri",
+          "bps"
+        ],
+        "title": "RegionCodes",
+        "description": "Cross-agency code bridging for a region."
+      },
+      "RegionDetail": {
+        "properties": {
+          "region": {
+            "$ref": "#/components/schemas/RegionSummary"
+          },
+          "composite_scores": {
+            "$ref": "#/components/schemas/CompositeScores"
+          },
+          "indicators": {
+            "items": {
+              "$ref": "#/components/schemas/app__models__regions__RegionIndicatorValue"
+            },
+            "type": "array",
+            "title": "Indicators",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "region",
+          "composite_scores"
+        ],
+        "title": "RegionDetail",
+        "description": "Full region profile (GET /regions/{region_id})."
+      },
+      "RegionSummary": {
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "title": "Region Id"
+          },
+          "parent_region_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Region Id"
+          },
+          "province_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Province Name"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "short_name": {
+            "type": "string",
+            "title": "Short Name"
+          },
+          "codes": {
+            "$ref": "#/components/schemas/RegionCodes"
+          },
+          "island_group": {
+            "type": "string",
+            "title": "Island Group"
+          },
+          "area_km2": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Km2"
+          },
+          "anchor_point": {
+            "$ref": "#/components/schemas/AnchorPoint"
+          },
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Bbox",
+            "description": "[minLng, minLat, maxLng, maxLat]"
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_id",
+          "level",
+          "name",
+          "short_name",
+          "codes",
+          "island_group",
+          "anchor_point",
+          "bbox"
+        ],
+        "title": "RegionSummary",
+        "description": "Region in list responses (GET /regions)."
+      },
+      "ResponseMeta": {
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id",
+            "examples": [
+              "2026.10.0-wia-demo"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "examples": [
+              "DEMO"
+            ]
+          },
+          "boundary_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boundary Version"
+          },
+          "total_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Count"
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverageMeta"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "data_origin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Origin",
+            "description": "bmkg_live | bmkg_cache | fixture"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At",
+            "description": "ISO 8601 timestamp of last successful upstream fetch"
+          },
+          "is_stale": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Stale",
+            "description": "True if data is beyond cache TTL or upstream is unavailable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "snapshot_id",
+          "mode"
+        ],
+        "title": "ResponseMeta",
+        "description": "Metadata block included in every API response."
+      },
+      "SnapshotInfo": {
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "environment_tag": {
+            "type": "string",
+            "title": "Environment Tag"
+          },
+          "is_active_default": {
+            "type": "boolean",
+            "title": "Is Active Default"
+          },
+          "boundary_version": {
+            "type": "string",
+            "title": "Boundary Version"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At"
+          },
+          "manifest_checksum": {
+            "type": "string",
+            "title": "Manifest Checksum"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "indicator_completeness_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indicator Completeness Pct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "snapshot_id",
+          "label",
+          "environment_tag",
+          "is_active_default",
+          "boundary_version",
+          "created_at",
+          "manifest_checksum"
+        ],
+        "title": "SnapshotInfo",
+        "description": "A data snapshot version."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WeightValidationError": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "error"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "default": "WEIGHT_VALIDATION_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "WeightValidationError",
+        "description": "422 response returned when composite-query weights are invalid.\n\nCommon causes:\n- Sum of all weight values \u2260 10000 (basis points).\n- An ``indicator_id`` key is not recognised."
+      },
+      "app__models__indicators__IndicatorProvenance": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "agency_code": {
+            "type": "string",
+            "title": "Agency Code"
+          },
+          "dataset_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Title"
+          },
+          "official_portal_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Portal Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "agency_code"
+        ],
+        "title": "IndicatorProvenance",
+        "description": "Dataset provenance for an indicator."
+      },
+      "app__models__indicators__RegionIndicatorValue": {
+        "properties": {
+          "raw": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Raw"
+          },
+          "norm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Norm"
+          },
+          "pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pct"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "flag": {
+            "type": "string",
+            "title": "Flag",
+            "default": "DEMO_EXAMPLE"
+          }
+        },
+        "type": "object",
+        "title": "RegionIndicatorValue",
+        "description": "Compact indicator value for one region."
+      },
+      "app__models__regions__IndicatorProvenance": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "agency_code": {
+            "type": "string",
+            "title": "Agency Code"
+          },
+          "official_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "agency_code"
+        ],
+        "title": "IndicatorProvenance",
+        "description": "Data provenance for a single indicator value."
+      },
+      "app__models__regions__RegionIndicatorValue": {
+        "properties": {
+          "indicator_id": {
+            "type": "string",
+            "title": "Indicator Id"
+          },
+          "indicator_name": {
+            "type": "string",
+            "title": "Indicator Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "raw_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Raw Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "normalized_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Normalized Score"
+          },
+          "national_percentile": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "National Percentile"
+          },
+          "national_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "National Rank"
+          },
+          "reference_year": {
+            "type": "integer",
+            "title": "Reference Year"
+          },
+          "quality_flag": {
+            "type": "string",
+            "title": "Quality Flag",
+            "default": "DEMO_EXAMPLE"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/app__models__regions__IndicatorProvenance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "indicator_id",
+          "indicator_name",
+          "category",
+          "unit",
+          "reference_year",
+          "provenance"
+        ],
+        "title": "RegionIndicatorValue",
+        "description": "One indicator's value attached to a region profile."
+      }
+    }
+  }
+}

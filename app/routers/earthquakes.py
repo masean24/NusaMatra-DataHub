@@ -12,7 +12,7 @@ Endpoints:
 - GET /api/v1/earthquakes/summary  — Executive national seismic activity summary
 """
 
-from typing import Optional
+from typing import Literal, Optional
 from fastapi import APIRouter, Query, Request, Response
 from fastapi.responses import JSONResponse
 
@@ -70,7 +70,7 @@ def _upstream_503_response(exc: Exception) -> JSONResponse:
 async def get_latest(
     request: Request,
     response: Response,
-    mode: Optional[str] = Query(None, description="Data mode: demo or live"),
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: demo or live"),
     simulate_upstream_failure: Optional[bool] = Query(False, description="Simulate upstream BMKG outage"),
 ):
     """
@@ -110,7 +110,7 @@ async def get_latest(
 async def get_recent_m5(
     request: Request,
     response: Response,
-    mode: Optional[str] = Query(None, description="Data mode: demo or live"),
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: demo or live"),
     simulate_upstream_failure: Optional[bool] = Query(False, description="Simulate upstream BMKG outage"),
 ):
     """
@@ -149,7 +149,7 @@ async def get_recent_m5(
 async def get_felt(
     request: Request,
     response: Response,
-    mode: Optional[str] = Query(None, description="Data mode: demo or live"),
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: demo or live"),
     simulate_upstream_failure: Optional[bool] = Query(False, description="Simulate upstream BMKG outage"),
 ):
     """
@@ -189,7 +189,7 @@ async def get_felt(
 async def get_geojson(
     request: Request,
     response: Response,
-    mode: Optional[str] = Query(None, description="Data mode: demo or live"),
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: demo or live"),
     simulate_upstream_failure: Optional[bool] = Query(False, description="Simulate upstream BMKG outage"),
 ):
     """
@@ -225,7 +225,7 @@ async def get_geojson(
 async def get_summary(
     request: Request,
     response: Response,
-    mode: Optional[str] = Query(None, description="Data mode: demo or live"),
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: demo or live"),
     simulate_upstream_failure: Optional[bool] = Query(False, description="Simulate upstream BMKG outage"),
 ):
     """

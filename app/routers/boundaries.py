@@ -10,7 +10,7 @@ Backed by official Badan Informasi Geospasial (BIG) 2026 polygon geometries:
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 import aiosqlite
 import json
 
@@ -23,10 +23,7 @@ router = APIRouter(prefix="/boundaries", tags=["Boundaries"])
 _503_responses = {
     503: {
         "model": LiveUnavailableError,
-        "description": (
-            "LIVE mode requested but not yet available. "
-            "Retry with ``?mode=demo``."
-        ),
+        "description": "LIVE mode requested but verified database unavailable.",
     }
 }
 
@@ -97,7 +94,7 @@ async def get_kabupaten_boundaries(
     format: str = Query("geojson", pattern="^(geojson)$", description="Output format. Only ``geojson`` is currently supported."),
     resolution: str = Query("low", pattern="^(low|high)$"),
     province_id: Optional[str] = Query(None, description="2-digit province filter"),
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):
@@ -225,7 +222,7 @@ async def get_provinsi_boundaries(
     request: Request,
     format: str = Query("geojson", pattern="^(geojson)$", description="Output format. Only ``geojson`` is currently supported."),
     resolution: str = Query("low", pattern="^(low|high)$"),
-    mode: Optional[str] = _mode_param,
+    mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
     db: aiosqlite.Connection = Depends(get_db),
 ):

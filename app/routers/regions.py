@@ -4,7 +4,7 @@ Matches API_CONTRACT_DRAFT.md Section 2.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from typing import Optional
+from typing import Literal, Optional
 import aiosqlite
 
 from app.database import get_db
@@ -18,10 +18,7 @@ router = APIRouter(prefix="/regions", tags=["Regions"])
 _503_responses = {
     503: {
         "model": LiveUnavailableError,
-        "description": (
-            "LIVE mode requested but not yet available. "
-            "Retry with ``?mode=demo``."
-        ),
+        "description": "LIVE mode requested but verified database unavailable.",
     }
 }
 
@@ -36,7 +33,7 @@ async def get_regions(
     level: str = Query("kabupaten_kota", pattern="^(kabupaten_kota|provinsi|all)$"),
     parent_id: Optional[str] = Query(None, description="2-digit province code filter"),
     q: Optional[str] = Query(None, description="Text search on name or code"),
-    mode: Optional[str] = Query(
+    mode: Optional[Literal["demo", "live"]] = Query(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "
@@ -77,7 +74,7 @@ async def get_regions(
 async def get_region(
     request: Request,
     region_id: str,
-    mode: Optional[str] = Query(
+    mode: Optional[Literal["demo", "live"]] = Query(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "

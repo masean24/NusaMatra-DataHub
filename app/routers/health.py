@@ -3,7 +3,8 @@ Health check router.
 Matches API_CONTRACT_DRAFT.md Section 5.
 """
 
-from fastapi import APIRouter, Request
+from typing import Literal, Optional
+from fastapi import APIRouter, Query, Request
 
 from app.config import settings
 from app.database import check_db_health
@@ -13,7 +14,10 @@ router = APIRouter(tags=["System"])
 
 
 @router.get("/health", response_model=HealthResponse)
-async def health_check(request: Request):
+async def health_check(
+    request: Request,
+    mode: Optional[Literal["demo", "live"]] = Query(None, description="Data mode: 'demo' or 'live'"),
+):
     """Check API health: database connectivity, mode, and fallback status."""
 
     mode = getattr(request.state, "data_mode", settings.default_mode)
