@@ -40,7 +40,8 @@ _mode_param = Query(
     None,
     description=(
         "Data mode: ``demo`` (default) or ``live``. "
-        "``live`` currently returns **503** (fail-closed)."
+        "``live`` serves verified official government data. "
+        "Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
     ),
     include_in_schema=True,
 )
@@ -111,6 +112,7 @@ async def get_indicator_values_endpoint(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
+            total_count=len(result.values_by_region),
         ),
         data=result,
     )
@@ -176,6 +178,7 @@ async def composite_query(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
+            total_count=result.total_regions,
         ),
         data=result,
     )

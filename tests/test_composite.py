@@ -38,6 +38,24 @@ async def test_composite_query_valid(client):
 
 
 @pytest.mark.asyncio
+async def test_composite_query_unavailable_indicator_transparency(client):
+    """BE-03: Indicators with no observations must be listed in unavailable_indicators."""
+    body = {
+        "weights": {
+            "dis_multihazard_index": 5000,
+            "edu_school_travel_time_p90": 5000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 200
+
+    data = resp.json()["data"]
+    assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
+    assert "edu_school_travel_time_p90" not in data["effective_weights"]
+    assert data["effective_weights"]["dis_multihazard_index"] == 5000
+
+
+@pytest.mark.asyncio
 async def test_composite_query_invalid_sum(client):
     """Weights not summing to 10000 should return 422."""
     body = {
@@ -70,6 +88,54 @@ async def test_composite_query_province_filter(client):
     # Province 32 (Jawa Barat) has 27 kab/kota
     assert data["total_regions"] == 27
     assert len(data["regions"]) == 27
+
+
+@pytest.mark.asyncio
+async def test_composite_query_negative_weight_rejected(client):
+    """BE-01: Negative weights must return 422 even if sum equals 10000."""
+    body = {
+        "weights": {
+            "soc_poverty_rate": 20000,
+            "dis_multihazard_index": -10000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_composite_query_empty_weights_rejected(client):
+    """BE-01: Empty weights dictionary must return 422."""
+    body = {"weights": {}}
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_composite_query_weight_above_max_rejected(client):
+    """BE-01: Weight exceeding 10000 must return 422."""
+    body = {
+        "weights": {
+            "soc_poverty_rate": 15000,
+            "dis_multihazard_index": -5000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_composite_query_invalid_province_filter(client):
+    """BE-07.2: Non-2-digit province filter must return 422."""
+    body = {
+        "weights": {
+            "dis_multihazard_index": 5000,
+            "soc_poverty_rate": 5000,
+        },
+        "filter_province_id": "invalid_province_abc",
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
 
 
 @pytest.mark.asyncio

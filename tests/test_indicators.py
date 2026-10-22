@@ -27,11 +27,13 @@ async def test_list_indicators(client):
 
 @pytest.mark.asyncio
 async def test_get_indicator_values(client):
-    """GET /indicators/{id}/values should return dict of region values."""
+    """GET /indicators/{id}/values should return dict of region values and total_count in meta."""
     resp = await client.get("/api/v1/indicators/soc_poverty_rate/values")
     assert resp.status_code == 200
 
-    data = resp.json()["data"]
+    body = resp.json()
+    assert body["meta"]["total_count"] == 514
+    data = body["data"]
     assert "indicator" in data
     assert "values_by_region" in data
     assert data["indicator"]["indicator_id"] == "soc_poverty_rate"

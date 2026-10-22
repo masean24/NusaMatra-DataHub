@@ -4,7 +4,7 @@ Matches API_CONTRACT_DRAFT.md Sections 4.1, 4.2, 4.3.
 """
 
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class IndicatorProvenance(BaseModel):
@@ -79,12 +79,13 @@ class CompositeQueryRequest(BaseModel):
     """
     Request body for weighted composite score calculation.
     Weights are in integer basis points (sum must equal 10000).
+    Each weight must be in the range 0–10000 (inclusive).
     Blocker #4: use basis points, not floats.
     """
 
     weights: dict[str, int] = Field(
         ...,
-        description="Map of indicator_id -> weight in basis points (1/10000). Sum must equal 10000.",
+        description="Map of indicator_id -> weight in basis points (1/10000). Each weight 0–10000, sum must equal 10000.",
         examples=[{
             "dis_multihazard_index": 3500,
             "soc_poverty_rate": 2500,
@@ -95,7 +96,25 @@ class CompositeQueryRequest(BaseModel):
     filter_province_id: Optional[str] = Field(
         None,
         description="Optional 2-digit province code to filter results.",
+        pattern=r"^\d{2}$",
     )
+
+    @field_validator("weights")
+    @classmethod
+    def validate_weights(cls, w: dict[str, int]) -> dict[str, int]:
+        if not w:
+            raise ValueError("weights tidak boleh kosong (weights must not be empty)")
+        for k, v in w.items():
+            if not (0 <= v <= 10000):
+                raise ValueError(
+                    f"Bobot '{k}' harus dalam rentang 0..10000 bp, diterima {v}"
+                )
+        total = sum(w.values())
+        if total != 10000:
+            raise ValueError(
+                f"Weights must sum to 10000 basis points, got {total}"
+            )
+        return w
 
 
 class CompositeRegionScore(BaseModel):
@@ -114,6 +133,14 @@ class CompositeQueryResult(BaseModel):
     total_regions: int
     weights_basis_points: dict[str, int]
     regions: list[CompositeRegionScore] = []
+    unavailable_indicators: list[str] = Field(
+        default_factory=list,
+        description="Indicators requested in weights that have 0 data in this snapshot.",
+    )
+    effective_weights: Optional[dict[str, int]] = Field(
+        None,
+        description="Effective weights utilized in the calculation after excluding unavailable indicators.",
+    )
 
 
 class CompositePreset(BaseModel):

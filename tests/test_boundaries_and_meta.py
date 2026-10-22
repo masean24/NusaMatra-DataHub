@@ -134,6 +134,16 @@ async def test_boundaries_provinsi(client):
 
 
 @pytest.mark.asyncio
+async def test_boundaries_topojson_format_rejected(client):
+    """BE-04: format=topojson must return 422 as it is not yet supported."""
+    resp_kab = await client.get("/api/v1/boundaries/kabupaten?format=topojson")
+    assert resp_kab.status_code == 422
+
+    resp_prov = await client.get("/api/v1/boundaries/provinsi?format=topojson")
+    assert resp_prov.status_code == 422
+
+
+@pytest.mark.asyncio
 async def test_datasets_endpoint(client):
     """GET /datasets should return registered government datasets."""
     resp = await client.get("/api/v1/datasets")

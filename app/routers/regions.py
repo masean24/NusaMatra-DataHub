@@ -40,7 +40,7 @@ async def get_regions(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` currently returns **503** (fail-closed)."
+            "``live`` serves verified official government data."
         ),
         include_in_schema=True,
     ),
@@ -81,7 +81,7 @@ async def get_region(
         None,
         description=(
             "Data mode: ``demo`` (default) or ``live``. "
-            "``live`` currently returns **503** (fail-closed)."
+            "``live`` serves verified official government data."
         ),
         include_in_schema=True,
     ),

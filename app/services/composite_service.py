@@ -30,19 +30,9 @@ async def compute_composite_scores(
     weights = request.weights
     indicator_ids = list(weights.keys())
 
-    if not indicator_ids:
-        return CompositeQueryResult(
-            total_regions=0,
-            weights_basis_points=weights,
-            regions=[],
-        )
-
-    # Validate weights sum to 10000
-    weight_sum = sum(weights.values())
-    if weight_sum != 10000:
-        raise ValueError(
-            f"Weights must sum to 10000 basis points, got {weight_sum}"
-        )
+    # Note: empty weights, negative values, out-of-range, and sum != 10000
+    # are all validated by CompositeQueryRequest's @field_validator.
+    # We only need to validate that indicator_ids exist in the catalog.
 
     # Validate that all indicator_ids exist in the catalog
     placeholders_check = ",".join("?" for _ in indicator_ids)
@@ -109,6 +99,18 @@ async def compute_composite_scores(
         reverse=True,
     )
 
+    found_indicator_ids = {
+        row["indicator_id"] for row in rows if row["normalized_score"] is not None
+    }
+    unavailable_indicators = [
+        iid for iid in indicator_ids if iid not in found_indicator_ids
+    ]
+    effective_weights = (
+        {iid: w for iid, w in weights.items() if iid in found_indicator_ids}
+        if unavailable_indicators
+        else weights
+    )
+
     results = []
     for rank, (rid, data) in enumerate(sorted_regions, start=1):
         results.append(
@@ -125,6 +127,8 @@ async def compute_composite_scores(
         total_regions=len(results),
         weights_basis_points=weights,
         regions=results,
+        unavailable_indicators=unavailable_indicators,
+        effective_weights=effective_weights,
     )
 
 

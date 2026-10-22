@@ -211,8 +211,10 @@ async def root():
             "earthquakes_summary": f"{settings.api_prefix}/earthquakes/summary",
         },
         "notice": (
-            "DEMO mode only. All data is illustrative (DEMO_EXAMPLE). "
-            "Not sourced from verified LIVE measurements."
+            "DEMO and LIVE modes available. "
+            "DEMO data is illustrative (DEMO_EXAMPLE). "
+            "LIVE data is sourced from verified official government datasets (BPS, BNPB, Kemenkes, Kemendikdasmen, BMKG). "
+            "Earthquake endpoints are fail-closed when upstream BMKG is unavailable."
         ),
     }
     if settings.enable_docs:

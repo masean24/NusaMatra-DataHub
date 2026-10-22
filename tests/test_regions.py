@@ -50,6 +50,17 @@ async def test_list_regions_search(client):
 
 
 @pytest.mark.asyncio
+async def test_list_regions_search_wildcard_escaping(client):
+    """BE-07.1: Text search with LIKE wildcards % or _ must be escaped literally."""
+    # Since no region has a literal % in its name or ID, this should return 0 results
+    resp = await client.get("/api/v1/regions?q=%25")
+    assert resp.status_code == 200
+
+    data = resp.json()
+    assert data["meta"]["total_count"] == 0
+
+
+@pytest.mark.asyncio
 async def test_get_region_detail(client):
     """GET /regions/{id} should return full profile with indicators."""
     # Get first region from list to find a valid ID

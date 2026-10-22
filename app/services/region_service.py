@@ -40,8 +40,12 @@ async def list_regions(
         params.append(parent_id)
 
     if q:
-        conditions.append("(r.name LIKE ? OR r.region_id LIKE ? OR r.bps_code LIKE ?)")
-        like = f"%{q}%"
+        # Escape SQL LIKE wildcards to prevent unintended wildcard matches
+        escaped_q = q.replace("%", "\\%").replace("_", "\\_")
+        conditions.append(
+            "(r.name LIKE ? ESCAPE '\\' OR r.region_id LIKE ? ESCAPE '\\' OR r.bps_code LIKE ? ESCAPE '\\')"
+        )
+        like = f"%{escaped_q}%"
         params.extend([like, like, like])
 
     where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
