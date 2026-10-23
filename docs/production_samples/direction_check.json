@@ -1,0 +1,43 @@
+{
+  "soc_poverty_rate": {
+    "n": 514,
+    "corr_raw_norm": 1.0,
+    "expected": "positive",
+    "examples": [
+      [
+        "9119",
+        42.56,
+        100.0
+      ],
+      [
+        "9407",
+        39.21,
+        91.76
+      ],
+      [
+        "9408",
+        37.29,
+        87.04
+      ]
+    ]
+  },
+  "soc_hdi": {
+    "n": 514,
+    "corr_raw_norm": -1.0,
+    "expected": "negative",
+    "examples_highest_raw": [
+      [
+        "3471",
+        88.77,
+        0.0
+      ]
+    ],
+    "examples_lowest_raw": [
+      [
+        "9508",
+        36.3,
+        100.0
+      ]
+    ]
+  }
+}
