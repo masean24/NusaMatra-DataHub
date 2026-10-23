@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **110/110 Unit & Integration Tests Passing** |
+| **Status API** | ✅ **112/112 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |

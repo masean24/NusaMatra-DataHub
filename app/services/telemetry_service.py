@@ -1,22 +1,51 @@
 """
 Nusa Matra Data Hub — Real-Time Telemetry and Usage Statistics Service.
 
-Collects in-memory API metrics:
+Collects API metrics:
 - Request counts by endpoint and HTTP status
 - Latency metrics (mean, min, max in milliseconds)
-- Operational uptime and service start time
+- Service uptime (persisted across restarts) and process uptime
 - Data mode distribution (DEMO vs LIVE)
 - Rolling log of recent requests for live monitoring
+
+Persistence is optional and snapshot-based: counters stay in memory for zero
+per-request I/O, then a background task flushes them to SQLite every few
+seconds. Point ``NM_TELEMETRY_DB_PATH`` to a persistent volume in Coolify so
+the counters survive redeploys.
 """
 
+import asyncio
+import json
+import logging
 import time
 from collections import deque
+from contextlib import suppress
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Optional
+
+import aiosqlite
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
+
+
+def _iso(timestamp: Optional[float]) -> Optional[str]:
+    if timestamp is None:
+        return None
+    return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+
+
+def _format_uptime(seconds: int) -> str:
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    remaining = seconds % 60
+    return f"{hours}h {minutes}m {remaining}s"
 
 
 class TelemetryCollector:
-    """Thread-safe in-memory metrics collector with zero performance overhead."""
+    """In-memory metrics collector with optional periodic SQLite snapshots."""
 
     SYSTEM_PATHS = {
         "/",
@@ -45,18 +74,41 @@ class TelemetryCollector:
         "/api/v1/scalar",
     )
 
-    def __init__(self, max_recent: int = 20):
-        self.start_time = time.time()
+    def __init__(
+        self,
+        max_recent: int = 20,
+        db_path: Optional[str] = None,
+        flush_interval: Optional[float] = None,
+        persistence_enabled: Optional[bool] = None,
+    ):
+        self.process_started_at = time.time()
+        self.first_started_at = self.process_started_at
+        self.last_flush_at: Optional[float] = None
+
         self.total_requests = 0
         self.total_latency_ms = 0.0
         self.min_latency_ms: Optional[float] = None
         self.max_latency_ms: Optional[float] = None
-        
+
         self.status_counts: dict[str, int] = {}
         self.endpoint_counts: dict[str, int] = {}
         self.mode_counts: dict[str, int] = {"DEMO": 0, "LIVE": 0}
-        
+
         self.recent_requests: deque[dict[str, Any]] = deque(maxlen=max_recent)
+
+        self.db_path = db_path if db_path is not None else settings.telemetry_db_path
+        self.flush_interval = (
+            flush_interval
+            if flush_interval is not None
+            else settings.telemetry_flush_interval_seconds
+        )
+        self.persistence_enabled = (
+            persistence_enabled
+            if persistence_enabled is not None
+            else settings.telemetry_persistence_enabled
+        )
+        self._initialized = False
+        self._flush_task: Optional[asyncio.Task] = None
 
     @classmethod
     def is_system_path(cls, path: str) -> bool:
@@ -69,6 +121,156 @@ class TelemetryCollector:
             return True
         return any(clean == p or clean.startswith(p + "/") for p in cls.SYSTEM_PREFIXES)
 
+    # ------------------------------------------------------------------
+    # Persistence lifecycle
+    # ------------------------------------------------------------------
+    @property
+    def persistence_active(self) -> bool:
+        return bool(self.persistence_enabled and self.db_path)
+
+    async def initialize(self) -> None:
+        """Create the telemetry table and load the previous snapshot, if any."""
+        if not self.persistence_active or self._initialized:
+            return
+
+        try:
+            path = Path(self.db_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+
+            async with aiosqlite.connect(self.db_path) as db:
+                db.row_factory = aiosqlite.Row
+                await db.execute("PRAGMA journal_mode = WAL")
+                await db.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS telemetry_state (
+                        id INTEGER PRIMARY KEY CHECK (id = 1),
+                        first_started_at REAL,
+                        total_requests INTEGER NOT NULL DEFAULT 0,
+                        total_latency_ms REAL NOT NULL DEFAULT 0,
+                        min_latency_ms REAL,
+                        max_latency_ms REAL,
+                        status_counts TEXT NOT NULL DEFAULT '{}',
+                        endpoint_counts TEXT NOT NULL DEFAULT '{}',
+                        mode_counts TEXT NOT NULL DEFAULT '{}',
+                        recent_requests TEXT NOT NULL DEFAULT '[]',
+                        updated_at REAL
+                    )
+                    """
+                )
+                cursor = await db.execute("SELECT * FROM telemetry_state WHERE id = 1")
+                row = await cursor.fetchone()
+                await db.commit()
+
+            if row is not None:
+                self._restore(row)
+            self._initialized = True
+        except Exception:
+            logger.exception("Telemetry persistence unavailable; continuing in-memory only")
+
+    def _restore(self, row: aiosqlite.Row) -> None:
+        self.total_requests = int(row["total_requests"] or 0)
+        self.total_latency_ms = float(row["total_latency_ms"] or 0.0)
+        self.min_latency_ms = row["min_latency_ms"]
+        self.max_latency_ms = row["max_latency_ms"]
+        self.status_counts = self._load_json(row["status_counts"], {})
+        self.endpoint_counts = self._load_json(row["endpoint_counts"], {})
+        self.mode_counts = self._load_json(row["mode_counts"], {"DEMO": 0, "LIVE": 0})
+        for key in ("DEMO", "LIVE"):
+            self.mode_counts.setdefault(key, 0)
+
+        recent = self._load_json(row["recent_requests"], [])
+        self.recent_requests.clear()
+        self.recent_requests.extend(recent)
+
+        first_started_at = row["first_started_at"]
+        if first_started_at:
+            self.first_started_at = min(float(first_started_at), self.process_started_at)
+        self.last_flush_at = row["updated_at"]
+
+    @staticmethod
+    def _load_json(raw: Any, fallback: Any) -> Any:
+        try:
+            value = json.loads(raw) if raw else fallback
+            return value if isinstance(value, type(fallback)) else fallback
+        except (TypeError, ValueError):
+            return fallback
+
+    async def flush(self) -> bool:
+        """Write a consistent counter snapshot to SQLite."""
+        if not self.persistence_active:
+            return False
+
+        try:
+            await self.initialize()
+            async with aiosqlite.connect(self.db_path) as db:
+                await db.execute("PRAGMA journal_mode = WAL")
+                await db.execute(
+                    """
+                    INSERT INTO telemetry_state (
+                        id, first_started_at, total_requests, total_latency_ms,
+                        min_latency_ms, max_latency_ms, status_counts,
+                        endpoint_counts, mode_counts, recent_requests, updated_at
+                    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(id) DO UPDATE SET
+                        first_started_at = excluded.first_started_at,
+                        total_requests = excluded.total_requests,
+                        total_latency_ms = excluded.total_latency_ms,
+                        min_latency_ms = excluded.min_latency_ms,
+                        max_latency_ms = excluded.max_latency_ms,
+                        status_counts = excluded.status_counts,
+                        endpoint_counts = excluded.endpoint_counts,
+                        mode_counts = excluded.mode_counts,
+                        recent_requests = excluded.recent_requests,
+                        updated_at = excluded.updated_at
+                    """,
+                    (
+                        self.first_started_at,
+                        self.total_requests,
+                        self.total_latency_ms,
+                        self.min_latency_ms,
+                        self.max_latency_ms,
+                        json.dumps(self.status_counts),
+                        json.dumps(self.endpoint_counts),
+                        json.dumps(self.mode_counts),
+                        json.dumps(list(self.recent_requests)),
+                        time.time(),
+                    ),
+                )
+                await db.commit()
+            self.last_flush_at = time.time()
+            return True
+        except Exception:
+            logger.exception("Telemetry flush failed")
+            return False
+
+    async def start(self) -> None:
+        """Load persisted state and start the periodic flush loop."""
+        await self.initialize()
+        if not self.persistence_active or self._flush_task is not None:
+            return
+        if self.last_flush_at is None:
+            # Persist first_started_at immediately so a fast restart still has it.
+            await self.flush()
+        self._flush_task = asyncio.create_task(self._flush_loop())
+
+    async def _flush_loop(self) -> None:
+        interval = max(0.5, float(self.flush_interval))
+        while True:
+            await asyncio.sleep(interval)
+            await self.flush()
+
+    async def stop(self) -> None:
+        """Cancel the flush loop and write one final snapshot."""
+        if self._flush_task is not None:
+            self._flush_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await self._flush_task
+            self._flush_task = None
+        await self.flush()
+
+    # ------------------------------------------------------------------
+    # Request recording and summary
+    # ------------------------------------------------------------------
     def record_request(
         self,
         method: str,
@@ -83,7 +285,7 @@ class TelemetryCollector:
 
         self.total_requests += 1
         self.total_latency_ms += latency_ms
-        
+
         if self.min_latency_ms is None or latency_ms < self.min_latency_ms:
             self.min_latency_ms = latency_ms
         if self.max_latency_ms is None or latency_ms > self.max_latency_ms:
@@ -112,11 +314,9 @@ class TelemetryCollector:
 
     def get_summary(self) -> dict[str, Any]:
         """Generate comprehensive telemetry statistics dictionary."""
-        uptime_seconds = int(time.time() - self.start_time)
-        hours = uptime_seconds // 3600
-        minutes = (uptime_seconds % 3600) // 60
-        seconds = uptime_seconds % 60
-        uptime_str = f"{hours}h {minutes}m {seconds}s"
+        now = time.time()
+        process_uptime = max(0, int(now - self.process_started_at))
+        service_uptime = max(0, int(now - self.first_started_at))
 
         avg_latency = (
             round(self.total_latency_ms / self.total_requests, 2)
@@ -142,8 +342,21 @@ class TelemetryCollector:
         )
 
         return {
-            "uptime_seconds": uptime_seconds,
-            "uptime_formatted": uptime_str,
+            # Backwards-compatible fields. "uptime" is now service uptime,
+            # which survives redeploys when persistence is enabled.
+            "uptime_seconds": service_uptime,
+            "uptime_formatted": _format_uptime(service_uptime),
+            "service_uptime_seconds": service_uptime,
+            "service_uptime_formatted": _format_uptime(service_uptime),
+            "process_uptime_seconds": process_uptime,
+            "process_uptime_formatted": _format_uptime(process_uptime),
+            "first_started_at": _iso(self.first_started_at),
+            "persistence": {
+                "enabled": self.persistence_active,
+                "initialized": self._initialized,
+                "flush_interval_seconds": self.flush_interval,
+                "last_flush_at": _iso(self.last_flush_at),
+            },
             "total_requests": self.total_requests,
             "success_rate_pct": success_rate,
             "latency": {

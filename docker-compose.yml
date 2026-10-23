@@ -12,9 +12,16 @@ services:
       - PORT=8000
       - NM_DEFAULT_MODE=DEMO
       - NM_DEBUG=false
+      - NM_TELEMETRY_DB_PATH=/data/telemetry.db
+      - NM_TELEMETRY_FLUSH_INTERVAL_SECONDS=5
+    volumes:
+      - nusa-matra-telemetry:/data
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')\" || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 5s
+
+volumes:
+  nusa-matra-telemetry:

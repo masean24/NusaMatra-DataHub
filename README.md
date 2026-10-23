@@ -6,7 +6,7 @@
 Backend API geospasial terintegrasi penyedia data 33 indikator pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
 [![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
-[![Tests](https://img.shields.io/badge/Tests-110%2F110%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-112%2F112%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -164,10 +164,10 @@ cd d:\wia2
 # Install dependensi
 pip install -r requirements.txt
 
-# Jalankan 110 unit tests
+# Jalankan 112 unit tests
 python -m pytest -v
 ```
-*(Hasil: **110 passed** dalam ~10-15 detik).*
+*(Hasil: **112 passed** dalam ~10-15 detik).*
 
 ---
 

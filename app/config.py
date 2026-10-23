@@ -78,6 +78,35 @@ class Settings(BaseSettings):
         description="Minimum number of contributing indicators for a region to be ranked",
     )
 
+    # Telemetry persistence (point to a Coolify persistent volume in production)
+    telemetry_db_path: str = Field(
+        default=str(Path(__file__).parent.parent / "data" / "telemetry.db"),
+        validation_alias=AliasChoices(
+            "TELEMETRY_DB_PATH",
+            "NM_TELEMETRY_DB_PATH",
+            "telemetry_db_path",
+        ),
+        description="SQLite path for persisted telemetry counters",
+    )
+    telemetry_flush_interval_seconds: float = Field(
+        default=5.0,
+        validation_alias=AliasChoices(
+            "TELEMETRY_FLUSH_INTERVAL_SECONDS",
+            "NM_TELEMETRY_FLUSH_INTERVAL_SECONDS",
+            "telemetry_flush_interval_seconds",
+        ),
+        description="Seconds between telemetry snapshot flushes",
+    )
+    telemetry_persistence_enabled: bool = Field(
+        default=True,
+        validation_alias=AliasChoices(
+            "TELEMETRY_PERSISTENCE_ENABLED",
+            "NM_TELEMETRY_PERSISTENCE_ENABLED",
+            "telemetry_persistence_enabled",
+        ),
+        description="Persist telemetry counters across process restarts",
+    )
+
     model_config = {"env_prefix": "NM_", "env_file": ".env", "extra": "ignore"}
 
 

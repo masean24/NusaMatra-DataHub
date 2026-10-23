@@ -21,6 +21,7 @@ from app.database import init_db
 from app.middleware.mode_selector import ModeSelector
 from app.routers import regions, indicators, boundaries, datasets, snapshots, health, earthquakes, stats
 from app.routers.stats import get_stats_html
+from app.services.telemetry_service import telemetry
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -35,7 +36,11 @@ async def lifespan(app: FastAPI):
     """Application startup/shutdown lifecycle."""
     # Ensure database schema exists on startup
     await init_db()
-    yield
+    await telemetry.start()
+    try:
+        yield
+    finally:
+        await telemetry.stop()
 
 
 app = FastAPI(

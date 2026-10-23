@@ -4,7 +4,7 @@
 **Dari:** Backend Nusa Matra Data Hub  
 **Tanggal:** 23 Oktober 2026  
 **Snapshot:** `2026.10.0-official-live`  
-**Status:** 110/110 test lulus · 25 indikator berdata · 12.689 observasi · 514/514 kab/kota
+**Status:** 112/112 test lulus · 25 indikator berdata · 12.689 observasi · 514/514 kab/kota
 
 ---
 
@@ -451,7 +451,7 @@ Setiap dataset punya file `*.provenance.json` berisi URL resmi, SHA-256 raw, dan
 
 ```bash
 python -m pytest -q
-# 110 passed
+# 112 passed
 
 python scripts/seed_live_db.py
 # 12,689 fact rows, 25 indicators, 514/514 regions, max rank 514

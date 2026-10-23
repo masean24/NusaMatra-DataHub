@@ -4,7 +4,7 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (Working Tree: v2.1 remediation in progress, 110/110 Pytest Green)  
+> **Active Branch:** `main` (Working Tree: v2.1 remediation in progress, 112/112 Pytest Green)  
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
 > **Date Generated:** 23 Oktober 2026 (updated after v2.1 data-integrity remediation)  
 
@@ -42,9 +42,15 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
    - Akses internet rumah tangga (BPS 2024), JKN (BPS 2025), dan penduduk terdampak bencana per 10.000 (BNPB 2024) → **province-imputed**, seluruhnya ditandai `IMPUTED_PROVINCE`.
    - Semua provenance + SHA-256 tersimpan di file `*.provenance.json`; `inf_electrification_pct` tetap `IMPUTED_PROVINCE`.
 
+5. **Telemetry persisten (v2.2)**
+   - Counter dan `recent_requests` di-flush ke SQLite tiap 5 detik (`NM_TELEMETRY_FLUSH_INTERVAL_SECONDS`).
+   - `uptime` sekarang = uptime layanan lintas redeploy; `process_uptime` terpisah.
+   - Di Coolify: mount volume ke `/data`, set `NM_TELEMETRY_DB_PATH=/data/telemetry.db`.
+   - Panduan lengkap: `docs/TELEMETRY_PERSISTENCE_COOLIFY.md`.
+
 **Snapshot LIVE saat ini:** 12.689 observasi, **25 indikator berdata**, 514/514 wilayah. Delapan indikator belum berdata: 2 `UNAVAILABLE` by design (travel time & ICU) dan 6 menunggu akses granular kab/kota (Dapodik/Kemenkes/Podes).
 
-**Verifikasi:** `python -m pytest -q` → **110 passed**.
+**Verifikasi:** `python -m pytest -q` → **112 passed**.
 
 ---
 
@@ -204,25 +210,26 @@ Semua endpoint resmi beralamat di bawah prefix `/api/v1`:
 Pengujian unit dan integrasi dijalankan otomatis melalui Pytest AsyncIO:
 
 ```
-collected 110 items
+collected 112 items
 
-tests\test_audit_requirements.py ..............................          [ 27%]
-tests\test_boundaries_and_meta.py ...............                        [ 41%]
-tests\test_composite.py ..........                                       [ 50%]
-tests\test_composite_eligibility.py ......                               [ 55%]
-tests\test_crosswalk.py ......                                           [ 61%]
-tests\test_demo_data_integrity.py ...                                    [ 64%]
-tests\test_earthquakes.py ........                                       [ 71%]
-tests\test_health.py ........                                            [ 78%]
-tests\test_indicators.py ......                                          [ 84%]
-tests\test_live_data_integrity.py ..........                             [ 93%]
-tests\test_regions.py ........                                           [100%]
+tests\test_audit_requirements.py ..............................          [ 26%]
+tests\test_boundaries_and_meta.py ...............                        [ 40%]
+tests\test_composite.py ..........                                       [ 49%]
+tests\test_composite_eligibility.py ......                               [ 54%]
+tests\test_crosswalk.py ......                                           [ 60%]
+tests\test_demo_data_integrity.py ...                                    [ 62%]
+tests\test_earthquakes.py ........                                       [ 70%]
+tests\test_health.py ........                                            [ 77%]
+tests\test_indicators.py ......                                          [ 82%]
+tests\test_live_data_integrity.py ..........                             [ 91%]
+tests\test_regions.py ........                                           [ 98%]
+tests\test_telemetry_persistence.py ..                                   [100%]
 
-============================= 110 passed in 10.38s ==============================
+============================= 112 passed in 9.17s ==============================
 ```
 
 ### Jaminan Kualitas Kunci:
-1. **Zero Failing Tests:** 110 kasus uji berstatus *pass* (termasuk test BMKG deterministik berbasis fixture resmi).
+1. **Zero Failing Tests:** 112 kasus uji berstatus *pass* (termasuk test BMKG deterministik berbasis fixture resmi).
 2. **Crosswalk Integrity:** 514/514 wilayah tercakup; kode legacy tidak menimpa kode 2026; kota/kabupaten senama tidak bertukar data.
 3. **Canonical Direction:** DEMO dan LIVE sama-sama memakai semantik `higher_is_need`; diuji dengan korelasi raw vs normalized.
 4. **Eligibility Integrity:** wilayah parsial di-reweight, wilayah di bawah ambang masuk `insufficient_data`, dan `national_rank` tidak melebihi 514.
