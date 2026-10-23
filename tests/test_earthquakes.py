@@ -4,6 +4,8 @@ Covers latest, recent M5+, felt, GeoJSON FeatureCollection, summary,
 provenance metadata, cache policies, and fail-closed upstream simulations.
 """
 
+import time
+
 import pytest
 import httpx
 from app.main import app
@@ -26,8 +28,26 @@ def reset_earthquake_cache():
     bmkg_service._cache._last_success_at = None
 
 
+@pytest.fixture
+def mock_bmkg_upstream(monkeypatch):
+    """Deterministic BMKG live payload built from the bundled official fixture."""
+    result = bmkg_service.BmkgFeedResult(
+        data=bmkg_service._load_local_fixture(),
+        data_origin="bmkg_live",
+        last_success_at="2026-10-23T00:00:00+00:00",
+        is_stale=False,
+        fallback_header="NONE",
+    )
+
+    async def fake_fetch(*args, **kwargs):
+        return result
+
+    monkeypatch.setattr(bmkg_service, "fetch_bmkg_feeds", fake_fetch)
+    return result
+
+
 @pytest.mark.asyncio
-async def test_get_earthquakes_latest():
+async def test_get_earthquakes_latest(mock_bmkg_upstream):
     """Verify latest earthquake endpoint returns 200 and standard event format."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/latest?mode=live")
@@ -55,7 +75,7 @@ async def test_get_earthquakes_latest():
 
 
 @pytest.mark.asyncio
-async def test_get_earthquakes_recent_m5():
+async def test_get_earthquakes_recent_m5(mock_bmkg_upstream):
     """Verify recent M5+ earthquakes endpoint returns list of significant events."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/recent?mode=live")
@@ -77,7 +97,7 @@ async def test_get_earthquakes_recent_m5():
 
 
 @pytest.mark.asyncio
-async def test_get_earthquakes_felt():
+async def test_get_earthquakes_felt(mock_bmkg_upstream):
     """Verify felt earthquakes endpoint returns events with intensity notes."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/felt?mode=live")
@@ -96,7 +116,7 @@ async def test_get_earthquakes_felt():
 
 
 @pytest.mark.asyncio
-async def test_get_earthquakes_geojson_live_provenance():
+async def test_get_earthquakes_geojson_live_provenance(mock_bmkg_upstream):
     """Verify GeoJSON FeatureCollection metadata, origin, and headers in LIVE mode."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/geojson?mode=live")
@@ -158,25 +178,18 @@ async def test_get_earthquakes_geojson_demo_fixture():
 
 
 @pytest.mark.asyncio
-async def test_earthquakes_live_caching_transition():
-    """Verify transition from bmkg_live to bmkg_cache within 60s window."""
-    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
-        # First call: fetches fresh
-        resp1 = await client.get("/api/v1/earthquakes/geojson?mode=live")
-        assert resp1.status_code == 200
-        origin1 = resp1.json()["metadata"]["data_origin"]
-        assert origin1 == "bmkg_live"
-        last_success1 = resp1.json()["metadata"]["last_success_at"]
+async def test_earthquakes_live_cache_hit_avoids_upstream():
+    """A fresh in-memory cache must be served without touching BMKG upstream."""
+    now = time.time()
+    bmkg_service._cache._live_cache = bmkg_service._load_local_fixture()
+    bmkg_service._cache._cached_at = now
+    bmkg_service._cache._last_success_at = now
 
-        # Immediate second call: must hit in-memory cache
-        resp2 = await client.get("/api/v1/earthquakes/geojson?mode=live")
-        assert resp2.status_code == 200
-        origin2 = resp2.json()["metadata"]["data_origin"]
-        assert origin2 == "bmkg_cache"
-        last_success2 = resp2.json()["metadata"]["last_success_at"]
+    result = await bmkg_service.fetch_bmkg_feeds(mode="LIVE")
 
-        assert last_success1 == last_success2
-        assert resp2.json()["metadata"]["is_stale"] is False
+    assert result.data_origin == "bmkg_cache"
+    assert result.is_stale is False
+    assert result.last_success_at is not None
 
 
 @pytest.mark.asyncio
@@ -198,7 +211,7 @@ async def test_earthquakes_live_upstream_failure_simulation():
 
 
 @pytest.mark.asyncio
-async def test_get_earthquakes_summary():
+async def test_get_earthquakes_summary(mock_bmkg_upstream):
     """Verify earthquake activity summary endpoint."""
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/summary?mode=live")

@@ -14,10 +14,13 @@ import os
 import sqlite3
 import sys
 import hashlib
-import re
+import statistics
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from app.services.crosswalk_service import crosswalk_rows, first_value, sort_vintages
 DB_PATH = REPO_ROOT / "data" / "nusa_matra_live.db"
 MIGRATION_PATH = REPO_ROOT / "migrations" / "001_init_schema.sql"
 MASTER_CSV = REPO_ROOT / "data" / "verified_indicators_master.csv"
@@ -59,16 +62,47 @@ OFFICIAL_DATASETS = [
      "https://data.bmkg.go.id/gempabumi/",
      "https://data.bmkg.go.id/DataMKG/TEWS/",
      "REST_API", "Data Terbuka BMKG", "Event-Driven"),
+    ("nusa_matra_internal_audit", "NUSAMATRA", "Nusa Matra Data Hub",
+     "Internal Ingestion Audit (completeness & freshness derived from active snapshot)",
+     "https://api.orangkeren.me",
+     "internal://ingestion-audit",
+     "INTERNAL_DERIVATION", "Internal", "Per Snapshot"),
+    ("bps_sdgs_kabkota_2025", "BPS", "Badan Pusat Statistik",
+     "Susenas 2025 - Akses Air Minum Layak & Sanitasi Layak per Kabupaten/Kota (WebAPI var 2830 & 2748)",
+     "https://webapi.bps.go.id/developer/",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("kemendikdasmen_apm_2024_2025", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
+     "APK/APM PAUD, SD, SMP, dan SM Tahun 2024/2025 (termasuk Madrasah dan Sederajat)",
+     "https://data.kemendikdasmen.go.id/",
+     "https://data.kemendikdasmen.go.id/publikasi/p/vokasi-buku-analisis/apk-apm-paud-sd-smp-dan-sm-tahun-2024-2025-termasuk-madrasah-dan-sederajat-2025",
+     "PDF_TABLE", "Data Terbuka Kemendikdasmen", "Tahunan"),
+    ("bnpb_dibi_kabkota_2024", "BNPB", "Badan Nasional Penanggulangan Bencana",
+     "Kompilasi Data Kejadian dan Dampak Bencana - Jumlah Kejadian per Kabupaten 2010-2024",
+     "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
+     "https://data.bnpb.go.id/api/3/action/datastore_search?resource_id=21044ffd-c397-4b3c-acbd-5adaa03d79e3",
+     "CKAN_API", "Lisensi Terbuka Satu Data Indonesia", "Tahunan"),
+    ("bps_proyeksi_penduduk_2026", "BPS", "Badan Pusat Statistik",
+     "Proyeksi Penduduk Indonesia 2020-2050 Hasil SP2020 - Kabupaten/Kota menurut Kelompok Umur (2026)",
+     "https://www.bps.go.id/id/statistics-table/2/Mjc5MCMy/-jumlah-penduduk-menurut-kabupaten-kota-dan-kelompok-umur.html",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2790/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("bps_susenas_tik_2024", "BPS", "Badan Pusat Statistik",
+     "Susenas 2024 - Persentase Rumah Tangga yang Mengakses Internet (provinsi)",
+     "https://webapi.bps.go.id/developer/",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/398/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("bps_susenas_jkn_2025", "BPS", "Badan Pusat Statistik",
+     "Susenas Maret 2025 - Persentase Penduduk dengan Jaminan Kesehatan Nasional (provinsi)",
+     "https://webapi.bps.go.id/developer/",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2279/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("bnpb_dibi_affected_2024", "BNPB", "Badan Nasional Penanggulangan Bencana",
+     "BNPB DIBI 2024 - Korban Terdampak dan Mengungsi Menurut Provinsi",
+     "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
+     "https://data.bnpb.go.id/api/3/action/datastore_search?resource_id=39ceb577-b49f-45c9-b909-7dd8daef417a",
+     "CKAN_API", "Lisensi Terbuka Satu Data Indonesia", "Tahunan"),
 ]
-
-def norm(s):
-    if not s:
-        return ""
-    s = s.upper()
-    s = s.replace("KABUPATEN", "").replace("KAB.", "").replace("KOTA", "")
-    s = s.replace("ADM.", "").replace("ADMINISTRASI", "")
-    s = re.sub(r'[^A-Z0-9]', '', s)
-    return s
 
 def calc_bbox_and_centroid(coords):
     def flatten(c):
@@ -182,7 +216,6 @@ def main():
     with open(KAB_GEOJSON, "r", encoding="utf-8") as f:
         kab_gj = json.load(f)
     kab_count = 0
-    name_to_region_id = {}
     for feat in kab_gj["features"]:
         props = feat["properties"]
         geom = feat["geometry"]
@@ -212,13 +245,7 @@ def main():
             ),
         )
         kab_count += 1
-        
-        # Index for matching
-        k = norm(props["name"])
-        name_to_region_id[k] = props["region_id"]
-        name_to_region_id[f"{props['parent_region_id']}_{k}"] = props["region_id"]
-        name_to_region_id[norm(props["short_name"])] = props["region_id"]
-        
+
     conn.commit()
     print(f"       [OK] {len(prov_gj['features'])} provinces & {kab_count} kab/kota inserted from BIG 2026")
 
@@ -236,6 +263,8 @@ def main():
                 ds_id = "kemenkes_ski_2023"
             elif "Kemendikdasmen" in r["primary_source_agency"]:
                 ds_id = "kemendikdasmen_ref_2026"
+            elif "Nusa Matra" in r["primary_source_agency"]:
+                ds_id = "nusa_matra_internal_audit"
                 
             indicators_meta[ind_id] = {
                 "name": r["indicator_name"],
@@ -264,22 +293,49 @@ def main():
     with open(MASTER_CSV, "r", encoding="utf-8") as f:
         master_rows = list(csv.DictReader(f))
 
-    aliases = {
-        "KOTAPADANGSIDIMPUAN": "PADANGSIDEMPUAN",
-        "KEPSERIBU": "KEPULAUANSERIBU",
-        "SIAUTAGULANDANGBIARO": "KEPULAUANSIAUTAGULANDANGBIARO",
-        "SITAROSIAUTAGULANDANGBIARO": "KEPULAUANSIAUTAGULANDANGBIARO",
-        "SITARO": "KEPULAUANSIAUTAGULANDANGBIARO",
-        "KOTAMAKASAR": "KOTAMAKASSAR",
-        "MAKASAR": "KOTAMAKASSAR",
-        "TOBASAMOSIRTOBA": "TOBA",
-        "TOBASAMOSIR": "TOBA",
-        "LABUHANBATU": "LABUHANBATU",
-        "BATANGHARI": "BATANGHARI",
-        "BANYUASIN": "BANYUASIN"
-    }
+    regions = [
+        {
+            "region_id": row[0],
+            "parent_region_id": row[1],
+            "bps_code": row[2],
+            "name": row[3],
+            "level": row[4],
+        }
+        for row in conn.execute(
+            "SELECT region_id, parent_region_id, bps_code, name, level "
+            "FROM dim_regions WHERE level IN ('kabupaten', 'kota')"
+        )
+    ]
 
-    # Column to indicator mapping
+    crosswalk = crosswalk_rows(master_rows, regions)
+    print(
+        f"       Crosswalk matched {len(crosswalk.covered_region_ids)}/{len(regions)} regions "
+        f"({len(crosswalk.multi_vintage_region_ids)} multi-vintage); "
+        f"unmatched={len(crosswalk.unmatched)}, ambiguous={len(crosswalk.ambiguous)}"
+    )
+
+    uncovered = sorted(
+        {region["region_id"] for region in regions} - crosswalk.covered_region_ids
+    )
+    if uncovered:
+        print(f"       [ERROR] Crosswalk left {len(uncovered)} regions uncovered: {uncovered}")
+        sys.exit(1)
+
+    for entry in crosswalk.unmatched + crosswalk.ambiguous:
+        conn.execute(
+            """INSERT INTO etl_quarantine_rows
+               (dataset_id, raw_region_code, raw_region_name, raw_payload, failure_reason)
+               VALUES (?, ?, ?, ?, ?)""",
+            (
+                "crosswalk",
+                entry.get("bps_code"),
+                entry.get("region_name"),
+                json.dumps(entry, ensure_ascii=False),
+                entry["reason"],
+            ),
+        )
+
+    # Column to indicator mapping: (indicator_id, reference_year, dataset_id, source_label)
     col_to_ind = {
         "soc_hdi": ("soc_hdi", 2024, "bps_susenas_sakernas_2025", "BPS IPM Metode Baru 2024"),
         "hlt_life_expectancy": ("hlt_life_expectancy", 2024, "bps_susenas_sakernas_2025", "BPS UHH 2024"),
@@ -299,54 +355,22 @@ def main():
         "inf_safe_water_prov_pct": ("inf_safe_water_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
         "inf_electrification_prov_pct": ("inf_electrification_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
     }
+    master_columns = list(col_to_ind.keys())
 
-    inserted_facts = 0
-    # Gather all valid values for normalization per indicator
-    for col_name, (ind_id, ref_year, ds_id, ref_src) in col_to_ind.items():
-        if ind_id not in indicators_meta:
-            continue
-        polarity = indicators_meta[ind_id]["polarity"]
-        
-        reg_vals = []
-        for r in master_rows:
-            name = r["region_name"]
-            code = r["bps_code"]
-            prov_id = code[:2]
-            k = norm(name)
-            lk = aliases.get(k, k)
-            
-            # Resolve region_id
-            reg_id = (
-                name_to_region_id.get(f"{prov_id}_{lk}") or 
-                name_to_region_id.get(lk) or 
-                name_to_region_id.get(f"{prov_id}_{k}") or 
-                name_to_region_id.get(k)
-            )
-            if not reg_id:
-                for p in name.split("/"):
-                    pk = norm(p)
-                    if pk in name_to_region_id:
-                        reg_id = name_to_region_id[pk]
-                        break
-            
-            if not reg_id:
-                continue
+    def _seed_facts(ind_id, ref_year, ds_id, ref_src, values, polarity):
+        """
+        Normalize, rank and insert one indicator.
 
-            val_str = r.get(col_name)
-            if val_str and val_str.strip():
-                try:
-                    reg_vals.append((reg_id, float(val_str)))
-                except ValueError:
-                    continue
+        Canonical semantics: normalized_score 100 always means "most vulnerable
+        / most in need", regardless of source polarity or DEMO/LIVE mode.
+        """
+        if not values:
+            return 0
 
-        if not reg_vals:
-            continue
-
-        raw_numbers = [v[1] for v in reg_vals]
+        raw_numbers = [v[1] for v in values]
         v_min, v_max = min(raw_numbers), max(raw_numbers)
         v_mean = sum(raw_numbers) / len(raw_numbers)
-        sorted_vals = sorted(raw_numbers)
-        v_median = sorted_vals[len(sorted_vals) // 2]
+        v_median = statistics.median(raw_numbers)
 
         conn.execute(
             """UPDATE dim_indicators
@@ -355,21 +379,31 @@ def main():
             (round(v_min, 4), round(v_max, 4), round(v_mean, 4), round(v_median, 4), ind_id),
         )
 
-        is_pos = (polarity == "positive")
-        reg_vals_sorted = sorted(reg_vals, key=lambda x: x[1], reverse=is_pos)
-        
-        total_n = len(reg_vals)
-        for rank_idx, (reg_id, val) in enumerate(reg_vals_sorted, 1):
+        normed = []
+        for rid, val, flag in values:
             if v_max > v_min:
-                norm_score = (val - v_min) / (v_max - v_min) * 100
-                if not is_pos:
-                    norm_score = 100.0 - norm_score
+                share = (val - v_min) / (v_max - v_min)
             else:
-                norm_score = 50.0
-                
-            percentile = ((total_n - rank_idx) / total_n) * 100.0 if total_n > 1 else 100.0
-            flag = "IMPUTED_PROVINCE" if "prov" in col_name else "VERIFIED"
+                share = 0.5
+            norm_score = (1.0 - share) * 100.0 if polarity == "positive" else share * 100.0
+            normed.append((rid, val, round(norm_score, 2), flag))
 
+        # Competition ranking: equal scores share the same rank (1, 1, 3).
+        normed.sort(key=lambda item: (-item[2], item[0]))
+        ranked = []
+        previous_score = None
+        current_rank = 0
+        for index, item in enumerate(normed, start=1):
+            if item[2] != previous_score:
+                current_rank = index
+                previous_score = item[2]
+            ranked.append((*item, current_rank))
+
+        total_n = len(ranked)
+        for rid, val, norm_score, flag, rank in ranked:
+            percentile = (
+                ((total_n - rank) / (total_n - 1)) * 100.0 if total_n > 1 else 100.0
+            )
             conn.execute(
                 """INSERT OR REPLACE INTO fact_indicator_values
                    (snapshot_id, region_id, indicator_id, reference_year,
@@ -377,14 +411,272 @@ def main():
                     quality_flag, dataset_id, source_record_ref)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
-                    SNAPSHOT_ID, reg_id, ind_id, ref_year,
-                    round(val, 4), round(norm_score, 2), round(percentile, 2),
-                    rank_idx, flag, ds_id, ref_src,
+                    SNAPSHOT_ID, rid, ind_id, ref_year,
+                    round(val, 4), norm_score, round(percentile, 2),
+                    rank, flag, ds_id, ref_src,
                 ),
             )
-            inserted_facts += 1
+        return total_n
+
+    for col_name, (ind_id, ref_year, ds_id, ref_src) in col_to_ind.items():
+        if ind_id not in indicators_meta:
+            continue
+
+        values = []
+        for region in regions:
+            rid = region["region_id"]
+            rows = sort_vintages(
+                crosswalk.rows_by_region.get(rid, []), master_columns, region
+            )
+            raw = first_value(rows, col_name)
+            if raw is None:
+                continue
+            try:
+                value = float(raw)
+            except ValueError:
+                continue
+            flag = "IMPUTED_PROVINCE" if col_name.endswith("_prov_pct") else "VERIFIED"
+            values.append((rid, value, flag))
+
+        _seed_facts(
+            ind_id,
+            ref_year,
+            ds_id,
+            ref_src,
+            values,
+            indicators_meta[ind_id]["polarity"],
+        )
 
     conn.commit()
+
+    # 6a. Replace province-imputed water/sanitation with verified kab/kota values
+    # from BPS WebAPI (var 2830 & 2748, th 125), crosswalked to 2026 region_ids.
+    verified_sdgs_csv = REPO_ROOT / "data" / "bps_kabkota_water_sanitation_2025.csv"
+    if verified_sdgs_csv.exists():
+        with open(verified_sdgs_csv, "r", encoding="utf-8") as f:
+            sdgs_rows = list(csv.DictReader(f))
+
+        for ind_id, column in (
+            ("inf_safe_water_pct", "inf_safe_water_pct"),
+            ("inf_safe_sanitation_pct", "inf_safe_sanitation_pct"),
+        ):
+            values = []
+            for row in sdgs_rows:
+                raw = (row.get(column) or "").strip()
+                if not raw:
+                    continue
+                try:
+                    values.append((row["region_id"], float(raw), "VERIFIED"))
+                except (KeyError, ValueError):
+                    continue
+            if values:
+                _seed_facts(
+                    ind_id,
+                    2025,
+                    "bps_sdgs_kabkota_2025",
+                    "BPS Susenas 2025 WebAPI (kab/kota)",
+                    values,
+                    indicators_meta[ind_id]["polarity"],
+                )
+        conn.commit()
+        print(f"       [OK] Verified kab/kota water & sanitation: {len(sdgs_rows)} rows")
+
+    # 6b. Verified APM SMP & SMA/SMK from Kemendikdasmen Pusdatin (2024/2025).
+    verified_apm_csv = REPO_ROOT / "data" / "kemendikdasmen_apm_smp_sma_2024_2025.csv"
+    if verified_apm_csv.exists():
+        with open(verified_apm_csv, "r", encoding="utf-8") as f:
+            apm_rows = list(csv.DictReader(f))
+
+        for ind_id in ("edu_net_enrollment_smp", "edu_net_enrollment_sma"):
+            values = []
+            for row in apm_rows:
+                raw = (row.get(ind_id) or "").strip()
+                if not raw:
+                    continue
+                try:
+                    values.append((row["region_id"], float(raw), "VERIFIED"))
+                except (KeyError, ValueError):
+                    continue
+            if values:
+                _seed_facts(
+                    ind_id,
+                    2025,
+                    "kemendikdasmen_apm_2024_2025",
+                    "Kemendikdasmen APK/APM 2024/2025 (kab/kota)",
+                    values,
+                    indicators_meta[ind_id]["polarity"],
+                )
+        conn.commit()
+        print(f"       [OK] Verified APM SMP & SMA: {len(apm_rows)} rows")
+
+    # 6c. Verified disaster event frequency from BNPB DIBI (2020-2024).
+    verified_events_csv = REPO_ROOT / "data" / "bnpb_events_5yr_kabkota_2020_2024.csv"
+    if verified_events_csv.exists():
+        with open(verified_events_csv, "r", encoding="utf-8") as f:
+            event_rows = list(csv.DictReader(f))
+
+        values = []
+        for row in event_rows:
+            raw = (row.get("dis_events_5yr_freq") or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "VERIFIED"))
+            except (KeyError, ValueError):
+                continue
+        if values:
+            _seed_facts(
+                "dis_events_5yr_freq",
+                2024,
+                "bnpb_dibi_kabkota_2024",
+                "BNPB DIBI 2020-2024 (kab/kota)",
+                values,
+                indicators_meta["dis_events_5yr_freq"]["polarity"],
+            )
+        conn.commit()
+        print(f"       [OK] Verified disaster event frequency: {len(event_rows)} rows")
+
+    # 6d. Dependency ratio from BPS population projection (SP2020, 2026).
+    verified_dependency_csv = REPO_ROOT / "data" / "bps_dependency_ratio_2026.csv"
+    if verified_dependency_csv.exists():
+        with open(verified_dependency_csv, "r", encoding="utf-8") as f:
+            dependency_rows = list(csv.DictReader(f))
+
+        values = []
+        for row in dependency_rows:
+            raw = (row.get("soc_dependency_ratio") or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "DERIVED"))
+            except (KeyError, ValueError):
+                continue
+        if values:
+            _seed_facts(
+                "soc_dependency_ratio",
+                2026,
+                "bps_proyeksi_penduduk_2026",
+                "BPS Proyeksi Penduduk SP2020 2026 (kab/kota)",
+                values,
+                indicators_meta["soc_dependency_ratio"]["polarity"],
+            )
+        conn.commit()
+        print(f"       [OK] Derived dependency ratio: {len(dependency_rows)} rows")
+
+    # 6e. Province-level BPS indicators imputed to kab/kota (explicitly flagged).
+    verified_province_csv = REPO_ROOT / "data" / "bps_province_internet_jkn_2024_2025.csv"
+    if verified_province_csv.exists():
+        with open(verified_province_csv, "r", encoding="utf-8") as f:
+            province_rows = list(csv.DictReader(f))
+
+        for ind_id, column, year, ds_id, source_label in (
+            ("inf_internet_household_pct", "inf_internet_household_pct", 2024, "bps_susenas_tik_2024", "BPS Susenas 2024 (province-imputed)"),
+            ("hlt_jkn_coverage_pct", "hlt_jkn_coverage_pct", 2025, "bps_susenas_jkn_2025", "BPS Susenas 2025 (province-imputed)"),
+        ):
+            values = []
+            for row in province_rows:
+                raw = (row.get(column) or "").strip()
+                if not raw:
+                    continue
+                try:
+                    values.append((row["region_id"], float(raw), "IMPUTED_PROVINCE"))
+                except (KeyError, ValueError):
+                    continue
+            if values:
+                _seed_facts(
+                    ind_id,
+                    year,
+                    ds_id,
+                    source_label,
+                    values,
+                    indicators_meta[ind_id]["polarity"],
+                )
+        conn.commit()
+        print(f"       [OK] Province-imputed internet & JKN: {len(province_rows)} rows")
+
+    # 6f. Province-imputed disaster impact per 10k population (BNPB DIBI 2024).
+    verified_affected_csv = REPO_ROOT / "data" / "bnpb_affected_per_10k_2024.csv"
+    if verified_affected_csv.exists():
+        with open(verified_affected_csv, "r", encoding="utf-8") as f:
+            affected_rows = list(csv.DictReader(f))
+
+        values = []
+        for row in affected_rows:
+            raw = (row.get("dis_affected_pop_per_10k") or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "IMPUTED_PROVINCE"))
+            except (KeyError, ValueError):
+                continue
+        if values:
+            _seed_facts(
+                "dis_affected_pop_per_10k",
+                2024,
+                "bnpb_dibi_affected_2024",
+                "BNPB DIBI 2024 (province-imputed)",
+                values,
+                indicators_meta["dis_affected_pop_per_10k"]["polarity"],
+            )
+        conn.commit()
+        print(f"       [OK] Province-imputed disaster impact: {len(affected_rows)} rows")
+
+    # 6b. Internal reliability indicators derived from the snapshot itself.
+    # Completeness is measured against the full non-meta indicator framework,
+    # including indicators that are still UNAVAILABLE, so the score reflects
+    # real national coverage rather than only the indicators we happened to seed.
+    core_indicator_ids = [
+        iid for iid in indicators_meta if not iid.startswith("meta_")
+    ]
+    completeness_by_region = {region["region_id"]: 0 for region in regions}
+    years_by_region = {region["region_id"]: [] for region in regions}
+    for rid, iid, year in conn.execute(
+        "SELECT region_id, indicator_id, reference_year FROM fact_indicator_values WHERE snapshot_id = ?",
+        (SNAPSHOT_ID,),
+    ):
+        if iid in core_indicator_ids and rid in completeness_by_region:
+            completeness_by_region[rid] += 1
+            years_by_region[rid].append(year)
+
+    completeness_values = []
+    freshness_values = []
+    for region in regions:
+        rid = region["region_id"]
+        if core_indicator_ids:
+            pct = completeness_by_region[rid] / len(core_indicator_ids) * 100.0
+            completeness_values.append((rid, round(pct, 4), "DERIVED"))
+        years = years_by_region[rid]
+        if years:
+            lag = 2026 - (sum(years) / len(years))
+            freshness_values.append((rid, round(lag, 4), "DERIVED"))
+
+    _seed_facts(
+        "meta_indicator_completeness", 2026, "nusa_matra_internal_audit",
+        "Internal snapshot completeness audit", completeness_values, "positive",
+    )
+    _seed_facts(
+        "meta_freshness_lag_years", 2026, "nusa_matra_internal_audit",
+        "Internal snapshot freshness audit", freshness_values, "negative",
+    )
+
+    # Mark indicators without observations as UNAVAILABLE instead of pretending they exist.
+    for ind_id in indicators_meta:
+        has_rows = conn.execute(
+            "SELECT 1 FROM fact_indicator_values WHERE snapshot_id = ? AND indicator_id = ? LIMIT 1",
+            (SNAPSHOT_ID, ind_id),
+        ).fetchone()
+        if not has_rows:
+            conn.execute(
+                "UPDATE dim_indicators SET availability_status = 'UNAVAILABLE' WHERE indicator_id = ?",
+                (ind_id,),
+            )
+
+    conn.commit()
+    final_facts = conn.execute(
+        "SELECT COUNT(*) FROM fact_indicator_values WHERE snapshot_id = ?", (SNAPSHOT_ID,)
+    ).fetchone()[0]
+    print(f"       [OK] {final_facts} fact rows in final snapshot")
+
 
     # Integrity verification
     cursor = conn.cursor()
@@ -396,6 +688,24 @@ def main():
     n_facts = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(DISTINCT region_id) FROM fact_indicator_values WHERE snapshot_id = ?", (SNAPSHOT_ID,))
     n_fact_regions = cursor.fetchone()[0]
+    cursor.execute(
+        "SELECT COUNT(*) FROM (SELECT DISTINCT indicator_id FROM fact_indicator_values WHERE snapshot_id = ?)",
+        (SNAPSHOT_ID,),
+    )
+    n_fact_indicators = cursor.fetchone()[0]
+    cursor.execute(
+        "SELECT MAX(national_rank) FROM fact_indicator_values WHERE snapshot_id = ?",
+        (SNAPSHOT_ID,),
+    )
+    max_rank = cursor.fetchone()[0] or 0
+    cursor.execute(
+        """SELECT COUNT(DISTINCT f.region_id)
+           FROM fact_indicator_values f
+           JOIN dim_regions r ON r.region_id = f.region_id
+           WHERE f.snapshot_id = ? AND r.level IN ('kabupaten', 'kota')""",
+        (SNAPSHOT_ID,),
+    )
+    n_kabkota_with_facts = cursor.fetchone()[0]
 
     conn.close()
 
@@ -405,8 +715,13 @@ def main():
     print(f"- Snapshot ID:     {SNAPSHOT_ID}")
     print(f"- Dim Regions:     {n_regions} (38 Prov + 514 Kab/Kota)")
     print(f"- Dim Indicators:  {n_indicators} catalog indicators")
-    print(f"- Fact Values:     {n_facts:,} verified observations")
+    print(f"- Fact Values:     {n_facts:,} observations ({n_fact_indicators} indicators)")
     print(f"- Covered Regions: {n_fact_regions} regions with observations")
+    print(f"- Kab/Kota coverage: {n_kabkota_with_facts}/514")
+    print(f"- Max national_rank: {max_rank} (must be <= 514)")
+    if n_kabkota_with_facts != 514 or max_rank > 514:
+        print("[ERROR] LIVE database failed regional integrity checks.")
+        sys.exit(1)
     print("=" * 70)
 
 if __name__ == "__main__":

@@ -58,6 +58,26 @@ class Settings(BaseSettings):
         description="Official BPS WebAPI Developer Key",
     )
 
+    # Composite ranking eligibility policy
+    composite_min_coverage_pct: int = Field(
+        default=70,
+        validation_alias=AliasChoices(
+            "COMPOSITE_MIN_COVERAGE_PCT",
+            "NM_COMPOSITE_MIN_COVERAGE_PCT",
+            "composite_min_coverage_pct",
+        ),
+        description="Minimum percentage of requested weight observed for a region to be ranked",
+    )
+    composite_min_components: int = Field(
+        default=2,
+        validation_alias=AliasChoices(
+            "COMPOSITE_MIN_COMPONENTS",
+            "NM_COMPOSITE_MIN_COMPONENTS",
+            "composite_min_components",
+        ),
+        description="Minimum number of contributing indicators for a region to be ranked",
+    )
+
     model_config = {"env_prefix": "NM_", "env_file": ".env", "extra": "ignore"}
 
 

@@ -1,17 +1,68 @@
 """
 Composite score calculation service.
-Supports weighted aggregation with integer basis points (Blocker #4).
+
+Canonical semantics (DEMO and LIVE):
+    normalized_score / composite_score 100 = most vulnerable / most in need.
+
+Ranking rules:
+- Nationally unavailable indicators are removed and remaining weights are
+  rescaled to 10,000 basis points (global renormalization).
+- Each region is then evaluated on the components it actually has. Weights are
+  redistributed per region only when the region meets the coverage gate.
+- Regions below the gate are returned in ``insufficient_data`` and are never
+  ranked as if missing data were zero.
+- ``national_rank`` is computed before province filtering; ``rank`` is the
+  position within the returned (filtered) list.
 """
 
 from typing import Optional
+
 import aiosqlite
 
+from app.config import settings
 from app.models.indicators import (
     CompositePreset,
     CompositeQueryRequest,
     CompositeQueryResult,
     CompositeRegionScore,
+    InsufficientDataRegion,
+    PresetAvailability,
 )
+
+SCORE_DIRECTION = "higher_is_need"
+TOTAL_BASIS_POINTS = 10000
+
+
+def apportion_weights(weights: dict[str, int], target: int = TOTAL_BASIS_POINTS) -> dict[str, int]:
+    """Scale integer weights to ``target`` using largest-remainder apportionment."""
+    usable = {key: value for key, value in weights.items() if value > 0}
+    total = sum(usable.values())
+    if total <= 0:
+        return {}
+
+    exact = {key: value * target / total for key, value in usable.items()}
+    apportioned = {key: int(value) for key, value in exact.items()}
+    remainder = target - sum(apportioned.values())
+
+    order = sorted(
+        exact,
+        key=lambda key: (-(exact[key] - apportioned[key]), key),
+    )
+    for key in order[:remainder]:
+        apportioned[key] += 1
+    return apportioned
+
+
+def _assign_rank(entries: list, attribute: str) -> None:
+    """Competition ranking: equal scores share a rank (1, 1, 3)."""
+    previous_score = None
+    current_rank = 0
+    for index, entry in enumerate(entries, start=1):
+        score = getattr(entry, "composite_score")
+        if score != previous_score:
+            current_rank = index
+            previous_score = score
+        setattr(entry, attribute, current_rank)
 
 
 async def compute_composite_scores(
@@ -19,136 +70,257 @@ async def compute_composite_scores(
     request: CompositeQueryRequest,
     snapshot_id: str = "2026.10.0-wia-demo",
 ) -> CompositeQueryResult:
-    """
-    Calculate weighted composite scores for all regions.
-
-    Weights are in basis points (1/10000). Sum must equal 10000.
-    Each indicator's normalized_score (0-100) is multiplied by its
-    weight/10000, then summed to produce a composite score (0-100).
-    """
-
+    """Calculate weighted composite vulnerability scores for eligible regions."""
     weights = request.weights
-    indicator_ids = list(weights.keys())
+    requested_ids = list(weights.keys())
 
-    # Note: empty weights, negative values, out-of-range, and sum != 10000
-    # are all validated by CompositeQueryRequest's @field_validator.
-    # We only need to validate that indicator_ids exist in the catalog.
-
-    # Validate that all indicator_ids exist in the catalog
-    placeholders_check = ",".join("?" for _ in indicator_ids)
+    # Validate that every requested indicator exists in the catalog.
+    placeholders_check = ",".join("?" for _ in requested_ids)
     cursor_check = await db.execute(
         f"SELECT indicator_id FROM dim_indicators WHERE indicator_id IN ({placeholders_check})",
-        indicator_ids,
+        requested_ids,
     )
     found_rows = await cursor_check.fetchall()
-    found_ids = {r["indicator_id"] for r in found_rows}
-    unknown_ids = [iid for iid in indicator_ids if iid not in found_ids]
+    found_ids = {row["indicator_id"] for row in found_rows}
+    unknown_ids = [indicator_id for indicator_id in requested_ids if indicator_id not in found_ids]
     if unknown_ids:
         raise ValueError(
             f"Unknown indicator_id(s): {', '.join(unknown_ids)}. "
             "Check GET /indicators for valid IDs."
         )
 
-    # Build query to fetch normalized scores for requested indicators
-    placeholders = ",".join("?" for _ in indicator_ids)
-
-    province_filter = ""
-    params: list = [snapshot_id] + indicator_ids
-    if request.filter_province_id:
-        province_filter = "AND r.parent_region_id = ?"
-        params.append(request.filter_province_id)
-
-    query = f"""
+    placeholders = ",".join("?" for _ in requested_ids)
+    cursor = await db.execute(
+        f"""
         SELECT
             f.region_id,
             r.name AS region_name,
+            r.parent_region_id,
             f.indicator_id,
-            f.normalized_score
+            f.normalized_score,
+            f.quality_flag
         FROM fact_indicator_values f
         JOIN dim_regions r ON f.region_id = r.region_id
         WHERE f.snapshot_id = ?
           AND f.indicator_id IN ({placeholders})
           AND r.level IN ('kabupaten', 'kota')
-          {province_filter}
         ORDER BY f.region_id, f.indicator_id
-    """
-
-    cursor = await db.execute(query, params)
+        """,
+        [snapshot_id] + requested_ids,
+    )
     rows = await cursor.fetchall()
 
-    found_indicator_ids = {
+    # --- Global availability & renormalization --------------------------------
+    available_ids = {
         row["indicator_id"] for row in rows if row["normalized_score"] is not None
     }
     unavailable_indicators = [
-        iid for iid in indicator_ids if iid not in found_indicator_ids
+        indicator_id for indicator_id in requested_ids if indicator_id not in available_ids
     ]
-
-    if unavailable_indicators and not found_indicator_ids:
+    if not available_ids:
         raise ValueError(
-            f"All requested indicators are unavailable in this snapshot: {', '.join(unavailable_indicators)}. "
+            f"All requested indicators are unavailable in this snapshot: "
+            f"{', '.join(unavailable_indicators)}. "
             "Check GET /api/v1/indicators/coverage for verified indicators."
         )
 
     if unavailable_indicators:
-        # BE-08: Renormalize remaining weights to sum to exactly 10,000 basis points
-        available_list = [iid for iid in indicator_ids if iid in found_indicator_ids]
-        sum_available = sum(weights[iid] for iid in available_list)
-        effective_weights = {}
-        accumulated = 0
-        for i, iid in enumerate(available_list):
-            if i == len(available_list) - 1:
-                effective_weights[iid] = 10000 - accumulated
-            else:
-                w_scaled = round(weights[iid] * 10000 / sum_available)
-                effective_weights[iid] = w_scaled
-                accumulated += w_scaled
+        effective_weights = apportion_weights(
+            {indicator_id: weights[indicator_id] for indicator_id in requested_ids if indicator_id in available_ids}
+        )
         renormalized = True
     else:
-        effective_weights = weights
+        effective_weights = dict(weights)
         renormalized = False
 
-    # Aggregate scores per region using effective_weights
+    active_ids = [indicator_id for indicator_id in requested_ids if indicator_id in available_ids]
+    required_components = min(settings.composite_min_components, len(active_ids))
+    coverage_threshold_bp = settings.composite_min_coverage_pct * 100
+
+    # --- Group observations per region ---------------------------------------
     region_data: dict[str, dict] = {}
     for row in rows:
-        rid = row["region_id"]
-        if rid not in region_data:
-            region_data[rid] = {
+        region_id = row["region_id"]
+        entry = region_data.setdefault(
+            region_id,
+            {
                 "region_name": row["region_name"],
-                "component_scores": {},
-                "composite": 0.0,
-            }
-        norm = row["normalized_score"]
-        iid = row["indicator_id"]
-        region_data[rid]["component_scores"][iid] = norm
-        if norm is not None and iid in effective_weights:
-            region_data[rid]["composite"] += norm * (effective_weights[iid] / 10000.0)
+                "parent_region_id": row["parent_region_id"],
+                "components": {},
+                "quality_flags": {},
+            },
+        )
+        indicator_id = row["indicator_id"]
+        if indicator_id in effective_weights and row["normalized_score"] is not None:
+            entry["components"][indicator_id] = row["normalized_score"]
+            entry["quality_flags"][indicator_id] = row["quality_flag"]
 
-    # Sort by composite score descending and assign ranks
-    sorted_regions = sorted(
-        region_data.items(),
-        key=lambda x: x[1]["composite"],
-        reverse=True,
+    # Include every kab/kota, even those with no observation at all, so excluded
+    # regions are reported instead of disappearing from the response.
+    all_regions_cursor = await db.execute(
+        "SELECT region_id, name, parent_region_id FROM dim_regions "
+        "WHERE level IN ('kabupaten', 'kota')"
     )
+    for row in await all_regions_cursor.fetchall():
+        region_data.setdefault(
+            row["region_id"],
+            {
+                "region_name": row["name"],
+                "parent_region_id": row["parent_region_id"],
+                "components": {},
+                "quality_flags": {},
+            },
+        )
 
-    results = []
-    for rank, (rid, data) in enumerate(sorted_regions, start=1):
-        results.append(
+    eligible: list[CompositeRegionScore] = []
+    excluded: list[InsufficientDataRegion] = []
+
+    for region_id, entry in region_data.items():
+        present = entry["components"]
+        present_weight = sum(effective_weights[indicator_id] for indicator_id in present)
+        coverage_pct = round(present_weight / 100.0, 1)
+
+        if len(present) < required_components or present_weight < coverage_threshold_bp:
+            excluded.append(
+                InsufficientDataRegion(
+                    region_id=region_id,
+                    region_name=entry["region_name"],
+                    coverage_pct=coverage_pct,
+                    components_used=sorted(present),
+                    missing_indicators=[
+                        indicator_id for indicator_id in requested_ids if indicator_id not in present
+                    ],
+                    component_scores={indicator_id: present.get(indicator_id) for indicator_id in requested_ids},
+                )
+            )
+            continue
+
+        region_weights = apportion_weights(
+            {indicator_id: effective_weights[indicator_id] for indicator_id in present}
+        )
+        composite = sum(
+            score * (region_weights[indicator_id] / TOTAL_BASIS_POINTS)
+            for indicator_id, score in present.items()
+            if region_weights.get(indicator_id)
+        )
+
+        eligible.append(
             CompositeRegionScore(
-                region_id=rid,
-                region_name=data["region_name"],
-                composite_score=round(data["composite"], 2),
-                rank=rank,
-                component_scores=data["component_scores"],
+                region_id=region_id,
+                region_name=entry["region_name"],
+                composite_score=round(composite, 2),
+                rank=0,
+                coverage_pct=coverage_pct,
+                components_used=sorted(present),
+                missing_indicators=[
+                    indicator_id for indicator_id in requested_ids if indicator_id not in present
+                ],
+                effective_weights_region=region_weights,
+                component_scores={indicator_id: present.get(indicator_id) for indicator_id in requested_ids},
+                quality_flags=entry["quality_flags"],
             )
         )
 
+    # --- National ranking (before province filter) ----------------------------
+    eligible.sort(key=lambda item: (-item.composite_score, item.region_id))
+    _assign_rank(eligible, "national_rank")
+
+    filtered = eligible
+    if request.filter_province_id:
+        filtered = [
+            item
+            for item in eligible
+            if region_data[item.region_id]["parent_region_id"] == request.filter_province_id
+        ]
+    _assign_rank(filtered, "rank")
+
+    if request.filter_province_id:
+        excluded = [
+            item
+            for item in excluded
+            if region_data[item.region_id]["parent_region_id"] == request.filter_province_id
+        ]
+    excluded.sort(key=lambda item: (-item.coverage_pct, item.region_id))
+
     return CompositeQueryResult(
-        total_regions=len(results),
+        total_regions=len(filtered),
+        total_eligible_national=len(eligible),
+        total_excluded=len(excluded),
+        score_direction=SCORE_DIRECTION,
+        min_coverage_pct=settings.composite_min_coverage_pct,
+        min_components=required_components,
         weights_basis_points=weights,
-        regions=results,
+        regions=filtered,
         unavailable_indicators=unavailable_indicators,
         effective_weights=effective_weights,
         renormalized=renormalized,
+        insufficient_data=excluded,
+    )
+
+
+async def compute_preset_availability(
+    db: aiosqlite.Connection,
+    preset: CompositePreset,
+    snapshot_id: str,
+) -> PresetAvailability:
+    """Attach live coverage metadata to a static policy preset."""
+    indicator_ids = list(preset.weights)
+    placeholders = ",".join("?" for _ in indicator_ids)
+
+    cursor = await db.execute(
+        f"""
+        SELECT f.indicator_id, COUNT(DISTINCT f.region_id) AS coverage
+        FROM fact_indicator_values f
+        JOIN dim_regions r ON f.region_id = r.region_id
+        WHERE f.snapshot_id = ?
+          AND f.indicator_id IN ({placeholders})
+          AND r.level IN ('kabupaten', 'kota')
+          AND f.normalized_score IS NOT NULL
+        GROUP BY f.indicator_id
+        """,
+        [snapshot_id] + indicator_ids,
+    )
+    coverage_by_indicator = {
+        row["indicator_id"]: row["coverage"] for row in await cursor.fetchall()
+    }
+
+    total_cursor = await db.execute(
+        "SELECT COUNT(*) AS total FROM dim_regions WHERE level IN ('kabupaten', 'kota')"
+    )
+    total_row = await total_cursor.fetchone()
+    total_regions = total_row["total"] if total_row else 514
+
+    indicator_coverage = {
+        indicator_id: round(
+            (coverage_by_indicator.get(indicator_id, 0) / total_regions) * 100, 1
+        )
+        for indicator_id in indicator_ids
+    }
+    available = [
+        indicator_id
+        for indicator_id in indicator_ids
+        if coverage_by_indicator.get(indicator_id, 0) > 0
+    ]
+    unavailable = [indicator_id for indicator_id in indicator_ids if indicator_id not in available]
+
+    effective_weights = apportion_weights(
+        {indicator_id: preset.weights[indicator_id] for indicator_id in available}
+    )
+    coverage_weight_pct = round(
+        sum(preset.weights[indicator_id] for indicator_id in available) / 100.0, 1
+    )
+    required_components = min(settings.composite_min_components, len(indicator_ids))
+
+    return PresetAvailability(
+        available_indicators=available,
+        unavailable_indicators=unavailable,
+        indicator_coverage_pct=indicator_coverage,
+        effective_weights=effective_weights,
+        coverage_weight_pct=coverage_weight_pct,
+        rankable=(
+            coverage_weight_pct >= settings.composite_min_coverage_pct
+            and len(available) >= required_components
+        ),
     )
 
 

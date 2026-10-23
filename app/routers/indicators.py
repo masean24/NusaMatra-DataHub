@@ -23,7 +23,11 @@ from app.models.indicators import (
     IndicatorValuesData,
 )
 from app.services.indicator_service import list_indicators, get_indicator_values
-from app.services.composite_service import compute_composite_scores, COMPOSITE_PRESETS
+from app.services.composite_service import (
+    COMPOSITE_PRESETS,
+    compute_composite_scores,
+    compute_preset_availability,
+)
 
 router = APIRouter(prefix="/indicators", tags=["Indicators"])
 
@@ -145,7 +149,7 @@ async def get_indicators_coverage(
     coverage_meta = CoverageMeta(
         available=available_count,
         total_regions=total_reg,
-        missing_region_ids=empty_indicators,
+        missing_region_ids=[],
         mode=request.state.data_mode,
     )
 
@@ -285,20 +289,28 @@ async def get_composite_presets(
     request: Request,
     mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
+    db: aiosqlite.Connection = Depends(get_db),
 ):
     """
     Get curated policy-weighting presets for composite scoring.
 
-    Provides ready-to-use scenario weights summing to exactly 10,000 basis points (100%).
-    Frontend map clients can send these directly to POST /indicators/composite-query.
+    Each preset includes live ``availability`` metadata: which indicators have
+    observations in the active snapshot, their regional coverage, the effective
+    weights after excluding unavailable indicators, and whether the preset is
+    rankable under the coverage gate.
     """
     _snapshot_id = request.state.snapshot_id
+
+    presets = []
+    for preset in COMPOSITE_PRESETS:
+        availability = await compute_preset_availability(db, preset, _snapshot_id)
+        presets.append(preset.model_copy(update={"availability": availability}))
 
     return ApiResponse(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
-            total_count=len(COMPOSITE_PRESETS),
+            total_count=len(presets),
         ),
-        data=COMPOSITE_PRESETS,
+        data=presets,
     )

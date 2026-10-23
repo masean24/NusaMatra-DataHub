@@ -1,0 +1,21 @@
+{
+  "retrieved_at": "2026-10-23",
+  "agency": "Kementerian Pendidikan Dasar dan Menengah (Kemendikdasmen), Pusdatin",
+  "source": "APK/APM PAUD, SD, SMP, dan SM Tahun 2024/2025 (termasuk Madrasah dan sederajat)",
+  "source_url": "https://data.kemendikdasmen.go.id/publikasi/p/vokasi-buku-analisis/apk-apm-paud-sd-smp-dan-sm-tahun-2024-2025-termasuk-madrasah-dan-sederajat-2025",
+  "pdf": {
+    "path": "data/raw/kemendikdasmen/apm_2024_2025.pdf",
+    "sha256": "b68f832e05004060c27c4cbb1dbec9f931f211e74e2ef8e61c49c336f56b5ae4",
+    "bytes": 7073010
+  },
+  "tables": {
+    "edu_net_enrollment_smp": "pages 40-51 (APK/APM SMP Sederajat per Kabupaten/Kota)",
+    "edu_net_enrollment_sma": "pages 52-63 (APK/APM SM Sederajat per Kabupaten/Kota)"
+  },
+  "derived_csv": {
+    "path": "data/kemendikdasmen_apm_smp_sma_2024_2025.csv",
+    "rows": 514,
+    "sha256": "45702caf8a95932c93441d0a5fcdbe081988bcea6c874255881f682c6b9b8e79"
+  },
+  "notes": "APM is the final column of each row. Regions were crosswalked by name+level+province."
+}

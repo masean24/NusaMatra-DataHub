@@ -1,0 +1,20 @@
+{
+  "retrieved_at": "2026-10-23",
+  "agency": "Badan Pusat Statistik (BPS)",
+  "source": "Proyeksi Penduduk Indonesia 2020-2050 Hasil SP2020",
+  "source_url": "https://www.bps.go.id/id/statistics-table/2/Mjc5MCMy/-jumlah-penduduk-menurut-kabupaten-kota-dan-kelompok-umur.html",
+  "var_id": 2790,
+  "year_id": 126,
+  "year": 2026,
+  "formula": "(penduduk 0-14 + penduduk 65+) / penduduk 15-64 * 100",
+  "raw": {
+    "path": "data/raw/bps/var_2790_th_126.json",
+    "sha256": "820fce42ce9ebe5debe9374e7716892d79bc640d61781ab7b2246058d1c20357",
+    "bytes": 269401
+  },
+  "derived_csv": {
+    "path": "data/bps_dependency_ratio_2026.csv",
+    "rows": 514,
+    "sha256": "e073344a98c3f35fbbd3da2717c3c0c8dbbe213f59cacf67a7e16ad049720e46"
+  }
+}

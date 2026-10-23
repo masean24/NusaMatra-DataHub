@@ -126,13 +126,67 @@ class CompositeRegionScore(BaseModel):
     region_name: str
     composite_score: float
     rank: int
+    national_rank: int = Field(
+        0,
+        description="Position across all nationally eligible regions, before province filtering.",
+    )
+    coverage_pct: float = Field(
+        100.0,
+        description="Share of the requested weight that had observations for this region.",
+    )
+    components_used: list[str] = Field(
+        default_factory=list,
+        description="Indicator IDs actually contributing to this region's score.",
+    )
+    missing_indicators: list[str] = Field(
+        default_factory=list,
+        description="Requested indicators with no observation for this region.",
+    )
+    effective_weights_region: dict[str, int] = Field(
+        default_factory=dict,
+        description="Per-region basis-point weights after redistributing to 10,000.",
+    )
     component_scores: dict[str, Optional[float]] = {}
+    quality_flags: dict[str, str] = Field(
+        default_factory=dict,
+        description="Quality flag per component (VERIFIED, IMPUTED_PROVINCE, DERIVED).",
+    )
+
+
+class InsufficientDataRegion(BaseModel):
+    """Region excluded from ranking because its coverage is below the threshold."""
+
+    region_id: str
+    region_name: str
+    coverage_pct: float
+    components_used: list[str] = Field(default_factory=list)
+    missing_indicators: list[str] = Field(default_factory=list)
+    component_scores: dict[str, Optional[float]] = {}
+    reason: str = "COVERAGE_BELOW_THRESHOLD"
 
 
 class CompositeQueryResult(BaseModel):
     """Payload for POST /indicators/composite-query."""
 
-    total_regions: int
+    total_regions: int = Field(
+        ..., description="Number of ranked regions returned (after province filtering)."
+    )
+    total_eligible_national: int = Field(
+        0, description="Regions meeting the eligibility threshold nationally."
+    )
+    total_excluded: int = Field(
+        0, description="Regions excluded from ranking because of insufficient coverage."
+    )
+    score_direction: str = Field(
+        "higher_is_need",
+        description="Canonical score semantics: higher score means greater need for intervention.",
+    )
+    min_coverage_pct: int = Field(
+        70, description="Minimum share of requested weight required to be ranked."
+    )
+    min_components: int = Field(
+        2, description="Minimum number of contributing components required to be ranked."
+    )
     weights_basis_points: dict[str, int]
     regions: list[CompositeRegionScore] = []
     unavailable_indicators: list[str] = Field(
@@ -141,11 +195,30 @@ class CompositeQueryResult(BaseModel):
     )
     effective_weights: Optional[dict[str, int]] = Field(
         None,
-        description="Effective weights utilized in the calculation after excluding unavailable indicators.",
+        description="Global effective weights after excluding nationally unavailable indicators.",
     )
     renormalized: bool = Field(
         False,
-        description="Whether weights were rescaled because some requested indicators have no observations in this snapshot.",
+        description="Whether global weights were rescaled because some requested indicators have no observations.",
+    )
+    insufficient_data: list[InsufficientDataRegion] = Field(
+        default_factory=list,
+        description="Regions that could not be ranked, with the components that were available.",
+    )
+
+
+class PresetAvailability(BaseModel):
+    """Live availability metadata for a policy preset."""
+
+    available_indicators: list[str] = Field(default_factory=list)
+    unavailable_indicators: list[str] = Field(default_factory=list)
+    indicator_coverage_pct: dict[str, float] = Field(default_factory=dict)
+    effective_weights: dict[str, int] = Field(default_factory=dict)
+    coverage_weight_pct: float = Field(
+        0.0, description="Share of preset weight backed by at least one observation."
+    )
+    rankable: bool = Field(
+        False, description="True when coverage_weight_pct meets the eligibility threshold."
     )
 
 
@@ -158,3 +231,4 @@ class CompositePreset(BaseModel):
     description: str
     target_focus: str
     weights: dict[str, int]
+    availability: Optional[PresetAvailability] = None

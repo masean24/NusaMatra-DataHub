@@ -1,0 +1,27 @@
+{
+  "retrieved_at": "2026-10-23",
+  "agency": "Badan Nasional Penanggulangan Bencana (BNPB)",
+  "source": "BNPB DIBI 2024 - Jumlah Korban Terdampak dan Mengungsi Menurut Provinsi",
+  "resource_ids": {
+    "affected": "39ceb577-b49f-45c9-b909-7dd8daef417a",
+    "displaced": "d528ad3f-5159-4c7d-b87e-e41d614df191"
+  },
+  "formula": "(terdampak + mengungsi) / populasi provinsi * 10.000",
+  "denominator": "BPS Proyeksi Penduduk 2026 (sum kab/kota per provinsi)",
+  "raw_files": {
+    "affected": {
+      "path": "data/raw/bnpb/datastore_39ceb577-b49f-45c9-b909-7dd8daef417a.json",
+      "sha256": "b0b4c325a59ec2ea77e3ba6f9a0b9ffbaf38b543e7eabe81755eea69b1ea4950"
+    },
+    "displaced": {
+      "path": "data/raw/bnpb/datastore_d528ad3f-5159-4c7d-b87e-e41d614df191.json",
+      "sha256": "6281c58d6c15a33e8927211ba9e6c6903e89b13b7cc617dadb893f953eacf32a"
+    }
+  },
+  "derived_csv": {
+    "path": "data/bnpb_affected_per_10k_2024.csv",
+    "rows": 514,
+    "sha256": "988b9ae2846a77316733c71d312d30b235be8274617dc579581bdcc1989f100f"
+  },
+  "notes": "Official BNPB values are province-level. Imputed to kab/kota by parent province and flagged IMPUTED_PROVINCE."
+}

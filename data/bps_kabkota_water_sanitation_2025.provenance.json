@@ -1,0 +1,35 @@
+{
+  "retrieved_at": "2026-10-23T05:48:45.732678+00:00",
+  "agency": "Badan Pusat Statistik (BPS)",
+  "source": "BPS WebAPI",
+  "domain": "0000",
+  "year_id": 125,
+  "variables": {
+    "inf_safe_water_pct": {
+      "var_id": 2830,
+      "title": "Persentase Rumah Tangga yang Memiliki Akses terhadap Sumber Air Minum Layak menurut Kabupaten/Kota"
+    },
+    "inf_safe_sanitation_pct": {
+      "var_id": 2748,
+      "title": "6.2.1 Persentase rumah tangga yang memiliki akses terhadap sanitasi layak menurut kabupaten/kota"
+    }
+  },
+  "raw_files": {
+    "inf_safe_water_pct": {
+      "path": "data/raw/bps/var_2830_th_125.json",
+      "sha256": "0e242d7b6ac5baef4f1be75b2c23d7369cd6f2236c4cbdd21bfd2090bdec41eb",
+      "bytes": 33242
+    },
+    "inf_safe_sanitation_pct": {
+      "path": "data/raw/bps/var_2748_th_125.json",
+      "sha256": "9a183bb24594f45a13bdbf0ddc684c4330205f79d5a7347a2cf79dc8c4a53dd8",
+      "bytes": 33182
+    }
+  },
+  "derived_csv": {
+    "path": "data/bps_kabkota_water_sanitation_2025.csv",
+    "rows": 514,
+    "sha256": "85729ccc02193aa256bff04789f1441a81a33cb3df3a5f450685c534d45c841a"
+  },
+  "notes": "Values are BPS Susenas 2025 kabupaten/kota. Source bps_code values were crosswalked to 2026 Kemendagri codes by name+level+province; the derived CSV is keyed by canonical region_id."
+}

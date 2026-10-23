@@ -509,14 +509,16 @@ def main():
                 # Higher raw = higher vulnerability score
                 norm = round(((raw - actual_min) / val_range) * 100, 2)
 
-            # National percentile (what % of regions have lower vulnerability)
-            pct = round((rank_idx / max(len(sorted_vals) - 1, 1)) * 100, 2)
-
             # Rank: 1 = highest vulnerability score
             if polarity == "positive":
                 rank = rank_idx + 1  # lowest raw = rank 1 (most vulnerable)
             else:
                 rank = len(sorted_vals) - rank_idx  # highest raw = rank 1
+
+            # Percentile: 100 = most vulnerable, independent of source polarity
+            pct = round(
+                ((len(sorted_vals) - rank) / max(len(sorted_vals) - 1, 1)) * 100, 2
+            )
 
             batch.append((
                 SNAPSHOT_ID, rid, ind_id, ref_year,

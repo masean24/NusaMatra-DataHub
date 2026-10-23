@@ -1,0 +1,37 @@
+{
+  "retrieved_at": "2026-10-23",
+  "agency": "Badan Pusat Statistik (BPS)",
+  "source": "BPS WebAPI (Susenas)",
+  "variables": {
+    "inf_internet_household_pct": {
+      "var_id": 398,
+      "turvar": 191,
+      "year": 2024,
+      "title": "Persentase Rumah Tangga yang Pernah Mengakses Internet dalam 3 Bulan Terakhir Menurut Provinsi dan Klasifikasi Daerah"
+    },
+    "hlt_jkn_coverage_pct": {
+      "var_id": 2279,
+      "turvar": "0",
+      "year": 2025,
+      "title": "Persentase Penduduk yang Memiliki Jaminan Kesehatan Nasional (JKN) Menurut Provinsi"
+    }
+  },
+  "raw_files": {
+    "inf_internet_household_pct": {
+      "path": "data/raw/bps/var_398_th_124.json",
+      "sha256": "94e18d531a7cb938ff61b850f2ad84375b8e1c22b8568594ad59efa23fb9ef7a",
+      "bytes": 5589
+    },
+    "hlt_jkn_coverage_pct": {
+      "path": "data/raw/bps/var_2279_th_125.json",
+      "sha256": "de2ce234dbf64a385eaa9040a508cd21b35f486fe34ab23d68284b6887aff11a",
+      "bytes": 3319
+    }
+  },
+  "derived_csv": {
+    "path": "data/bps_province_internet_jkn_2024_2025.csv",
+    "rows": 514,
+    "sha256": "d477caa7c3763e9a4ba74edbe0492c9175595fd4580625567107f843dfec51c5"
+  },
+  "notes": "Official BPS values are published at province level only. They are imputed to kabupaten/kota by parent province and must be flagged IMPUTED_PROVINCE."
+}

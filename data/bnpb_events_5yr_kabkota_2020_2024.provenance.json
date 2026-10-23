@@ -1,0 +1,48 @@
+{
+  "retrieved_at": "2026-10-23",
+  "agency": "Badan Nasional Penanggulangan Bencana (BNPB)",
+  "source": "BNPB DIBI via CKAN Datastore",
+  "dataset": "data-bencana-indonesia",
+  "resource_id": "21044ffd-c397-4b3c-acbd-5adaa03d79e3",
+  "resource_title": "Jumlah Kejadian Bencana Menurut Kabupaten Tahun 2010-2024",
+  "source_url": "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
+  "window": "2020-2024",
+  "raw_pages": [
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_0.json",
+      "sha256": "38fc05c8cd6cd35cfb6e629130a08310ace61ad804d696733d851db443193834",
+      "bytes": 43038
+    },
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_100.json",
+      "sha256": "a4e722412a29caa2908bc6f9a1d4e84b80db0a9569c6602cd87e49be713c4a38",
+      "bytes": 43425
+    },
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_200.json",
+      "sha256": "1a196dd5f6714dd962b8d4945f66c50affd38fa5b2429d4ad976de931fc7ca3a",
+      "bytes": 43210
+    },
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_300.json",
+      "sha256": "60a9617996271c3d43dd6a28377e6ed0f6b01dc180f28b6c1e6a957bfa09dfbe",
+      "bytes": 43389
+    },
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_400.json",
+      "sha256": "2b2de9cca299be6d605659a570aa4f520edc9d92eaeab9d83fd43fa8a91f7485",
+      "bytes": 43086
+    },
+    {
+      "path": "data/raw/bnpb/bnpb_events_pages/page_500.json",
+      "sha256": "0c312952711011c6e435405913a0e834f23061d3e387e635c981e88bb7d75fd6",
+      "bytes": 7979
+    }
+  ],
+  "derived_csv": {
+    "path": "data/bnpb_events_5yr_kabkota_2020_2024.csv",
+    "rows": 510,
+    "sha256": "9a55fa9bf7c694b47c577fa20ca38828f0590b482730e402ac38743c91ab7450"
+  },
+  "notes": "dis_events_5yr_freq = sum of recorded disaster events 2020-2024 per kabupaten/kota. Source rows were crosswalked to 2026 region_ids by name+level+province."
+}

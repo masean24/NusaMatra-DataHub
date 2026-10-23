@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **100% Siap Produksi (81/81 Unit & Integration Tests Passing)** |
+| **Status API** | ✅ **110/110 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
@@ -14,96 +14,211 @@
 
 ## 📌 Ringkasan Pembaruan untuk Frontend (TL;DR)
 
-1. **Composite Query Auto-Renormalization (BE-08):** Bobot query otomatis diskalakan ulang jika ada indikator yang kosong di mode LIVE (`renormalized: true`). Skor prioritas wilayah dijamin **adil dan selalu berada di rentang 0–100**.
-2. **Endpoint Coverage Sekali Panggil (BE-03):** Endpoint baru `GET /api/v1/indicators/coverage?mode=live` menyajikan status ketersediaan ke-33 indikator. Frontend bisa langsung menonaktifkan (*gray-out*) layer yang kosong saat aplikasi dibuka.
-3. **Peta Batas Wilayah 3D Jauh Lebih Cepat (BE-05):** Header `Cache-Control: public, max-age=604800, immutable` (7 hari) sudah aktif di `/boundaries/*`.
-4. **Validasi Mode Ketat (BE-02):** Parameter `mode` sekarang strict: gunakan `?mode=demo` atau `?mode=live` (huruf kecil).
+1. **Semantik Skor Kanonik (v2.1):** `score_direction: "higher_is_need"`. Skor dan `normalized_score` bernilai 100 berarti **paling rentan / paling butuh intervensi**, konsisten di DEMO maupun LIVE. Rank 1 = wilayah paling prioritas.
+2. **Kebijakan Data Missing (v2.1):** Missing **tidak lagi dihitung nol**. Wilayah dengan cakupan bobot ≥70% dan minimal 2 komponen tetap diranking memakai bobot per wilayah (`effective_weights_region`). Wilayah di bawah ambang masuk `insufficient_data`, bukan ranking.
+3. **Rank Nasional + Rank Filter:** `national_rank` selalu posisi se-Indonesia; `rank` adalah posisi di dalam hasil filter provinsi.
+4. **Transparansi per Wilayah:** Setiap region menyertakan `coverage_pct`, `components_used`, `missing_indicators`, `effective_weights_region`, dan `quality_flags`.
+5. **Preset dengan Availability:** `GET /api/v1/indicators/composite-presets` kini menyertakan `availability` (indikator tersedia, coverage per indikator, bobot efektif, dan `rankable`).
+6. **Endpoint Coverage Sekali Panggil (BE-03):** `GET /api/v1/indicators/coverage?mode=live` menyajikan status ketersediaan seluruh indikator.
+7. **Peta Batas Wilayah 3D Jauh Lebih Cepat (BE-05):** Header `Cache-Control: public, max-age=604800, immutable` (7 hari) aktif di `/boundaries/*`.
+8. **Validasi Mode Ketat (BE-02):** Parameter `mode` strict: `?mode=demo` atau `?mode=live` (huruf kecil).
 
 ---
 
-## 1. Dynamic Composite Query & Auto-Renormalization (BE-08 & BE-01)
+## 1. Dynamic Composite Query & Kebijakan Data Missing (v2.1)
 
 Endpoint `POST /api/v1/indicators/composite-query` digunakan untuk simulasi pembobotan prioritas kebijakan oleh pengambil keputusan secara *real-time*.
 
-### Aturan Input Bobot:
+### Aturan Input Bobot
 - Bobot dikirim dalam satuan **integer basis points** (100% = 10.000 bps; misal 35% = 3500).
 - Setiap nilai bobot harus berada di rentang `0` sampai `10000`.
 - Total penjumlahan seluruh bobot wajib tepat bernilai **10.000**.
 - Tidak boleh mengirim objek bobot kosong `{}` (otomatis ditolak HTTP 422).
 
-### Mekanisme Fair Renormalization (BE-08):
-Di mode LIVE, jika pengguna memilih skenario kebijakan yang memuat indikator yang belum tersedia datanya (misal ruang kelas rusak `edu_damaged_classrooms_pct`):
-1. Backend **tidak akan membiarkan skor anjlok separuh**.
-2. Bobot indikator yang memiliki data **otomatis diskalakan ulang ke 10.000 bps**.
-3. Respons menyertakan informasi provenance:
-   - `renormalized: true`
-   - `unavailable_indicators: ["edu_damaged_classrooms_pct"]`
-   - `effective_weights`: Bobot aktual setelah diskalakan.
+### Semantik Skor Kanonik (v2.1)
+- `score_direction: "higher_is_need"` — `normalized_score` dan `composite_score` bernilai 100 berarti **paling rentan / paling butuh intervensi**, konsisten di DEMO maupun LIVE.
+- Rank 1 = wilayah paling prioritas.
+- `national_rank` = posisi se-Indonesia (sebelum filter provinsi).
+- `rank` = posisi di dalam hasil filter yang dikembalikan.
 
-### Contoh Request & Response (TypeScript / JavaScript):
+### Kebijakan Data Missing (v2.1)
+1. **Indikator kosong secara nasional** dikeluarkan dari perhitungan; bobot indikator yang tersisa diskalakan ke 10.000 bps (`renormalized: true`).
+2. **Indikator tersedia nasional tetapi kosong di sebagian wilayah**:
+   - `coverage_pct` per wilayah = bobot yang memiliki observasi ÷ 10.000 × 100%.
+   - Wilayah dengan `coverage_pct >= 70` **dan** minimal 2 komponen tetap diranking. Bobot komponen yang ada diskalakan ulang ke 10.000 bps di `effective_weights_region`.
+   - Wilayah di bawah ambang **tidak diranking**; masuk `insufficient_data` beserta komponen yang tersedia dan `reason`.
+   - Missing **tidak pernah** dihitung sebagai nol dengan bobot penuh.
+3. Ambang dapat diubah melalui `NM_COMPOSITE_MIN_COVERAGE_PCT` (default 70) dan `NM_COMPOSITE_MIN_COMPONENTS` (default 2).
+
+### Contoh Perhitungan (Golden)
+Dengan komponen `72.1`, `61.5`, `70.3` dan bobot efektif `43.75%`, `31.25%`, `25%`:
+
+```text
+72.1 × 0.4375 = 31.54375
+61.5 × 0.3125 = 19.21875
+70.3 × 0.2500 = 17.57500
+------------------------------
+Total         = 68.33750 → 68.34
+```
+
+Angka **68.42** pada dokumen v2 sebelumnya salah dan tidak dapat direproduksi dari data mana pun.
+
+### Contoh Request
 
 ```typescript
-// Contoh panggilan Composite Query dari Frontend
 const response = await fetch("https://api.orangkeren.me/api/v1/indicators/composite-query?mode=live", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     weights: {
-      dis_multihazard_index: 3500,     // 35%
-      soc_poverty_rate: 2500,          // 25%
-      edu_damaged_classrooms_pct: 2000,// 20% (kosong di LIVE)
-      hlt_stunting_prevalence: 2000    // 20%
+      soc_poverty_rate: 3000,          // 30%
+      hlt_stunting_prevalence: 3000,   // 30%
+      inf_safe_water_pct: 2000,        // 20%
+      inf_safe_sanitation_pct: 2000    // 20%
     },
-    filter_province_id: "32" // Opsional: filter 2-digit Jawa Barat
+    filter_province_id: "33" // Jawa Tengah
   })
 });
 
 const result = await response.json();
 ```
 
-#### Struktur Response:
+### Contoh Response — wilayah dengan data parsial (LIVE, Jawa Tengah)
+
 ```json
 {
   "status": "success",
   "meta": {
     "snapshot_id": "2026.10.0-official-live",
     "mode": "LIVE",
-    "total_count": 27
+    "boundary_version": null,
+    "total_count": 35,
+    "coverage": null,
+    "data_origin": null,
+    "last_success_at": null,
+    "is_stale": null
   },
   "data": {
-    "total_regions": 27,
+    "total_regions": 35,
+    "total_eligible_national": 513,
+    "total_excluded": 0,
+    "score_direction": "higher_is_need",
+    "min_coverage_pct": 70,
+    "min_components": 2,
     "weights_basis_points": {
-      "dis_multihazard_index": 3500,
-      "soc_poverty_rate": 2500,
-      "edu_damaged_classrooms_pct": 2000,
-      "hlt_stunting_prevalence": 2000
+      "soc_poverty_rate": 3000,
+      "hlt_stunting_prevalence": 3000,
+      "inf_safe_water_pct": 2000,
+      "inf_safe_sanitation_pct": 2000
     },
-    "unavailable_indicators": ["edu_damaged_classrooms_pct"],
+    "unavailable_indicators": [],
     "effective_weights": {
-      "dis_multihazard_index": 4375,
-      "soc_poverty_rate": 3125,
-      "hlt_stunting_prevalence": 2500
+      "soc_poverty_rate": 3000,
+      "hlt_stunting_prevalence": 3000,
+      "inf_safe_water_pct": 2000,
+      "inf_safe_sanitation_pct": 2000
     },
-    "renormalized": true,
+    "renormalized": false,
     "regions": [
       {
-        "region_id": "3201",
-        "region_name": "Kabupaten Bogor",
-        "composite_score": 68.42,
+        "region_id": "3307",
+        "region_name": "Kabupaten Wonosobo",
+        "composite_score": 35.06,
         "rank": 1,
+        "national_rank": 80,
+        "coverage_pct": 100.0,
+        "components_used": ["hlt_stunting_prevalence", "inf_safe_sanitation_pct", "inf_safe_water_pct", "soc_poverty_rate"],
+        "missing_indicators": [],
+        "effective_weights_region": {
+          "hlt_stunting_prevalence": 3000,
+          "inf_safe_sanitation_pct": 2000,
+          "inf_safe_water_pct": 2000,
+          "soc_poverty_rate": 3000
+        },
         "component_scores": {
-          "dis_multihazard_index": 72.1,
-          "soc_poverty_rate": 61.5,
-          "hlt_stunting_prevalence": 70.3
+          "soc_poverty_rate": 28.14,
+          "hlt_stunting_prevalence": 56.79,
+          "inf_safe_water_pct": 10.06,
+          "inf_safe_sanitation_pct": 37.85
+        },
+        "quality_flags": {
+          "hlt_stunting_prevalence": "VERIFIED",
+          "inf_safe_sanitation_pct": "VERIFIED",
+          "inf_safe_water_pct": "VERIFIED",
+          "soc_poverty_rate": "VERIFIED"
+        }
+      },
+      {
+        "region_id": "3372",
+        "region_name": "Kota Surakarta",
+        "composite_score": 9.57,
+        "rank": 35,
+        "national_rank": 487,
+        "coverage_pct": 70.0,
+        "components_used": ["inf_safe_sanitation_pct", "inf_safe_water_pct", "soc_poverty_rate"],
+        "missing_indicators": ["hlt_stunting_prevalence"],
+        "effective_weights_region": {
+          "inf_safe_sanitation_pct": 2857,
+          "inf_safe_water_pct": 2857,
+          "soc_poverty_rate": 4286
+        },
+        "component_scores": {
+          "soc_poverty_rate": 14.24,
+          "hlt_stunting_prevalence": null,
+          "inf_safe_water_pct": 0.0,
+          "inf_safe_sanitation_pct": 12.13
+        },
+        "quality_flags": {
+          "inf_safe_sanitation_pct": "VERIFIED",
+          "inf_safe_water_pct": "VERIFIED",
+          "soc_poverty_rate": "VERIFIED"
         }
       }
-    ]
+    ],
+    "insufficient_data": []
   }
 }
 ```
 
+> Surakarta memiliki cakupan 70% (3 dari 4 komponen). Bobotnya didistribusikan ulang ke `4286 + 2857 + 2857 = 10000`; missing **tidak** dihitung nol.
+
+### Contoh Response — wilayah yang dikeluarkan dari ranking (LIVE, Sumatera Utara)
+
+```json
+{
+  "total_regions": 32,
+  "total_eligible_national": 511,
+  "total_excluded": 1,
+  "unavailable_indicators": ["inf_asphalt_road_village_pct"],
+  "effective_weights": {
+    "dis_multihazard_index": 4667,
+    "dis_flood_hazard_idx": 2000,
+    "inf_electrification_pct": 3333
+  },
+  "renormalized": true,
+  "insufficient_data": [
+    {
+      "region_id": "1277",
+      "region_name": "Kota Padangsidimpuan",
+      "coverage_pct": 33.3,
+      "components_used": ["inf_electrification_pct"],
+      "missing_indicators": ["dis_multihazard_index", "dis_flood_hazard_idx", "inf_asphalt_road_village_pct"],
+      "component_scores": {
+        "dis_multihazard_index": null,
+        "dis_flood_hazard_idx": null,
+        "inf_asphalt_road_village_pct": null,
+        "inf_electrification_pct": 0.9
+      },
+      "reason": "COVERAGE_BELOW_THRESHOLD"
+    }
+  ]
+}
+```
+
+> Padangsidimpuan hanya punya 1 komponen (33,3%). Wilayah ini **tidak** diberi rank dan tidak dapat melonjak ke peringkat 1 seperti pada perilaku lama.
+
 > [!TIP]
-> **Rekomendasi UI FE:** Jika `data.renormalized === true`, tampilkan badge kecil atau tooltip: *"1 indikator belum tersedia di mode LIVE; bobot otomatis dinormalisasi ulang ke 100%."*
+> **Rekomendasi UI FE:** Tampilkan badge `coverage_pct` per wilayah dan daftar `missing_indicators`. Tampilkan juga `insufficient_data` sebagai panel "data belum cukup", bukan sebagai ranking bernilai rendah.
 
 ---
 
@@ -124,7 +239,7 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
     "mode": "LIVE",
     "total_count": 33,
     "coverage": {
-      "available": 16,
+      "available": 25,
       "total_regions": 514,
       "missing_region_ids": [],
       "mode": "LIVE"
@@ -134,11 +249,12 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
     "snapshot_id": "2026.10.0-official-live",
     "mode": "LIVE",
     "total_indicators": 33,
-    "available_indicators_count": 16,
-    "empty_indicators_count": 17,
+    "available_indicators_count": 25,
+    "empty_indicators_count": 8,
     "empty_indicators": [
       "edu_damaged_classrooms_pct",
-      "edu_net_enrollment_sma",
+      "edu_school_travel_time_p90",
+      "hlt_realtime_icu_occupancy",
       "..."
     ],
     "indicators": {
@@ -146,8 +262,8 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
         "name": "Persentase Penduduk Miskin (P0)",
         "category": "socioeconomic",
         "available": true,
-        "coverage_count": 487,
-        "coverage_pct": 94.7
+        "coverage_count": 514,
+        "coverage_pct": 100.0
       },
       "edu_damaged_classrooms_pct": {
         "name": "Persentase Ruang Kelas Rusak (SD)",

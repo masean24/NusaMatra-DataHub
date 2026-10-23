@@ -6,7 +6,7 @@
 Backend API geospasial terintegrasi penyedia data 33 indikator pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
 [![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
-[![Tests](https://img.shields.io/badge/Tests-81%2F81%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-110%2F110%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -46,8 +46,8 @@ Dalam perencanaan pembangunan dan mitigasi kebencanaan nasional, pengambil kebij
 
 **Nusa Matra Data Hub** hadir sebagai **lapisan agregasi data dan mesin pendukung keputusan geospasial (*decision-support backend engine*)** yang:
 1. **Menyelaraskan Kode Wilayah (*Cross-Agency Code Bridging*)** untuk 514 Kabupaten/Kota dan 38 Provinsi (termasuk 4 provinsi baru Papua).
-2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*) yang siap diekstrusi instan oleh peta 3D frontend.
-3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** untuk simulasi bobot prioritas kebijakan tanpa distorsi matematika.
+2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*). Snapshot LIVE saat ini memuat **25 indikator berdata** (mayoritas 514/514 kab/kota; frekuensi bencana 510/514). Delapan indikator sisanya ditandai `UNAVAILABLE`: 2 memang tidak tersedia publik, 6 menunggu akses Dapodik/Kemenkes/Podes tingkat kab/kota.
+3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** global dan **coverage gate per wilayah**: missing data tidak pernah dihitung nol, wilayah dengan cakupan bobot di bawah ambang dipindahkan ke `insufficient_data`.
 4. **Pemantauan Gempa Bumi *Real-Time* BMKG** dengan output GeoJSON (RFC 7946) lengkap dengan radius visual 3D, kedalaman hiposenter, dan status potensi tsunami.
 5. **Dual Architecture (DEMO vs LIVE Mode)** dengan prinsip integritas tinggi (*Fail-Closed Architecture*).
 
@@ -89,15 +89,20 @@ Nusa Matra menyediakan 5 endpoint khusus pemantauan seismik nasional dari feed t
 
 ## ⚙️ Keunggulan Teknis & Engineering Excellence
 
-### 1. Integer Basis Points & Fair Renormalization (BE-01 & BE-08)
+### 1. Integer Basis Points, Semantik Kanonik & Coverage Gate (BE-01 & BE-08)
 Perhitungan skor komposit multivariat menggunakan integer **basis points (bps)** ($10.000\text{ bps} = 100\%$):
 $$\text{Composite Score} = \sum_{i=1}^{n} \left( \text{Normalized Score}_i \times \frac{\text{Effective Weight}_i}{10000} \right)$$
 - Menolak bobot negatif, bobot kosong `{}`, dan bobot melebihi batas (HTTP 422).
-- **Automatic Fair Renormalization:** Jika suatu indikator belum tersedia pada snapshot aktif (misal di mode LIVE), backend secara otomatis menormalisasi ulang bobot yang tersisa menjadi 10.000 bps dan menandai respons dengan `renormalized: true`, sehingga skor prioritas tetap adil pada rentang 0–100.
+- **Semantik kanonik:** `score_direction: "higher_is_need"`. Skor 100 selalu berarti paling rentan/paling butuh intervensi, konsisten di DEMO maupun LIVE.
+- **Global renormalization:** indikator yang kosong secara nasional dikeluarkan dan bobot sisanya diskalakan ke 10.000 bps (`renormalized: true`).
+- **Coverage gate per wilayah:** wilayah dengan cakupan bobot ≥70% dan minimal 2 komponen diranking menggunakan `effective_weights_region`. Wilayah di bawah ambang dikembalikan di `insufficient_data` dan **tidak** diranking. Missing tidak pernah dihitung sebagai nol.
+- `rank` adalah posisi dalam hasil filter; `national_rank` adalah posisi se-Indonesia.
+- **Data resmi kab/kota:** air minum layak dan sanitasi layak ditarik langsung dari BPS WebAPI 2025 (var 2830 & 2748) melalui `scripts/fetch_bps_sdgs_kabkota.py`; provenance dan checksum tersimpan di `data/bps_kabkota_water_sanitation_2025.provenance.json`.
 
 ### 2. Transparansi Cakupan Data (BE-03)
 - Setiap endpoint nilai menyertakan blok `meta.coverage` lengkap dengan jumlah wilayah yang memiliki data, total 514 wilayah, dan daftar `missing_region_ids`.
-- Endpoint `GET /api/v1/indicators/coverage` menyajikan status ketersediaan ke-33 indikator dalam satu panggilan ringan agar klien peta 3D dapat menonaktifkan layer yang kosong tanpa query berulang.
+- Endpoint `GET /api/v1/indicators/coverage` menyajikan status ketersediaan seluruh indikator dalam satu panggilan ringan agar klien peta 3D dapat menonaktifkan layer yang kosong tanpa query berulang.
+- Setiap region pada composite query menyertakan `coverage_pct`, `components_used`, `missing_indicators`, `effective_weights_region`, dan `quality_flags`.
 
 ### 3. Standarisasi Skema Amplop Respons
 Semua respons terstruktur konsisten dengan generic envelope `ApiResponse[T]`:
@@ -159,10 +164,10 @@ cd d:\wia2
 # Install dependensi
 pip install -r requirements.txt
 
-# Jalankan 81 unit tests
+# Jalankan 110 unit tests
 python -m pytest -v
 ```
-*(Hasil: **81 passed** dalam ~18-20 detik).*
+*(Hasil: **110 passed** dalam ~10-15 detik).*
 
 ---
 

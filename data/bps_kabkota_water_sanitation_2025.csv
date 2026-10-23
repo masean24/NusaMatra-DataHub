@@ -1,0 +1,515 @@
+region_id,bps_code,region_name,inf_safe_water_pct,inf_safe_sanitation_pct,year,source,source_url
+1101,1101,Kabupaten Aceh Selatan,90.47,78.42,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1102,1102,Kabupaten Aceh Tenggara,96.24,66.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1103,1103,Kabupaten Aceh Timur,86.62,75.14,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1104,1104,Kabupaten Aceh Tengah,94.0,87.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1105,1105,Kabupaten Aceh Barat,97.28,92.55,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1106,1106,Kabupaten Aceh Besar,93.98,90.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1107,1107,Kabupaten Pidie,90.77,57.03,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1108,1108,Kabupaten Aceh Utara,96.31,84.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1109,1109,Kabupaten Simeulue,85.13,78.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1110,1110,Kabupaten Aceh Singkil,81.35,67.35,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1111,1111,Kabupaten Bireuen,91.39,89.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1112,1112,Kabupaten Aceh Barat Daya,93.6,71.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1113,1113,Kabupaten Gayo Lues,85.23,56.83,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1114,1114,Kabupaten Aceh Jaya,92.4,83.17,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1115,1115,Kabupaten Nagan Raya,92.35,88.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1116,1116,Kabupaten Aceh Tamiang,87.41,87.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1117,1117,Kabupaten Bener Meriah,88.37,91.16,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1118,1118,Kabupaten Pidie Jaya,90.06,82.09,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1171,1171,Kota Banda Aceh,99.79,99.22,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1172,1172,Kota Sabang,94.89,95.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1173,1173,Kota Lhokseumawe,96.92,94.33,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1174,1174,Kota Langsa,97.15,95.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1175,1175,Kota Subulussalam,67.09,64.22,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1201,1201,Kabupaten Tapanuli Tengah,86.2,65.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1202,1202,Kabupaten Tapanuli Utara,90.23,92.62,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1203,1203,Kabupaten Tapanuli Selatan,75.01,64.68,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1204,1204,Kabupaten Nias,51.9,33.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1205,1205,Kabupaten Langkat,94.39,90.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1206,1206,Kabupaten Karo,97.57,92.33,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1207,1207,Kabupaten Deli Serdang,96.47,97.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1208,1208,Kabupaten Simalungun,99.65,98.05,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1209,1209,Kabupaten Asahan,95.93,94.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1210,1210,Kabupaten Labuhanbatu,92.62,92.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1211,1211,Kabupaten Dairi,97.06,97.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1212,1212,Kabupaten Toba,96.36,94.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1213,1213,Kabupaten Mandailing Natal,81.43,48.89,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1214,1214,Kabupaten Nias Selatan,73.25,22.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1215,1215,Kabupaten Pakpak Bharat,66.54,89.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1216,1216,Kabupaten Humbang Hasundutan,97.11,97.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1217,1217,Kabupaten Samosir,83.08,97.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1218,1218,Kabupaten Serdang Bedagai,99.3,95.87,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1219,1219,Kabupaten Batu Bara,98.12,93.49,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1220,1220,Kabupaten Padang Lawas Utara,84.86,83.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1221,1221,Kabupaten Padang Lawas,87.62,66.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1222,1222,Kabupaten Labuhanbatu Selatan,89.97,86.23,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1223,1223,Kabupaten Labuhanbatu Utara,93.68,91.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1224,1224,Kabupaten Nias Utara,74.34,59.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1225,1225,Kabupaten Nias Barat,75.03,50.34,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1271,1271,Kota Medan,99.26,93.15,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1272,1272,Kota Pematangsiantar,99.61,93.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1273,1273,Kota Sibolga,98.96,49.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1274,1274,Kota Tanjungbalai,84.89,92.45,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1275,1275,Kota Binjai,98.5,98.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1276,1276,Kota Tebing Tinggi,99.2,98.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1277,1277,Kota Padangsidimpuan,64.23,54.69,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1278,1278,Kota Gunungsitoli,82.35,58.97,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1301,1301,Kabupaten Pesisir Selatan,90.28,84.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1302,1302,Kabupaten Solok,85.59,57.11,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1303,1303,Kabupaten Sijunjung,76.13,75.49,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1304,1304,Kabupaten Tanah Datar,90.04,69.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1305,1305,Kabupaten Padang Pariaman,93.5,65.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1306,1306,Kabupaten Agam,92.49,79.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1307,1307,Kabupaten Lima Puluh Kota,70.83,65.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1308,1308,Kabupaten Pasaman,85.07,53.74,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1309,1309,Kabupaten Kepulauan Mentawai,76.12,79.06,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1310,1310,Kabupaten Dharmasraya,69.35,83.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1311,1311,Kabupaten Solok Selatan,82.07,60.32,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1312,1312,Kabupaten Pasaman Barat,81.55,74.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1371,1371,Kota Padang,95.25,80.28,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1372,1372,Kota Solok,95.35,93.09,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1373,1373,Kota Sawahlunto,90.03,87.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1374,1374,Kota Padang Panjang,99.39,84.62,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1375,1375,Kota Bukittinggi,99.97,89.33,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1376,1376,Kota Payakumbuh,98.05,92.34,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1377,1377,Kota Pariaman,96.52,87.24,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1401,1401,Kabupaten Kampar,96.57,97.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1402,1402,Kabupaten Indragiri Hulu,76.75,89.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1403,1403,Kabupaten Bengkalis,95.82,94.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1404,1404,Kabupaten Indragiri Hilir,92.17,68.69,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1405,1405,Kabupaten Pelalawan,86.93,92.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1406,1406,Kabupaten Rokan Hulu,91.57,94.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1407,1407,Kabupaten Rokan Hilir,88.04,90.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1408,1408,Kabupaten Siak,91.47,95.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1409,1409,Kabupaten Kuantan Singingi,87.59,93.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1410,1410,Kabupaten Kepulauan Meranti,93.36,64.18,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1471,1471,Kota Pekanbaru,99.19,97.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1472,1472,Kota Dumai,95.46,97.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1501,1501,Kabupaten Kerinci,77.77,72.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1502,1502,Kabupaten Merangin,62.2,82.2,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1503,1503,Kabupaten Sarolangun,79.1,87.69,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1504,1504,Kabupaten Batanghari,83.75,90.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1505,1505,Kabupaten Muaro Jambi,74.18,91.21,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1506,1506,Kabupaten Tanjung Jabung Barat,96.1,81.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1507,1507,Kabupaten Tanjung Jabung Timur,89.33,77.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1508,1508,Kabupaten Bungo,81.72,84.27,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1509,1509,Kabupaten Tebo,81.17,85.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1571,1571,Kota Jambi,96.57,95.83,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1572,1572,Kota Sungai Penuh,87.91,80.83,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1601,1601,Kabupaten Ogan Komering Ulu,80.44,86.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1602,1602,Kabupaten Ogan Komering Ilir,82.99,77.92,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1603,1603,Kabupaten Muara Enim,91.92,90.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1604,1604,Kabupaten Lahat,84.32,79.06,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1605,1605,Kabupaten Musi Rawas,90.51,77.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1606,1606,Kabupaten Musi Banyuasin,82.73,91.16,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1607,1607,Kabupaten Banyuasin,84.16,81.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1608,1608,Kabupaten Ogan Komering Ulu Timur,93.79,91.17,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1609,1609,Kabupaten Ogan Komering Ulu Selatan,78.92,80.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1610,1610,Kabupaten Ogan Ilir,71.17,76.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1611,1611,Kabupaten Empat Lawang,65.2,71.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1612,1612,Kabupaten Penukal Abab Lematang Ilir,91.77,98.98,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1613,1613,Kabupaten Musi Rawas Utara,86.67,77.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1671,1671,Kota Palembang,94.13,93.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1672,1672,Kota Pagar Alam,90.3,69.09,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1673,1673,Kota Lubuk Linggau,96.73,93.97,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1674,1674,Kota Prabumulih,97.97,94.59,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1701,1701,Kabupaten Bengkulu Selatan,73.88,87.2,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1702,1702,Kabupaten Rejang Lebong,58.0,81.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1703,1703,Kabupaten Bengkulu Utara,75.48,86.55,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1704,1704,Kabupaten Kaur,77.97,92.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1705,1705,Kabupaten Seluma,61.42,91.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1706,1706,Kabupaten Mukomuko,79.14,87.27,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1707,1707,Kabupaten Lebong,50.54,52.32,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1708,1708,Kabupaten Kepahiang,57.58,75.15,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1709,1709,Kabupaten Bengkulu Tengah,49.34,88.84,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1771,1771,Kota Bengkulu,90.67,95.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1801,1801,Kabupaten Lampung Selatan,95.31,96.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1802,1802,Kabupaten Lampung Tengah,83.71,86.78,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1803,1803,Kabupaten Lampung Utara,73.33,77.23,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1804,1804,Kabupaten Lampung Barat,74.27,83.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1805,1805,Kabupaten Tulang Bawang,86.33,88.78,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1806,1806,Kabupaten Tanggamus,69.02,75.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1807,1807,Kabupaten Lampung Timur,85.24,88.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1808,1808,Kabupaten Way Kanan,75.38,81.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1809,1809,Kabupaten Pesawaran,92.88,88.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1810,1810,Kabupaten Pringsewu,96.06,88.52,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1811,1811,Kabupaten Mesuji,82.32,90.06,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1812,1812,Kabupaten Tulang Bawang Barat,68.09,84.42,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1813,1813,Kabupaten Pesisir Barat,76.87,89.93,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1871,1871,Kota Bandar Lampung,97.19,89.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1872,1872,Kota Metro,94.94,99.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1901,1901,Kabupaten Bangka,79.54,97.59,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1902,1902,Kabupaten Belitung,82.26,95.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1903,1903,Kabupaten Bangka Selatan,73.43,92.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1904,1904,Kabupaten Bangka Tengah,88.13,97.75,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1905,1905,Kabupaten Bangka Barat,88.94,96.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1906,1906,Kabupaten Belitung Timur,70.51,94.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+1971,1971,Kota Pangkal Pinang,98.67,99.11,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2101,2101,Kabupaten Bintan,87.83,87.92,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2102,2102,Kabupaten Karimun,89.49,95.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2103,2103,Kabupaten Natuna,89.01,77.9,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2104,2104,Kabupaten Lingga,89.07,79.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2105,2105,Kabupaten Kepulauan Anambas,30.77,24.21,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2171,2171,Kota Batam,97.78,93.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+2172,2172,Kota Tanjung Pinang,95.74,89.23,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3101,3101,Kabupaten Administrasi Kepulauan Seribu,95.85,92.8,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3171,3171,Kota Administrasi Jakarta Pusat,100.0,88.85,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3172,3172,Kota Administrasi Jakarta Utara,99.95,92.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3173,3173,Kota Administrasi Jakarta Barat,100.0,93.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3174,3174,Kota Administrasi Jakarta Selatan,100.0,93.45,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3175,3175,Kota Administrasi Jakarta Timur,100.0,97.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3201,3201,Kabupaten Bogor,96.26,67.17,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3202,3202,Kabupaten Sukabumi,90.26,59.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3203,3203,Kabupaten Cianjur,86.73,61.11,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3204,3204,Kabupaten Bandung,99.08,70.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3205,3205,Kabupaten Garut,88.39,53.35,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3206,3206,Kabupaten Tasikmalaya,84.79,58.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3207,3207,Kabupaten Ciamis,94.23,75.84,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3208,3208,Kabupaten Kuningan,99.11,89.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3209,3209,Kabupaten Cirebon,97.79,90.78,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3210,3210,Kabupaten Majalengka,96.18,81.85,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3211,3211,Kabupaten Sumedang,96.3,86.77,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3212,3212,Kabupaten Indramayu,98.04,93.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3213,3213,Kabupaten Subang,99.73,90.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3214,3214,Kabupaten Purwakarta,92.89,74.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3215,3215,Kabupaten Karawang,97.3,86.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3216,3216,Kabupaten Bekasi,98.29,90.24,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3217,3217,Kabupaten Bandung Barat,91.33,55.95,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3218,3218,Kabupaten Pangandaran,87.64,93.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3271,3271,Kota Bogor,100.0,74.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3272,3272,Kota Sukabumi,99.34,46.61,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3273,3273,Kota Bandung,99.66,56.5,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3274,3274,Kota Cirebon,99.11,92.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3275,3275,Kota Bekasi,99.9,97.93,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3276,3276,Kota Depok,99.64,97.68,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3277,3277,Kota Cimahi,99.32,79.18,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3278,3278,Kota Tasikmalaya,97.93,56.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3279,3279,Kota Banjar,96.8,93.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3301,3301,Kabupaten Cilacap,95.32,87.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3302,3302,Kabupaten Banyumas,91.11,85.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3303,3303,Kabupaten Purbalingga,91.3,77.73,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3304,3304,Kabupaten Banjarnegara,89.83,52.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3305,3305,Kabupaten Kebumen,90.75,94.04,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3306,3306,Kabupaten Purworejo,90.01,87.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3307,3307,Kabupaten Wonosobo,91.44,62.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3308,3308,Kabupaten Magelang,94.85,80.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3309,3309,Kabupaten Boyolali,96.7,89.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3310,3310,Kabupaten Klaten,99.67,95.78,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3311,3311,Kabupaten Sukoharjo,98.56,96.27,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3312,3312,Kabupaten Wonogiri,99.1,98.59,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3313,3313,Kabupaten Karanganyar,99.93,98.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3314,3314,Kabupaten Sragen,99.81,97.33,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3315,3315,Kabupaten Grobogan,83.47,97.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3316,3316,Kabupaten Blora,92.91,92.46,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3317,3317,Kabupaten Rembang,99.31,97.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3318,3318,Kabupaten Pati,98.63,92.97,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3319,3319,Kabupaten Kudus,99.71,96.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3320,3320,Kabupaten Jepara,91.61,71.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3321,3321,Kabupaten Demak,97.73,94.03,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3322,3322,Kabupaten Semarang,99.83,87.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3323,3323,Kabupaten Temanggung,98.62,74.98,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3324,3324,Kabupaten Kendal,99.55,82.83,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3325,3325,Kabupaten Batang,98.98,68.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3326,3326,Kabupaten Pekalongan,98.61,83.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3327,3327,Kabupaten Pemalang,93.37,83.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3328,3328,Kabupaten Tegal,94.05,91.2,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3329,3329,Kabupaten Brebes,98.36,83.87,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3371,3371,Kota Magelang,99.98,90.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3372,3372,Kota Surakarta,100.0,88.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3373,3373,Kota Salatiga,99.89,94.22,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3374,3374,Kota Semarang,99.45,98.22,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3375,3375,Kota Pekalongan,99.73,88.2,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3376,3376,Kota Tegal,100.0,94.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3401,3401,Kabupaten Kulon Progo,91.44,98.07,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3402,3402,Kabupaten Bantul,97.71,95.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3403,3403,Kabupaten Gunungkidul,97.3,98.34,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3404,3404,Kabupaten Sleman,98.05,97.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3471,3471,Kota Yogyakarta,99.59,95.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3501,3501,Kabupaten Pacitan,86.55,83.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3502,3502,Kabupaten Ponorogo,97.09,93.28,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3503,3503,Kabupaten Trenggalek,86.65,86.53,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3504,3504,Kabupaten Tulungagung,99.72,90.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3505,3505,Kabupaten Blitar,98.88,88.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3506,3506,Kabupaten Kediri,94.07,94.35,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3507,3507,Kabupaten Malang,96.94,89.16,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3508,3508,Kabupaten Lumajang,94.01,82.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3509,3509,Kabupaten Jember,97.51,72.92,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3510,3510,Kabupaten Banyuwangi,98.55,87.92,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3511,3511,Kabupaten Bondowoso,97.53,65.34,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3512,3512,Kabupaten Situbondo,95.16,68.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3513,3513,Kabupaten Probolinggo,98.55,73.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3514,3514,Kabupaten Pasuruan,99.05,87.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3515,3515,Kabupaten Sidoarjo,98.81,97.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3516,3516,Kabupaten Mojokerto,97.69,92.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3517,3517,Kabupaten Jombang,99.6,97.32,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3518,3518,Kabupaten Nganjuk,99.74,92.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3519,3519,Kabupaten Madiun,97.51,92.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3520,3520,Kabupaten Magetan,99.17,91.47,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3521,3521,Kabupaten Ngawi,96.85,86.98,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3522,3522,Kabupaten Bojonegoro,98.1,95.51,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3523,3523,Kabupaten Tuban,99.32,90.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3524,3524,Kabupaten Lamongan,86.48,93.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3525,3525,Kabupaten Gresik,95.76,97.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3526,3526,Kabupaten Bangkalan,95.48,71.82,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3527,3527,Kabupaten Sampang,96.87,88.8,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3528,3528,Kabupaten Pamekasan,97.57,76.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3529,3529,Kabupaten Sumenep,99.26,81.09,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3571,3571,Kota Kediri,100.0,98.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3572,3572,Kota Blitar,97.94,97.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3573,3573,Kota Malang,99.83,89.51,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3574,3574,Kota Probolinggo,99.63,93.27,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3575,3575,Kota Pasuruan,99.88,91.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3576,3576,Kota Mojokerto,99.73,99.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3577,3577,Kota Madiun,98.91,98.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3578,3578,Kota Surabaya,100.0,99.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3579,3579,Kota Batu,99.35,96.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3601,3601,Kabupaten Pandeglang,83.37,63.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3602,3602,Kabupaten Lebak,85.95,81.07,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3603,3603,Kabupaten Tangerang,99.73,91.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3604,3604,Kabupaten Serang,91.75,88.54,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3671,3671,Kota Tangerang,99.91,99.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3672,3672,Kota Cilegon,99.58,97.73,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3673,3673,Kota Serang,99.3,94.83,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+3674,3674,Kota Tangerang Selatan,99.01,99.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5101,5101,Kabupaten Jembrana,94.35,96.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5102,5102,Kabupaten Tabanan,96.67,98.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5103,5103,Kabupaten Badung,100.0,100.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5104,5104,Kabupaten Gianyar,99.0,99.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5105,5105,Kabupaten Klungkung,99.29,99.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5106,5106,Kabupaten Bangli,97.2,94.64,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5107,5107,Kabupaten Karangasem,100.0,94.9,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5108,5108,Kabupaten Buleleng,98.24,95.8,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5171,5171,Kota Denpasar,99.8,99.92,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5201,5201,Kabupaten Lombok Barat,91.22,80.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5202,5202,Kabupaten Lombok Tengah,94.37,86.45,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5203,5203,Kabupaten Lombok Timur,97.27,89.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5204,5204,Kabupaten Sumbawa,95.08,92.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5205,5205,Kabupaten Dompu,99.95,86.46,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5206,5206,Kabupaten Bima,99.69,89.09,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5207,5207,Kabupaten Sumbawa Barat,95.32,98.05,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5208,5208,Kabupaten Lombok Utara,98.37,87.69,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5271,5271,Kota Mataram,99.82,92.05,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5272,5272,Kota Bima,98.97,92.87,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5301,5301,Kabupaten Kupang,90.62,77.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5302,5302,Kabupaten Timor Tengah Selatan,71.69,71.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5303,5303,Kabupaten Timor Tengah Utara,94.49,84.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5304,5304,Kabupaten Belu,87.38,86.89,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5305,5305,Kabupaten Alor,91.74,88.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5306,5306,Kabupaten Flores Timur,98.98,95.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5307,5307,Kabupaten Sikka,94.35,87.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5308,5308,Kabupaten Ende,97.66,94.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5309,5309,Kabupaten Ngada,95.15,94.51,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5310,5310,Kabupaten Manggarai,90.77,69.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5311,5311,Kabupaten Sumba Timur,82.41,70.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5312,5312,Kabupaten Sumba Barat,85.38,62.82,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5313,5313,Kabupaten Lembata,95.48,92.61,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5314,5314,Kabupaten Rote Ndao,87.18,88.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5315,5315,Kabupaten Manggarai Barat,94.97,84.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5316,5316,Kabupaten Nagekeo,93.74,93.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5317,5317,Kabupaten Sumba Tengah,65.18,62.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5318,5318,Kabupaten Sumba Barat Daya,90.61,58.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5319,5319,Kabupaten Manggarai Timur,85.21,64.18,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5320,5320,Kabupaten Sabu Raijua,77.51,86.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5321,5321,Kabupaten Malaka,94.0,75.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+5371,5371,Kota Kupang,98.03,93.47,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6101,6101,Kabupaten Sambas,96.91,94.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6102,6102,Kabupaten Mempawah,91.0,90.04,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6103,6103,Kabupaten Sanggau,85.65,80.3,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6104,6104,Kabupaten Ketapang,73.81,91.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6105,6105,Kabupaten Sintang,72.62,82.87,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6106,6106,Kabupaten Kapuas Hulu,76.71,83.98,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6107,6107,Kabupaten Bengkayang,88.56,88.34,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6108,6108,Kabupaten Landak,73.46,76.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6109,6109,Kabupaten Sekadau,65.12,85.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6110,6110,Kabupaten Melawi,52.15,80.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6111,6111,Kabupaten Kayong Utara,98.39,87.61,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6112,6112,Kabupaten Kubu Raya,95.08,90.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6171,6171,Kota Pontianak,97.74,98.93,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6172,6172,Kota Singkawang,92.66,96.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6201,6201,Kotawaringin Barat,88.7,94.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6202,6202,Kotawaringin Timur,81.54,83.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6203,6203,Kabupaten Kapuas,73.47,69.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6204,6204,Kabupaten Barito Selatan,64.06,68.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6205,6205,Kabupaten Barito Utara,74.19,85.04,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6206,6206,Kabupaten Katingan,89.05,87.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6207,6207,Kabupaten Seruyan,76.25,76.46,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6208,6208,Kabupaten Sukamara,94.9,88.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6209,6209,Kabupaten Lamandau,72.3,91.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6210,6210,Kabupaten Gunung Mas,61.01,82.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6211,6211,Kabupaten Pulang Pisau,85.1,71.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6212,6212,Kabupaten Murung Raya,66.16,80.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6213,6213,Kabupaten Barito Timur,76.1,90.62,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6271,6271,Kota Palangkaraya,100.0,94.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6301,6301,Kabupaten Tanah Laut,78.37,79.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6302,6302,Kotabaru,69.86,80.87,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6303,6303,Kabupaten Banjar,65.88,84.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6304,6304,Kabupaten Barito Kuala,57.55,63.05,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6305,6305,Kabupaten Tapin,82.17,86.05,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6306,6306,Kabupaten Hulu Sungai Selatan,73.68,87.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6307,6307,Kabupaten Hulu Sungai Tengah,86.4,90.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6308,6308,Kabupaten Hulu Sungai Utara,83.32,96.61,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6309,6309,Kabupaten Tabalong,82.26,97.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6310,6310,Kabupaten Tanah Bumbu,67.43,92.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6311,6311,Kabupaten Balangan,89.23,95.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6371,6371,Kota Banjarmasin,99.89,90.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6372,6372,Kota Banjarbaru,80.22,94.17,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6401,6401,Kabupaten Paser,77.17,87.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6402,6402,Kabupaten Kutai Kartanegara,81.71,88.53,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6403,6403,Kabupaten Berau,91.91,90.36,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6407,6407,Kabupaten Kutai Barat,90.27,92.82,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6408,6408,Kabupaten Kutai Timur,76.08,91.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6409,6409,Kabupaten Penajam Paser Utara,84.73,94.23,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6411,6411,Kabupaten Mahakam Ulu,54.52,68.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6471,6471,Kota Balikpapan,99.85,95.04,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6472,6472,Kota Samarinda,94.56,97.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6474,6474,Kota Bontang,100.0,91.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6501,6501,Kabupaten Bulungan,77.15,94.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6502,6502,Kabupaten Malinau,85.46,90.52,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6503,6503,Kabupaten Nunukan,93.96,78.38,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6504,6504,Kabupaten Tana Tidung,90.93,97.88,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+6571,6571,Kota Tarakan,99.1,84.93,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7101,7101,Kabupaten Bolaang Mongondow,92.87,74.31,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7102,7102,Kabupaten Minahasa,95.97,90.26,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7103,7103,Kabupaten Kepulauan Sangihe,93.96,85.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7104,7104,Kabupaten Kepulauan Talaud,95.06,95.15,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7105,7105,Kabupaten Minahasa Selatan,93.09,92.32,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7106,7106,Kabupaten Minahasa Utara,92.8,90.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7107,7107,Kabupaten Minahasa Tenggara,93.29,89.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7108,7108,Kabupaten Bolaang Mongondow Utara,91.17,77.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7109,7109,Kabupaten Kep. Siau Tagulandang Biaro,92.74,97.33,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7110,7110,Kabupaten Bolaang Mongondow Timur,94.03,76.72,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7111,7111,Kabupaten Bolaang Mongondow Selatan,89.7,76.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7171,7171,Kota Manado,95.71,90.82,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7172,7172,Kota Bitung,98.8,92.71,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7173,7173,Kota Tomohon,97.11,94.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7174,7174,Kota Kotamobagu,98.77,76.74,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7201,7201,Kabupaten Banggai,91.53,86.02,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7202,7202,Kabupaten Poso,94.62,91.93,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7203,7203,Kabupaten Donggala,91.78,67.25,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7204,7204,Kabupaten Toli-Toli,70.61,70.74,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7205,7205,Kabupaten Buol,75.79,78.77,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7206,7206,Kabupaten Morowali,92.68,78.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7207,7207,Kabupaten Banggai Kepulauan,93.39,77.86,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7208,7208,Kabupaten Parigi Moutong,82.94,72.45,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7209,7209,Kabupaten Tojo Una Una,98.05,72.21,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7210,7210,Kabupaten Sigi,75.6,80.21,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7211,7211,Kabupaten Banggai Laut,88.02,71.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7212,7212,Kabupaten Morowali Utara,89.18,86.88,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7271,7271,Kota Palu,94.98,90.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7301,7301,Kabupaten Kepulauan Selayar,95.2,90.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7302,7302,Kabupaten Bulukumba,89.7,89.88,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7303,7303,Kabupaten Bantaeng,96.97,80.35,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7304,7304,Kabupaten Jeneponto,98.12,89.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7305,7305,Kabupaten Takalar,98.48,97.53,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7306,7306,Kabupaten Gowa,98.96,98.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7307,7307,Kabupaten Sinjai,90.23,89.91,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7308,7308,Kabupaten Bone,92.74,97.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7309,7309,Kabupaten Maros,91.95,97.85,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7310,7310,Kabupaten Pangkajene Dan Kepulauan,91.47,92.97,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7311,7311,Kabupaten Barru,98.18,98.06,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7312,7312,Kabupaten Soppeng,99.28,93.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7313,7313,Kabupaten Wajo,93.01,95.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7314,7314,Kabupaten Sidenreng Rappang,98.87,98.4,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7315,7315,Kabupaten Pinrang,91.02,93.78,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7316,7316,Kabupaten Enrekang,88.28,97.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7317,7317,Kabupaten Luwu,87.33,94.26,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7318,7318,Kabupaten Tana Toraja,66.93,93.67,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7322,7322,Kabupaten Luwu Utara,91.81,95.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7324,7324,Kabupaten Luwu Timur,87.35,90.28,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7326,7326,Kabupaten Toraja Utara,65.48,95.19,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7371,7371,Kota Makassar,98.83,92.2,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7372,7372,Kota Parepare,99.29,98.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7373,7373,Kota Palopo,95.82,96.52,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7401,7401,Kabupaten Kolaka,90.29,96.47,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7402,7402,Kabupaten Konawe,89.72,90.9,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7403,7403,Kabupaten Muna,93.68,87.95,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7404,7404,Kabupaten Buton,97.79,85.01,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7405,7405,Kabupaten Konawe Selatan,94.24,93.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7406,7406,Kabupaten Bombana,98.36,88.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7407,7407,Kabupaten Wakatobi,99.33,87.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7408,7408,Kabupaten Kolaka Utara,94.84,93.77,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7409,7409,Kabupaten Konawe Utara,85.69,88.36,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7410,7410,Kabupaten Buton Utara,94.18,79.12,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7411,7411,Kabupaten Kolaka Timur,95.21,97.55,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7412,7412,Kabupaten Konawe Kepulauan,96.37,76.23,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7413,7413,Kabupaten Muna Barat,97.48,80.16,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7414,7414,Kabupaten Buton Tengah,95.73,90.62,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7415,7415,Kabupaten Buton Selatan,96.44,90.46,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7471,7471,Kota Kendari,97.29,95.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7472,7472,Kota Bau Bau,99.61,97.32,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7501,7501,Kabupaten Gorontalo,95.66,82.84,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7502,7502,Kabupaten Boalemo,94.29,75.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7503,7503,Kabupaten Bone Bolango,96.73,85.45,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7504,7504,Kabupaten Pohuwato,95.71,83.26,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7505,7505,Kabupaten Gorontalo Utara,92.89,84.8,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7571,7571,Kota Gorontalo,98.75,94.8,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7601,7601,Kabupaten Pasangkayu,85.02,84.15,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7602,7602,Kabupaten Mamuju,86.8,85.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7603,7603,Kabupaten Mamasa,52.97,74.49,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7604,7604,Kabupaten Polewali Mandar,87.64,90.48,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7605,7605,Kabupaten Majene,93.41,87.63,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+7606,7606,Kabupaten Mamuju Tengah,82.7,88.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8101,8101,Kabupaten Maluku Tengah,94.69,82.53,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8102,8102,Kabupaten Maluku Tenggara,87.91,81.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8103,8103,Kabupaten Kepulauan Tanimbar,93.33,90.64,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8104,8104,Kabupaten Buru,95.68,80.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8105,8105,Kabupaten Seram Bagian Timur,82.41,78.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8106,8106,Kabupaten Seram Bagian Barat,90.38,74.43,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8107,8107,Kabupaten Kepulauan Aru,87.1,44.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8108,8108,Kabupaten Maluku Barat Daya,95.94,89.76,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8109,8109,Kabupaten Buru Selatan,84.99,68.88,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8171,8171,Kota Ambon,95.37,93.57,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8172,8172,Kota Tual,94.46,83.77,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8201,8201,Kabupaten Halmahera Barat,97.96,81.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8202,8202,Kabupaten Halmahera Tengah,92.49,89.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8203,8203,Kabupaten Halmahera Utara,85.22,73.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8204,8204,Kabupaten Halmahera Selatan,86.27,79.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8205,8205,Kabupaten Kepulauan Sula,84.06,86.36,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8206,8206,Kabupaten Halmahera Timur,73.19,83.03,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8207,8207,Kabupaten Pulau Morotai,88.59,65.81,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8208,8208,Kabupaten Pulau Taliabu,88.75,73.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8271,8271,Kota Ternate,99.68,98.9,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+8272,8272,Kota Tidore Kepulauan,95.95,93.44,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9103,9103,Kabupaten Jayapura,81.0,73.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9105,9105,Kabupaten Kepulauan Yapen,82.49,67.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9106,9106,Kabupaten Biak Numfor,92.35,88.96,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9110,9110,Kabupaten Sarmi,89.72,88.52,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9111,9111,Kabupaten Keerom,66.13,85.41,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9115,9115,Kabupaten Waropen,90.62,81.51,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9119,9119,Kabupaten Supiori,72.49,81.84,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9120,9120,Kabupaten Mamberamo Raya,75.25,28.79,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9171,9171,Kota Jayapura,96.02,75.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9202,9202,Kabupaten Manokwari,85.39,88.08,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9203,9203,Kabupaten Fak Fak,95.84,73.59,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9206,9206,Kabupaten Teluk Bintuni,91.54,75.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9207,9207,Kabupaten Teluk Wondama,30.81,59.66,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9208,9208,Kabupaten Kaimana,88.88,80.29,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9211,9211,Kabupaten Manokwari Selatan,81.99,91.55,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9212,9212,Kabupaten Pegunungan Arfak,69.47,56.9,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9301,9301,Kabupaten Merauke,79.31,88.37,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9302,9302,Kabupaten Boven Digoel,64.79,70.28,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9303,9303,Kabupaten Mappi,39.5,38.69,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9304,9304,Kabupaten Asmat,85.45,29.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9401,9401,Kabupaten Nabire,90.99,92.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9402,9402,Kabupaten Puncak Jaya,85.03,14.39,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9403,9403,Kabupaten Paniai,94.26,25.03,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9404,9404,Kabupaten Mimika,98.38,82.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9405,9405,Kabupaten Puncak,32.97,,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9406,9406,Kabupaten Dogiyai,72.53,10.94,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9407,9407,Kabupaten Intan Jaya,82.75,23.59,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9408,9408,Kabupaten Deiyai,89.45,20.65,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9501,9501,Kabupaten Jayawijaya,50.58,43.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9502,9502,Kabupaten Pegunungan Bintang,76.8,17.88,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9503,9503,Kabupaten Yahukimo,44.35,14.36,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9504,9504,Kabupaten Tolikara,30.34,1.13,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9505,9505,Kabupaten Mamberamo Tengah,20.25,6.06,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9506,9506,Kabupaten Yalimo,31.88,24.1,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9507,9507,Kabupaten Lanny Jaya,,5.58,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9508,9508,Kabupaten Nduga,14.93,4.0,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9601,9601,Kabupaten Sorong,88.09,88.6,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9602,9602,Kabupaten Sorong Selatan,55.21,48.7,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9603,9603,Kabupaten Raja Ampat,84.97,68.62,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9604,9604,Kabupaten Tambrauw,51.18,87.15,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9605,9605,Kabupaten Maybrat,47.2,71.56,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/
+9671,9671,Kota Sorong,88.8,83.99,125,BPS Susenas 2025,https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/

@@ -21,6 +21,12 @@ data/*.db
 data/*.db-wal
 data/*.db-shm
 
+# Raw source snapshots (large PDFs/HTML/JSON; derived CSVs are kept)
+data/raw/
+data/boundaries/hdx_*
+data/boundaries/big_*
+data/boundaries/*.gz
+
 # IDE & OS
 .vscode/
 .idea/
