@@ -23,7 +23,7 @@ COPY migrations/ migrations/
 COPY scripts/ scripts/
 
 # Pre-seed both DEMO and verified official LIVE databases during container image build
-# This pre-bakes the DEMO dataset (15,934 values) & LIVE dataset (7,648 verified values) into the image
+# This pre-bakes the DEMO dataset and the verified LIVE snapshot (14,745 values)
 RUN python data/seed_db.py
 RUN python scripts/seed_live_db.py
 

@@ -4,7 +4,7 @@
 **Dari:** Backend Nusa Matra Data Hub  
 **Tanggal:** 23 Oktober 2026  
 **Snapshot:** `2026.10.0-official-live`  
-**Status:** 112/112 test lulus · 25 indikator berdata · 12.689 observasi · 514/514 kab/kota
+**Status:** 114/114 test lulus · 29 indikator berdata · 14.745 observasi · 514/514 kab/kota
 
 ---
 
@@ -390,7 +390,7 @@ Saat ini yang berstatus `IMPUTED_PROVINCE`: `inf_electrification_pct`, `inf_inte
 
 ## 7. Cakupan data saat ini
 
-**25 indikator berdata · 12.689 observasi · 514/514 kab/kota**
+**29 indikator berdata · 14.745 observasi · 514/514 kab/kota**
 
 | Indikator | Wilayah | Flag |
 |---|---:|---|
@@ -400,10 +400,14 @@ Saat ini yang berstatus `IMPUTED_PROVINCE`: `inf_electrification_pct`, `inf_inte
 | `dis_flood_hazard_idx` | 396 | VERIFIED |
 | `dis_landslide_hazard_idx` | 510 | VERIFIED |
 | `dis_multihazard_index` | 511 | VERIFIED |
+| `edu_damaged_classrooms_pct` | 514 | VERIFIED |
 | `edu_expected_years_schooling` | 514 | VERIFIED |
 | `edu_mean_years_schooling` | 514 | VERIFIED |
 | `edu_net_enrollment_sma` | 514 | VERIFIED |
 | `edu_net_enrollment_smp` | 514 | VERIFIED |
+| `edu_student_teacher_ratio_sd` | 514 | VERIFIED |
+| `hlt_doctors_per_10k` | 514 | IMPUTED_PROVINCE |
+| `hlt_facilities_per_10k` | 514 | VERIFIED |
 | `hlt_jkn_coverage_pct` | 514 | IMPUTED_PROVINCE |
 | `hlt_life_expectancy` | 514 | VERIFIED |
 | `hlt_stunting_prevalence` | 487 | VERIFIED |
@@ -420,25 +424,22 @@ Saat ini yang berstatus `IMPUTED_PROVINCE`: `inf_electrification_pct`, `inf_inte
 | `soc_poverty_severity_p2` | 514 | VERIFIED |
 | `soc_unemployment_rate` | 514 | VERIFIED |
 
-### 8 indikator yang belum berdata
+### 4 indikator yang belum berdata
 
 **By design (tidak tersedia publik):**
 - `edu_school_travel_time_p90`
 - `hlt_realtime_icu_occupancy`
 
 **Terblokir akses/granularitas:**
-- `edu_student_teacher_ratio_sd`
-- `edu_damaged_classrooms_pct`
 - `meta_dapodik_sync_rate`
-- `hlt_facilities_per_10k`
-- `hlt_doctors_per_10k`
 - `inf_asphalt_road_village_pct`
 
-Alasan: portal Dapodik resmi dilindungi WAF (mirror non-`.go.id` tidak dipakai); Kemenkes/SATUSEHAT baru menyediakan agregat provinsi/dashboard; publikasi Podes nasional hanya sampai provinsi. Nilai-nilai ini **tidak** diisi tebakan.
+Alasan: progres sinkronisasi Dapodik hanya ada di dashboard operator/dinas yang dilindungi login (mirror non-`.go.id` tidak dipakai); publikasi Podes nasional hanya sampai provinsi sehingga butuh microdata SILASTIK atau tabel kab/kota resmi. Nilai-nilai ini **tidak** diisi tebakan.
 
 ### Sumber dan provenance
 - BPS WebAPI: air minum & sanitasi kab/kota (var 2830 & 2748), proyeksi penduduk (var 2790), internet (var 398), JKN (var 2279).
-- Kemendikdasmen Pusdatin: APK/APM 2024/2025 (PDF resmi).
+- Kemendikdasmen Pusdatin: APK/APM 2024/2025 (PDF resmi); rasio murid-guru SD dan ruang kelas SD/SMP TA 2022/2023 (XLSX resmi).
+- Kemenkes: Puskesmas Teregistrasi Semester II 2025 (PDF), RS Online/SIRS (JSON), dan dokter per provinsi dari SATUSEHAT Data.
 - BNPB DIBI: kejadian 2020–2024 per kabupaten, korban terdampak/mengungsi 2024.
 - BIG: batas wilayah 2026.
 - BMKG: gempa real-time.
@@ -451,10 +452,10 @@ Setiap dataset punya file `*.provenance.json` berisi URL resmi, SHA-256 raw, dan
 
 ```bash
 python -m pytest -q
-# 112 passed
+# 114 passed
 
 python scripts/seed_live_db.py
-# 12,689 fact rows, 25 indicators, 514/514 regions, max rank 514
+# 14,745 fact rows, 29 indicators, 514/514 regions, max rank 514
 ```
 
 Setelah deploy, cek:
@@ -503,4 +504,4 @@ Yang harus terlihat:
 
 ---
 
-**Kesimpulan:** ranking LIVE sudah valid secara metodologis dan siap dipakai setelah redeploy. Yang tersisa adalah 6 indikator yang memang belum punya sumber kab/kota yang dapat diakses; dua indikator lain memang tidak tersedia publik.
+**Kesimpulan:** ranking LIVE sudah valid secara metodologis dan siap dipakai setelah redeploy. Yang tersisa adalah 2 indikator yang memang belum punya sumber kab/kota yang dapat diakses; dua indikator lain memang tidak tersedia publik.

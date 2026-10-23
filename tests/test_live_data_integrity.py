@@ -123,9 +123,13 @@ def test_new_official_indicators_are_populated(live):
     expected_minimum = {
         "edu_net_enrollment_smp": 514,
         "edu_net_enrollment_sma": 514,
+        "edu_student_teacher_ratio_sd": 514,
+        "edu_damaged_classrooms_pct": 514,
         "soc_dependency_ratio": 514,
         "inf_internet_household_pct": 514,
         "hlt_jkn_coverage_pct": 514,
+        "hlt_facilities_per_10k": 514,
+        "hlt_doctors_per_10k": 514,
         "dis_affected_pop_per_10k": 514,
         "dis_events_5yr_freq": 510,
     }
@@ -141,6 +145,7 @@ def test_province_imputed_indicators_are_flagged(live):
     for indicator_id in (
         "inf_internet_household_pct",
         "hlt_jkn_coverage_pct",
+        "hlt_doctors_per_10k",
         "dis_affected_pop_per_10k",
     ):
         flags = dict(

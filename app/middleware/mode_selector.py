@@ -129,14 +129,17 @@ class ModeSelector(BaseHTTPMiddleware):
         response = await call_next(request)
         latency_ms = (time.perf_counter() - start_t) * 1000.0
 
-        # Record telemetry metric for business/domain data endpoints only (Option A: skip health/stats/probes)
-        if not telemetry.is_system_path(request.url.path):
+        # Record telemetry metric for known API endpoints only.
+        # Unknown paths (scanner probes such as /.gitmodules or /runtime.js) are ignored.
+        if telemetry.is_trackable_path(request.url.path):
+            route = request.scope.get("route")
             telemetry.record_request(
                 method=request.method,
                 path=request.url.path,
                 status_code=response.status_code,
                 latency_ms=latency_ms,
                 mode=mode,
+                route_path=getattr(route, "path", None),
             )
 
         # Inject standard response headers if not explicitly set by the route handler

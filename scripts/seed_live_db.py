@@ -102,6 +102,21 @@ OFFICIAL_DATASETS = [
      "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
      "https://data.bnpb.go.id/api/3/action/datastore_search?resource_id=39ceb577-b49f-45c9-b909-7dd8daef417a",
      "CKAN_API", "Lisensi Terbuka Satu Data Indonesia", "Tahunan"),
+    ("kemendikdasmen_statistik_2026", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
+     "Statistik Ruang Kelas dan Rasio Murid-Guru SD Tahun Ajaran 2022/2023 (kab/kota)",
+     "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana",
+     "https://cdn.data-portal.belajar.id/Aset-Dataset/20241105/1d05febc22bb5ad9f749ccfa6eee06e9444c08256b3f48977f7ff465c78af9d6.xlsx",
+     "XLSX_DOWNLOAD", "Data Terbuka Kemendikdasmen", "Tahunan"),
+    ("kemenkes_sirs_regpus_2026", "KEMENKES", "Kementerian Kesehatan",
+     "RS Online dan Data Puskesmas Teregistrasi Semester II 2025 (kab/kota)",
+     "https://sirs.kemkes.go.id/fo/home/dashboard_rs?id=0",
+     "https://sirs.kemkes.go.id/fo/home/rekap_rs_all?id=0",
+     "REST_API+PDF_TABLE", "Data Terbuka Kemenkes", "Semesteran"),
+    ("kemenkes_satusehat_dokter_2026", "KEMENKES", "Kementerian Kesehatan",
+     "Jumlah Dokter di Fasilitas Kesehatan per Provinsi (SATUSEHAT Data)",
+     "https://satusehat.kemkes.go.id/data/dataset/65cff906-5fd1-4f8d-baad-9f6ad837f5b8",
+     "https://api.kemkes.go.id/satusehat-data/dataset/public/65cff906-5fd1-4f8d-baad-9f6ad837f5b8/csv",
+     "REST_API", "Data Terbuka Kemenkes", "Bulanan"),
 ]
 
 def calc_bbox_and_centroid(coords):
@@ -265,7 +280,14 @@ def main():
                 ds_id = "kemendikdasmen_ref_2026"
             elif "Nusa Matra" in r["primary_source_agency"]:
                 ds_id = "nusa_matra_internal_audit"
-                
+
+            if ind_id in ("edu_student_teacher_ratio_sd", "edu_damaged_classrooms_pct"):
+                ds_id = "kemendikdasmen_statistik_2026"
+            elif ind_id == "hlt_facilities_per_10k":
+                ds_id = "kemenkes_sirs_regpus_2026"
+            elif ind_id == "hlt_doctors_per_10k":
+                ds_id = "kemenkes_satusehat_dokter_2026"
+
             indicators_meta[ind_id] = {
                 "name": r["indicator_name"],
                 "category": r["category"],
@@ -620,6 +642,83 @@ def main():
             )
         conn.commit()
         print(f"       [OK] Province-imputed disaster impact: {len(affected_rows)} rows")
+
+    # 6g. Verified Kemendikdasmen education indicators (TA 2022/2023).
+    verified_edu_csv = REPO_ROOT / "data" / "kemendikdasmen_edu_kabkota_2023.csv"
+    if verified_edu_csv.exists():
+        with open(verified_edu_csv, "r", encoding="utf-8") as f:
+            edu_rows = list(csv.DictReader(f))
+
+        for ind_id, column in (
+            ("edu_student_teacher_ratio_sd", "edu_student_teacher_ratio_sd"),
+            ("edu_damaged_classrooms_pct", "edu_damaged_classrooms_pct"),
+        ):
+            values = []
+            for row in edu_rows:
+                raw = (row.get(column) or "").strip()
+                if not raw:
+                    continue
+                try:
+                    values.append((row["region_id"], float(raw), "VERIFIED"))
+                except (KeyError, ValueError):
+                    continue
+            if values:
+                _seed_facts(
+                    ind_id,
+                    2023,
+                    "kemendikdasmen_statistik_2026",
+                    "Kemendikdasmen Pusdatin TA 2022/2023 (kab/kota)",
+                    values,
+                    indicators_meta[ind_id]["polarity"],
+                )
+        conn.commit()
+        print(f"       [OK] Verified Kemendikdasmen education: {len(edu_rows)} rows")
+
+    # 6h. Verified Kemenkes facilities per 10k (Puskesmas + SIRS hospitals).
+    verified_health_csv = REPO_ROOT / "data" / "kemenkes_health_access_2026.csv"
+    if verified_health_csv.exists():
+        with open(verified_health_csv, "r", encoding="utf-8") as f:
+            health_rows = list(csv.DictReader(f))
+
+        for ind_id, column, ds_id, label in (
+            (
+                "hlt_facilities_per_10k",
+                "hlt_facilities_per_10k",
+                "kemenkes_sirs_regpus_2026",
+                "Kemenkes Regpus Semester II 2025 + SIRS RS 2026 (kab/kota)",
+            ),
+            (
+                "hlt_doctors_per_10k",
+                "hlt_doctors_per_10k",
+                "kemenkes_satusehat_dokter_2026",
+                "SATUSEHAT Data 2026 (province-imputed)",
+            ),
+        ):
+            values = []
+            for row in health_rows:
+                raw = (row.get(column) or "").strip()
+                if not raw:
+                    continue
+                flag = (
+                    "IMPUTED_PROVINCE"
+                    if ind_id == "hlt_doctors_per_10k"
+                    else "VERIFIED"
+                )
+                try:
+                    values.append((row["region_id"], float(raw), flag))
+                except (KeyError, ValueError):
+                    continue
+            if values:
+                _seed_facts(
+                    ind_id,
+                    2026,
+                    ds_id,
+                    label,
+                    values,
+                    indicators_meta[ind_id]["polarity"],
+                )
+        conn.commit()
+        print(f"       [OK] Verified Kemenkes health access: {len(health_rows)} rows")
 
     # 6b. Internal reliability indicators derived from the snapshot itself.
     # Completeness is measured against the full non-meta indicator framework,

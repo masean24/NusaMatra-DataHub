@@ -4,7 +4,7 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (Working Tree: v2.1 remediation in progress, 112/112 Pytest Green)  
+> **Active Branch:** `main` (Working Tree: v2.1 remediation in progress, 114/114 Pytest Green)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
 > **Date Generated:** 23 Oktober 2026 (updated after v2.1 data-integrity remediation)  
 
@@ -40,6 +40,8 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
    - Frekuensi kejadian bencana 2020–2024 dari BNPB DIBI (CKAN Datastore) → **510/514** wilayah (4 wilayah tidak ada di dataset).
    - Rasio ketergantungan dari BPS Proyeksi Penduduk SP2020 2026 (var 2790) → **514/514** wilayah.
    - Akses internet rumah tangga (BPS 2024), JKN (BPS 2025), dan penduduk terdampak bencana per 10.000 (BNPB 2024) → **province-imputed**, seluruhnya ditandai `IMPUTED_PROVINCE`.
+   - **Kemendikdasmen 2022/2023** (`scripts/build_kemendikdasmen_edu.py`): rasio murid-guru SD dan % ruang kelas rusak sedang/berat (SD+SMP) → **514/514 VERIFIED**.
+   - **Kemenkes** (`scripts/build_kemenkes_health_access.py`): Puskesmas Semester II 2025 + daftar RS SIRS → `hlt_facilities_per_10k` **514/514 VERIFIED**; dokter per provinsi dari SATUSEHAT Data → `hlt_doctors_per_10k` **514/514 `IMPUTED_PROVINCE`**.
    - Semua provenance + SHA-256 tersimpan di file `*.provenance.json`; `inf_electrification_pct` tetap `IMPUTED_PROVINCE`.
 
 5. **Telemetry persisten (v2.2)**
@@ -47,10 +49,11 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
    - `uptime` sekarang = uptime layanan lintas redeploy; `process_uptime` terpisah.
    - Di Coolify: mount volume ke `/data`, set `NM_TELEMETRY_DB_PATH=/data/telemetry.db`.
    - Panduan lengkap: `docs/TELEMETRY_PERSISTENCE_COOLIFY.md`.
+   - v2.3: hanya route API asli yang dihitung (probe scanner diabaikan), endpoint parameterized digabung per template, dan waktu tampil memakai WIB (`Asia/Jakarta`).
 
-**Snapshot LIVE saat ini:** 12.689 observasi, **25 indikator berdata**, 514/514 wilayah. Delapan indikator belum berdata: 2 `UNAVAILABLE` by design (travel time & ICU) dan 6 menunggu akses granular kab/kota (Dapodik/Kemenkes/Podes).
+**Snapshot LIVE saat ini:** 14.745 observasi, **29 indikator berdata**, 514/514 wilayah. Empat indikator belum berdata: 2 `UNAVAILABLE` by design (travel time & ICU), `meta_dapodik_sync_rate` menunggu akses Dapodik, dan `inf_asphalt_road_village_pct` menunggu microdata Podes.
 
-**Verifikasi:** `python -m pytest -q` → **112 passed**.
+**Verifikasi:** `python -m pytest -q` → **114 passed**.
 
 ---
 
@@ -210,22 +213,22 @@ Semua endpoint resmi beralamat di bawah prefix `/api/v1`:
 Pengujian unit dan integrasi dijalankan otomatis melalui Pytest AsyncIO:
 
 ```
-collected 112 items
+collected 114 items
 
 tests\test_audit_requirements.py ..............................          [ 26%]
-tests\test_boundaries_and_meta.py ...............                        [ 40%]
-tests\test_composite.py ..........                                       [ 49%]
-tests\test_composite_eligibility.py ......                               [ 54%]
-tests\test_crosswalk.py ......                                           [ 60%]
-tests\test_demo_data_integrity.py ...                                    [ 62%]
-tests\test_earthquakes.py ........                                       [ 70%]
-tests\test_health.py ........                                            [ 77%]
-tests\test_indicators.py ......                                          [ 82%]
-tests\test_live_data_integrity.py ..........                             [ 91%]
-tests\test_regions.py ........                                           [ 98%]
-tests\test_telemetry_persistence.py ..                                   [100%]
+tests\test_boundaries_and_meta.py ...............                        [ 39%]
+tests\test_composite.py ..........                                       [ 48%]
+tests\test_composite_eligibility.py ......                               [ 53%]
+tests\test_crosswalk.py ......                                           [ 58%]
+tests\test_demo_data_integrity.py ...                                    [ 61%]
+tests\test_earthquakes.py ........                                       [ 68%]
+tests\test_health.py ........                                            [ 75%]
+tests\test_indicators.py ......                                          [ 80%]
+tests\test_live_data_integrity.py ..........                             [ 89%]
+tests\test_regions.py ........                                           [ 96%]
+tests\test_telemetry_persistence.py ....                                 [100%]
 
-============================= 112 passed in 9.17s ==============================
+============================= 114 passed in 10.06s ==============================
 ```
 
 ### Jaminan Kualitas Kunci:
@@ -298,12 +301,11 @@ python scripts/seed_live_db.py
 
 ## 8. Rekomendasi Rencana Pengembangan Berikutnya (Next Milestones)
 
-1. **Enrichment 6 Indikator yang Masih Terblokir:**
-   - `edu_student_teacher_ratio_sd`, `edu_damaged_classrooms_pct`, `meta_dapodik_sync_rate`: portal Dapodik resmi dilindungi WAF; mirror non-`.go.id` tidak dipakai. Perlu akses API/unduhan resmi Dapodik.
-   - `hlt_facilities_per_10k`, `hlt_doctors_per_10k`: Kemenkes/SATUSEHAT baru menyediakan agregat provinsi atau dashboard interaktif; perlu API kab/kota.
-   - `inf_asphalt_road_village_pct`: Podes 2024 tersedia, tetapi publikasi nasional hanya sampai provinsi; perlu microdata Podes atau tabel kab/kota resmi.
+1. **Enrichment 2 Indikator yang Masih Terblokir:**
+   - `meta_dapodik_sync_rate`: portal Dapodik resmi dilindungi WAF; mirror non-`.go.id` tidak dipakai. Perlu akses dashboard/API Dapodik resmi.
+   - `inf_asphalt_road_village_pct`: Podes 2024 tersedia, tetapi publikasi nasional hanya sampai provinsi; perlu microdata SILASTIK atau tabel kab/kota resmi.
    - Wajib menyimpan raw snapshot + SHA-256 + URL resmi untuk setiap sumber; yang gagal diambil tetap `UNAVAILABLE`.
-2. **Naikkan kualitas data province-imputed** (`inf_internet_household_pct`, `hlt_jkn_coverage_pct`, `dis_affected_pop_per_10k`, `inf_electrification_pct`) menjadi nilai kab/kota bila sumber resminya tersedia.
+2. **Naikkan kualitas data province-imputed** (`inf_internet_household_pct`, `hlt_jkn_coverage_pct`, `hlt_doctors_per_10k`, `dis_affected_pop_per_10k`, `inf_electrification_pct`) menjadi nilai kab/kota bila sumber resminya tersedia.
 3. **Deploy & verifikasi produksi** setelah push: cek `/api/v1/indicators/composite-query?mode=live`, `/api/v1/indicators/composite-presets?mode=live`, dan `/api/v1/indicators/coverage?mode=live`.
 4. **Dukungan PostgreSQL / PostGIS** jika volume data spasial bertambah ke level kecamatan/desa.
 5. **Websocket stream** untuk gempa BMKG guna menggantikan polling 60 detik.

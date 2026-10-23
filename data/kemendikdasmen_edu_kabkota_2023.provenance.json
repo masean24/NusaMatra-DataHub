@@ -1,0 +1,39 @@
+{
+  "retrieved_at": "2026-10-23T15:58:20.658500+00:00",
+  "agency": "Kementerian Pendidikan Dasar dan Menengah (Pusdatin)",
+  "year": "Tahun Ajaran 2022/2023",
+  "cut_off": "30 November 2022",
+  "raw_files": {
+    "ruang_kelas_sd": {
+      "path": "data/raw/kemendikdasmen/ruang_kelas_sd_2022_2023.xlsx",
+      "url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20241105/18573d786866088078bd059aecb2da1069862126ab2d806fd22d1f48e34665eb.xlsx",
+      "page": "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana/kondisi-ruang-kelas-rusak-berat-sd",
+      "sha256": "057e66e3b52d2c99f877a9c22042887977899c3d84664828a29a79322bf6a126",
+      "bytes": 205307
+    },
+    "ruang_kelas_smp": {
+      "path": "data/raw/kemendikdasmen/ruang_kelas_smp_2022_2023.xlsx",
+      "url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20241105/30b39bf842fad8eb8cb235abd2527bdf6076cf94695e154937861ecf614f0efb.xlsx",
+      "page": "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana/kondisi-ruang-kelas-rusak-berat-smp",
+      "sha256": "ce1f3e66490355a3565f25a2752fe3ef93bb43b59e9b78d693321a35e21ed156",
+      "bytes": 66608
+    },
+    "rasio_sd": {
+      "path": "data/raw/kemendikdasmen/rasio_murid_guru_sd_2022_2023.xlsx",
+      "url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20241105/1d05febc22bb5ad9f749ccfa6eee06e9444c08256b3f48977f7ff465c78af9d6.xlsx",
+      "page": "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana/rasio-murid-guru-sd",
+      "sha256": "cc74d1249061c7d64d93ab3cd0ebc30ee5677daee6541acf7374bfa0e6a737d9",
+      "bytes": 178132
+    }
+  },
+  "derived_csv": {
+    "path": "data/kemendikdasmen_edu_kabkota_2023.csv",
+    "rows": 514,
+    "sha256": "815560c29d01c3837fbbbd32d48c5e3a8cf3e41c3c437af50f2953214b1dc3a5"
+  },
+  "formulas": {
+    "edu_student_teacher_ratio_sd": "Direct official ratio (peserta didik / pendidik) per kab/kota.",
+    "edu_damaged_classrooms_pct": "(rusak sedang total + rusak berat total) / total ruang kelas, SD + SMP, x 100."
+  },
+  "notes": "All rows are official kab/kota workbooks. Region IDs are resolved by name + level + province using the canonical crosswalk; Kode Kemdagri is retained for audit."
+}

@@ -90,11 +90,13 @@ Basis data kondisi infrastruktur persekolahan dan ketercukupan tenaga pendidik n
 
 * **Endpoint & Sistem:**
   * **Portal Data Pendidikan:** [`https://data.kemendikdasmen.go.id/`](https://data.kemendikdasmen.go.id/) (Publikasi master *Statistik Persekolahan* & *Neraca Pendidikan Daerah*)
-  * **Portal Dapodik:** [`https://dapo.kemendikdasmen.go.id/rekap/progresSP`](https://dapo.kemendikdasmen.go.id/) (Telemetri progres pengiriman data)
+  * **Dataset Ruang Kelas SD:** [`kondisi-ruang-kelas-rusak-berat-sd`](https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana/kondisi-ruang-kelas-rusak-berat-sd) (XLSX resmi, kondisi baik/ringan/sedang/berat per kab/kota)
+  * **Dataset Rasio SD:** [`rasio-murid-guru-sd`](https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana/rasio-murid-guru-sd) (XLSX resmi per kab/kota)
+  * **Portal Dapodik:** [`https://dapo.kemendikdasmen.go.id/`](https://dapo.kemendikdasmen.go.id/) (Telemetri progres pengiriman data; butuh login untuk data sinkronisasi)
 * **Daftar Indikator:**
-  1. `edu_student_teacher_ratio_sd` — **Rasio Murid terhadap Guru Jenjang SD** (Total peserta didik dibagi guru SD)
-  2. `edu_damaged_classrooms_pct` — **Persentase Ruang Kelas Rusak Sedang/Berat (SD & SMP)** (Kondisi fisik gedung sekolah)
-  3. `meta_dapodik_sync_rate` — **Persentase Sinkronisasi Data Dapodik** (Kepatuhan operasional pelaporan satuan pendidikan per wilayah)
+  1. `edu_student_teacher_ratio_sd` — ✅ **514/514 VERIFIED**, TA 2022/2023 (dataset resmi)
+  2. `edu_damaged_classrooms_pct` — ✅ **514/514 VERIFIED**, TA 2022/2023 (SD+SMP, rusak sedang+berat)
+  3. `meta_dapodik_sync_rate` — ❌ **belum tersedia**; progres sinkronisasi ada di dashboard Dapodik yang perlu akun operator/dinas
 
 ---
 
@@ -103,11 +105,14 @@ Penyedia data status kesehatan masyarakat, prevalensi gizi buruk, serta ketersed
 
 * **Endpoint & Sistem:**
   * **Portal Satu Data Indonesia (SDI):** [`https://data.go.id/`](https://data.go.id/)
-  * **Portal Kemenkes & Publikasi Resmi:** *Survei Kesehatan Indonesia (SKI) / SSGI* dan *Profil Kesehatan Indonesia*
+  * **Layanan Permintaan Data Kemenkes:** [`https://layanandata.kemkes.go.id/`](https://layanandata.kemkes.go.id/)
+  * **Registrasi Puskesmas:** [`https://regpus.kemkes.go.id/publikasi/`](https://regpus.kemkes.go.id/publikasi/) (PDF resmi jumlah Puskesmas per kab/kota)
+  * **RS Online (SIRS):** [`https://sirs.kemkes.go.id/fo/home/dashboard_rs`](https://sirs.kemkes.go.id/fo/home/dashboard_rs) (daftar RS per kab/kota, endpoint JSON publik)
+  * **SATUSEHAT Data:** [`https://satusehat.kemkes.go.id/data/`](https://satusehat.kemkes.go.id/data/) (dataset dokter per provinsi)
 * **Daftar Indikator:**
   1. `hlt_stunting_prevalence` — **Prevalensi Balita Stunting** (Persentase balita pendek/sangat pendek hasil survei SKI/SSGI)
-  2. `hlt_facilities_per_10k` — **Rasio RS & Puskesmas per 10.000 Penduduk**
-  3. `hlt_doctors_per_10k` — **Rasio Dokter (Umum & Spesialis) per 10.000 Penduduk**
+  2. `hlt_facilities_per_10k` — ✅ **514/514 VERIFIED** (Puskesmas Semester II 2025 + RS SIRS / penduduk 2026)
+  3. `hlt_doctors_per_10k` — ✅ **514/514 `IMPUTED_PROVINCE`** (dokter per provinsi dari SATUSEHAT Data)
   4. `hlt_jkn_coverage_pct` — **Cakupan Kepesertaan Jaminan Kesehatan Nasional (JKN/BPJS)**
 
 ---

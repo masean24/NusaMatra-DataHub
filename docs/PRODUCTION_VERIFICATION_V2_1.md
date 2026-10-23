@@ -1,9 +1,11 @@
-# Verifikasi Production v2.1 — Nusa Matra Data Hub
+# Verifikasi Production v2.1 (historis) — Nusa Matra Data Hub
 
 **Base URL:** `https://api.orangkeren.me`  
 **Snapshot:** `2026.10.0-official-live`  
 **Waktu verifikasi:** 23 Oktober 2026  
-**Status:** LIVE, 25 indikator, 12.689 observasi, 514/514 wilayah
+**Status historis:** LIVE v2.1, 25 indikator, 12.689 observasi, 514/514 wilayah
+
+> **Update v2.2 (23 Oktober 2026):** snapshot LIVE kini memuat **29 indikator / 14.745 observasi**. Empat indikator baru: `edu_student_teacher_ratio_sd`, `edu_damaged_classrooms_pct`, `hlt_facilities_per_10k` (VERIFIED), dan `hlt_doctors_per_10k` (`IMPUTED_PROVINCE`). Angka 25/12.689 di bawah adalah sampel historis v2.1; gunakan `docs/LAPORAN_PERBAIKAN_BACKEND_V2.md` untuk cakupan terbaru.
 
 ---
 

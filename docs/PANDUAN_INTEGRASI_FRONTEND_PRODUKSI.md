@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **112/112 Unit & Integration Tests Passing** |
+| **Status API** | ✅ **114/114 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
@@ -239,7 +239,7 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
     "mode": "LIVE",
     "total_count": 33,
     "coverage": {
-      "available": 25,
+      "available": 29,
       "total_regions": 514,
       "missing_region_ids": [],
       "mode": "LIVE"
@@ -249,13 +249,13 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
     "snapshot_id": "2026.10.0-official-live",
     "mode": "LIVE",
     "total_indicators": 33,
-    "available_indicators_count": 25,
-    "empty_indicators_count": 8,
+    "available_indicators_count": 29,
+    "empty_indicators_count": 4,
     "empty_indicators": [
-      "edu_damaged_classrooms_pct",
+      "meta_dapodik_sync_rate",
       "edu_school_travel_time_p90",
       "hlt_realtime_icu_occupancy",
-      "..."
+      "inf_asphalt_road_village_pct"
     ],
     "indicators": {
       "soc_poverty_rate": {
@@ -265,9 +265,9 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
         "coverage_count": 514,
         "coverage_pct": 100.0
       },
-      "edu_damaged_classrooms_pct": {
-        "name": "Persentase Ruang Kelas Rusak (SD)",
-        "category": "education_access",
+      "inf_asphalt_road_village_pct": {
+        "name": "Persentase Desa dengan Jalan Utama Aspal/Beton",
+        "category": "infrastructure",
         "available": false,
         "coverage_count": 0,
         "coverage_pct": 0.0

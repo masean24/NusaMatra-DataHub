@@ -1,0 +1,60 @@
+{
+  "retrieved_at": "2026-10-23T16:00:59.274970+00:00",
+  "agency": "Kementerian Kesehatan RI",
+  "sources": {
+    "puskesmas": {
+      "url": "https://regpus.kemkes.go.id/media/dokumen/publikasi/2026-04-23/KMK_No._HK.01.07-MENKES-314-2026_ttg_Data_PKM_Teregistrasi__nZUZbyn.pdf",
+      "title": "Data Puskesmas Teregistrasi Semester II Tahun 2025 (Kepmenkes 314/2026)"
+    },
+    "hospitals": {
+      "url": "https://sirs.kemkes.go.id/fo/home/rekap_rs_all?id=0",
+      "title": "RS Online / SIRS - List Rumah Sakit Nasional"
+    },
+    "doctors": {
+      "url": "https://api.kemkes.go.id/satusehat-data/dataset/public/65cff906-5fd1-4f8d-baad-9f6ad837f5b8/csv",
+      "title": "SATUSEHAT Data - Jumlah Dokter di Fasilitas Kesehatan (per provinsi)"
+    },
+    "population": {
+      "url": "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2790/",
+      "title": "BPS Proyeksi Penduduk SP2020 2026 (kab/kota)"
+    }
+  },
+  "raw_files": {
+    "puskesmas_pdf": {
+      "path": "data/raw/kemenkes/puskesmas_semester_ii_2025.pdf",
+      "sha256": "9de7d1b80c905db81c6ebeefffa9102cf8afb2bfce3d76dc6959444e93dae2ac",
+      "bytes": 1775080
+    },
+    "sirs_hospitals": {
+      "path": "data/raw/kemenkes/sirs_hospitals.json",
+      "sha256": "296b862a5e763f87755f193dcfcf30964e89ef1de7b5da5a0e017d4bbba4cc5b",
+      "bytes": 727101
+    },
+    "sirs_provinces": {
+      "path": "data/raw/kemenkes/sirs_provinces.json",
+      "sha256": "d57d2ecb244f6f2c43d18c813aaae33183ebaa4901295bf32cc85d39418728fc",
+      "bytes": 627531
+    },
+    "satusehat_doctors": {
+      "path": "data/raw/kemenkes/satusehat_doctors_provinsi.csv",
+      "sha256": "bff4da7e9f2f9cd71b8d2f3b4e498cad6a6de23b4f6c53d9d9d7907f816cee1d",
+      "bytes": 2430
+    }
+  },
+  "derived_csv": {
+    "path": "data/kemenkes_health_access_2026.csv",
+    "rows": 514,
+    "sha256": "8221073534f384bdcb0967f3c51a031c473f4c3176dfb10eec546b0c3bf31498"
+  },
+  "formulas": {
+    "hlt_facilities_per_10k": "(Puskesmas + RS) / total population * 10,000.",
+    "hlt_doctors_per_10k": "Province doctor count / province population * 10,000; the same province rate is assigned to each kab/kota and flagged IMPUTED_PROVINCE."
+  },
+  "coverage": {
+    "puskesmas_kabkota": 514,
+    "hospitals_total": 3324,
+    "hospital_regions": 513,
+    "doctor_provinces": 38
+  },
+  "notes": "Facilities are verified at kab/kota. Doctors are officially available only at province level, so they are explicitly marked IMPUTED_PROVINCE rather than fabricating an intra-province distribution."
+}

@@ -20,9 +20,10 @@ import logging
 import time
 from collections import deque
 from contextlib import suppress
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
+from zoneinfo import ZoneInfo
 
 import aiosqlite
 
@@ -30,11 +31,14 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+WIB = ZoneInfo("Asia/Jakarta")
+STATE_VERSION = 2
+
 
 def _iso(timestamp: Optional[float]) -> Optional[str]:
     if timestamp is None:
         return None
-    return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+    return datetime.fromtimestamp(timestamp, tz=WIB).isoformat()
 
 
 def _format_uptime(seconds: int) -> str:
@@ -108,7 +112,36 @@ class TelemetryCollector:
             else settings.telemetry_persistence_enabled
         )
         self._initialized = False
+        self._needs_flush = False
+        self._route_patterns: tuple[Any, ...] = ()
         self._flush_task: Optional[asyncio.Task] = None
+
+    def configure_routes(self, routes: Any) -> None:
+        """Keep only real API route patterns, so scanner 404s never reach stats."""
+        patterns = []
+        for route in routes:
+            path = getattr(route, "path", "")
+            if not path.startswith(f"{settings.api_prefix}/"):
+                continue
+            if self.is_system_path(path):
+                continue
+            pattern = getattr(route, "path_regex", None)
+            if pattern is not None:
+                patterns.append(pattern)
+        self._route_patterns = tuple(patterns)
+
+    def is_api_path(self, path: str) -> bool:
+        clean = path.split("?")[0].rstrip("/") or "/"
+        return clean.startswith(f"{settings.api_prefix}/") and not self.is_system_path(clean)
+
+    def is_trackable_path(self, path: str) -> bool:
+        """Return True only for known API routes (before routes are configured, use the API prefix)."""
+        clean = path.split("?")[0].rstrip("/") or "/"
+        if not self.is_api_path(clean):
+            return False
+        if self._route_patterns:
+            return any(pattern.fullmatch(clean) for pattern in self._route_patterns)
+        return True
 
     @classmethod
     def is_system_path(cls, path: str) -> bool:
@@ -153,10 +186,18 @@ class TelemetryCollector:
                         endpoint_counts TEXT NOT NULL DEFAULT '{}',
                         mode_counts TEXT NOT NULL DEFAULT '{}',
                         recent_requests TEXT NOT NULL DEFAULT '[]',
-                        updated_at REAL
+                        updated_at REAL,
+                        state_version INTEGER NOT NULL DEFAULT 1
                     )
                     """
                 )
+                cursor = await db.execute("PRAGMA table_info(telemetry_state)")
+                columns = {row[1] for row in await cursor.fetchall()}
+                if "state_version" not in columns:
+                    await db.execute(
+                        "ALTER TABLE telemetry_state "
+                        "ADD COLUMN state_version INTEGER NOT NULL DEFAULT 1"
+                    )
                 cursor = await db.execute("SELECT * FROM telemetry_state WHERE id = 1")
                 row = await cursor.fetchone()
                 await db.commit()
@@ -167,7 +208,30 @@ class TelemetryCollector:
         except Exception:
             logger.exception("Telemetry persistence unavailable; continuing in-memory only")
 
+    def _reset_counters(self) -> None:
+        self.total_requests = 0
+        self.total_latency_ms = 0.0
+        self.min_latency_ms = None
+        self.max_latency_ms = None
+        self.status_counts = {}
+        self.endpoint_counts = {}
+        self.mode_counts = {"DEMO": 0, "LIVE": 0}
+        self.recent_requests.clear()
+
     def _restore(self, row: aiosqlite.Row) -> None:
+        first_started_at = row["first_started_at"]
+        if first_started_at:
+            self.first_started_at = min(float(first_started_at), self.process_started_at)
+
+        state_version = int(row["state_version"] or 1)
+        if state_version < STATE_VERSION:
+            # v1 counters include internet scanner noise (unknown paths) and UTC
+            # timestamps. Reset once, keep the service start time.
+            self._reset_counters()
+            self.last_flush_at = None
+            self._needs_flush = True
+            return
+
         self.total_requests = int(row["total_requests"] or 0)
         self.total_latency_ms = float(row["total_latency_ms"] or 0.0)
         self.min_latency_ms = row["min_latency_ms"]
@@ -181,10 +245,6 @@ class TelemetryCollector:
         recent = self._load_json(row["recent_requests"], [])
         self.recent_requests.clear()
         self.recent_requests.extend(recent)
-
-        first_started_at = row["first_started_at"]
-        if first_started_at:
-            self.first_started_at = min(float(first_started_at), self.process_started_at)
         self.last_flush_at = row["updated_at"]
 
     @staticmethod
@@ -209,8 +269,9 @@ class TelemetryCollector:
                     INSERT INTO telemetry_state (
                         id, first_started_at, total_requests, total_latency_ms,
                         min_latency_ms, max_latency_ms, status_counts,
-                        endpoint_counts, mode_counts, recent_requests, updated_at
-                    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        endpoint_counts, mode_counts, recent_requests, updated_at,
+                        state_version
+                    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(id) DO UPDATE SET
                         first_started_at = excluded.first_started_at,
                         total_requests = excluded.total_requests,
@@ -221,7 +282,8 @@ class TelemetryCollector:
                         endpoint_counts = excluded.endpoint_counts,
                         mode_counts = excluded.mode_counts,
                         recent_requests = excluded.recent_requests,
-                        updated_at = excluded.updated_at
+                        updated_at = excluded.updated_at,
+                        state_version = excluded.state_version
                     """,
                     (
                         self.first_started_at,
@@ -234,10 +296,12 @@ class TelemetryCollector:
                         json.dumps(self.mode_counts),
                         json.dumps(list(self.recent_requests)),
                         time.time(),
+                        STATE_VERSION,
                     ),
                 )
                 await db.commit()
             self.last_flush_at = time.time()
+            self._needs_flush = False
             return True
         except Exception:
             logger.exception("Telemetry flush failed")
@@ -248,8 +312,9 @@ class TelemetryCollector:
         await self.initialize()
         if not self.persistence_active or self._flush_task is not None:
             return
-        if self.last_flush_at is None:
-            # Persist first_started_at immediately so a fast restart still has it.
+        if self.last_flush_at is None or self._needs_flush:
+            # Persist first_started_at immediately so a fast restart still has it,
+            # and persist the one-time cleanup of legacy scanner counters.
             await self.flush()
         self._flush_task = asyncio.create_task(self._flush_loop())
 
@@ -278,9 +343,10 @@ class TelemetryCollector:
         status_code: int,
         latency_ms: float,
         mode: str = "DEMO",
+        route_path: Optional[str] = None,
     ) -> None:
-        """Record an incoming request observation (skips system/health/telemetry paths)."""
-        if self.is_system_path(path):
+        """Record an incoming request observation (skips system paths and unknown routes)."""
+        if not self.is_trackable_path(path):
             return
 
         self.total_requests += 1
@@ -294,15 +360,18 @@ class TelemetryCollector:
         status_key = str(status_code)
         self.status_counts[status_key] = self.status_counts.get(status_key, 0) + 1
 
-        # Normalize path for aggregation (remove query params)
+        # Normalize path for aggregation (remove query params and trailing slash)
         clean_path = path.split("?")[0]
-        self.endpoint_counts[clean_path] = self.endpoint_counts.get(clean_path, 0) + 1
+        if len(clean_path) > 1:
+            clean_path = clean_path.rstrip("/")
+        endpoint_key = route_path if route_path and self.is_api_path(route_path) else clean_path
+        self.endpoint_counts[endpoint_key] = self.endpoint_counts.get(endpoint_key, 0) + 1
 
         mode_upper = mode.upper() if mode else "DEMO"
         self.mode_counts[mode_upper] = self.mode_counts.get(mode_upper, 0) + 1
 
-        # Append to recent requests queue
-        now_iso = datetime.now(timezone.utc).strftime("%H:%M:%S")
+        # Append to recent requests queue (WIB, independent of VPS timezone)
+        now_iso = datetime.now(WIB).strftime("%H:%M:%S")
         self.recent_requests.append({
             "time": now_iso,
             "method": method,
@@ -324,9 +393,13 @@ class TelemetryCollector:
             else 0.0
         )
 
-        # Sort endpoints by popularity
+        # Sort endpoints by popularity, keeping only known API routes.
         top_endpoints = sorted(
-            [{"path": p, "count": c} for p, c in self.endpoint_counts.items()],
+            [
+                {"path": p, "count": c}
+                for p, c in self.endpoint_counts.items()
+                if self.is_api_path(p)
+            ],
             key=lambda x: x["count"],
             reverse=True,
         )[:8]
@@ -344,6 +417,8 @@ class TelemetryCollector:
         return {
             # Backwards-compatible fields. "uptime" is now service uptime,
             # which survives redeploys when persistence is enabled.
+            "timezone": "Asia/Jakarta",
+            "server_time": datetime.now(WIB).isoformat(),
             "uptime_seconds": service_uptime,
             "uptime_formatted": _format_uptime(service_uptime),
             "service_uptime_seconds": service_uptime,

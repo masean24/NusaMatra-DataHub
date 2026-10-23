@@ -6,7 +6,7 @@
 Backend API geospasial terintegrasi penyedia data 33 indikator pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
 [![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
-[![Tests](https://img.shields.io/badge/Tests-112%2F112%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-114%2F114%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -46,7 +46,7 @@ Dalam perencanaan pembangunan dan mitigasi kebencanaan nasional, pengambil kebij
 
 **Nusa Matra Data Hub** hadir sebagai **lapisan agregasi data dan mesin pendukung keputusan geospasial (*decision-support backend engine*)** yang:
 1. **Menyelaraskan Kode Wilayah (*Cross-Agency Code Bridging*)** untuk 514 Kabupaten/Kota dan 38 Provinsi (termasuk 4 provinsi baru Papua).
-2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*). Snapshot LIVE saat ini memuat **25 indikator berdata** (mayoritas 514/514 kab/kota; frekuensi bencana 510/514). Delapan indikator sisanya ditandai `UNAVAILABLE`: 2 memang tidak tersedia publik, 6 menunggu akses Dapodik/Kemenkes/Podes tingkat kab/kota.
+2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*). Snapshot LIVE saat ini memuat **29 indikator berdata** (mayoritas 514/514 kab/kota; frekuensi bencana 510/514). Empat indikator sisanya ditandai `UNAVAILABLE`: 2 memang tidak tersedia publik, 2 menunggu akses Dapodik sync dan microdata Podes tingkat kab/kota.
 3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** global dan **coverage gate per wilayah**: missing data tidak pernah dihitung nol, wilayah dengan cakupan bobot di bawah ambang dipindahkan ke `insufficient_data`.
 4. **Pemantauan Gempa Bumi *Real-Time* BMKG** dengan output GeoJSON (RFC 7946) lengkap dengan radius visual 3D, kedalaman hiposenter, dan status potensi tsunami.
 5. **Dual Architecture (DEMO vs LIVE Mode)** dengan prinsip integritas tinggi (*Fail-Closed Architecture*).
@@ -164,10 +164,10 @@ cd d:\wia2
 # Install dependensi
 pip install -r requirements.txt
 
-# Jalankan 112 unit tests
+# Jalankan 114 unit tests
 python -m pytest -v
 ```
-*(Hasil: **112 passed** dalam ~10-15 detik).*
+*(Hasil: **114 passed** dalam ~10-15 detik).*
 
 ---
 

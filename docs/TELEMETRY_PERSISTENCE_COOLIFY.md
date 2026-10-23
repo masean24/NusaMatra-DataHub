@@ -79,3 +79,10 @@ Pastikan Coolify memakai compose tersebut, lalu redeploy.
 - **Kehilangan maksimal satu interval flush** jika container mati keras (`kill -9`). Default 5 detik.
 - **Volume harus persisten.** Kalau volume dihapus, data telemetry hilang.
 - Jangan mount volume ke `/app/data`; itu bisa menutupi database hasil seeder. Gunakan `/data`.
+
+## Telemetry hygiene (v2.3)
+
+- Hanya request yang cocok dengan route API asli yang dihitung. Probe scanner seperti `/.gitmodules`, `/runtime.js`, atau `/wp-admin` tidak lagi masuk `top_endpoints`, `status_codes`, maupun `total_requests`.
+- Endpoint parameterized digabung memakai template route, misalnya `/api/v1/regions/{region_id}`, bukan ribuan ID berbeda.
+- Semua waktu manusiawi memakai **Asia/Jakarta (WIB)**: `recent_requests[].time`, `first_started_at`, `last_flush_at`, dan `server_time`.
+- Saat pertama kali deploy versi ini, counter lama yang berisi scanner di-reset satu kali (`state_version` 1 → 2). `first_started_at` tetap dipertahankan.

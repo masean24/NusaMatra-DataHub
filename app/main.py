@@ -201,6 +201,9 @@ app.include_router(snapshots.router, prefix=settings.api_prefix)
 app.include_router(earthquakes.router, prefix=settings.api_prefix)
 app.include_router(stats.router, prefix=settings.api_prefix)
 
+# Restrict telemetry to actual API route templates (ignore internet scanner paths).
+telemetry.configure_routes(app.routes)
+
 
 @app.get("/stats", response_class=HTMLResponse, include_in_schema=False)
 @app.get(f"{settings.api_prefix}/stats/ui", response_class=HTMLResponse, include_in_schema=False)
