@@ -16,8 +16,23 @@ CREATE TABLE IF NOT EXISTS data_snapshots (
     boundary_version TEXT NOT NULL,                     -- e.g. 'BIG-Kepmendagri-300.2.2-2430-2025'
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     published_at TEXT,
-    manifest_checksum TEXT NOT NULL,                    -- SHA-256
-    notes TEXT
+    manifest_checksum TEXT NOT NULL,                    -- legacy metadata checksum; NOT a content digest
+    notes TEXT,
+    content_sha256 TEXT,                                -- canonical dataset content digest
+    metadata_checksum TEXT,                             -- metadata-only digest
+    content_hash_spec TEXT NOT NULL DEFAULT 'canonical-json-v1',
+    is_immutable INTEGER NOT NULL DEFAULT 0,
+    is_reproducible INTEGER NOT NULL DEFAULT 1,
+    methodology_version TEXT,
+    reference_periods TEXT,
+    source_manifest TEXT,
+    supersedes TEXT,
+    observation_count INTEGER,
+    indicator_count INTEGER,
+    available_indicator_count INTEGER,
+    region_count INTEGER,
+    dataset_count INTEGER,
+    immutability_note TEXT
 );
 
 -- 2. Dimensi Wilayah Administrasi Kanonis (38 Provinsi + 514 Kab/Kota)
@@ -83,6 +98,28 @@ CREATE TABLE IF NOT EXISTS dim_indicators (
     national_median REAL,
     national_min REAL,
     national_max REAL
+);
+
+-- 4b. Snapshot-specific indicator metadata and distribution statistics
+CREATE TABLE IF NOT EXISTS snapshot_indicators (
+    snapshot_id TEXT NOT NULL REFERENCES data_snapshots(snapshot_id),
+    indicator_id TEXT NOT NULL REFERENCES dim_indicators(indicator_id),
+    indicator_name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    unit TEXT NOT NULL,
+    polarity TEXT NOT NULL,
+    availability_status TEXT NOT NULL,
+    primary_dataset_id TEXT,
+    derivation_formula TEXT,
+    description TEXT NOT NULL,
+    national_min REAL,
+    national_max REAL,
+    national_mean REAL,
+    national_median REAL,
+    observation_count INTEGER NOT NULL DEFAULT 0,
+    reference_years TEXT NOT NULL DEFAULT '[]',
+    computed_at TEXT NOT NULL,
+    PRIMARY KEY (snapshot_id, indicator_id)
 );
 
 -- 5. Tabel Fakta Nilai Indikator per Wilayah & Snapshot

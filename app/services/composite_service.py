@@ -134,8 +134,46 @@ async def compute_composite_scores(
         renormalized = False
 
     active_ids = [indicator_id for indicator_id in requested_ids if indicator_id in available_ids]
-    required_components = min(settings.composite_min_components, len(active_ids))
+    required_components = min(settings.composite_min_components, len(requested_ids))
     coverage_threshold_bp = settings.composite_min_coverage_pct * 100
+    available_weight_bp = sum(weights[indicator_id] for indicator_id in active_ids)
+    national_coverage_pct = round(available_weight_bp / 100.0, 1)
+    rankable = (
+        national_coverage_pct >= settings.composite_min_coverage_pct
+        and len(active_ids) >= required_components
+    )
+
+    if not rankable:
+        reasons = []
+        if national_coverage_pct < settings.composite_min_coverage_pct:
+            reasons.append(
+                f"national weight coverage {national_coverage_pct}% is below "
+                f"the {settings.composite_min_coverage_pct}% threshold"
+            )
+        if len(active_ids) < required_components:
+            reasons.append(
+                f"only {len(active_ids)} of the required {required_components} "
+                "components have national observations"
+            )
+        return CompositeQueryResult(
+            total_regions=0,
+            total_eligible_national=0,
+            total_excluded=0,
+            rankable=False,
+            not_rankable_reason="; ".join(reasons),
+            national_coverage_pct=national_coverage_pct,
+            available_weight_basis_points=available_weight_bp,
+            available_indicators=active_ids,
+            score_direction=SCORE_DIRECTION,
+            min_coverage_pct=settings.composite_min_coverage_pct,
+            min_components=required_components,
+            weights_basis_points=weights,
+            regions=[],
+            unavailable_indicators=unavailable_indicators,
+            effective_weights=effective_weights,
+            renormalized=renormalized,
+            insufficient_data=[],
+        )
 
     # --- Group observations per region ---------------------------------------
     region_data: dict[str, dict] = {}
@@ -177,7 +215,7 @@ async def compute_composite_scores(
 
     for region_id, entry in region_data.items():
         present = entry["components"]
-        present_weight = sum(effective_weights[indicator_id] for indicator_id in present)
+        present_weight = sum(weights[indicator_id] for indicator_id in present)
         coverage_pct = round(present_weight / 100.0, 1)
 
         if len(present) < required_components or present_weight < coverage_threshold_bp:
@@ -246,6 +284,11 @@ async def compute_composite_scores(
         total_regions=len(filtered),
         total_eligible_national=len(eligible),
         total_excluded=len(excluded),
+        rankable=True,
+        not_rankable_reason=None,
+        national_coverage_pct=national_coverage_pct,
+        available_weight_basis_points=available_weight_bp,
+        available_indicators=active_ids,
         score_direction=SCORE_DIRECTION,
         min_coverage_pct=settings.composite_min_coverage_pct,
         min_components=required_components,

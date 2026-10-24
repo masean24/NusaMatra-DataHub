@@ -185,6 +185,9 @@ app.add_middleware(
     expose_headers=[
         "X-NusaMatra-Mode",
         "X-NusaMatra-Snapshot",
+        "X-NusaMatra-Content-SHA256",
+        "X-NusaMatra-Snapshot-Immutable",
+        "X-NusaMatra-Snapshot-Reproducible",
         "X-Data-Fallback",
         "Content-Length",
     ],
@@ -200,9 +203,6 @@ app.include_router(datasets.router, prefix=settings.api_prefix)
 app.include_router(snapshots.router, prefix=settings.api_prefix)
 app.include_router(earthquakes.router, prefix=settings.api_prefix)
 app.include_router(stats.router, prefix=settings.api_prefix)
-
-# Restrict telemetry to actual API route templates (ignore internet scanner paths).
-telemetry.configure_routes(app.routes)
 
 
 @app.get("/stats", response_class=HTMLResponse, include_in_schema=False)

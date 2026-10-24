@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models.common import ApiResponse, ResponseMeta, LiveUnavailableError
 from app.models.regions import RegionSummary, RegionDetail
 from app.services.region_service import list_regions, get_region_detail
+from app.services.snapshot_registry import snapshot_meta_fields
 from app.config import settings
 
 router = APIRouter(prefix="/regions", tags=["Regions"])
@@ -59,6 +60,7 @@ async def get_regions(
             mode=request.state.data_mode,
             boundary_version=settings.boundary_version,
             total_count=len(regions),
+            **snapshot_meta_fields(request),
         ),
         data=regions,
     )
@@ -100,6 +102,7 @@ async def get_region(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
+            **snapshot_meta_fields(request),
         ),
         data=detail,
     )

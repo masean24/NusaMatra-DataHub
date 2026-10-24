@@ -22,6 +22,9 @@ class HealthResponse(BaseModel):
     version: str
     mode: str
     active_snapshot: str
+    snapshot_content_sha256: Optional[str] = None
+    snapshot_immutable: Optional[bool] = None
+    snapshot_reproducible: Optional[bool] = None
     database: DatabaseHealth
     redis: Optional[str] = "not_configured"
     static_fallback_ready: bool = True
@@ -56,3 +59,20 @@ class SnapshotInfo(BaseModel):
     manifest_checksum: str
     notes: Optional[str] = None
     indicator_completeness_pct: Optional[float] = None
+    content_sha256: Optional[str] = None
+    metadata_checksum: Optional[str] = None
+    content_hash_spec: Optional[str] = None
+    is_immutable: bool = False
+    is_reproducible: bool = False
+    methodology_version: Optional[str] = None
+    reference_periods: list[int] = []
+    source_manifest: Optional[list[dict]] = None
+    supersedes: Optional[str] = None
+    observation_count: Optional[int] = None
+    indicator_count: Optional[int] = None
+    available_indicator_count: Optional[int] = None
+    region_count: Optional[int] = None
+    dataset_count: Optional[int] = None
+    available_indicator_data_pct: Optional[float] = None
+    region_coverage_pct: Optional[float] = None
+    immutability_note: Optional[str] = None

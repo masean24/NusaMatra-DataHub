@@ -28,12 +28,17 @@ async def health_check(
     db_health = await check_db_health(mode=mode)
 
     overall = "healthy" if db_health["status"] == "connected" else "degraded"
+    snapshot_meta = getattr(request.state, "snapshot_meta", None) or {}
 
     return HealthResponse(
         status=overall,
         version=settings.app_version,
         mode=request.state.data_mode,
         active_snapshot=request.state.snapshot_id,
+        snapshot_content_sha256=snapshot_meta.get("content_sha256"),
+        snapshot_immutable=bool(snapshot_meta.get("is_immutable", 0)),
+        snapshot_reproducible=bool(snapshot_meta.get("is_reproducible", 0))
+        and bool(snapshot_meta.get("content_sha256")),
         database=DatabaseHealth(**db_health),
         redis="not_configured",
         static_fallback_ready=True,

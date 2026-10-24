@@ -3,8 +3,10 @@
 **Untuk:** Tim Frontend / penanggung jawab Lab Prioritas LIVE  
 **Dari:** Backend Nusa Matra Data Hub  
 **Tanggal:** 23 Oktober 2026  
-**Snapshot:** `2026.10.0-official-live`  
-**Status:** 114/114 test lulus · 29 indikator berdata · 14.745 observasi · 514/514 kab/kota
+**Snapshot:** legacy `2026.10.0-official-live` (historis) → immutable `2026.10.0-live-<sha16>` (v2.2)
+**Status:** 134/134 test lulus · 29 indikator berdata · 14.745 observasi · 514/514 kab/kota
+
+> **Catatan v2.2 (24 Oktober 2026):** laporan ini mendokumentasikan perbaikan kontrak v2.1. Perbaikan integritas berikutnya—normalisasi Lanny Jaya, snapshot immutable berbasis `content_sha256`, definisi coverage yang eksplisit, dan rankability composite—ada di `docs/INTEGRITY_FIX_V2_2.md`, `docs/SNAPSHOT_VERSIONING_V2_2.md`, dan `docs/FRONTEND_HANDOFF_V2_2.md`.
 
 ---
 
@@ -452,7 +454,7 @@ Setiap dataset punya file `*.provenance.json` berisi URL resmi, SHA-256 raw, dan
 
 ```bash
 python -m pytest -q
-# 114 passed
+# 134 passed
 
 python scripts/seed_live_db.py
 # 14,745 fact rows, 29 indicators, 514/514 regions, max rank 514

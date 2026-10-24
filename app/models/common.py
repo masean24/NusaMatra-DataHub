@@ -16,6 +16,25 @@ class CoverageMeta(BaseModel):
     total_regions: int = Field(514, description="Total national kabupaten/kota count (514)")
     missing_region_ids: list[str] = Field(default_factory=list, description="Region IDs lacking values")
     mode: str = Field(..., description="Data mode: DEMO or LIVE")
+    total_indicators: Optional[int] = Field(
+        None, description="Indicator framework size when indicator coverage is reported."
+    )
+    available_indicators: Optional[int] = Field(
+        None, description="Indicators with at least one observation in this snapshot."
+    )
+    indicator_completeness_pct: Optional[float] = Field(
+        None, description="Available indicators divided by the full indicator framework."
+    )
+
+
+class IndicatorCoverageMeta(BaseModel):
+    """Explicit indicator-framework coverage, separate from region coverage."""
+
+    total_indicators: int
+    available_indicators: int
+    unavailable_indicators: int
+    indicator_completeness_pct: float
+    available_indicator_data_pct: float
 
 
 class ResponseMeta(BaseModel):
@@ -26,6 +45,11 @@ class ResponseMeta(BaseModel):
     boundary_version: Optional[str] = None
     total_count: Optional[int] = None
     coverage: Optional[CoverageMeta] = None
+    indicator_coverage: Optional[IndicatorCoverageMeta] = None
+    content_sha256: Optional[str] = None
+    snapshot_immutable: Optional[bool] = None
+    snapshot_reproducible: Optional[bool] = None
+    methodology_version: Optional[str] = None
     data_origin: Optional[str] = Field(None, description="bmkg_live | bmkg_cache | fixture")
     last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream fetch")
     is_stale: Optional[bool] = Field(None, description="True if data is beyond cache TTL or upstream is unavailable")

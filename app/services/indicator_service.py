@@ -24,19 +24,30 @@ async def list_indicators(
     cursor = await db.execute(
         """
         SELECT
-            i.indicator_id, i.indicator_name, i.category, i.unit,
-            i.polarity, i.availability_status,
-            i.derivation_formula, i.description,
-            i.national_mean, i.national_median, i.national_min, i.national_max,
+            i.indicator_id,
+            COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
+            COALESCE(si.category, i.category) AS category,
+            COALESCE(si.unit, i.unit) AS unit,
+            COALESCE(si.polarity, i.polarity) AS polarity,
+            COALESCE(si.availability_status, i.availability_status) AS availability_status,
+            COALESCE(si.derivation_formula, i.derivation_formula) AS derivation_formula,
+            COALESCE(si.description, i.description) AS description,
+            COALESCE(si.national_mean, i.national_mean) AS national_mean,
+            COALESCE(si.national_median, i.national_median) AS national_median,
+            COALESCE(si.national_min, i.national_min) AS national_min,
+            COALESCE(si.national_max, i.national_max) AS national_max,
+            COALESCE(si.primary_dataset_id, i.primary_dataset_id) AS primary_dataset_id,
             d.dataset_id, d.agency_code, d.dataset_title, d.official_portal_url,
             COUNT(f.region_id) as coverage_count
         FROM dim_indicators i
-        LEFT JOIN dim_datasets d ON i.primary_dataset_id = d.dataset_id
+        LEFT JOIN snapshot_indicators si
+            ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
+        LEFT JOIN dim_datasets d ON COALESCE(si.primary_dataset_id, i.primary_dataset_id) = d.dataset_id
         LEFT JOIN fact_indicator_values f ON i.indicator_id = f.indicator_id AND f.snapshot_id = ?
         GROUP BY i.indicator_id
-        ORDER BY i.category, i.indicator_id
+        ORDER BY category, i.indicator_id
         """,
-        [snapshot_id],
+        [snapshot_id, snapshot_id],
     )
     rows = await cursor.fetchall()
 
@@ -84,15 +95,25 @@ async def get_indicator_values(
     cursor = await db.execute(
         """
         SELECT
-            i.indicator_id, i.indicator_name, i.category, i.unit,
-            i.polarity, i.availability_status,
-            i.national_mean, i.national_median, i.national_min, i.national_max,
+            i.indicator_id,
+            COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
+            COALESCE(si.category, i.category) AS category,
+            COALESCE(si.unit, i.unit) AS unit,
+            COALESCE(si.polarity, i.polarity) AS polarity,
+            COALESCE(si.availability_status, i.availability_status) AS availability_status,
+            COALESCE(si.national_mean, i.national_mean) AS national_mean,
+            COALESCE(si.national_median, i.national_median) AS national_median,
+            COALESCE(si.national_min, i.national_min) AS national_min,
+            COALESCE(si.national_max, i.national_max) AS national_max,
+            COALESCE(si.primary_dataset_id, i.primary_dataset_id) AS primary_dataset_id,
             d.dataset_id, d.agency_code, d.dataset_title, d.official_portal_url
         FROM dim_indicators i
-        LEFT JOIN dim_datasets d ON i.primary_dataset_id = d.dataset_id
+        LEFT JOIN snapshot_indicators si
+            ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
+        LEFT JOIN dim_datasets d ON COALESCE(si.primary_dataset_id, i.primary_dataset_id) = d.dataset_id
         WHERE i.indicator_id = ?
         """,
-        [indicator_id],
+        [snapshot_id, indicator_id],
     )
     ind_row = await cursor.fetchone()
     if not ind_row:
@@ -104,7 +125,7 @@ async def get_indicator_values(
         SELECT
             f.region_id, f.raw_value, f.normalized_score,
             f.national_percentile, f.national_rank,
-            f.quality_flag, f.reference_year
+            f.quality_flag, f.reference_year, f.dataset_id, f.source_record_ref
         FROM fact_indicator_values f
         WHERE f.indicator_id = ? AND f.snapshot_id = ?
         ORDER BY f.region_id
@@ -124,6 +145,8 @@ async def get_indicator_values(
             pct=vr["national_percentile"],
             rank=vr["national_rank"],
             flag=vr["quality_flag"],
+            dataset_id=vr["dataset_id"],
+            source_record_ref=vr["source_record_ref"],
         )
 
     indicator_meta = IndicatorMeta(

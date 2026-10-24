@@ -43,7 +43,7 @@
 **Tujuan:** Menghitung skor ternormalisasi, metrik keandalan data, dan mengunci snapshot deterministik untuk WIA 2026.
 
 1. **Mesin Normalisasi & Peringkat (`etl/normalize/scorer.py`):**
-   * Hitung nilai `normalized_score` ($0 - 100$ dengan *Winsorized clipping* $P_2 - P_{98}$), `national_percentile`, dan `national_rank` ($1 - 514$) untuk seluruh indikator aktif.
+   * Hitung nilai `normalized_score` ($0 - 100$ dengan *min-max full-range*, `v2.2-minmax-full-range`), `national_percentile`, dan `national_rank` ($1 - 514$) untuk seluruh indikator aktif.
    * Hitung indikator keandalan data `meta_indicator_completeness` dan `meta_freshness_lag_years` untuk setiap Kabupaten/Kota.
 2. **Pembekuan Snapshot `2026.10.0-wia-demo`:**
    * Jalankan rangkaian pengujian integritas data (`pytest tests/data_integrity/`).

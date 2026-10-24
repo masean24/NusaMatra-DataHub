@@ -98,6 +98,8 @@ Basis data kondisi infrastruktur persekolahan dan ketercukupan tenaga pendidik n
   2. `edu_damaged_classrooms_pct` — ✅ **514/514 VERIFIED**, TA 2022/2023 (SD+SMP, rusak sedang+berat)
   3. `meta_dapodik_sync_rate` — ❌ **belum tersedia**; progres sinkronisasi ada di dashboard Dapodik yang perlu akun operator/dinas
 
+> **Catatan provenance:** dataset_id `kemendikdasmen_statistik_2026` dipertahankan demi kompatibilitas kontrak, tetapi judul dataset dan `reference_year` yang benar adalah **TA 2022/2023**. Kedua indikator di atas berasal dari XLSX resmi tingkat kab/kota (bukan agregasi provinsi); SHA-256 file mentah dan CSV turunan ada di `data/kemendikdasmen_edu_kabkota_2023.provenance.json`.
+
 ---
 
 ### 🏥 4. Kementerian Kesehatan (Kemenkes) & Satu Data Indonesia (SDI)
@@ -143,13 +145,14 @@ Sesuai prinsip kepatuhan hukum dan transparansi ilmiah, Nusa Matra Data Hub **me
 
 ## 📐 4. Standar Normalisasi Indikator ($0 - 100$)
 
-Untuk menggabungkan berbagai satuan (persentase, skor IRBI, rupiah, rasio) menjadi **Indeks Prioritas Wilayah Terpadu**, setiap indikator dinormalisasi dengan metode:
+Untuk menggabungkan berbagai satuan (persentase, skor IRBI, rupiah, rasio) menjadi **Indeks Prioritas Wilayah Terpadu**, setiap indikator dinormalisasi dengan **min-max full-range** (`v2.2-minmax-full-range`). Tidak ada Winsorized clipping pada implementasi saat ini; outlier tetap dipertahankan dan tercakup dalam `content_sha256` snapshot.
 
-1. **Winsorized Clipping ($P_2 - P_{98}$):** Memotong nilai pencilan ekstrem bawah ($2\%$) dan atas ($98\%$) agar tidak mendistorsi skala nasional.
-2. **Penyelarasan Polaritas:**
+1. **Batas nasional:** $x_{\min}$ dan $x_{\max}$ dihitung dari seluruh observasi kanonik indikator pada snapshot yang sama, bukan per batch sumber.
+2. **Penyelarasan polaritas:**
    - **Polaritas Negatif** *(semakin tinggi angka mentah, semakin rentan daerahnya — misal Kemiskinan, Stunting, Bencana)*:
-     $$S_{\text{score}} = \frac{x_{\text{clipped}} - P_2}{P_{98} - P_2} \times 100$$
+     $$S_{\text{score}} = \frac{x - x_{\min}}{x_{\max} - x_{\min}} \times 100$$
    - **Polaritas Positif** *(semakin rendah angka mentah, semakin rentan daerahnya — misal IPM, Air Bersih, Listrik)*:
-     $$S_{\text{score}} = \left(1 - \frac{x_{\text{clipped}} - P_2}{P_{98} - P_2}\right) \times 100$$
+     $$S_{\text{score}} = \left(1 - \frac{x - x_{\min}}{x_{\max} - x_{\min}}\right) \times 100$$
+3. **Degenerate distribution:** jika $x_{\max} = x_{\min}$, skor netral 50 diberikan dan tidak ada klaim urutan yang dibuat.
 
 > **Catatan Penggunaan:** Pada seluruh output API, nilai skor ternormalisasi yang mendekati angka **$100$** selalu mengindikasikan **tingkat kebutuhan intervensi / kerentanan yang paling tinggi**.

@@ -21,6 +21,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from app.services.crosswalk_service import crosswalk_rows, first_value, sort_vintages
+from app.services.normalization_service import (
+    METHODOLOGY_VERSION,
+    normalize_score,
+    rank_normalized_values,
+)
+from app.services.snapshot_integrity import (
+    STAGING_SNAPSHOT_ID,
+    ensure_snapshot_schema,
+    finalize_staging_snapshot,
+    mark_legacy_snapshots,
+    verify_content_digest,
+)
 DB_PATH = REPO_ROOT / "data" / "nusa_matra_live.db"
 MIGRATION_PATH = REPO_ROOT / "migrations" / "001_init_schema.sql"
 MASTER_CSV = REPO_ROOT / "data" / "verified_indicators_master.csv"
@@ -28,7 +40,7 @@ MAPPING_CSV = REPO_ROOT / "data" / "INDICATOR_MAPPING.csv"
 PROV_GEOJSON = REPO_ROOT / "data" / "boundaries" / "indonesia_provinsi_low.geojson"
 KAB_GEOJSON = REPO_ROOT / "data" / "boundaries" / "indonesia_kabupaten_low.geojson"
 
-SNAPSHOT_ID = "2026.10.0-official-live"
+SNAPSHOT_ID = STAGING_SNAPSHOT_ID
 BOUNDARY_VER = "BIG-20260601"
 
 OFFICIAL_DATASETS = [
@@ -97,6 +109,11 @@ OFFICIAL_DATASETS = [
      "https://webapi.bps.go.id/developer/",
      "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2279/",
      "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("bps_provincial_sdgs_2025", "BPS", "Badan Pusat Statistik",
+     "Susenas 2025 - Akses Air Minum Layak per Provinsi (legacy BPS province codes)",
+     "https://webapi.bps.go.id/developer/",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/845/th/125/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
     ("bnpb_dibi_affected_2024", "BNPB", "Badan Nasional Penanggulangan Bencana",
      "BNPB DIBI 2024 - Korban Terdampak dan Mengungsi Menurut Provinsi",
      "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
@@ -145,33 +162,45 @@ def main():
     print("=" * 70)
 
     if DB_PATH.exists():
-        print(f"[INFO] Removing previous live database: {DB_PATH}")
-        DB_PATH.unlink()
+        print(f"[INFO] Preserving existing snapshot history in: {DB_PATH}")
 
     conn = sqlite3.connect(DB_PATH)
     conn.execute("PRAGMA journal_mode = WAL")
-    conn.execute("PRAGMA foreign_keys = ON")
+    # Metadata tables are upserted by primary key; facts from older immutable
+    # snapshots must remain valid while the build is in progress.
+    conn.execute("PRAGMA foreign_keys = OFF")
 
     # 1. Init schema
     print("[1/6] Initialising schema from migrations/001_init_schema.sql...")
     with open(MIGRATION_PATH, "r", encoding="utf-8") as f:
         conn.executescript(f.read())
+    ensure_snapshot_schema(conn)
     conn.commit()
 
-    # 2. Insert Snapshot
-    print("[2/6] Inserting LIVE snapshot record...")
-    checksum = hashlib.sha256(b"nusa_matra_official_live_2026").hexdigest()
+    # 2. Rebuild only the unpublished staging snapshot.
+    print("[2/6] Preparing immutable LIVE snapshot staging area...")
+    for table in ("fact_indicator_values", "snapshot_indicators", "data_snapshots"):
+        if table == "data_snapshots":
+            conn.execute(
+                "DELETE FROM data_snapshots WHERE snapshot_id = ? AND is_immutable = 0",
+                (SNAPSHOT_ID,),
+            )
+        else:
+            conn.execute(f"DELETE FROM {table} WHERE snapshot_id = ?", (SNAPSHOT_ID,))
+    checksum = hashlib.sha256(b"nusa_matra_official_live_staging").hexdigest()
     conn.execute(
         """INSERT INTO data_snapshots
            (snapshot_id, label, environment_tag, is_active_default,
-            boundary_version, manifest_checksum, notes, published_at)
-           VALUES (?, ?, 'LIVE', 1, ?, ?, ?, datetime('now'))""",
+            boundary_version, manifest_checksum, notes, published_at,
+            content_hash_spec, is_immutable, is_reproducible, methodology_version)
+           VALUES (?, ?, 'LIVE', 0, ?, ?, ?, datetime('now'), 'canonical-json-v1', 0, 0, ?)""",
         (
             SNAPSHOT_ID,
-            "Nusa Matra Official LIVE Snapshot (BIG, BPS, BNPB, Kemenkes, Kemendikdasmen)",
+            "Nusa Matra Official LIVE Snapshot (staging)",
             BOUNDARY_VER,
             checksum,
-            "100% verified official data compiled from primary government sources.",
+            "Staging snapshot; replaced by a digest-addressed immutable snapshot.",
+            METHODOLOGY_VERSION,
         ),
     )
     conn.commit()
@@ -180,7 +209,7 @@ def main():
     print("[3/6] Inserting official dataset catalog...")
     for ds in OFFICIAL_DATASETS:
         conn.execute(
-            """INSERT INTO dim_datasets
+            """INSERT OR REPLACE INTO dim_datasets
                (dataset_id, agency_code, agency_name, dataset_title,
                 official_portal_url, api_or_download_url, access_method,
                 license_name, update_frequency, last_ingested_at,
@@ -206,7 +235,7 @@ def main():
         geom = feat["geometry"]
         c_lat, c_lng, min_lng, min_lat, max_lng, max_lat = calc_bbox_and_centroid(geom["coordinates"])
         conn.execute(
-            """INSERT INTO dim_regions
+            """INSERT OR REPLACE INTO dim_regions
                (region_id, parent_region_id, level, name, short_name,
                 kemendagri_code, bps_code, island_group, area_km2,
                 label_lat, label_lng, bbox_min_lng, bbox_min_lat,
@@ -237,7 +266,7 @@ def main():
         c_lat, c_lng, min_lng, min_lat, max_lng, max_lat = calc_bbox_and_centroid(geom["coordinates"])
         lvl = "kota" if props["type"].lower() == "kota" else "kabupaten"
         conn.execute(
-            """INSERT INTO dim_regions
+            """INSERT OR REPLACE INTO dim_regions
                (region_id, parent_region_id, level, name, short_name,
                 kemendagri_code, bps_code, island_group, area_km2,
                 label_lat, label_lng, bbox_min_lng, bbox_min_lat,
@@ -373,21 +402,25 @@ def main():
         "dis_earthquake_score": ("dis_earthquake_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Gempa"),
         "dis_landslide_score": ("dis_landslide_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Longsor"),
         "hlt_stunting_prevalence": ("hlt_stunting_prevalence", 2023, "kemenkes_ski_2023", "Kemenkes SKI 2023 Bab 15"),
-        "inf_safe_sanitation_pct": ("inf_safe_sanitation_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas SDGs 2025"),
-        "inf_safe_water_prov_pct": ("inf_safe_water_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
         "inf_electrification_prov_pct": ("inf_electrification_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
     }
-    master_columns = list(col_to_ind.keys())
+    master_columns = list(master_rows[0].keys())
 
     def _seed_facts(ind_id, ref_year, ds_id, ref_src, values, polarity):
         """
-        Normalize, rank and insert one indicator.
+        Replace one indicator's observations for this snapshot, then normalize
+        and rank the full canonical set exactly once.
 
-        Canonical semantics: normalized_score 100 always means "most vulnerable
-        / most in need", regardless of source polarity or DEMO/LIVE mode.
+        Replacing instead of merging prevents leftover rows from an earlier
+        provenance pass from retaining stale normalized scores.
         """
         if not values:
             return 0
+
+        conn.execute(
+            "DELETE FROM fact_indicator_values WHERE snapshot_id = ? AND indicator_id = ?",
+            (SNAPSHOT_ID, ind_id),
+        )
 
         raw_numbers = [v[1] for v in values]
         v_min, v_max = min(raw_numbers), max(raw_numbers)
@@ -401,31 +434,25 @@ def main():
             (round(v_min, 4), round(v_max, 4), round(v_mean, 4), round(v_median, 4), ind_id),
         )
 
-        normed = []
-        for rid, val, flag in values:
-            if v_max > v_min:
-                share = (val - v_min) / (v_max - v_min)
+        normalized = []
+        for item in values:
+            if len(item) == 5:
+                rid, val, flag, row_ds_id, row_ref = item
             else:
-                share = 0.5
-            norm_score = (1.0 - share) * 100.0 if polarity == "positive" else share * 100.0
-            normed.append((rid, val, round(norm_score, 2), flag))
+                rid, val, flag = item
+                row_ds_id, row_ref = ds_id, ref_src
+            norm_score = normalize_score(val, v_min, v_max, polarity)
+            normalized.append((rid, val, norm_score, flag, row_ds_id, row_ref))
 
-        # Competition ranking: equal scores share the same rank (1, 1, 3).
-        normed.sort(key=lambda item: (-item[2], item[0]))
-        ranked = []
-        previous_score = None
-        current_rank = 0
-        for index, item in enumerate(normed, start=1):
-            if item[2] != previous_score:
-                current_rank = index
-                previous_score = item[2]
-            ranked.append((*item, current_rank))
-
-        total_n = len(ranked)
-        for rid, val, norm_score, flag, rank in ranked:
-            percentile = (
-                ((total_n - rank) / (total_n - 1)) * 100.0 if total_n > 1 else 100.0
-            )
+        ranked_rows = rank_normalized_values(
+            [(rid, val, score, flag) for rid, val, score, flag, _, _ in normalized]
+        )
+        by_region = {
+            rid: (val, score, rank, percentile)
+            for rid, val, score, rank, percentile in ranked_rows
+        }
+        for rid, val, norm_score, flag, row_ds_id, row_ref in normalized:
+            _, _, rank, percentile = by_region[rid]
             conn.execute(
                 """INSERT OR REPLACE INTO fact_indicator_values
                    (snapshot_id, region_id, indicator_id, reference_year,
@@ -434,11 +461,11 @@ def main():
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     SNAPSHOT_ID, rid, ind_id, ref_year,
-                    round(val, 4), norm_score, round(percentile, 2),
-                    rank, flag, ds_id, ref_src,
+                    round(val, 4), norm_score, percentile,
+                    rank, flag, row_ds_id, row_ref,
                 ),
             )
-        return total_n
+        return len(normalized)
 
     for col_name, (ind_id, ref_year, ds_id, ref_src) in col_to_ind.items():
         if ind_id not in indicators_meta:
@@ -471,26 +498,82 @@ def main():
 
     conn.commit()
 
-    # 6a. Replace province-imputed water/sanitation with verified kab/kota values
-    # from BPS WebAPI (var 2830 & 2748, th 125), crosswalked to 2026 region_ids.
+    # 6a. Build the canonical water/sanitation sets.
+    # Verified kab/kota values come from BPS WebAPI (var 2830 & 2748, th 125).
+    # When a kab/kota water value is genuinely absent (Lanny Jaya 9507), retain
+    # the official province-level Susenas value as an explicit IMPUTED_PROVINCE
+    # fallback. Both sources are normalized together exactly once.
     verified_sdgs_csv = REPO_ROOT / "data" / "bps_kabkota_water_sanitation_2025.csv"
     if verified_sdgs_csv.exists():
         with open(verified_sdgs_csv, "r", encoding="utf-8") as f:
             sdgs_rows = list(csv.DictReader(f))
 
-        for ind_id, column in (
-            ("inf_safe_water_pct", "inf_safe_water_pct"),
-            ("inf_safe_sanitation_pct", "inf_safe_sanitation_pct"),
+        province_names_by_code: dict[str, str] = {}
+        province_csv = REPO_ROOT / "data" / "bps_provincial_sdgs_2025.csv"
+        if province_csv.exists():
+            with open(province_csv, "r", encoding="utf-8-sig") as f:
+                for row in csv.DictReader(f):
+                    province_names_by_code[str(row.get("bps_prov_code") or "")[:2]] = (
+                        row.get("province_name") or "unknown"
+                    )
+
+        verified_by_region = {row["region_id"]: row for row in sdgs_rows}
+        for ind_id, column, fallback_column in (
+            ("inf_safe_water_pct", "inf_safe_water_pct", "inf_safe_water_prov_pct"),
+            ("inf_safe_sanitation_pct", "inf_safe_sanitation_pct", None),
         ):
             values = []
-            for row in sdgs_rows:
-                raw = (row.get(column) or "").strip()
-                if not raw:
+            for region in regions:
+                rid = region["region_id"]
+                verified_row = verified_by_region.get(rid) or {}
+                raw = (verified_row.get(column) or "").strip()
+                if raw:
+                    try:
+                        values.append(
+                            (
+                                rid,
+                                float(raw),
+                                "VERIFIED",
+                                "bps_sdgs_kabkota_2025",
+                                "BPS Susenas 2025 WebAPI (kab/kota)",
+                            )
+                        )
+                    except ValueError:
+                        continue
                     continue
-                try:
-                    values.append((row["region_id"], float(raw), "VERIFIED"))
-                except (KeyError, ValueError):
+
+                if not fallback_column:
                     continue
+
+                ordered = sort_vintages(
+                    crosswalk.rows_by_region.get(rid, []), master_columns, region
+                )
+                fallback = first_value(ordered, fallback_column)
+                if not fallback:
+                    continue
+                source_row = next(
+                    (
+                        row
+                        for row in ordered
+                        if (row.get(fallback_column) or "").strip()
+                    ),
+                    {},
+                )
+                legacy_prefix = str(source_row.get("bps_code") or "")[:2]
+                province_name = province_names_by_code.get(legacy_prefix, "unknown")
+                values.append(
+                    (
+                        rid,
+                        float(fallback),
+                        "IMPUTED_PROVINCE",
+                        "bps_provincial_sdgs_2025",
+                        (
+                            f"BPS Susenas 2025 Provinsi {province_name} "
+                            f"(legacy BPS {legacy_prefix}00)"
+                        ),
+                    )
+                )
+
             if values:
                 _seed_facts(
                     ind_id,
@@ -501,7 +584,7 @@ def main():
                     indicators_meta[ind_id]["polarity"],
                 )
         conn.commit()
-        print(f"       [OK] Verified kab/kota water & sanitation: {len(sdgs_rows)} rows")
+        print(f"       [OK] Canonical water & sanitation sets: {len(sdgs_rows)} verified rows")
 
     # 6b. Verified APM SMP & SMA/SMK from Kemendikdasmen Pusdatin (2024/2025).
     verified_apm_csv = REPO_ROOT / "data" / "kemendikdasmen_apm_smp_sma_2024_2025.csv"
@@ -771,11 +854,64 @@ def main():
             )
 
     conn.commit()
+
+    # Freeze the staging facts into a digest-addressed immutable snapshot.
+    previous_active = conn.execute(
+        "SELECT snapshot_id FROM data_snapshots "
+        "WHERE environment_tag = 'LIVE' AND is_active_default = 1 AND snapshot_id != ? "
+        "LIMIT 1",
+        (SNAPSHOT_ID,),
+    ).fetchone()
+    snapshot_result = finalize_staging_snapshot(
+        conn,
+        SNAPSHOT_ID,
+        label="Nusa Matra Official LIVE Snapshot (BIG, BPS, BNPB, Kemenkes, Kemendikdasmen)",
+        boundary_version=BOUNDARY_VER,
+        notes="Verified official data compiled from primary government sources.",
+        supersedes=previous_active[0] if previous_active else None,
+    )
+    final_snapshot_id = snapshot_result["snapshot_id"]
+    mark_legacy_snapshots(conn)
+
+    if not verify_content_digest(conn, final_snapshot_id):
+        print("[ERROR] Snapshot content digest verification failed.")
+        sys.exit(1)
+
+    # Normalization audit: every observation must match its frozen bounds.
+    normalization_errors = []
+    for indicator_row in conn.execute(
+        "SELECT indicator_id, polarity, national_min, national_max FROM dim_indicators"
+    ):
+        ind_id, polarity, national_min, national_max = indicator_row
+        for rid, raw, stored in conn.execute(
+            "SELECT region_id, raw_value, normalized_score FROM fact_indicator_values "
+            "WHERE snapshot_id = ? AND indicator_id = ?",
+            (final_snapshot_id, ind_id),
+        ):
+            expected = normalize_score(raw, national_min, national_max, polarity)
+            if expected is None or abs(expected - stored) > 0.02:
+                normalization_errors.append((ind_id, rid, raw, stored, expected))
+    if normalization_errors:
+        print(f"[ERROR] {len(normalization_errors)} normalization mismatches found.")
+        for item in normalization_errors[:5]:
+            print("       ", item)
+        sys.exit(1)
+
+    conn.execute("PRAGMA foreign_keys = ON")
+    fk_violations = conn.execute("PRAGMA foreign_key_check").fetchall()
+    if fk_violations:
+        print(f"[ERROR] Foreign key violations: {fk_violations[:5]}")
+        sys.exit(1)
+
     final_facts = conn.execute(
-        "SELECT COUNT(*) FROM fact_indicator_values WHERE snapshot_id = ?", (SNAPSHOT_ID,)
+        "SELECT COUNT(*) FROM fact_indicator_values WHERE snapshot_id = ?",
+        (final_snapshot_id,),
     ).fetchone()[0]
     print(f"       [OK] {final_facts} fact rows in final snapshot")
-
+    print(
+        f"       [OK] Snapshot {final_snapshot_id} "
+        f"content_sha256={snapshot_result['content_sha256'][:16]}..."
+    )
 
     # Integrity verification
     cursor = conn.cursor()
@@ -783,18 +919,18 @@ def main():
     n_regions = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM dim_indicators")
     n_indicators = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM fact_indicator_values WHERE snapshot_id = ?", (SNAPSHOT_ID,))
+    cursor.execute("SELECT COUNT(*) FROM fact_indicator_values WHERE snapshot_id = ?", (final_snapshot_id,))
     n_facts = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(DISTINCT region_id) FROM fact_indicator_values WHERE snapshot_id = ?", (SNAPSHOT_ID,))
+    cursor.execute("SELECT COUNT(DISTINCT region_id) FROM fact_indicator_values WHERE snapshot_id = ?", (final_snapshot_id,))
     n_fact_regions = cursor.fetchone()[0]
     cursor.execute(
         "SELECT COUNT(*) FROM (SELECT DISTINCT indicator_id FROM fact_indicator_values WHERE snapshot_id = ?)",
-        (SNAPSHOT_ID,),
+        (final_snapshot_id,),
     )
     n_fact_indicators = cursor.fetchone()[0]
     cursor.execute(
         "SELECT MAX(national_rank) FROM fact_indicator_values WHERE snapshot_id = ?",
-        (SNAPSHOT_ID,),
+        (final_snapshot_id,),
     )
     max_rank = cursor.fetchone()[0] or 0
     cursor.execute(
@@ -802,7 +938,7 @@ def main():
            FROM fact_indicator_values f
            JOIN dim_regions r ON r.region_id = f.region_id
            WHERE f.snapshot_id = ? AND r.level IN ('kabupaten', 'kota')""",
-        (SNAPSHOT_ID,),
+        (final_snapshot_id,),
     )
     n_kabkota_with_facts = cursor.fetchone()[0]
 
@@ -811,7 +947,9 @@ def main():
     print("\n" + "=" * 70)
     print("Seeding Complete! Integrity Summary for LIVE Database:")
     print(f"- Output Database: {DB_PATH} ({os.path.getsize(DB_PATH):,} bytes)")
-    print(f"- Snapshot ID:     {SNAPSHOT_ID}")
+    print(f"- Snapshot ID:     {final_snapshot_id}")
+    print(f"- Content SHA-256: {snapshot_result['content_sha256']}")
+    print(f"- Metadata SHA-256: {snapshot_result['metadata_checksum']}")
     print(f"- Dim Regions:     {n_regions} (38 Prov + 514 Kab/Kota)")
     print(f"- Dim Indicators:  {n_indicators} catalog indicators")
     print(f"- Fact Values:     {n_facts:,} observations ({n_fact_indicators} indicators)")

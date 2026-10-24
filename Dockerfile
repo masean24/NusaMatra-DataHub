@@ -22,8 +22,10 @@ COPY data/ data/
 COPY migrations/ migrations/
 COPY scripts/ scripts/
 
-# Pre-seed both DEMO and verified official LIVE databases during container image build
-# This pre-bakes the DEMO dataset and the verified LIVE snapshot (14,745 values)
+# Pre-seed both DEMO and verified official LIVE databases during container image build.
+# Remove any stale local databases from the build context so every image gets a
+# fresh, digest-addressed LIVE snapshot instead of inheriting old facts.
+RUN rm -f data/nusa_matra_demo.db data/nusa_matra_live.db data/telemetry.db data/telemetry.db-wal data/telemetry.db-shm
 RUN python data/seed_db.py
 RUN python scripts/seed_live_db.py
 

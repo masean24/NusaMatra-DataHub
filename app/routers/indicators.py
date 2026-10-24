@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models.common import (
     ApiResponse,
     CoverageMeta,
+    IndicatorCoverageMeta,
     ResponseMeta,
     LiveUnavailableError,
     WeightValidationError,
@@ -23,6 +24,7 @@ from app.models.indicators import (
     IndicatorValuesData,
 )
 from app.services.indicator_service import list_indicators, get_indicator_values
+from app.services.snapshot_registry import snapshot_meta_fields
 from app.services.composite_service import (
     COMPOSITE_PRESETS,
     compute_composite_scores,
@@ -79,6 +81,7 @@ async def get_indicators(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=len(indicators),
+            **snapshot_meta_fields(request),
         ),
         data=grouped,
     )
@@ -136,6 +139,25 @@ async def get_indicators_coverage(
             "coverage_pct": round((cnt / total_reg) * 100, 1),
         }
 
+    available_catalog_count = (
+        await (
+            await db.execute(
+                "SELECT COUNT(*) FROM snapshot_indicators "
+                "WHERE snapshot_id = ? AND availability_status != 'UNAVAILABLE'",
+                (_snapshot_id,),
+            )
+        ).fetchone()
+    )[0]
+    if not available_catalog_count:
+        available_catalog_count = (
+            await (
+                await db.execute(
+                    "SELECT COUNT(*) FROM dim_indicators "
+                    "WHERE availability_status != 'UNAVAILABLE'"
+                )
+            ).fetchone()
+        )[0]
+
     data = {
         "snapshot_id": _snapshot_id,
         "mode": request.state.data_mode,
@@ -143,14 +165,40 @@ async def get_indicators_coverage(
         "available_indicators_count": available_count,
         "empty_indicators_count": len(empty_indicators),
         "empty_indicators": empty_indicators,
+        "indicator_completeness_pct": round(available_count / len(rows) * 100, 1)
+        if rows
+        else 0.0,
+        "available_indicator_data_pct": round(
+            available_count / available_catalog_count * 100, 1
+        )
+        if available_catalog_count
+        else 0.0,
+        "total_regions": total_reg,
+        "region_coverage_pct": round(
+            (
+                await (
+                    await db.execute(
+                        "SELECT COUNT(DISTINCT region_id) FROM fact_indicator_values "
+                        "WHERE snapshot_id = ?",
+                        (_snapshot_id,),
+                    )
+                ).fetchone()
+            )[0]
+            / total_reg
+            * 100,
+            1,
+        ),
         "indicators": indicators_info,
     }
 
     coverage_meta = CoverageMeta(
-        available=available_count,
+        available=total_reg,
         total_regions=total_reg,
         missing_region_ids=[],
         mode=request.state.data_mode,
+        total_indicators=len(rows),
+        available_indicators=available_count,
+        indicator_completeness_pct=data["indicator_completeness_pct"],
     )
 
     return ApiResponse(
@@ -159,6 +207,14 @@ async def get_indicators_coverage(
             mode=request.state.data_mode,
             total_count=len(rows),
             coverage=coverage_meta,
+            indicator_coverage=IndicatorCoverageMeta(
+                total_indicators=len(rows),
+                available_indicators=available_count,
+                unavailable_indicators=len(empty_indicators),
+                indicator_completeness_pct=data["indicator_completeness_pct"],
+                available_indicator_data_pct=data["available_indicator_data_pct"],
+            ),
+            **snapshot_meta_fields(request),
         ),
         data=data,
     )
@@ -209,6 +265,7 @@ async def get_indicator_values_endpoint(
             mode=request.state.data_mode,
             total_count=available,
             coverage=coverage_meta,
+            **snapshot_meta_fields(request),
         ),
         data=result,
     )
@@ -275,6 +332,7 @@ async def composite_query(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=result.total_regions,
+            **snapshot_meta_fields(request),
         ),
         data=result,
     )
@@ -311,6 +369,7 @@ async def get_composite_presets(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=len(presets),
+            **snapshot_meta_fields(request),
         ),
         data=presets,
     )

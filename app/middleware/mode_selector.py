@@ -20,6 +20,7 @@ from pathlib import Path
 import time
 from app.config import settings
 from app.services.telemetry_service import telemetry
+from app.services.snapshot_registry import resolve_snapshot
 
 
 class ModeSelector(BaseHTTPMiddleware):
@@ -55,50 +56,24 @@ class ModeSelector(BaseHTTPMiddleware):
         else:
             mode = settings.default_mode
 
-        # Validate snapshot_id if explicitly requested
-        raw_snapshot = request.query_params.get("snapshot_id")
-        if raw_snapshot is not None and raw_snapshot.strip() != "":
-            valid_snapshots = (settings.default_snapshot_id, settings.live_snapshot_id)
-            if raw_snapshot not in valid_snapshots:
-                return JSONResponse(
-                    status_code=404,
-                    content={
-                        "status": "error",
-                        "code": "SNAPSHOT_NOT_FOUND",
-                        "message": (
-                            f"Snapshot '{raw_snapshot}' not found. "
-                            "Check GET /api/v1/snapshots for active snapshots."
-                        ),
-                    },
-                )
-            # Check environment compatibility
-            if mode == "LIVE" and raw_snapshot != settings.live_snapshot_id:
-                return JSONResponse(
-                    status_code=422,
-                    content={
-                        "status": "error",
-                        "code": "SNAPSHOT_MODE_MISMATCH",
-                        "message": (
-                            f"Snapshot '{raw_snapshot}' belongs to DEMO environment, "
-                            "but mode=LIVE was requested."
-                        ),
-                    },
-                )
-            elif mode == "DEMO" and raw_snapshot != settings.default_snapshot_id:
-                return JSONResponse(
-                    status_code=422,
-                    content={
-                        "status": "error",
-                        "code": "SNAPSHOT_MODE_MISMATCH",
-                        "message": (
-                            f"Snapshot '{raw_snapshot}' belongs to LIVE environment, "
-                            "but mode=DEMO was requested."
-                        ),
-                    },
-                )
-            snapshot_id = raw_snapshot
-        else:
-            snapshot_id = settings.live_snapshot_id if mode == "LIVE" else settings.default_snapshot_id
+        # Resolve snapshot pin. ``snapshot`` is the v2.2 alias; ``snapshot_id``
+        # remains supported for the v2.1 frontend contract.
+        raw_snapshot_alias = request.query_params.get("snapshot")
+        raw_snapshot_id = request.query_params.get("snapshot_id")
+        if (
+            raw_snapshot_alias
+            and raw_snapshot_id
+            and raw_snapshot_alias.strip() != raw_snapshot_id.strip()
+        ):
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "status": "error",
+                    "code": "SNAPSHOT_PARAM_CONFLICT",
+                    "message": "Use either 'snapshot' or 'snapshot_id', not two different values.",
+                },
+            )
+        raw_snapshot = (raw_snapshot_alias or raw_snapshot_id or "").strip() or None
 
         # BLOCKER #1: LIVE must fail closed — unless explicitly enabled with verified database
         if mode == "LIVE":
@@ -120,9 +95,78 @@ class ModeSelector(BaseHTTPMiddleware):
                     },
                 )
 
+        snapshot_meta = await resolve_snapshot(mode, raw_snapshot)
+        if raw_snapshot and snapshot_meta is None:
+            other_mode = "LIVE" if mode == "DEMO" else "DEMO"
+            other_snapshot = await resolve_snapshot(other_mode, raw_snapshot)
+            if other_snapshot is not None:
+                return JSONResponse(
+                    status_code=422,
+                    content={
+                        "status": "error",
+                        "code": "SNAPSHOT_MODE_MISMATCH",
+                        "message": (
+                            f"Snapshot '{raw_snapshot}' belongs to {other_mode}, "
+                            f"but mode={mode} was requested."
+                        ),
+                    },
+                )
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": "error",
+                    "code": "SNAPSHOT_NOT_FOUND",
+                    "message": (
+                        f"Snapshot '{raw_snapshot}' was not found. "
+                        "Use GET /api/v1/snapshots to list immutable snapshot IDs."
+                    ),
+                },
+            )
+
+        if snapshot_meta is not None and snapshot_meta["environment_tag"] != mode:
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "status": "error",
+                    "code": "SNAPSHOT_MODE_MISMATCH",
+                    "message": (
+                        f"Snapshot '{snapshot_meta['snapshot_id']}' belongs to "
+                        f"{snapshot_meta['environment_tag']}, but mode={mode} was requested."
+                    ),
+                },
+            )
+
+        if snapshot_meta is None and mode == "LIVE":
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "status": "error",
+                    "code": "LIVE_SNAPSHOT_UNAVAILABLE",
+                    "message": (
+                        "LIVE mode is enabled but no active immutable snapshot is available. "
+                        "Run the snapshot seeder before serving LIVE data."
+                    ),
+                },
+                headers={
+                    "X-NusaMatra-Mode": "LIVE",
+                    "X-Data-Fallback": "UNAVAILABLE",
+                },
+            )
+
+        snapshot_id = (
+            snapshot_meta["snapshot_id"]
+            if snapshot_meta is not None
+            else (
+                settings.live_snapshot_id
+                if mode == "LIVE"
+                else settings.default_snapshot_id
+            )
+        )
+
         # Store in request state for downstream handlers
         request.state.data_mode = mode
         request.state.snapshot_id = snapshot_id
+        request.state.snapshot_meta = snapshot_meta
 
         # Call the actual endpoint handler and measure execution latency
         start_t = time.perf_counter()
@@ -145,6 +189,19 @@ class ModeSelector(BaseHTTPMiddleware):
         # Inject standard response headers if not explicitly set by the route handler
         response.headers["X-NusaMatra-Snapshot"] = snapshot_id
         response.headers["X-NusaMatra-Mode"] = mode
+        if snapshot_meta is not None:
+            response.headers["X-NusaMatra-Content-SHA256"] = str(
+                snapshot_meta.get("content_sha256") or ""
+            )
+            response.headers["X-NusaMatra-Snapshot-Immutable"] = (
+                "true" if snapshot_meta.get("is_immutable") else "false"
+            )
+            response.headers["X-NusaMatra-Snapshot-Reproducible"] = (
+                "true"
+                if snapshot_meta.get("is_reproducible")
+                and snapshot_meta.get("content_sha256")
+                else "false"
+            )
         if "X-Data-Fallback" not in response.headers:
             response.headers["X-Data-Fallback"] = "NONE"
 

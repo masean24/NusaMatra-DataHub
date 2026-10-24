@@ -10,6 +10,7 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from starlette.requests import Request
 from app.config import settings
+from app.services.snapshot_integrity import ensure_snapshot_schema_async
 
 
 def _db_path(mode: str = "DEMO") -> str:
@@ -30,12 +31,19 @@ async def get_db(request: Request = None):
 
 
 async def init_db():
-    """Run migration scripts to initialise the database schema."""
+    """Run migration scripts and snapshot-integrity upgrades on both databases."""
     migration_file = Path(__file__).parent.parent / "migrations" / "001_init_schema.sql"
-    async with aiosqlite.connect(_db_path()) as db:
-        sql = migration_file.read_text(encoding="utf-8")
-        await db.executescript(sql)
-        await db.commit()
+    sql = migration_file.read_text(encoding="utf-8")
+    paths = [settings.database_path]
+    live_path = Path(settings.live_database_path)
+    if live_path.exists():
+        paths.append(str(live_path))
+
+    for path in dict.fromkeys(paths):
+        async with aiosqlite.connect(path) as db:
+            await db.executescript(sql)
+            await ensure_snapshot_schema_async(db)
+            await db.commit()
 
 
 async def check_db_health(mode: str = "DEMO") -> dict:

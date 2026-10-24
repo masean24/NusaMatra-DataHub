@@ -241,4 +241,11 @@ async def test_snapshots_endpoint(client):
     assert snap["snapshot_id"] == "2026.10.0-wia-demo"
     assert snap["environment_tag"] == "DEMO"
     assert snap["is_active_default"] is True
-    assert snap["indicator_completeness_pct"] == 100.0
+    # Completeness is measured against the full 33-indicator framework, not
+    # only against indicators that happen to be available in this snapshot.
+    assert snap["indicator_completeness_pct"] == 93.9
+    assert snap["indicator_count"] == 33
+    assert snap["available_indicator_count"] == 31
+    assert snap["available_indicator_data_pct"] == 100.0
+    assert snap["region_count"] == 514
+    assert snap["region_coverage_pct"] == 100.0

@@ -32,7 +32,9 @@ from app.config import settings
 logger = logging.getLogger(__name__)
 
 WIB = ZoneInfo("Asia/Jakarta")
-STATE_VERSION = 2
+# v3 resets counters produced while the route-regex filter was dropping every
+# real business API request in production. first_started_at is preserved.
+STATE_VERSION = 3
 
 
 def _iso(timestamp: Optional[float]) -> Optional[str]:
@@ -76,6 +78,19 @@ class TelemetryCollector:
         "/api/v1/docs",
         "/api/v1/redoc",
         "/api/v1/scalar",
+        "/api/v1/openapi.json",
+    )
+
+    # Explicit business API prefixes. This is intentionally static: relying on
+    # APIRoute.path_regex made production deployments sensitive to router
+    # registration/order differences, which silently dropped every real API hit.
+    KNOWN_API_PREFIXES = (
+        "/api/v1/regions",
+        "/api/v1/indicators",
+        "/api/v1/boundaries",
+        "/api/v1/datasets",
+        "/api/v1/snapshots",
+        "/api/v1/earthquakes",
     )
 
     def __init__(
@@ -113,35 +128,21 @@ class TelemetryCollector:
         )
         self._initialized = False
         self._needs_flush = False
-        self._route_patterns: tuple[Any, ...] = ()
         self._flush_task: Optional[asyncio.Task] = None
-
-    def configure_routes(self, routes: Any) -> None:
-        """Keep only real API route patterns, so scanner 404s never reach stats."""
-        patterns = []
-        for route in routes:
-            path = getattr(route, "path", "")
-            if not path.startswith(f"{settings.api_prefix}/"):
-                continue
-            if self.is_system_path(path):
-                continue
-            pattern = getattr(route, "path_regex", None)
-            if pattern is not None:
-                patterns.append(pattern)
-        self._route_patterns = tuple(patterns)
 
     def is_api_path(self, path: str) -> bool:
         clean = path.split("?")[0].rstrip("/") or "/"
         return clean.startswith(f"{settings.api_prefix}/") and not self.is_system_path(clean)
 
     def is_trackable_path(self, path: str) -> bool:
-        """Return True only for known API routes (before routes are configured, use the API prefix)."""
+        """Track known business API prefixes only; ignore scanners and system paths."""
         clean = path.split("?")[0].rstrip("/") or "/"
         if not self.is_api_path(clean):
             return False
-        if self._route_patterns:
-            return any(pattern.fullmatch(clean) for pattern in self._route_patterns)
-        return True
+        return any(
+            clean == prefix or clean.startswith(prefix + "/")
+            for prefix in self.KNOWN_API_PREFIXES
+        )
 
     @classmethod
     def is_system_path(cls, path: str) -> bool:
@@ -398,7 +399,7 @@ class TelemetryCollector:
             [
                 {"path": p, "count": c}
                 for p, c in self.endpoint_counts.items()
-                if self.is_api_path(p)
+                if self.is_trackable_path(p)
             ],
             key=lambda x: x["count"],
             reverse=True,

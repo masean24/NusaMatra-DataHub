@@ -1,9 +1,7 @@
 """Tests for telemetry persistence across process restarts."""
 
 import json
-import re
 import sqlite3
-from types import SimpleNamespace
 
 import pytest
 
@@ -71,18 +69,6 @@ async def test_scanner_paths_are_ignored_and_time_is_wib(tmp_path):
         db_path=str(tmp_path / "telemetry.db"),
         persistence_enabled=False,
     )
-    collector.configure_routes(
-        [
-            SimpleNamespace(
-                path="/api/v1/regions",
-                path_regex=re.compile(r"/api/v1/regions"),
-            ),
-            SimpleNamespace(
-                path="/api/v1/indicators/{indicator_id}/values",
-                path_regex=re.compile(r"/api/v1/indicators/[^/]+/values"),
-            ),
-        ]
-    )
 
     collector.record_request("GET", "/api/v1/regions", 200, 1.0, "DEMO")
     collector.record_request(
@@ -93,18 +79,27 @@ async def test_scanner_paths_are_ignored_and_time_is_wib(tmp_path):
         "DEMO",
         route_path="/api/v1/indicators/{indicator_id}/values",
     )
+    collector.record_request("POST", "/api/v1/indicators/composite-query", 200, 1.0, "DEMO")
+    collector.record_request("GET", "/api/v1/openapi.json", 200, 1.0, "DEMO")
     collector.record_request("GET", "/.gitmodules", 404, 1.0, "DEMO")
     collector.record_request("GET", "/api/v1/unknown", 404, 1.0, "DEMO")
+    collector.record_request("GET", "/api/v1/stats", 200, 1.0, "DEMO")
 
-    assert collector.total_requests == 2
+    assert collector.total_requests == 3
     assert collector.endpoint_counts == {
         "/api/v1/regions": 1,
         "/api/v1/indicators/{indicator_id}/values": 1,
+        "/api/v1/indicators/composite-query": 1,
     }
     summary = collector.get_summary()
     assert summary["timezone"] == "Asia/Jakarta"
     assert summary["first_started_at"].endswith("+07:00")
-    assert summary["recent_requests"][0]["path"] == "/api/v1/indicators/soc_hdi/values"
+    assert summary["recent_requests"][0]["path"] == "/api/v1/indicators/composite-query"
+    assert {row["path"] for row in summary["top_endpoints"]} == {
+        "/api/v1/regions",
+        "/api/v1/indicators/{indicator_id}/values",
+        "/api/v1/indicators/composite-query",
+    }
 
 
 @pytest.mark.asyncio

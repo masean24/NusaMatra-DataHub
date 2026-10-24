@@ -106,13 +106,17 @@ async def get_region_detail(
             f.indicator_id, f.raw_value, f.normalized_score,
             f.national_percentile, f.national_rank, f.reference_year,
             f.quality_flag, f.dataset_id,
-            i.indicator_name, i.category, i.unit,
+            COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
+            COALESCE(si.category, i.category) AS category,
+            COALESCE(si.unit, i.unit) AS unit,
             d.agency_code, d.official_portal_url
         FROM fact_indicator_values f
         JOIN dim_indicators i ON f.indicator_id = i.indicator_id
+        LEFT JOIN snapshot_indicators si
+            ON si.indicator_id = f.indicator_id AND si.snapshot_id = f.snapshot_id
         LEFT JOIN dim_datasets d ON f.dataset_id = d.dataset_id
         WHERE f.region_id = ? AND f.snapshot_id = ?
-        ORDER BY i.category, i.indicator_id
+        ORDER BY category, f.indicator_id
         """,
         [region_id, snapshot_id],
     )

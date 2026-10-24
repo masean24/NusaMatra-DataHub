@@ -23,6 +23,10 @@ random.seed(42)
 
 # ─── Paths ────────────────────────────────────────────────────────────────────
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from app.services.snapshot_integrity import ensure_snapshot_schema
+
 DB_PATH = REPO_ROOT / "data" / "nusa_matra_demo.db"
 MIGRATION_PATH = REPO_ROOT / "migrations" / "001_init_schema.sql"
 CSV_PATH = (
@@ -260,6 +264,7 @@ def main():
     print("[1/6] Running migration schema...")
     sql = MIGRATION_PATH.read_text(encoding="utf-8")
     conn.executescript(sql)
+    ensure_snapshot_schema(conn)
     conn.commit()
     print("       [OK] Schema created")
 
@@ -268,8 +273,11 @@ def main():
     conn.execute(
         """INSERT INTO data_snapshots
            (snapshot_id, label, environment_tag, is_active_default,
-            boundary_version, manifest_checksum, notes, published_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))""",
+            boundary_version, manifest_checksum, notes, published_at,
+            content_hash_spec, is_immutable, is_reproducible, immutability_note)
+           VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'),
+                   'canonical-json-v1', 0, 0,
+                   'DEMO illustrative dataset; not an immutable official snapshot.')""",
         (
             SNAPSHOT_ID,
             "WIA 2026 Demo Showcase Dataset",

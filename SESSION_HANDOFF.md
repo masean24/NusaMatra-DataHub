@@ -4,7 +4,7 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (Working Tree: v2.1 remediation in progress, 114/114 Pytest Green)
+> **Active Branch:** `main` (Working Tree: v2.2 integrity remediation, 134/134 Pytest Green)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
 > **Date Generated:** 23 Oktober 2026 (updated after v2.1 data-integrity remediation)  
 
@@ -53,7 +53,7 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
 
 **Snapshot LIVE saat ini:** 14.745 observasi, **29 indikator berdata**, 514/514 wilayah. Empat indikator belum berdata: 2 `UNAVAILABLE` by design (travel time & ICU), `meta_dapodik_sync_rate` menunggu akses Dapodik, dan `inf_asphalt_road_village_pct` menunggu microdata Podes.
 
-**Verifikasi:** `python -m pytest -q` → **114 passed**.
+**Verifikasi:** `python -m pytest -q` → **134 passed**.
 
 ---
 
@@ -63,7 +63,7 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
 
 Sistem ini menghubungkan **514 Kabupaten/Kota di 38 Provinsi Indonesia** dengan **33 indikator pembangunan multi-sektoral** yang bersumber dari **6 instansi resmi pemerintah Republik Indonesia**. Sistem dirancang dengan arsitektur **Dual-Runtime Mode (DEMO vs LIVE)** yang mematuhi standar *fail-closed* data integrity:
 - **Mode `DEMO`:** Sandbox dataset terverifikasi (`2026.10.0-wia-demo`) untuk presentasi juri, testing deterministik, dan preview tanpa dependensi eksternal.
-- **Mode `LIVE`:** Dataset resmi pemerintah (`2026.10.0-official-live`) dengan kueri riil dari BPS, BNPB, Kemenkes, Kemendikdasmen, BIG, dan auto-feed BMKG real-time. Jika data hulu tidak dapat diakses atau database belum terverifikasi, sistem *fail-closed* (mengembalikan HTTP 503 tanpa pernah menyajikan data palsu/fallback terselubung).
+- **Mode `LIVE`:** Dataset resmi pemerintah dengan snapshot immutable berbasis digest (`2026.10.0-live-<sha16>`), di-resolve dari `GET /api/v1/snapshots?mode=live`. ID legacy `2026.10.0-official-live` tetap ada tetapi ditandai `is_reproducible: false`. Jika data hulu tidak dapat diakses atau database belum terverifikasi, sistem *fail-closed* (mengembalikan HTTP 503 tanpa pernah menyajikan data palsu/fallback terselubung).
 
 ---
 
@@ -213,22 +213,24 @@ Semua endpoint resmi beralamat di bawah prefix `/api/v1`:
 Pengujian unit dan integrasi dijalankan otomatis melalui Pytest AsyncIO:
 
 ```
-collected 114 items
+collected 134 items
 
-tests\test_audit_requirements.py ..............................          [ 26%]
-tests\test_boundaries_and_meta.py ...............                        [ 39%]
-tests\test_composite.py ..........                                       [ 48%]
-tests\test_composite_eligibility.py ......                               [ 53%]
-tests\test_crosswalk.py ......                                           [ 58%]
-tests\test_demo_data_integrity.py ...                                    [ 61%]
-tests\test_earthquakes.py ........                                       [ 68%]
-tests\test_health.py ........                                            [ 75%]
-tests\test_indicators.py ......                                          [ 80%]
-tests\test_live_data_integrity.py ..........                             [ 89%]
-tests\test_regions.py ........                                           [ 96%]
+tests\test_audit_requirements.py ..............................          [ 22%]
+tests\test_boundaries_and_meta.py ...............                        [ 33%]
+tests\test_composite.py ...........                                      [ 42%]
+tests\test_composite_eligibility.py ......                               [ 46%]
+tests\test_crosswalk.py ......                                           [ 51%]
+tests\test_demo_data_integrity.py ...                                    [ 53%]
+tests\test_earthquakes.py ........                                       [ 59%]
+tests\test_health.py ........                                            [ 65%]
+tests\test_indicators.py ......                                          [ 69%]
+tests\test_live_data_integrity.py ............                           [ 78%]
+tests\test_normalization_integrity.py ........                           [ 84%]
+tests\test_regions.py ........                                           [ 90%]
+tests\test_snapshot_integrity.py .........                               [ 97%]
 tests\test_telemetry_persistence.py ....                                 [100%]
 
-============================= 114 passed in 10.06s ==============================
+============================= 134 passed in 10.21s ==============================
 ```
 
 ### Jaminan Kualitas Kunci:

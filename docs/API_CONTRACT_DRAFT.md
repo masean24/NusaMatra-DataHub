@@ -201,14 +201,16 @@ Menghitung skor komposit berbobot kustom secara *real-time* untuk mendukung simu
 ```json
 {
   "weights": {
-    "dis_multihazard_index": 0.35,
-    "soc_poverty_rate": 0.25,
-    "edu_damaged_classrooms_pct": 0.20,
-    "hlt_stunting_prevalence": 0.20
+    "dis_multihazard_index": 3500,
+    "soc_poverty_rate": 2500,
+    "edu_damaged_classrooms_pct": 2000,
+    "hlt_stunting_prevalence": 2000
   },
   "filter_province_id": null
 }
 ```
+
+> **v2.2:** weights are integer basis points summing to 10,000. Add `&snapshot=<id>` (or `&snapshot_id=<id>`) to pin an exact immutable snapshot. Check `data.rankable` before rendering rankings; non-rankable scenarios return `regions: []` with `not_rankable_reason`.
 
 ---
 

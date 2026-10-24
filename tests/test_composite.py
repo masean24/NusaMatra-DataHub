@@ -39,7 +39,32 @@ async def test_composite_query_valid(client):
 
 @pytest.mark.asyncio
 async def test_composite_query_unavailable_indicator_transparency(client):
-    """BE-03 & BE-08: Indicators with no observations must be listed in unavailable_indicators and renormalized."""
+    """A scenario remains rankable at 80% weight coverage with two active components."""
+    body = {
+        "weights": {
+            "dis_multihazard_index": 6000,
+            "soc_poverty_rate": 2000,
+            "edu_school_travel_time_p90": 2000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 200
+
+    data = resp.json()["data"]
+    assert data["rankable"] is True
+    assert data["national_coverage_pct"] == 80.0
+    assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
+    assert "edu_school_travel_time_p90" not in data["effective_weights"]
+    assert data["renormalized"] is True
+    # Available weights are rescaled to full 10,000 bp.
+    assert data["effective_weights"]["dis_multihazard_index"] == 7500
+    assert data["effective_weights"]["soc_poverty_rate"] == 2500
+    assert len(data["regions"]) > 0
+
+
+@pytest.mark.asyncio
+async def test_composite_query_non_rankable_scenario_is_explicit(client):
+    """A 50/50 scenario with one missing component must not return rankings."""
     body = {
         "weights": {
             "dis_multihazard_index": 5000,
@@ -50,20 +75,12 @@ async def test_composite_query_unavailable_indicator_transparency(client):
     assert resp.status_code == 200
 
     data = resp.json()["data"]
+    assert data["rankable"] is False
+    assert data["regions"] == []
+    assert data["total_regions"] == 0
+    assert data["national_coverage_pct"] == 50.0
+    assert "below" in data["not_rankable_reason"].lower()
     assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
-    assert "edu_school_travel_time_p90" not in data["effective_weights"]
-    assert data["renormalized"] is True
-    # Scaled to full 10,000 bp
-    assert data["effective_weights"]["dis_multihazard_index"] == 10000
-
-    # Also compare with single 10000 query to ensure scores are equal
-    single_resp = await client.post(
-        "/api/v1/indicators/composite-query",
-        json={"weights": {"dis_multihazard_index": 10000}},
-    )
-    assert single_resp.status_code == 200
-    single_data = single_resp.json()["data"]
-    assert data["regions"][0]["composite_score"] == single_data["regions"][0]["composite_score"]
 
 
 @pytest.mark.asyncio

@@ -6,7 +6,7 @@
 Backend API geospasial terintegrasi penyedia data 33 indikator pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
 [![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
-[![Tests](https://img.shields.io/badge/Tests-114%2F114%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-134%2F134%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -50,6 +50,7 @@ Dalam perencanaan pembangunan dan mitigasi kebencanaan nasional, pengambil kebij
 3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** global dan **coverage gate per wilayah**: missing data tidak pernah dihitung nol, wilayah dengan cakupan bobot di bawah ambang dipindahkan ke `insufficient_data`.
 4. **Pemantauan Gempa Bumi *Real-Time* BMKG** dengan output GeoJSON (RFC 7946) lengkap dengan radius visual 3D, kedalaman hiposenter, dan status potensi tsunami.
 5. **Dual Architecture (DEMO vs LIVE Mode)** dengan prinsip integritas tinggi (*Fail-Closed Architecture*).
+6. **Immutable Snapshot v2.2:** setiap perubahan data menghasilkan ID baru `2026.10.0-live-<sha16>` dan `content_sha256` kanonik. Snapshot lama tidak ditimpa; `2026.10.0-official-live` ditandai `is_reproducible: false` karena ID-nya pernah dipakai ulang. Lihat `docs/SNAPSHOT_VERSIONING_V2_2.md`.
 
 ---
 
@@ -110,8 +111,11 @@ Semua respons terstruktur konsisten dengan generic envelope `ApiResponse[T]`:
 {
   "status": "success",
   "meta": {
-    "snapshot_id": "2026.10.0-official-live",
+    "snapshot_id": "2026.10.0-live-<content-sha16>",
     "mode": "LIVE",
+    "content_sha256": "<64-char canonical dataset digest>",
+    "snapshot_immutable": true,
+    "snapshot_reproducible": true,
     "boundary_version": "BIG-Kepmendagri-300.2.2-2430-2025",
     "total_count": 514,
     "coverage": {
@@ -164,10 +168,10 @@ cd d:\wia2
 # Install dependensi
 pip install -r requirements.txt
 
-# Jalankan 114 unit tests
+# Jalankan 134 unit tests
 python -m pytest -v
 ```
-*(Hasil: **114 passed** dalam ~10-15 detik).*
+*(Hasil: **134 passed** dalam ~10-15 detik).*
 
 ---
 

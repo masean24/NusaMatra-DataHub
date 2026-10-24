@@ -163,14 +163,13 @@ CREATE TABLE etl_quarantine_rows (
 
 Agar berbagai indikator dengan satuan berbeda (persentase, skor IRBI, rasio dokter, rupiah pengeluaran) dapat digabungkan ke dalam **Indeks Prioritas Wilayah**, setiap indikator dinormalisasi ke skala $0 - 100$ di mana **skor mendekati $100$ selalu berarti tingkat kerentanan/kebutuhan intervensi yang lebih tinggi**:
 
-1. **Winsorized Min-Max Scaling (Proteksi Outlier Ekstrem):**
-   Nilai mentah $x$ dipotong pada persentil ke-2 ($P_2$) dan persentil ke-98 ($P_{98}$) secara nasional untuk mencegah satu daerah ekstrem mendistorsi gradasi warna 513 daerah lainnya:
-   $$x_{\text{clipped}} = \min(\max(x, P_2), P_{98})$$
+1. **Min-Max Full-Range Scaling (`v2.2-minmax-full-range`):**
+   Nilai mentah $x$ dinormalisasi terhadap $x_{\min}$ dan $x_{\max}$ dari seluruh observasi kanonik indikator pada snapshot yang sama. Implementasi saat ini tidak memakai Winsorized clipping $P_2 - P_{98}$; outlier tetap dipertahankan dan tercakup dalam digest snapshot.
 2. **Penyelarasan Polaritas (Polarity Alignment):**
    * Untuk indikator **polaritas negatif** (mis. Kemiskinan, Stunting, Risiko Bencana — semakin tinggi angka asli berarti semakin rentan):
-     $$S_{\text{vuln}} = \frac{x_{\text{clipped}} - P_2}{P_{98} - P_2} \times 100$$
+     $$S_{\text{vuln}} = \frac{x - x_{\min}}{x_{\max} - x_{\min}} \times 100$$
    * Untuk indikator **polaritas positif** (mis. IPM, Akses Air Layak, Harapan Lama Sekolah — semakin rendah angka asli berarti semakin rentan):
-     $$S_{\text{vuln}} = \left(1 - \frac{x_{\text{clipped}} - P_2}{P_{98} - P_2}\right) \times 100$$
+     $$S_{\text{vuln}} = \left(1 - \frac{x - x_{\min}}{x_{\max} - x_{\min}}\right) \times 100$$
 
 ---
 

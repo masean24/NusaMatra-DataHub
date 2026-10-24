@@ -52,6 +52,12 @@ class RegionIndicatorValue(BaseModel):
     pct: Optional[float] = None
     rank: Optional[int] = None
     flag: str = "DEMO_EXAMPLE"
+    dataset_id: Optional[str] = Field(
+        None, description="Exact dataset used for this observation."
+    )
+    source_record_ref: Optional[str] = Field(
+        None, description="Exact source record reference for this observation."
+    )
 
 
 class IndicatorMeta(BaseModel):
@@ -176,6 +182,23 @@ class CompositeQueryResult(BaseModel):
     )
     total_excluded: int = Field(
         0, description="Regions excluded from ranking because of insufficient coverage."
+    )
+    rankable: bool = Field(
+        True,
+        description="False when the requested scenario fails published rankability rules; regions is then empty.",
+    )
+    not_rankable_reason: Optional[str] = Field(
+        None, description="Structured explanation when rankable is false."
+    )
+    national_coverage_pct: float = Field(
+        100.0, description="Share of requested weight that has national observations."
+    )
+    available_weight_basis_points: int = Field(
+        10000, description="Requested weight backed by nationally available indicators."
+    )
+    available_indicators: list[str] = Field(
+        default_factory=list,
+        description="Requested indicators with at least one national observation.",
     )
     score_direction: str = Field(
         "higher_is_need",

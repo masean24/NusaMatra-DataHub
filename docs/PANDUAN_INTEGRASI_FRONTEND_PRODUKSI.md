@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **114/114 Unit & Integration Tests Passing** |
+| **Status API** | ✅ **134/134 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
@@ -22,6 +22,12 @@
 6. **Endpoint Coverage Sekali Panggil (BE-03):** `GET /api/v1/indicators/coverage?mode=live` menyajikan status ketersediaan seluruh indikator.
 7. **Peta Batas Wilayah 3D Jauh Lebih Cepat (BE-05):** Header `Cache-Control: public, max-age=604800, immutable` (7 hari) aktif di `/boundaries/*`.
 8. **Validasi Mode Ketat (BE-02):** Parameter `mode` strict: `?mode=demo` atau `?mode=live` (huruf kecil).
+9. **Snapshot Immutable (v2.2):** resolve snapshot aktif via `GET /api/v1/snapshots?mode=live`; gunakan `snapshot=<id>` (alias) atau `snapshot_id=<id>`. `content_sha256` adalah digest konten kanonik; `manifest_checksum` bukan content hash. Unknown snapshot → 404, tanpa fallback.
+10. **Coverage Eksplisit (v2.2):** `indicator_completeness_pct` = 29/33 = 87.9; `meta.coverage.available` = cakupan wilayah (514), sedangkan hitungan indikator ada di `meta.indicator_coverage`.
+11. **Composite Rankability (v2.2):** periksa `data.rankable`. Jika false, `regions` kosong dan `not_rankable_reason` menjelaskan ambang yang gagal; jangan render ranking.
+12. **Normalisasi Lanny Jaya (v2.2):** `inf_safe_water_pct` region `9507` sekarang `norm: 78.89` (bukan 100), flag tetap `IMPUTED_PROVINCE` dengan provenance provinsi Papua Pegunungan.
+
+> Handoff lengkap: `docs/FRONTEND_HANDOFF_V2_2.md` · Spesifikasi snapshot: `docs/SNAPSHOT_VERSIONING_V2_2.md` · Root cause: `docs/INTEGRITY_FIX_V2_2.md`.
 
 ---
 

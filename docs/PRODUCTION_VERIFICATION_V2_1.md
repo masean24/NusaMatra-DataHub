@@ -6,6 +6,8 @@
 **Status historis:** LIVE v2.1, 25 indikator, 12.689 observasi, 514/514 wilayah
 
 > **Update v2.2 (23 Oktober 2026):** snapshot LIVE kini memuat **29 indikator / 14.745 observasi**. Empat indikator baru: `edu_student_teacher_ratio_sd`, `edu_damaged_classrooms_pct`, `hlt_facilities_per_10k` (VERIFIED), dan `hlt_doctors_per_10k` (`IMPUTED_PROVINCE`). Angka 25/12.689 di bawah adalah sampel historis v2.1; gunakan `docs/LAPORAN_PERBAIKAN_BACKEND_V2.md` untuk cakupan terbaru.
+>
+> **Update integritas v2.2 (24 Oktober 2026):** dokumen ini **bukan** verifikasi production untuk perbaikan normalisasi/snapshot/composite terbaru. Lihat `docs/INTEGRITY_FIX_V2_2.md`, `docs/SNAPSHOT_VERSIONING_V2_2.md`, dan `docs/FRONTEND_HANDOFF_V2_2.md`. Jangan klaim production terverifikasi sampai endpoint production benar-benar dicek ulang.
 
 ---
 

@@ -2,7 +2,12 @@
 Tests for GET /api/v1/health
 """
 
+import sqlite3
+from pathlib import Path
+
 import pytest
+
+LIVE_DB = Path(__file__).parent.parent / "data" / "nusa_matra_live.db"
 
 
 @pytest.mark.asyncio
@@ -46,7 +51,19 @@ async def test_nonexistent_snapshot_returns_404(client):
 @pytest.mark.asyncio
 async def test_mismatched_snapshot_returns_422(client):
     """C1: Snapshot mismatch with environment must return 422."""
-    resp = await client.get("/api/v1/health?mode=demo&snapshot_id=2026.10.0-official-live")
+    if not LIVE_DB.exists():
+        pytest.skip("LIVE database not generated")
+    connection = sqlite3.connect(LIVE_DB)
+    row = connection.execute(
+        "SELECT snapshot_id FROM data_snapshots "
+        "WHERE environment_tag = 'LIVE' AND is_active_default = 1 LIMIT 1"
+    ).fetchone()
+    connection.close()
+    if row is None:
+        pytest.skip("No active LIVE snapshot")
+    resp = await client.get(
+        f"/api/v1/health?mode=demo&snapshot_id={row[0]}"
+    )
     assert resp.status_code == 422
     assert resp.json()["code"] == "SNAPSHOT_MODE_MISMATCH"
 
