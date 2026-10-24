@@ -4,7 +4,7 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (v2.2 integrity remediation, 134/134 Pytest Green, commit `6141749`)
+> **Active Branch:** `main` (v2.2 integrity remediation, 134/134 Pytest Green, `origin/main` = `bd3ba34`)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
 > **Date Generated:** 24 Oktober 2026 (updated after v2.2 integrity remediation)  
 
@@ -282,7 +282,7 @@ tests\test_telemetry_persistence.py ....                                 [100%]
 ```
 
 ### Jaminan Kualitas Kunci:
-1. **Zero Failing Tests:** 112 kasus uji berstatus *pass* (termasuk test BMKG deterministik berbasis fixture resmi).
+1. **Zero Failing Tests:** 134 kasus uji berstatus *pass* (termasuk regression normalisasi, snapshot digest, dan telemetri).
 2. **Crosswalk Integrity:** 514/514 wilayah tercakup; kode legacy tidak menimpa kode 2026; kota/kabupaten senama tidak bertukar data.
 3. **Canonical Direction:** DEMO dan LIVE sama-sama memakai semantik `higher_is_need`; diuji dengan korelasi raw vs normalized.
 4. **Eligibility Integrity:** wilayah parsial di-reweight, wilayah di bawah ambang masuk `insufficient_data`, dan `national_rank` tidak melebihi 514.
@@ -294,30 +294,29 @@ tests\test_telemetry_persistence.py ....                                 [100%]
 
 ## 6. Status Git & Panduan Deployment
 
-Saat ini working tree berada dalam status bersih, dengan 4 commit lokal terbaru yang siap dipublikasikan:
+Working tree bersih selain `.commandcode/` dan `pendapat_sementara.txt` (tidak di-commit). `origin/main` sudah berada di **`bd3ba34`**.
 
-```
-ef6cb3d (HEAD -> main) feat(telemetry): exclude system/health paths from metrics and set 5s refresh loop
-c23503c feat(ui): update stats telemetry dashboard to zinc sleek design from index (1).html
-b5c8904 feat(stats): add real-time system telemetry engine, interactive HTML dashboard, and smart root content-negotiation
-980ee2d docs: add frontend production integration guide (v2)
+Commit terbaru:
+
+```text
+bd3ba34 docs: update session handoff for v2.2 integrity work
+6141749 fix: enforce v2.2 data integrity and reliable telemetry
+225a164 feat: enrich LIVE data and clean telemetry
+91c0e30 feat(telemetry): persist counters and service uptime across redeploys
 ```
 
 ### Prosedur Deploy ke Produksi:
 
-1. **Push ke GitHub:**
-   ```bash
-   git push origin main
-   ```
-2. **Coolify Auto-Deploy:**
-   - Coolify akan mendeteksi commit baru di branch `main`.
-   - Mengambil `Dockerfile`, mengompilasi environment Python 3.13, menginstal dependensi dari `requirements.txt`.
-   - Menjalankan health check di `/health` atau `/api/v1/health`.
-   - Melakukan zero-downtime traffic switch ke container baru di domain `https://api.orangkeren.me`.
-3. **Verifikasi Produksi Pasca-Deploy:**
-   - Akses Dashboard Telemetri: `https://api.orangkeren.me/stats`
-   - Akses Scalar Docs: `https://api.orangkeren.me/docs`
-   - Healthcheck: `https://api.orangkeren.me/health`
+1. **Redeploy Coolify** dari branch `main` (`bd3ba34`). Docker build menghapus DB lama dari build context, menjalankan `data/seed_db.py`, lalu `scripts/seed_live_db.py`.
+2. **Snapshot yang diharapkan:** `2026.10.0-live-<16 hex content_sha256>` (lokal: `2026.10.0-live-62354dfad392d985`). Resolve via API, jangan hardcode.
+3. **Telemetry:** saat startup pertama, `state_version` 1/2 → 3 mereset counter lama sekali; `first_started_at` tetap. Setelah itu request API nyata harus bertambah.
+4. **Verifikasi pasca-deploy:**
+   - `GET /api/v1/snapshots?mode=live` → aktif, `is_immutable=true`, `is_reproducible=true`.
+   - `GET /api/v1/indicators/coverage?mode=live&snapshot=<id>` → 29/33, `indicator_completeness_pct=87.9`.
+   - `GET /api/v1/indicators/inf_safe_water_pct/values?mode=live&snapshot=<id>` → region `9507` raw `32.89`, norm `78.89`, flag `IMPUTED_PROVINCE`.
+   - `POST /api/v1/indicators/composite-query?mode=live&snapshot=<id>` dengan skenario coverage 50% → `rankable=false`, `regions=[]`.
+   - `GET /api/v1/regions`, tunggu ±6 detik, lalu `GET /api/v1/stats?cb=<random>` → `total_requests` bertambah, `top_endpoints` berisi `/api/v1/regions`, bukan openapi.
+5. **Jangan klaim production verified** sebelum checklist di atas benar-benar dijalankan.
 
 ---
 
@@ -356,7 +355,19 @@ python scripts/seed_live_db.py
    - `inf_asphalt_road_village_pct`: Podes 2024 tersedia, tetapi publikasi nasional hanya sampai provinsi; perlu microdata SILASTIK atau tabel kab/kota resmi.
    - Wajib menyimpan raw snapshot + SHA-256 + URL resmi untuk setiap sumber; yang gagal diambil tetap `UNAVAILABLE`.
 2. **Naikkan kualitas data province-imputed** (`inf_internet_household_pct`, `hlt_jkn_coverage_pct`, `hlt_doctors_per_10k`, `dis_affected_pop_per_10k`, `inf_electrification_pct`) menjadi nilai kab/kota bila sumber resminya tersedia.
-3. **Deploy & verifikasi produksi** setelah push: cek `/api/v1/indicators/composite-query?mode=live`, `/api/v1/indicators/composite-presets?mode=live`, dan `/api/v1/indicators/coverage?mode=live`.
+3. **Deploy & verifikasi produksi** setelah push: jalankan checklist Section 6 (snapshot aktif, coverage 29/33, Lanny 9507 = 78.89, composite non-rankable, telemetry bertambah).
 4. **Dukungan PostgreSQL / PostGIS** jika volume data spasial bertambah ke level kecamatan/desa.
 5. **Websocket stream** untuk gempa BMKG guna menggantikan polling 60 detik.
-6. **Filter eksklusif prefix `/api/v1/` pada telemetri** untuk mengabaikan probe bot dari luar.
+6. **Filter eksklusif prefix `/api/v1/` pada telemetri** — **sudah selesai di v2.2** (whitelist prefix bisnis eksplisit, scanner/openapi dikecualikan).
+
+---
+
+## 9. Resume Point untuk Sesi Baru
+
+Jika melanjutkan di sesi baru, cukup mulai dari dokumen ini lalu:
+
+1. Baca `docs/INTEGRITY_FIX_V2_2.md`, `docs/SNAPSHOT_VERSIONING_V2_2.md`, dan `docs/FRONTEND_HANDOFF_V2_2.md`.
+2. Pastikan `git status -sb` bersih dan `origin/main` = `bd3ba34`.
+3. Jalankan `python -m pytest -q` → harus **134 passed**.
+4. Langkah berikutnya yang belum dilakukan: **redeploy Coolify** dan jalankan checklist Section 6. Production saat ini masih image lama; jangan klaim v2.2 production verified sebelum redeploy.
+5. Dua indikator yang masih terblokir dan butuh akses pengguna: `meta_dapodik_sync_rate` (akun/export Dapodik) dan `inf_asphalt_road_village_pct` (microdata Podes/SILASTIK kab/kota).
