@@ -4,13 +4,61 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (Working Tree: v2.2 integrity remediation, 134/134 Pytest Green)
+> **Active Branch:** `main` (v2.2 integrity remediation, 134/134 Pytest Green, commit `6141749`)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
-> **Date Generated:** 23 Oktober 2026 (updated after v2.1 data-integrity remediation)  
+> **Date Generated:** 24 Oktober 2026 (updated after v2.2 integrity remediation)  
 
 ---
 
-## 0. Remediation v2.1 — Data Integrity & Ranking Validity (23 Oktober 2026)
+## 0. Remediation v2.2 — Integrity, Immutable Snapshots, Telemetry (24 Oktober 2026)
+
+Commit: **`6141749`** (`fix: enforce v2.2 data integrity and reliable telemetry`), sudah di-push ke `origin/main`.
+
+1. **Normalisasi Lanny Jaya (`9507`)**
+   - Root cause: dua batch seeding membuat baris `IMPUTED_PROVINCE` lama tertinggal saat batch VERIFIED menimpa metadata bounds.
+   - Fix: satu himpunan nilai kanonik per indikator, normalisasi sekali, hapus baris snapshot lama sebelum insert.
+   - `inf_safe_water_pct` `9507`: raw `32.89`, normalized **100.0 → 78.89**, flag tetap `IMPUTED_PROVINCE`, provenance `bps_provincial_sdgs_2025` (legacy BPS `9700`, PAPUA PEGUNUNGAN).
+   - Composite `kemiskinan_stunting`: **84.40 → 80.18**, rank **2 → 3** (lokal).
+   - Audit 14.745 observasi: 0 mismatch normalisasi, 0 duplikat.
+
+2. **Snapshot immutable**
+   - ID baru: `2026.10.0-live-<16 hex content_sha256>`.
+   - `content_sha256` kanonik mencakup observations, snapshot indicator metadata, region catalog, dataset catalog, reference periods, dan scoring config.
+   - `metadata_checksum` terpisah; `manifest_checksum` legacy bukan content digest.
+   - Pin snapshot: `snapshot=<id>` atau `snapshot_id=<id>`. Unknown snapshot → 404, tanpa fallback.
+   - `GET /api/v1/snapshots/{id}` menyediakan metadata + digest.
+   - `2026.10.0-official-live` ditandai `is_immutable: false`, `is_reproducible: false` bila masih ada.
+   - Snapshot lokal final: `2026.10.0-live-62354dfad392d985`.
+
+3. **Coverage konsisten**
+   - `indicator_completeness_pct` = **29/33 = 87.9** (bukan 100).
+   - `available_indicator_data_pct` = 29/29 = 100.
+   - `meta.coverage.available` = cakupan wilayah (514); hitungan indikator ada di `meta.indicator_coverage`.
+   - `region_count` = 514, `region_coverage_pct` = 100.
+
+4. **Composite contract hardening**
+   - `composite-query` mengembalikan `rankable`, `not_rankable_reason`, `national_coverage_pct`, `available_weight_basis_points`, `available_indicators`.
+   - Skenario tidak rankable → `regions: []`, bukan ranking palsu.
+   - `coverage_pct` per wilayah memakai bobot asli yang diminta; `effective_weights_region` tetap 10.000 bp untuk wilayah eligible.
+   - `rank` dan `national_rank` tetap terpisah; `score_direction` tetap `higher_is_need`.
+
+5. **Telemetry reliability**
+   - Filter route-regex di production hanya cocok untuk `/api/v1/openapi.json`, sehingga semua request API nyata tidak tercatat dan counter tampak 0.
+   - Fix: whitelist prefix API eksplisit (`regions`, `indicators`, `boundaries`, `datasets`, `snapshots`, `earthquakes`), exclude openapi/health/stats/scanner.
+   - `STATE_VERSION = 3`: counter lama di-reset sekali saat deploy; `first_started_at` dipertahankan.
+   - Waktu tetap WIB (`Asia/Jakarta`).
+
+6. **Dokumentasi**
+   - `docs/INTEGRITY_FIX_V2_2.md`
+   - `docs/SNAPSHOT_VERSIONING_V2_2.md`
+   - `docs/FRONTEND_HANDOFF_V2_2.md`
+   - Update: README, PANDUAN integrasi frontend, GOVERNMENT_DATA_SOURCES, TELEMETRY_PERSISTENCE_COOLIFY.
+
+**Verifikasi:** `python -m pytest -q` → **134 passed**. Production belum diverifikasi ulang setelah commit ini; jangan klaim production verified sebelum redeploy dan post-deploy checklist dijalankan.
+
+---
+
+## 0.1. Remediation v2.1 — Data Integrity & Ranking Validity (23 Oktober 2026)
 
 Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
 
