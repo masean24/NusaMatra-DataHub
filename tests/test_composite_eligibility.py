@@ -22,7 +22,14 @@ async def _make_db(tmp_path, facts, regions):
             level TEXT,
             name TEXT
         );
-        CREATE TABLE dim_indicators (indicator_id TEXT PRIMARY KEY);
+        CREATE TABLE dim_indicators (
+            indicator_id TEXT PRIMARY KEY,
+            is_public INTEGER NOT NULL DEFAULT 1
+        );
+        CREATE TABLE snapshot_indicators (
+            snapshot_id TEXT,
+            indicator_id TEXT
+        );
         CREATE TABLE fact_indicator_values (
             snapshot_id TEXT,
             region_id TEXT,
@@ -38,7 +45,9 @@ async def _make_db(tmp_path, facts, regions):
             (region_id, parent_id, name),
         )
     for indicator_id in INDICATORS:
-        await db.execute("INSERT INTO dim_indicators VALUES (?)", (indicator_id,))
+        await db.execute(
+            "INSERT INTO dim_indicators (indicator_id) VALUES (?)", (indicator_id,)
+        )
     for region_id, indicator_id, score in facts:
         await db.execute(
             "INSERT INTO fact_indicator_values VALUES (?, ?, ?, ?, 'VERIFIED')",

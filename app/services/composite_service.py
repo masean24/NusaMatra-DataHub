@@ -15,6 +15,10 @@ Ranking rules:
   position within the returned (filtered) list.
 """
 
+import asyncio
+import copy
+import json
+from collections import OrderedDict
 from typing import Optional
 
 import aiosqlite
@@ -74,19 +78,34 @@ async def compute_composite_scores(
     weights = request.weights
     requested_ids = list(weights.keys())
 
-    # Validate that every requested indicator exists in the catalog.
+    # Validate that every requested indicator belongs to this snapshot's public
+    # catalog. Historical snapshots keep their retired rows, so an old snapshot
+    # can still resolve them; new snapshots cannot.
     placeholders_check = ",".join("?" for _ in requested_ids)
     cursor_check = await db.execute(
-        f"SELECT indicator_id FROM dim_indicators WHERE indicator_id IN ({placeholders_check})",
-        requested_ids,
+        f"""
+        WITH snapshot_catalog AS (
+            SELECT indicator_id FROM snapshot_indicators WHERE snapshot_id = ?
+        )
+        SELECT i.indicator_id
+        FROM dim_indicators i
+        LEFT JOIN snapshot_indicators si
+            ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
+        WHERE i.indicator_id IN ({placeholders_check})
+          AND (
+            (EXISTS (SELECT 1 FROM snapshot_catalog) AND si.indicator_id IS NOT NULL)
+            OR (NOT EXISTS (SELECT 1 FROM snapshot_catalog) AND i.is_public = 1)
+          )
+        """,
+        [snapshot_id, snapshot_id, *requested_ids],
     )
     found_rows = await cursor_check.fetchall()
     found_ids = {row["indicator_id"] for row in found_rows}
     unknown_ids = [indicator_id for indicator_id in requested_ids if indicator_id not in found_ids]
     if unknown_ids:
         raise ValueError(
-            f"Unknown indicator_id(s): {', '.join(unknown_ids)}. "
-            "Check GET /indicators for valid IDs."
+            f"Indicator(s) not available in this snapshot's public catalog: "
+            f"{', '.join(unknown_ids)}. Check GET /indicators for valid IDs."
         )
 
     placeholders = ",".join("?" for _ in requested_ids)
@@ -299,6 +318,124 @@ async def compute_composite_scores(
         renormalized=renormalized,
         insufficient_data=excluded,
     )
+
+
+# ---------------------------------------------------------------------------
+# Deterministic composite cache
+# ---------------------------------------------------------------------------
+
+_CACHE: "OrderedDict[tuple, tuple[CompositeQueryResult, int]]" = OrderedDict()
+_CACHE_BYTES = 0
+_CACHE_HITS = 0
+_CACHE_MISSES = 0
+_CACHE_LOCKS: dict[tuple, asyncio.Lock] = {}
+
+
+def _cache_key(
+    request: CompositeQueryRequest,
+    snapshot_id: str,
+    mode: str,
+) -> tuple:
+    """Build a key that covers every input capable of changing the result."""
+    return (
+        mode.upper(),
+        snapshot_id,
+        request.filter_province_id or "",
+        tuple(sorted(request.weights.items())),
+        settings.composite_min_coverage_pct,
+        settings.composite_min_components,
+        SCORE_DIRECTION,
+    )
+
+
+def _result_size(result: CompositeQueryResult) -> int:
+    payload = json.dumps(
+        result.model_dump(mode="json"),
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    return len(payload.encode("utf-8"))
+
+
+def _evict_if_needed() -> None:
+    global _CACHE_BYTES
+    max_entries = max(0, settings.composite_cache_max_entries)
+    max_bytes = max(0, settings.composite_cache_max_bytes)
+    while _CACHE and (
+        len(_CACHE) > max_entries
+        or (max_bytes and _CACHE_BYTES > max_bytes)
+    ):
+        _, (_, size) = _CACHE.popitem(last=False)
+        _CACHE_BYTES = max(0, _CACHE_BYTES - size)
+
+
+def clear_composite_cache() -> None:
+    """Clear cached results and counters. Used by tests and operational resets."""
+    global _CACHE_BYTES, _CACHE_HITS, _CACHE_MISSES
+    _CACHE.clear()
+    _CACHE_LOCKS.clear()
+    _CACHE_BYTES = 0
+    _CACHE_HITS = 0
+    _CACHE_MISSES = 0
+
+
+def get_composite_cache_info() -> dict[str, int]:
+    return {
+        "entries": len(_CACHE),
+        "bytes": _CACHE_BYTES,
+        "hits": _CACHE_HITS,
+        "misses": _CACHE_MISSES,
+    }
+
+
+async def compute_composite_scores_cached(
+    db: aiosqlite.Connection,
+    request: CompositeQueryRequest,
+    snapshot_id: str = "2026.10.0-wia-demo",
+    mode: str = "DEMO",
+) -> CompositeQueryResult:
+    """Return a deterministic cached composite result with single-flight misses.
+
+    The underlying result depends only on the immutable snapshot, requested
+    weights, province filter, and scoring policy, so it is safe to cache for the
+    lifetime of the process. No TTL is used because snapshots are immutable.
+    """
+    global _CACHE_BYTES, _CACHE_HITS, _CACHE_MISSES
+
+    key = _cache_key(request, snapshot_id, mode)
+    cached = _CACHE.get(key)
+    if cached is not None:
+        _CACHE.move_to_end(key)
+        _CACHE_HITS += 1
+        return copy.deepcopy(cached[0])
+
+    if settings.composite_cache_max_entries <= 0:
+        return await compute_composite_scores(db, request, snapshot_id=snapshot_id)
+
+    lock = _CACHE_LOCKS.get(key)
+    if lock is None:
+        lock = asyncio.Lock()
+        _CACHE_LOCKS[key] = lock
+
+    try:
+        async with lock:
+            # Another waiter may have filled the cache while this request waited.
+            cached = _CACHE.get(key)
+            if cached is not None:
+                _CACHE.move_to_end(key)
+                _CACHE_HITS += 1
+                return copy.deepcopy(cached[0])
+
+            _CACHE_MISSES += 1
+            result = await compute_composite_scores(db, request, snapshot_id=snapshot_id)
+            size = _result_size(result)
+            _CACHE[key] = (copy.deepcopy(result), size)
+            _CACHE_BYTES += size
+            _evict_if_needed()
+            return copy.deepcopy(result)
+    finally:
+        if _CACHE_LOCKS.get(key) is lock and not lock.locked():
+            _CACHE_LOCKS.pop(key, None)
 
 
 async def compute_preset_availability(

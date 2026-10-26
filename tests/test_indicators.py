@@ -13,8 +13,8 @@ async def test_list_indicators(client):
 
     data = resp.json()
     assert data["status"] == "success"
-    # Total should be 33 indicators
-    assert data["meta"]["total_count"] == 33
+    # Total should be 30 public indicators; three restricted IDs are retired.
+    assert data["meta"]["total_count"] == 30
 
     # Data should be grouped by category
     categories = data["data"]
@@ -64,26 +64,29 @@ async def test_get_indicator_not_found(client):
 
 
 @pytest.mark.asyncio
-async def test_unavailable_indicator_no_values(client):
-    """UNAVAILABLE indicators should have no fact rows."""
-    resp = await client.get("/api/v1/indicators/edu_school_travel_time_p90/values")
-    assert resp.status_code == 200
-
-    data = resp.json()["data"]
-    assert len(data["values_by_region"]) == 0
+async def test_retired_indicators_are_not_public(client):
+    """Restricted indicators are removed from the public DEMO catalog."""
+    for indicator_id in (
+        "meta_dapodik_sync_rate",
+        "edu_school_travel_time_p90",
+        "hlt_realtime_icu_occupancy",
+    ):
+        resp = await client.get(f"/api/v1/indicators/{indicator_id}/values")
+        assert resp.status_code == 404
 
 
 @pytest.mark.asyncio
 async def test_get_indicators_coverage_endpoint(client):
-    """B2: GET /api/v1/indicators/coverage must return coverage breakdown for all 33 indicators."""
+    """B2: GET /api/v1/indicators/coverage must cover all public indicators."""
     resp = await client.get("/api/v1/indicators/coverage")
     assert resp.status_code == 200
 
     body = resp.json()
     assert body["status"] == "success"
     data = body["data"]
-    assert data["total_indicators"] == 33
-    assert data["available_indicators_count"] >= 31  # 31 active in DEMO
+    assert data["total_indicators"] == 30
+    assert data["available_indicators_count"] == 30
+    assert data["empty_indicators"] == []
     assert "indicators" in data
     assert "soc_poverty_rate" in data["indicators"]
     assert data["indicators"]["soc_poverty_rate"]["available"] is True

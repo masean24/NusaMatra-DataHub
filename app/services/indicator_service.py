@@ -23,6 +23,9 @@ async def list_indicators(
 
     cursor = await db.execute(
         """
+        WITH snapshot_catalog AS (
+            SELECT indicator_id FROM snapshot_indicators WHERE snapshot_id = ?
+        )
         SELECT
             i.indicator_id,
             COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
@@ -44,10 +47,17 @@ async def list_indicators(
             ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
         LEFT JOIN dim_datasets d ON COALESCE(si.primary_dataset_id, i.primary_dataset_id) = d.dataset_id
         LEFT JOIN fact_indicator_values f ON i.indicator_id = f.indicator_id AND f.snapshot_id = ?
+        WHERE (
+            EXISTS (SELECT 1 FROM snapshot_catalog)
+            AND si.indicator_id IS NOT NULL
+        ) OR (
+            NOT EXISTS (SELECT 1 FROM snapshot_catalog)
+            AND i.is_public = 1
+        )
         GROUP BY i.indicator_id
         ORDER BY category, i.indicator_id
         """,
-        [snapshot_id, snapshot_id],
+        [snapshot_id, snapshot_id, snapshot_id],
     )
     rows = await cursor.fetchall()
 
@@ -94,6 +104,9 @@ async def get_indicator_values(
     # Fetch indicator metadata
     cursor = await db.execute(
         """
+        WITH snapshot_catalog AS (
+            SELECT indicator_id FROM snapshot_indicators WHERE snapshot_id = ?
+        )
         SELECT
             i.indicator_id,
             COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
@@ -112,8 +125,12 @@ async def get_indicator_values(
             ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
         LEFT JOIN dim_datasets d ON COALESCE(si.primary_dataset_id, i.primary_dataset_id) = d.dataset_id
         WHERE i.indicator_id = ?
+          AND (
+            (EXISTS (SELECT 1 FROM snapshot_catalog) AND si.indicator_id IS NOT NULL)
+            OR (NOT EXISTS (SELECT 1 FROM snapshot_catalog) AND i.is_public = 1)
+          )
         """,
-        [snapshot_id, indicator_id],
+        [snapshot_id, snapshot_id, indicator_id],
     )
     ind_row = await cursor.fetchone()
     if not ind_row:

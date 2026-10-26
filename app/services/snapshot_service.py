@@ -39,7 +39,11 @@ def _parse_json(value: Any, fallback: Any) -> Any:
 
 async def _snapshot_counts(db: aiosqlite.Connection, snapshot_id: str) -> dict[str, Any]:
     total_indicators = (
-        await (await db.execute("SELECT COUNT(*) FROM dim_indicators")).fetchone()
+        await (
+            await db.execute(
+                "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1"
+            )
+        ).fetchone()
     )[0]
     available_indicators = (
         await (
@@ -92,7 +96,7 @@ async def _snapshot_counts(db: aiosqlite.Connection, snapshot_id: str) -> dict[s
             await (
                 await db.execute(
                     "SELECT COUNT(*) FROM dim_indicators "
-                    "WHERE availability_status != 'UNAVAILABLE'"
+                    "WHERE is_public = 1 AND availability_status != 'UNAVAILABLE'"
                 )
             ).fetchone()
         )[0]

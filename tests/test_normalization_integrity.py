@@ -139,8 +139,11 @@ def test_lanny_jaya_composite_recalculated_after_correction():
 @live_only
 @pytest.mark.asyncio
 async def test_live_indicator_value_exposes_observation_provenance():
+    from app.services.snapshot_integrity import ensure_snapshot_schema_async
+
     db = await aiosqlite.connect(LIVE_DB)
     db.row_factory = aiosqlite.Row
+    await ensure_snapshot_schema_async(db)
     row = await (
         await db.execute(
             "SELECT snapshot_id FROM data_snapshots WHERE is_active_default = 1 LIMIT 1"

@@ -15,10 +15,16 @@ from fastapi.openapi.docs import get_redoc_html
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.config import settings
 from app.database import init_db
 from app.middleware.mode_selector import ModeSelector
+from app.middleware.security import (
+    BodySizeLimitMiddleware,
+    SecurityHeadersMiddleware,
+    SecurityMiddleware,
+)
 from app.routers import regions, indicators, boundaries, datasets, snapshots, health, earthquakes, stats
 from app.routers.stats import get_stats_html
 from app.services.telemetry_service import telemetry
@@ -159,28 +165,31 @@ if settings.enable_docs:
 
 # --- Middleware ---
 # In Starlette, middleware added LAST executes FIRST (outermost wrapper).
-# ModeSelector is registered first (inner), and CORSMiddleware is registered
-# last (outermost) so that even short-circuited error responses (e.g. 503 LIVE
-# fail-closed) receive full CORS headers (Access-Control-Allow-Origin, etc.).
+# CORS is registered last so even short-circuited error responses (e.g. 429,
+# 413, 503) receive CORS headers. SecurityHeaders sits inside CORS but outside
+# body/rate checks so every response gets the same browser hardening headers.
 app.add_middleware(ModeSelector)
+app.add_middleware(BodySizeLimitMiddleware)
+app.add_middleware(SecurityMiddleware)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=[
+        "X-API-Key",
+        "X-Request-ID",
         "X-Data-Mode",
         "X-NusaMatra-Mode",
         "X-NusaMatra-Snapshot",
         "Content-Type",
-        "Authorization",
         "Accept",
         "Origin",
-        "X-Requested-With",
-        "*",
     ],
     expose_headers=[
         "X-NusaMatra-Mode",
@@ -189,6 +198,14 @@ app.add_middleware(
         "X-NusaMatra-Snapshot-Immutable",
         "X-NusaMatra-Snapshot-Reproducible",
         "X-Data-Fallback",
+        "X-Request-ID",
+        "X-API-Key-Name",
+        "X-RateLimit-Limit",
+        "X-RateLimit-Remaining",
+        "X-RateLimit-Reset",
+        "X-RateLimit-Bucket",
+        "X-RateLimit-Exceeded",
+        "Retry-After",
         "Content-Length",
     ],
 )

@@ -1,0 +1,893 @@
+{
+  "http_status": 200,
+  "body": {
+    "status": "success",
+    "meta": {
+      "snapshot_id": "2026.10.0-live-62354dfad392d985",
+      "mode": "LIVE",
+      "boundary_version": null,
+      "total_count": 33,
+      "coverage": null,
+      "indicator_coverage": null,
+      "content_sha256": "62354dfad392d985168450ac670b6c647ab097e800ee023768d5858387a984b5",
+      "snapshot_immutable": true,
+      "snapshot_reproducible": true,
+      "methodology_version": "v2.2-minmax-full-range",
+      "data_origin": null,
+      "last_success_at": null,
+      "is_stale": null
+    },
+    "data": {
+      "data_reliability": [
+        {
+          "indicator_id": "meta_dapodik_sync_rate",
+          "indicator_name": "Persentase Pengiriman Data Sinkronisasi Dapodik",
+          "category": "data_reliability",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "UNAVAILABLE",
+          "derivation_formula": "Direct operational telemetry of school reporting compliance per Kabupaten/Kota.",
+          "description": "Persentase Pengiriman Data Sinkronisasi Dapodik",
+          "stats": {
+            "min": null,
+            "p25": null,
+            "median": null,
+            "mean": null,
+            "p75": null,
+            "max": null
+          },
+          "provenance": {
+            "dataset_id": "kemendikdasmen_ref_2026",
+            "agency_code": "KEMENDIKDASMEN",
+            "dataset_title": "Data Referensi Satuan Pendidikan Persekolahan (SD, SMP, SMA, SMK) 2026",
+            "official_portal_url": "https://referensi.data.kemendikdasmen.go.id/"
+          },
+          "live_available": false,
+          "live_coverage_count": 0
+        },
+        {
+          "indicator_id": "meta_freshness_lag_years",
+          "indicator_name": "Rata-rata Usia Data Indikator (Freshness Lag)",
+          "category": "data_reliability",
+          "unit": "years",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "AVG(2026 - indicator_reference_year) across all active indicators for the region.",
+          "description": "Rata-rata Usia Data Indikator (Freshness Lag)",
+          "stats": {
+            "min": 1.2727,
+            "p25": null,
+            "median": 1.4444,
+            "mean": 1.435589,
+            "p75": null,
+            "max": 1.4444
+          },
+          "provenance": {
+            "dataset_id": "nusa_matra_internal_audit",
+            "agency_code": "NUSAMATRA",
+            "dataset_title": "Internal Ingestion Audit (completeness & freshness derived from active snapshot)",
+            "official_portal_url": "https://api.orangkeren.me"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "meta_indicator_completeness",
+          "indicator_name": "Skor Kelengkapan Indikator Wilayah (Data Completeness)",
+          "category": "data_reliability",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DERIVED",
+          "derivation_formula": "(count_non_null_core_indicators / total_core_indicators) * 100 per region.",
+          "description": "Skor Kelengkapan Indikator Wilayah (Data Completeness)",
+          "stats": {
+            "min": 73.3333,
+            "p25": null,
+            "median": 90.0,
+            "mean": 88.955909,
+            "p75": null,
+            "max": 90.0
+          },
+          "provenance": {
+            "dataset_id": "nusa_matra_internal_audit",
+            "agency_code": "NUSAMATRA",
+            "dataset_title": "Internal Ingestion Audit (completeness & freshness derived from active snapshot)",
+            "official_portal_url": "https://api.orangkeren.me"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        }
+      ],
+      "disaster_risk": [
+        {
+          "indicator_id": "dis_affected_pop_per_10k",
+          "indicator_name": "Penduduk Terdampak & Mengungsi per 10.000 Jiwa",
+          "category": "disaster_risk",
+          "unit": "per 10k pop",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "((jumlah_terdampak + jumlah_mengungsi) / jumlah_penduduk_bps) * 10000.",
+          "description": "Penduduk Terdampak & Mengungsi per 10.000 Jiwa",
+          "stats": {
+            "min": 0.02,
+            "p25": null,
+            "median": 226.67,
+            "mean": 331.999144,
+            "p75": null,
+            "max": 1279.88
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "dis_earthquake_hazard_idx",
+          "indicator_name": "Indeks Bahaya Gempabumi (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "unit": "index (0.0-1.0)",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "Zonal mean of 100m raster pixels intersecting BIG Kab/Kota polygon.",
+          "description": "Indeks Bahaya Gempabumi (Rata-rata Wilayah)",
+          "stats": {
+            "min": 4.23,
+            "p25": null,
+            "median": 13.365,
+            "mean": 14.787137,
+            "p75": null,
+            "max": 32.4
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 510
+        },
+        {
+          "indicator_id": "dis_events_5yr_freq",
+          "indicator_name": "Frekuensi Kejadian Bencana (Akumulasi 5 Tahun)",
+          "category": "disaster_risk",
+          "unit": "events",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "SUM(kejadian_bencana) per kode_kabkota over rolling 5-year window (2021-2025).",
+          "description": "Frekuensi Kejadian Bencana (Akumulasi 5 Tahun)",
+          "stats": {
+            "min": 0.0,
+            "p25": null,
+            "median": 29.0,
+            "mean": 44.709804,
+            "p75": null,
+            "max": 1229.0
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 510
+        },
+        {
+          "indicator_id": "dis_flood_hazard_idx",
+          "indicator_name": "Indeks Bahaya Banjir (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "unit": "index (0.0-1.0)",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "Zonal mean of 100m raster pixels intersecting BIG Kab/Kota polygon: AVG(pixel_value) WHERE pixel_value >= 0.",
+          "description": "Indeks Bahaya Banjir (Rata-rata Wilayah)",
+          "stats": {
+            "min": 2.47,
+            "p25": null,
+            "median": 20.26,
+            "mean": 21.291111,
+            "p75": null,
+            "max": 36.0
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 396
+        },
+        {
+          "indicator_id": "dis_landslide_hazard_idx",
+          "indicator_name": "Indeks Bahaya Tanah Longsor (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "unit": "index (0.0-1.0)",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "Zonal mean of 100m raster pixels intersecting BIG Kab/Kota polygon.",
+          "description": "Indeks Bahaya Tanah Longsor (Rata-rata Wilayah)",
+          "stats": {
+            "min": 1.0,
+            "p25": null,
+            "median": 12.805,
+            "mean": 14.903941,
+            "p75": null,
+            "max": 36.0
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 510
+        },
+        {
+          "indicator_id": "dis_multihazard_index",
+          "indicator_name": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana",
+          "category": "disaster_risk",
+          "unit": "score (0-300)",
+          "polarity": "negative",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly published composite score per Kab/Kota in IRBI report tables (Low < 13, Medium 13-144, High > 144).",
+          "description": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana",
+          "stats": {
+            "min": 43.5,
+            "p25": null,
+            "median": 124.92,
+            "mean": 127.084501,
+            "p75": null,
+            "max": 214.8
+          },
+          "provenance": {
+            "dataset_id": "bnpb_irbi_2024",
+            "agency_code": "BNPB",
+            "dataset_title": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
+            "official_portal_url": "https://inarisk.bnpb.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 511
+        }
+      ],
+      "education_access": [
+        {
+          "indicator_id": "edu_damaged_classrooms_pct",
+          "indicator_name": "Persentase Ruang Kelas Rusak Sedang/Berat (SD & SMP)",
+          "category": "education_access",
+          "unit": "percent (%)",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "((rusak sedang + rusak berat) / total ruang kelas) * 100, SD + SMP, TA 2022/2023.",
+          "description": "Persentase Ruang Kelas Rusak Sedang/Berat (SD & SMP)",
+          "stats": {
+            "min": 1.3646,
+            "p25": null,
+            "median": 26.675,
+            "mean": 26.153208,
+            "p75": null,
+            "max": 61.9924
+          },
+          "provenance": {
+            "dataset_id": "kemendikdasmen_statistik_2026",
+            "agency_code": "KEMENDIKDASMEN",
+            "dataset_title": "Statistik Ruang Kelas dan Rasio Murid-Guru SD Tahun Ajaran 2022/2023 (kab/kota)",
+            "official_portal_url": "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "edu_expected_years_schooling",
+          "indicator_name": "Harapan Lama Sekolah (HLS / EYS)",
+          "category": "education_access",
+          "unit": "years",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available for population aged 7+ years per Kabupaten/Kota.",
+          "description": "Harapan Lama Sekolah (HLS / EYS)",
+          "stats": {
+            "min": 4.73,
+            "p25": null,
+            "median": 13.2,
+            "mean": 13.28072,
+            "p75": null,
+            "max": 17.95
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "edu_mean_years_schooling",
+          "indicator_name": "Rata-rata Lama Sekolah (RLS / MYS)",
+          "category": "education_access",
+          "unit": "years",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available for population aged 25+ years per Kabupaten/Kota.",
+          "description": "Rata-rata Lama Sekolah (RLS / MYS)",
+          "stats": {
+            "min": 2.19,
+            "p25": null,
+            "median": 8.745,
+            "mean": 8.879047,
+            "p75": null,
+            "max": 13.37
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "edu_net_enrollment_sma",
+          "indicator_name": "Angka Partisipasi Murni (APM) SMA/SMK/MA",
+          "category": "education_access",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available via BPS Susenas Education tables and Kemendikdasmen NPD.",
+          "description": "Angka Partisipasi Murni (APM) SMA/SMK/MA",
+          "stats": {
+            "min": 7.83,
+            "p25": null,
+            "median": 68.0,
+            "mean": 65.96786,
+            "p75": null,
+            "max": 91.97
+          },
+          "provenance": {
+            "dataset_id": "kemendikdasmen_ref_2026",
+            "agency_code": "KEMENDIKDASMEN",
+            "dataset_title": "Data Referensi Satuan Pendidikan Persekolahan (SD, SMP, SMA, SMK) 2026",
+            "official_portal_url": "https://referensi.data.kemendikdasmen.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "edu_net_enrollment_smp",
+          "indicator_name": "Angka Partisipasi Murni (APM) SMP/MTs",
+          "category": "education_access",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available via BPS Susenas Education tables and Kemendikdasmen NPD.",
+          "description": "Angka Partisipasi Murni (APM) SMP/MTs",
+          "stats": {
+            "min": 14.31,
+            "p25": null,
+            "median": 77.28,
+            "mean": 76.116829,
+            "p75": null,
+            "max": 94.43
+          },
+          "provenance": {
+            "dataset_id": "kemendikdasmen_ref_2026",
+            "agency_code": "KEMENDIKDASMEN",
+            "dataset_title": "Data Referensi Satuan Pendidikan Persekolahan (SD, SMP, SMA, SMK) 2026",
+            "official_portal_url": "https://referensi.data.kemendikdasmen.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "edu_school_travel_time_p90",
+          "indicator_name": "Waktu Tempuh Riil Rumah-Sekolah Persentil ke-90",
+          "category": "education_access",
+          "unit": "minutes",
+          "polarity": "negative",
+          "availability_status": "UNAVAILABLE",
+          "derivation_formula": "UNAVAILABLE due to PII protection on student home addresses in Dapodik. Proxy via Podes village distance to nearest SMP/SMA.",
+          "description": "Waktu Tempuh Riil Rumah-Sekolah Persentil ke-90",
+          "stats": {
+            "min": null,
+            "p25": null,
+            "median": null,
+            "mean": null,
+            "p75": null,
+            "max": null
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": false,
+          "live_coverage_count": 0
+        },
+        {
+          "indicator_id": "edu_student_teacher_ratio_sd",
+          "indicator_name": "Rasio Murid terhadap Guru Jenjang SD",
+          "category": "education_access",
+          "unit": "students per teacher",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "Direct official ratio (peserta didik / pendidik) per Kabupaten/Kota, TA 2022/2023 (cut off 30 Nov 2022).",
+          "description": "Rasio Murid terhadap Guru Jenjang SD",
+          "stats": {
+            "min": 5.7958,
+            "p25": null,
+            "median": 14.7127,
+            "mean": 15.613463,
+            "p75": null,
+            "max": 67.9637
+          },
+          "provenance": {
+            "dataset_id": "kemendikdasmen_statistik_2026",
+            "agency_code": "KEMENDIKDASMEN",
+            "dataset_title": "Statistik Ruang Kelas dan Rasio Murid-Guru SD Tahun Ajaran 2022/2023 (kab/kota)",
+            "official_portal_url": "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        }
+      ],
+      "healthcare_access": [
+        {
+          "indicator_id": "hlt_doctors_per_10k",
+          "indicator_name": "Rasio Dokter per 10.000 Penduduk",
+          "category": "healthcare_access",
+          "unit": "doctors per 10k pop",
+          "polarity": "positive",
+          "availability_status": "DERIVED",
+          "derivation_formula": "Jumlah dokter (puskesmas + RS + faskes lainnya) / penduduk provinsi * 10000; nilai kab/kota = rate provinsi, flag IMPUTED_PROVINCE.",
+          "description": "Rasio Dokter per 10.000 Penduduk",
+          "stats": {
+            "min": 0.6325,
+            "p25": null,
+            "median": 2.1976,
+            "mean": 2.584542,
+            "p75": null,
+            "max": 7.5213
+          },
+          "provenance": {
+            "dataset_id": "kemenkes_satusehat_dokter_2026",
+            "agency_code": "KEMENKES",
+            "dataset_title": "Jumlah Dokter di Fasilitas Kesehatan per Provinsi (SATUSEHAT Data)",
+            "official_portal_url": "https://satusehat.kemkes.go.id/data/dataset/65cff906-5fd1-4f8d-baad-9f6ad837f5b8"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "hlt_facilities_per_10k",
+          "indicator_name": "Rasio Rumah Sakit & Puskesmas per 10.000 Penduduk",
+          "category": "healthcare_access",
+          "unit": "facilities per 10k pop",
+          "polarity": "positive",
+          "availability_status": "DERIVED",
+          "derivation_formula": "((jumlah puskesmas + jumlah RS) / jumlah penduduk 2026) * 10000.",
+          "description": "Rasio Rumah Sakit & Puskesmas per 10.000 Penduduk",
+          "stats": {
+            "min": 0.1483,
+            "p25": null,
+            "median": 0.6521,
+            "mean": 0.825489,
+            "p75": null,
+            "max": 7.9377
+          },
+          "provenance": {
+            "dataset_id": "kemenkes_sirs_regpus_2026",
+            "agency_code": "KEMENKES",
+            "dataset_title": "RS Online dan Data Puskesmas Teregistrasi Semester II 2025 (kab/kota)",
+            "official_portal_url": "https://sirs.kemkes.go.id/fo/home/dashboard_rs?id=0"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "hlt_jkn_coverage_pct",
+          "indicator_name": "Cakupan Kepesertaan Jaminan Kesehatan (JKN/BPJS)",
+          "category": "healthcare_access",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available as percentage of population with health insurance coverage.",
+          "description": "Cakupan Kepesertaan Jaminan Kesehatan (JKN/BPJS)",
+          "stats": {
+            "min": 61.04,
+            "p25": null,
+            "median": 74.32,
+            "mean": 77.483891,
+            "p75": null,
+            "max": 98.18
+          },
+          "provenance": {
+            "dataset_id": "kemenkes_ski_2023",
+            "agency_code": "KEMENKES",
+            "dataset_title": "Survei Kesehatan Indonesia (SKI) 2023 Prevalensi Status Gizi Balita",
+            "official_portal_url": "https://badankebijakan.kemkes.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "hlt_life_expectancy",
+          "indicator_name": "Umur Harapan Hidup Saat Lahir (UHH)",
+          "category": "healthcare_access",
+          "unit": "years",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available from BPS IPM components per Kabupaten/Kota.",
+          "description": "Umur Harapan Hidup Saat Lahir (UHH)",
+          "stats": {
+            "min": 55.74,
+            "p25": null,
+            "median": 70.59,
+            "mean": 70.409086,
+            "p75": null,
+            "max": 78.26
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "hlt_realtime_icu_occupancy",
+          "indicator_name": "Tingkat Keterisian Tempat Tidur ICU Rumah Sakit Real-Time",
+          "category": "healthcare_access",
+          "unit": "percent (%)",
+          "polarity": "negative",
+          "availability_status": "UNAVAILABLE",
+          "derivation_formula": "UNAVAILABLE publicly via stable historical/regional open API. Requires restricted SATUSEHAT hospital credentials.",
+          "description": "Tingkat Keterisian Tempat Tidur ICU Rumah Sakit Real-Time",
+          "stats": {
+            "min": null,
+            "p25": null,
+            "median": null,
+            "mean": null,
+            "p75": null,
+            "max": null
+          },
+          "provenance": {
+            "dataset_id": "kemenkes_ski_2023",
+            "agency_code": "KEMENKES",
+            "dataset_title": "Survei Kesehatan Indonesia (SKI) 2023 Prevalensi Status Gizi Balita",
+            "official_portal_url": "https://badankebijakan.kemkes.go.id/"
+          },
+          "live_available": false,
+          "live_coverage_count": 0
+        },
+        {
+          "indicator_id": "hlt_stunting_prevalence",
+          "indicator_name": "Prevalensi Balita Stunting",
+          "category": "healthcare_access",
+          "unit": "percent (%)",
+          "polarity": "negative",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Published in Kemenkes national stunting prevalence tables by Kabupaten/Kota.",
+          "description": "Prevalensi Balita Stunting",
+          "stats": {
+            "min": 1.6,
+            "p25": null,
+            "median": 22.2,
+            "mean": 22.769405,
+            "p75": null,
+            "max": 50.2
+          },
+          "provenance": {
+            "dataset_id": "kemenkes_ski_2023",
+            "agency_code": "KEMENKES",
+            "dataset_title": "Survei Kesehatan Indonesia (SKI) 2023 Prevalensi Status Gizi Balita",
+            "official_portal_url": "https://badankebijakan.kemkes.go.id/"
+          },
+          "live_available": true,
+          "live_coverage_count": 487
+        }
+      ],
+      "infrastructure": [
+        {
+          "indicator_id": "inf_asphalt_road_village_pct",
+          "indicator_name": "Persentase Desa dengan Jalan Utama Aspal/Beton Dapat Dilalui Sepanjang Tahun",
+          "category": "infrastructure",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "UNAVAILABLE",
+          "derivation_formula": "(jumlah_desa_jalan_aspal_beton / total_desa_kelurahan) * 100.",
+          "description": "Persentase Desa dengan Jalan Utama Aspal/Beton Dapat Dilalui Sepanjang Tahun",
+          "stats": {
+            "min": null,
+            "p25": null,
+            "median": null,
+            "mean": null,
+            "p75": null,
+            "max": null
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": false,
+          "live_coverage_count": 0
+        },
+        {
+          "indicator_id": "inf_electrification_pct",
+          "indicator_name": "Persentase Rumah Tangga Pengguna Listrik (PLN & Non-PLN)",
+          "category": "infrastructure",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available per Kabupaten/Kota from BPS.",
+          "description": "Persentase Rumah Tangga Pengguna Listrik (PLN & Non-PLN)",
+          "stats": {
+            "min": 68.88,
+            "p25": null,
+            "median": 99.86,
+            "mean": 98.931926,
+            "p75": null,
+            "max": 100.0
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "inf_internet_household_pct",
+          "indicator_name": "Persentase Rumah Tangga Mengakses Internet",
+          "category": "infrastructure",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available per Kabupaten/Kota from BPS.",
+          "description": "Persentase Rumah Tangga Mengakses Internet",
+          "stats": {
+            "min": 12.15,
+            "p25": null,
+            "median": 90.58,
+            "mean": 87.786848,
+            "p75": null,
+            "max": 98.18
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "inf_safe_sanitation_pct",
+          "indicator_name": "Persentase Rumah Tangga Akses Sanitasi Layak",
+          "category": "infrastructure",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available SDGs indicator per Kabupaten/Kota from BPS.",
+          "description": "Persentase Rumah Tangga Akses Sanitasi Layak",
+          "stats": {
+            "min": 1.13,
+            "p25": null,
+            "median": 88.19,
+            "mean": 82.933099,
+            "p75": null,
+            "max": 100.0
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 513
+        },
+        {
+          "indicator_id": "inf_safe_water_pct",
+          "indicator_name": "Persentase Rumah Tangga Akses Air Minum Layak",
+          "category": "infrastructure",
+          "unit": "percent (%)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available SDGs indicator per Kabupaten/Kota from BPS.",
+          "description": "Persentase Rumah Tangga Akses Air Minum Layak",
+          "stats": {
+            "min": 14.93,
+            "p25": null,
+            "median": 92.555,
+            "mean": 88.239786,
+            "p75": null,
+            "max": 100.0
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        }
+      ],
+      "socioeconomic": [
+        {
+          "indicator_id": "soc_dependency_ratio",
+          "indicator_name": "Rasio Ketergantungan (Dependency Ratio)",
+          "category": "socioeconomic",
+          "unit": "ratio per 100 working-age",
+          "polarity": "negative",
+          "availability_status": "DERIVED",
+          "derivation_formula": "((pop_0_14 + pop_65_plus) / pop_15_64) * 100.",
+          "description": "Rasio Ketergantungan (Dependency Ratio)",
+          "stats": {
+            "min": 28.86,
+            "p25": null,
+            "median": 46.325,
+            "mean": 47.086965,
+            "p75": null,
+            "max": 90.12
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "soc_expenditure_per_capita",
+          "indicator_name": "Pengeluaran per Kapita Disesuaikan",
+          "category": "socioeconomic",
+          "unit": "thousand IDR/person/year",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available PPP-adjusted real expenditure per capita from BPS IPM dataset.",
+          "description": "Pengeluaran per Kapita Disesuaikan",
+          "stats": {
+            "min": 4773.0,
+            "p25": null,
+            "median": 11684.0,
+            "mean": 11803.14786,
+            "p75": null,
+            "max": 26387.0
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "soc_hdi",
+          "indicator_name": "Indeks Pembangunan Manusia (IPM / HDI)",
+          "category": "socioeconomic",
+          "unit": "score (0-100)",
+          "polarity": "positive",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available from BPS annual IPM publication per Kabupaten/Kota.",
+          "description": "Indeks Pembangunan Manusia (IPM / HDI)",
+          "stats": {
+            "min": 36.3,
+            "p25": null,
+            "median": 71.685,
+            "mean": 71.918891,
+            "p75": null,
+            "max": 88.77
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "soc_poverty_rate",
+          "indicator_name": "Persentase Penduduk Miskin (P0)",
+          "category": "socioeconomic",
+          "unit": "percent (%)",
+          "polarity": "negative",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available from BPS Strategic Indicators per Kabupaten/Kota.",
+          "description": "Persentase Penduduk Miskin (P0)",
+          "stats": {
+            "min": 1.9,
+            "p25": null,
+            "median": 8.745,
+            "mean": 10.571887,
+            "p75": null,
+            "max": 42.56
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "soc_poverty_severity_p2",
+          "indicator_name": "Indeks Keparahan Kemiskinan (P2)",
+          "category": "socioeconomic",
+          "unit": "index",
+          "polarity": "negative",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available from BPS dynamic tables per Kabupaten/Kota.",
+          "description": "Indeks Keparahan Kemiskinan (P2)",
+          "stats": {
+            "min": 0.0,
+            "p25": null,
+            "median": 0.25,
+            "mean": 0.394825,
+            "p75": null,
+            "max": 4.96
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        },
+        {
+          "indicator_id": "soc_unemployment_rate",
+          "indicator_name": "Tingkat Pengangguran Terbuka (TPT)",
+          "category": "socioeconomic",
+          "unit": "percent (%)",
+          "polarity": "negative",
+          "availability_status": "DIRECT",
+          "derivation_formula": "Directly available from BPS August Sakernas release.",
+          "description": "Tingkat Pengangguran Terbuka (TPT)",
+          "stats": {
+            "min": 0.14,
+            "p25": null,
+            "median": 3.85,
+            "mean": 4.182276,
+            "p75": null,
+            "max": 11.37
+          },
+          "provenance": {
+            "dataset_id": "bps_susenas_sakernas_2025",
+            "agency_code": "BPS",
+            "dataset_title": "Indikator Strategis & SDGs Kemiskinan, Ketenagakerjaan, Sanitasi 2024-2025",
+            "official_portal_url": "https://webapi.bps.go.id/developer/"
+          },
+          "live_available": true,
+          "live_coverage_count": 514
+        }
+      ]
+    }
+  }
+}

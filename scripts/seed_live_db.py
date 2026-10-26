@@ -15,12 +15,17 @@ import sqlite3
 import sys
 import hashlib
 import statistics
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from app.services.crosswalk_service import crosswalk_rows, first_value, sort_vintages
+from app.services.indicator_policy import (
+    RETIRED_PUBLIC_INDICATORS,
+    retirement_reason,
+)
 from app.services.normalization_service import (
     METHODOLOGY_VERSION,
     normalize_score,
@@ -33,7 +38,11 @@ from app.services.snapshot_integrity import (
     mark_legacy_snapshots,
     verify_content_digest,
 )
-DB_PATH = REPO_ROOT / "data" / "nusa_matra_live.db"
+DB_PATH = Path(
+    os.environ.get("NM_LIVE_DATABASE_PATH")
+    or os.environ.get("LIVE_DATABASE_PATH")
+    or REPO_ROOT / "data" / "nusa_matra_live.db"
+)
 MIGRATION_PATH = REPO_ROOT / "migrations" / "001_init_schema.sql"
 MASTER_CSV = REPO_ROOT / "data" / "verified_indicators_master.csv"
 MAPPING_CSV = REPO_ROOT / "data" / "INDICATOR_MAPPING.csv"
@@ -326,15 +335,21 @@ def main():
                 "dataset_id": ds_id,
                 "formula": r["derivation_formula_or_notes"]
             }
+            is_public = 0 if ind_id in RETIRED_PUBLIC_INDICATORS else 1
+            retired_at = (
+                datetime.now(timezone.utc).isoformat() if not is_public else None
+            )
             conn.execute(
                 """INSERT OR REPLACE INTO dim_indicators
                    (indicator_id, indicator_name, category, unit, polarity,
-                    availability_status, primary_dataset_id, derivation_formula, description)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    availability_status, primary_dataset_id, derivation_formula,
+                    description, is_public, retired_at, retirement_reason)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     ind_id, r["indicator_name"], r["category"], r["unit"],
                     r["polarity"], r["availability_status"], ds_id,
                     r["derivation_formula_or_notes"], r["indicator_name"],
+                    is_public, retired_at, retirement_reason(ind_id),
                 ),
             )
     conn.commit()
@@ -414,7 +429,7 @@ def main():
         Replacing instead of merging prevents leftover rows from an earlier
         provenance pass from retaining stale normalized scores.
         """
-        if not values:
+        if not values or ind_id in RETIRED_PUBLIC_INDICATORS:
             return 0
 
         conn.execute(
@@ -804,11 +819,13 @@ def main():
         print(f"       [OK] Verified Kemenkes health access: {len(health_rows)} rows")
 
     # 6b. Internal reliability indicators derived from the snapshot itself.
-    # Completeness is measured against the full non-meta indicator framework,
-    # including indicators that are still UNAVAILABLE, so the score reflects
-    # real national coverage rather than only the indicators we happened to seed.
+    # Completeness is measured against the public non-meta framework. Restricted
+    # retired indicators are excluded so their absence does not punish regions.
     core_indicator_ids = [
-        iid for iid in indicators_meta if not iid.startswith("meta_")
+        iid
+        for iid in indicators_meta
+        if not iid.startswith("meta_")
+        and iid not in RETIRED_PUBLIC_INDICATORS
     ]
     completeness_by_region = {region["region_id"]: 0 for region in regions}
     years_by_region = {region["region_id"]: [] for region in regions}

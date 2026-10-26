@@ -27,7 +27,7 @@ from app.services.indicator_service import list_indicators, get_indicator_values
 from app.services.snapshot_registry import snapshot_meta_fields
 from app.services.composite_service import (
     COMPOSITE_PRESETS,
-    compute_composite_scores,
+    compute_composite_scores_cached,
     compute_preset_availability,
 )
 
@@ -98,23 +98,35 @@ async def get_indicators_coverage(
     db: aiosqlite.Connection = Depends(get_db),
 ):
     """
-    Return comprehensive data coverage summary for all 33 indicators in the active snapshot.
+    Return comprehensive data coverage summary for the active snapshot's public indicators.
 
     Enables frontend 3D map clients to immediately identify which indicators/layers have verified data.
     """
     _snapshot_id = request.state.snapshot_id
     cursor = await db.execute(
         """
-        SELECT 
+        WITH snapshot_catalog AS (
+            SELECT indicator_id FROM snapshot_indicators WHERE snapshot_id = ?
+        )
+        SELECT
             i.indicator_id, i.indicator_name, i.category,
             COUNT(f.region_id) as coverage_count
         FROM dim_indicators i
-        LEFT JOIN fact_indicator_values f 
+        LEFT JOIN snapshot_indicators si
+            ON si.indicator_id = i.indicator_id AND si.snapshot_id = ?
+        LEFT JOIN fact_indicator_values f
             ON i.indicator_id = f.indicator_id AND f.snapshot_id = ?
+        WHERE (
+            EXISTS (SELECT 1 FROM snapshot_catalog)
+            AND si.indicator_id IS NOT NULL
+        ) OR (
+            NOT EXISTS (SELECT 1 FROM snapshot_catalog)
+            AND i.is_public = 1
+        )
         GROUP BY i.indicator_id
         ORDER BY i.category, i.indicator_id
         """,
-        [_snapshot_id],
+        [_snapshot_id, _snapshot_id, _snapshot_id],
     )
     rows = await cursor.fetchall()
 
@@ -153,7 +165,7 @@ async def get_indicators_coverage(
             await (
                 await db.execute(
                     "SELECT COUNT(*) FROM dim_indicators "
-                    "WHERE availability_status != 'UNAVAILABLE'"
+                    "WHERE is_public = 1 AND availability_status != 'UNAVAILABLE'"
                 )
             ).fetchone()
         )[0]
@@ -316,7 +328,12 @@ async def composite_query(
     _snapshot_id = request.state.snapshot_id
 
     try:
-        result = await compute_composite_scores(db, body, snapshot_id=_snapshot_id)
+        result = await compute_composite_scores_cached(
+            db,
+            body,
+            snapshot_id=_snapshot_id,
+            mode=request.state.data_mode,
+        )
     except ValueError as exc:
         raise HTTPException(
             status_code=422,

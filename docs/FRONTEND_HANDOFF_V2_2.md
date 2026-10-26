@@ -2,6 +2,8 @@
 
 Backend v2.2 keeps the v2.1 field names used by the frontend. The changes below are additive except where noted.
 
+> **v2.3 retirement note:** `meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, and `hlt_realtime_icu_occupancy` are removed from the public catalog. New snapshot: 30 indicators / 29 available; historical snapshots remain 33 / 29 and remain pin-able. See `docs/INDICATOR_RETIREMENT_V2_3.md` and `docs/staging_samples/retirement/`.
+
 ---
 
 ## 1. Stop hardcoding the LIVE snapshot ID

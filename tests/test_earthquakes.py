@@ -193,8 +193,9 @@ async def test_earthquakes_live_cache_hit_avoids_upstream():
 
 
 @pytest.mark.asyncio
-async def test_earthquakes_live_upstream_failure_simulation():
+async def test_earthquakes_live_upstream_failure_simulation(monkeypatch):
     """Verify fail-closed 503 behavior when BMKG live upstream is unreachable."""
+    monkeypatch.setattr(settings, "enable_test_hooks", True)
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/earthquakes/geojson?mode=live&simulate_upstream_failure=true")
         assert resp.status_code == 503

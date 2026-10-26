@@ -3,7 +3,29 @@ Tests for POST /api/v1/indicators/composite-query
 Validates basis-point weighting (Blocker #4).
 """
 
+import sqlite3
+
 import pytest
+
+from app.config import settings
+from app.services.composite_service import clear_composite_cache
+
+
+def _demo_without_indicators(tmp_path, monkeypatch, indicator_ids):
+    """Copy the DEMO DB and remove facts for selected indicators."""
+    source = settings.database_path
+    target = tmp_path / "demo_missing.db"
+    with sqlite3.connect(source) as src, sqlite3.connect(target) as dst:
+        src.backup(dst)
+        dst.executemany(
+            "DELETE FROM fact_indicator_values "
+            "WHERE snapshot_id = ? AND indicator_id = ?",
+            [(settings.default_snapshot_id, indicator_id) for indicator_id in indicator_ids],
+        )
+        dst.commit()
+    clear_composite_cache()
+    monkeypatch.setattr(settings, "database_path", str(target))
+    return target
 
 
 @pytest.mark.asyncio
@@ -38,13 +60,18 @@ async def test_composite_query_valid(client):
 
 
 @pytest.mark.asyncio
-async def test_composite_query_unavailable_indicator_transparency(client):
+async def test_composite_query_unavailable_indicator_transparency(
+    client, tmp_path, monkeypatch
+):
     """A scenario remains rankable at 80% weight coverage with two active components."""
+    _demo_without_indicators(
+        tmp_path, monkeypatch, ["inf_asphalt_road_village_pct"]
+    )
     body = {
         "weights": {
             "dis_multihazard_index": 6000,
             "soc_poverty_rate": 2000,
-            "edu_school_travel_time_p90": 2000,
+            "inf_asphalt_road_village_pct": 2000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
@@ -53,8 +80,8 @@ async def test_composite_query_unavailable_indicator_transparency(client):
     data = resp.json()["data"]
     assert data["rankable"] is True
     assert data["national_coverage_pct"] == 80.0
-    assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
-    assert "edu_school_travel_time_p90" not in data["effective_weights"]
+    assert "inf_asphalt_road_village_pct" in data["unavailable_indicators"]
+    assert "inf_asphalt_road_village_pct" not in data["effective_weights"]
     assert data["renormalized"] is True
     # Available weights are rescaled to full 10,000 bp.
     assert data["effective_weights"]["dis_multihazard_index"] == 7500
@@ -63,12 +90,17 @@ async def test_composite_query_unavailable_indicator_transparency(client):
 
 
 @pytest.mark.asyncio
-async def test_composite_query_non_rankable_scenario_is_explicit(client):
+async def test_composite_query_non_rankable_scenario_is_explicit(
+    client, tmp_path, monkeypatch
+):
     """A 50/50 scenario with one missing component must not return rankings."""
+    _demo_without_indicators(
+        tmp_path, monkeypatch, ["inf_asphalt_road_village_pct"]
+    )
     body = {
         "weights": {
             "dis_multihazard_index": 5000,
-            "edu_school_travel_time_p90": 5000,
+            "inf_asphalt_road_village_pct": 5000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
@@ -80,21 +112,42 @@ async def test_composite_query_non_rankable_scenario_is_explicit(client):
     assert data["total_regions"] == 0
     assert data["national_coverage_pct"] == 50.0
     assert "below" in data["not_rankable_reason"].lower()
-    assert "edu_school_travel_time_p90" in data["unavailable_indicators"]
+    assert "inf_asphalt_road_village_pct" in data["unavailable_indicators"]
 
 
 @pytest.mark.asyncio
-async def test_composite_query_all_indicators_unavailable_rejected(client):
+async def test_composite_query_all_indicators_unavailable_rejected(
+    client, tmp_path, monkeypatch
+):
     """BE-08: If all requested indicators have no data in snapshot, return 422."""
+    _demo_without_indicators(
+        tmp_path,
+        monkeypatch,
+        ["inf_asphalt_road_village_pct", "hlt_stunting_prevalence"],
+    )
     body = {
         "weights": {
-            "edu_school_travel_time_p90": 5000,
-            "hlt_realtime_icu_occupancy": 5000,
+            "inf_asphalt_road_village_pct": 5000,
+            "hlt_stunting_prevalence": 5000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
     assert resp.status_code == 422
     assert "unavailable" in resp.json()["detail"]["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_composite_query_retired_indicator_rejected(client):
+    """Retired indicators are not part of the public catalog."""
+    body = {
+        "weights": {
+            "meta_dapodik_sync_rate": 5000,
+            "soc_poverty_rate": 5000,
+        }
+    }
+    resp = await client.post("/api/v1/indicators/composite-query", json=body)
+    assert resp.status_code == 422
+    assert "public catalog" in resp.json()["detail"]["message"].lower()
 
 
 @pytest.mark.asyncio

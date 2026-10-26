@@ -22,12 +22,12 @@ COPY data/ data/
 COPY migrations/ migrations/
 COPY scripts/ scripts/
 
-# Pre-seed both DEMO and verified official LIVE databases during container image build.
-# Remove any stale local databases from the build context so every image gets a
-# fresh, digest-addressed LIVE snapshot instead of inheriting old facts.
+# The DEMO database is deterministic and can be baked into the image. The LIVE
+# database must live on a persistent volume: rebuilding it on every image would
+# destroy historical snapshots and break pinned Evidence Passport links.
 RUN rm -f data/nusa_matra_demo.db data/nusa_matra_live.db data/telemetry.db data/telemetry.db-wal data/telemetry.db-shm
 RUN python data/seed_db.py
-RUN python scripts/seed_live_db.py
+RUN chmod +x scripts/entrypoint.sh
 
 # Expose default port (Coolify detects this automatically for port mapping)
 EXPOSE 8000
@@ -36,5 +36,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8000'); urllib.request.urlopen(f'http://localhost:{port}/api/v1/health')" || exit 1
 
-# Launch Uvicorn with dynamic PORT support
-CMD ["sh", "-c", "python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Seed LIVE only when the persistent volume is empty, then retire restricted
+# indicators (idempotent) before serving traffic.
+CMD ["sh", "scripts/entrypoint.sh"]

@@ -12,10 +12,12 @@ Endpoints:
 - GET /api/v1/earthquakes/summary  — Executive national seismic activity summary
 """
 
+import logging
 from typing import Literal, Optional
 from fastapi import APIRouter, Query, Request, Response
 from fastapi.responses import JSONResponse
 
+from app.config import settings
 from app.models.common import ApiResponse, ResponseMeta
 from app.models.earthquakes import (
     EarthquakeEvent,
@@ -32,10 +34,13 @@ from app.services.bmkg_service import (
 )
 
 router = APIRouter(prefix="/earthquakes", tags=["Disaster & Climate (BMKG)"])
+logger = logging.getLogger(__name__)
 
 
 def _check_simulation(request: Request) -> bool:
-    """Helper to detect upstream failure simulation requested by audit/test clients."""
+    """Detect the audit simulation hook only when test hooks are enabled."""
+    if not settings.enable_test_hooks:
+        return False
     sim_query = request.query_params.get("simulate_upstream_failure", "").lower()
     sim_header = request.headers.get("x-simulate-upstream-failure", "").lower()
     return sim_query in ("true", "1") or sim_header in ("true", "1")
@@ -43,6 +48,7 @@ def _check_simulation(request: Request) -> bool:
 
 def _upstream_503_response(exc: Exception) -> JSONResponse:
     """Standard fail-closed 503 response when BMKG upstream live service is unreachable."""
+    logger.warning("BMKG upstream unavailable: %s", exc)
     return JSONResponse(
         status_code=503,
         content={
@@ -52,7 +58,7 @@ def _upstream_503_response(exc: Exception) -> JSONResponse:
                 "BMKG live earthquake upstream service is currently unreachable. "
                 "LIVE mode fails closed to prevent presenting unverified or synthetic data as official events."
             ),
-            "detail": str(exc),
+            "detail": "upstream_unavailable",
         },
         headers={
             "X-NusaMatra-Mode": "LIVE",

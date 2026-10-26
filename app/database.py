@@ -5,12 +5,16 @@ For DEMO MVP, we use SQLite via aiosqlite.
 Production LIVE mode would use asyncpg + PostGIS.
 """
 
-import aiosqlite
+import logging
 from pathlib import Path
-from contextlib import asynccontextmanager
+
+import aiosqlite
 from starlette.requests import Request
+
 from app.config import settings
 from app.services.snapshot_integrity import ensure_snapshot_schema_async
+
+logger = logging.getLogger(__name__)
 
 
 def _db_path(mode: str = "DEMO") -> str:
@@ -57,5 +61,6 @@ async def check_db_health(mode: str = "DEMO") -> dict:
                 row = await cursor.fetchone()
                 counts[table] = row["cnt"] if row else 0
             return {"status": "connected", "tables": counts}
-    except Exception as exc:
-        return {"status": "error", "detail": str(exc)}
+    except Exception:
+        logger.exception("Database health check failed")
+        return {"status": "error", "detail": "database_unavailable"}

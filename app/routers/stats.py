@@ -38,6 +38,9 @@ async def get_stats_json(request: Request):
     - Recent requests stream
     """
     summary = telemetry.get_summary()
+    # Public dashboard: retain operational metrics, omit persistence internals
+    # (flush interval, database state, timestamps that are not useful to judges).
+    summary.pop("persistence", None)
     return ApiResponse(
         meta=ResponseMeta(
             snapshot_id=getattr(request.state, "snapshot_id", settings.default_snapshot_id),

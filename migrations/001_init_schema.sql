@@ -97,7 +97,10 @@ CREATE TABLE IF NOT EXISTS dim_indicators (
     national_mean REAL,
     national_median REAL,
     national_min REAL,
-    national_max REAL
+    national_max REAL,
+    is_public INTEGER NOT NULL DEFAULT 1 CHECK (is_public IN (0, 1)),
+    retired_at TEXT,
+    retirement_reason TEXT
 );
 
 -- 4b. Snapshot-specific indicator metadata and distribution statistics

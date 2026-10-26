@@ -12,9 +12,13 @@ services:
       - PORT=8000
       - NM_DEFAULT_MODE=DEMO
       - NM_DEBUG=false
+      - NM_ENABLE_LIVE_MODE=true
+      - NM_LIVE_DATABASE_PATH=/data/nusa_matra_live.db
       - NM_TELEMETRY_DB_PATH=/data/telemetry.db
       - NM_TELEMETRY_FLUSH_INTERVAL_SECONDS=5
     volumes:
+      # Historical name: this volume now stores both the LIVE database and
+      # telemetry. Keep the name so existing Coolify volumes are reused.
       - nusa-matra-telemetry:/data
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')\" || exit 1"]

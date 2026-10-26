@@ -3,8 +3,10 @@ Application configuration via environment variables.
 Uses pydantic-settings for typed config with .env file support.
 """
 
+import json
 from pathlib import Path
-from pydantic import AliasChoices, Field
+
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -45,7 +47,11 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://api.orangkeren.me",
-        "*",
+    ]
+    allowed_hosts: list[str] = [
+        "api.orangkeren.me",
+        "localhost",
+        "127.0.0.1",
     ]
     enable_docs: bool = Field(
         default=True,
@@ -78,6 +84,39 @@ class Settings(BaseSettings):
         description="Minimum number of contributing indicators for a region to be ranked",
     )
 
+    # Security / anti-abuse controls
+    rate_limit_enabled: bool = True
+    rate_limit_report_only: bool = True
+    rate_limit_read_per_minute: int = 900
+    rate_limit_read_burst: int = 200
+    rate_limit_search_per_minute: int = 180
+    rate_limit_search_burst: int = 60
+    rate_limit_boundaries_per_minute: int = 60
+    rate_limit_boundaries_burst: int = 30
+    rate_limit_composite_per_minute: int = 240
+    rate_limit_composite_burst: int = 80
+    rate_limit_earthquakes_per_minute: int = 20
+    rate_limit_earthquakes_burst: int = 10
+    rate_limit_docs_per_minute: int = 240
+    rate_limit_docs_burst: int = 60
+    rate_limit_global_per_minute: int = 1200
+    rate_limit_global_burst: int = 300
+    rate_limit_app_key_per_minute: int = 5000
+    rate_limit_judge_key_per_minute: int = 300
+    rate_limit_admin_key_per_minute: int = 60
+    max_request_body_bytes: int = 16384
+    max_composite_components: int = 33
+    composite_cache_max_entries: int = 256
+    composite_cache_max_bytes: int = 67108864
+    trusted_proxy_ips: str = Field(
+        default="",
+        description="Comma-separated CIDRs of trusted reverse proxies (Traefik/Coolify/Cloudflare).",
+    )
+    app_api_key_hash: str = ""
+    judge_api_key_hash: str = ""
+    admin_token_hash: str = ""
+    enable_test_hooks: bool = False
+
     # Telemetry persistence (point to a Coolify persistent volume in production)
     telemetry_db_path: str = Field(
         default=str(Path(__file__).parent.parent / "data" / "telemetry.db"),
@@ -107,7 +146,25 @@ class Settings(BaseSettings):
         description="Persist telemetry counters across process restarts",
     )
 
-    model_config = {"env_prefix": "NM_", "env_file": ".env", "extra": "ignore"}
+    @field_validator("cors_origins", "allowed_hosts", mode="before")
+    @classmethod
+    def parse_list_setting(cls, value):
+        """Accept JSON arrays or comma-separated environment values."""
+        if isinstance(value, str):
+            raw = value.strip()
+            if not raw:
+                return []
+            if raw.startswith("["):
+                return json.loads(raw)
+            return [item.strip() for item in raw.split(",") if item.strip()]
+        return value
+
+    model_config = {
+        "env_prefix": "NM_",
+        "env_file": ".env",
+        "extra": "ignore",
+        "enable_decoding": False,
+    }
 
 
 settings = Settings()

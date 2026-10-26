@@ -39,6 +39,12 @@ SNAPSHOT_COLUMNS: dict[str, str] = {
     "immutability_note": "TEXT",
 }
 
+INDICATOR_COLUMNS: dict[str, str] = {
+    "is_public": "INTEGER NOT NULL DEFAULT 1",
+    "retired_at": "TEXT",
+    "retirement_reason": "TEXT",
+}
+
 SNAPSHOT_INDICATORS_DDL = """
 CREATE TABLE IF NOT EXISTS snapshot_indicators (
     snapshot_id TEXT NOT NULL REFERENCES data_snapshots(snapshot_id),
@@ -67,12 +73,29 @@ def _sync_columns(conn: sqlite3.Connection, table: str) -> set[str]:
     return {row[1] for row in conn.execute(f"PRAGMA table_info({table})")}
 
 
+def ensure_indicator_schema(conn: sqlite3.Connection) -> None:
+    """Add public-visibility columns to an existing indicator catalog."""
+    columns = _sync_columns(conn, "dim_indicators")
+    for name, sql_type in INDICATOR_COLUMNS.items():
+        if name not in columns:
+            conn.execute(f"ALTER TABLE dim_indicators ADD COLUMN {name} {sql_type}")
+
+
+async def ensure_indicator_schema_async(db) -> None:
+    cursor = await db.execute("PRAGMA table_info(dim_indicators)")
+    columns = {row[1] for row in await cursor.fetchall()}
+    for name, sql_type in INDICATOR_COLUMNS.items():
+        if name not in columns:
+            await db.execute(f"ALTER TABLE dim_indicators ADD COLUMN {name} {sql_type}")
+
+
 def ensure_snapshot_schema(conn: sqlite3.Connection) -> None:
-    """Add immutable-snapshot columns/tables to an existing SQLite database."""
+    """Add immutable-snapshot and indicator-visibility columns to an existing DB."""
     columns = _sync_columns(conn, "data_snapshots")
     for name, sql_type in SNAPSHOT_COLUMNS.items():
         if name not in columns:
             conn.execute(f"ALTER TABLE data_snapshots ADD COLUMN {name} {sql_type}")
+    ensure_indicator_schema(conn)
     conn.execute(SNAPSHOT_INDICATORS_DDL)
     conn.commit()
 
@@ -86,6 +109,7 @@ async def ensure_snapshot_schema_async(db) -> None:
             await db.execute(
                 f"ALTER TABLE data_snapshots ADD COLUMN {name} {sql_type}"
             )
+    await ensure_indicator_schema_async(db)
     await db.execute(SNAPSHOT_INDICATORS_DDL)
     await db.commit()
 
@@ -359,6 +383,7 @@ def populate_snapshot_indicators(
                availability_status, primary_dataset_id, derivation_formula,
                description
         FROM dim_indicators
+        WHERE is_public = 1
         ORDER BY indicator_id
         """
     )
@@ -525,7 +550,9 @@ def finalize_staging_snapshot(
             source_manifest,
             supersedes,
             counts[0],
-            conn.execute("SELECT COUNT(*) FROM dim_indicators").fetchone()[0],
+            conn.execute(
+                "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1"
+            ).fetchone()[0],
             available_count,
             counts[1],
             dataset_count,

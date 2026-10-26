@@ -34,14 +34,17 @@ Counter yang persisten: `total_requests`, `status_codes`, `top_endpoints`, `mode
 
 1. Buka aplikasi di Coolify.
 2. **Persistent Storage** → Add.
-3. Name: `nusa-matra-telemetry`.
+3. Name: `nusa-matra-telemetry` (nama historis; sekarang menyimpan LIVE DB dan telemetry).
 4. Mount path: `/data`.
 5. Tambahkan environment:
    ```
+   NM_LIVE_DATABASE_PATH=/data/nusa_matra_live.db
    NM_TELEMETRY_DB_PATH=/data/telemetry.db
    NM_TELEMETRY_FLUSH_INTERVAL_SECONDS=5
+   NM_ENABLE_LIVE_MODE=true
    ```
-6. Redeploy.
+6. **Sebelum redeploy pertama**, salin `nusa_matra_live.db` dari container lama ke volume ini. Lihat `docs/INDICATOR_RETIREMENT_V2_3.md` bagian one-time migration.
+7. Redeploy.
 
 ### Opsi 2 — Docker Compose
 
@@ -49,13 +52,19 @@ Counter yang persisten: `total_requests`, `status_codes`, `top_endpoints`, `mode
 
 ```yaml
 environment:
+  - NM_LIVE_DATABASE_PATH=/data/nusa_matra_live.db
   - NM_TELEMETRY_DB_PATH=/data/telemetry.db
   - NM_TELEMETRY_FLUSH_INTERVAL_SECONDS=5
+  - NM_ENABLE_LIVE_MODE=true
 volumes:
   - nusa-matra-telemetry:/data
 ```
 
-Pastikan Coolify memakai compose tersebut, lalu redeploy.
+Pastikan Coolify memakai compose tersebut, lalu redeploy. Volume ini menyimpan
+LIVE database **dan** telemetry.
+
+> **Jangan mount volume ke `/app/data`.** Gunakan `/data`; `/app/data` berisi
+> DEMO database dari image dan bisa menutupi file yang di-seed.
 
 ## Verifikasi
 
@@ -72,6 +81,17 @@ Pastikan Coolify memakai compose tersebut, lalu redeploy.
 3. Catat `total_requests` dan `first_started_at`.
 4. Redeploy.
 5. Cek lagi: `total_requests` lanjut, `first_started_at` tetap, `process_uptime_seconds` reset.
+6. Cek snapshot:
+   ```http
+   GET /api/v1/snapshots?mode=live
+   ```
+   Snapshot lama `2026.10.0-live-62354dfad392d985` harus tetap ada, dan snapshot
+   baru 30 indikator harus menjadi `is_active_default`.
+7. Pin snapshot lama:
+   ```http
+   GET /api/v1/indicators?mode=live&snapshot_id=2026.10.0-live-62354dfad392d985
+   ```
+   Harus `200` dengan 33 indikator.
 
 ## Batasan
 

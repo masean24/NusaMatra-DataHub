@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **134/134 Unit & Integration Tests Passing** |
+| **Status API** | ✅ **159/159 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
@@ -14,6 +14,7 @@
 
 ## 📌 Ringkasan Pembaruan untuk Frontend (TL;DR)
 
+0. **Katalog v2.3:** tiga indikator restricted (`meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, `hlt_realtime_icu_occupancy`) tidak lagi ada di katalog publik. Snapshot baru 30 indikator / 29 berdata; snapshot lama 33 / 29 tetap bisa di-pin. Contoh response ada di `docs/staging_samples/retirement/`.
 1. **Semantik Skor Kanonik (v2.1):** `score_direction: "higher_is_need"`. Skor dan `normalized_score` bernilai 100 berarti **paling rentan / paling butuh intervensi**, konsisten di DEMO maupun LIVE. Rank 1 = wilayah paling prioritas.
 2. **Kebijakan Data Missing (v2.1):** Missing **tidak lagi dihitung nol**. Wilayah dengan cakupan bobot ≥70% dan minimal 2 komponen tetap diranking memakai bobot per wilayah (`effective_weights_region`). Wilayah di bawah ambang masuk `insufficient_data`, bukan ranking.
 3. **Rank Nasional + Rank Filter:** `national_rank` selalu posisi se-Indonesia; `rank` adalah posisi di dalam hasil filter provinsi.
@@ -23,7 +24,7 @@
 7. **Peta Batas Wilayah 3D Jauh Lebih Cepat (BE-05):** Header `Cache-Control: public, max-age=604800, immutable` (7 hari) aktif di `/boundaries/*`.
 8. **Validasi Mode Ketat (BE-02):** Parameter `mode` strict: `?mode=demo` atau `?mode=live` (huruf kecil).
 9. **Snapshot Immutable (v2.2):** resolve snapshot aktif via `GET /api/v1/snapshots?mode=live`; gunakan `snapshot=<id>` (alias) atau `snapshot_id=<id>`. `content_sha256` adalah digest konten kanonik; `manifest_checksum` bukan content hash. Unknown snapshot → 404, tanpa fallback.
-10. **Coverage Eksplisit (v2.2):** `indicator_completeness_pct` = 29/33 = 87.9; `meta.coverage.available` = cakupan wilayah (514), sedangkan hitungan indikator ada di `meta.indicator_coverage`.
+10. **Coverage Eksplisit (v2.2):** snapshot baru v2.3: `indicator_completeness_pct` = 29/30 = 96.7; snapshot lama tetap 29/33 = 87.9. `meta.coverage.available` = cakupan wilayah (514), sedangkan hitungan indikator ada di `meta.indicator_coverage`.
 11. **Composite Rankability (v2.2):** periksa `data.rankable`. Jika false, `regions` kosong dan `not_rankable_reason` menjelaskan ambang yang gagal; jangan render ranking.
 12. **Normalisasi Lanny Jaya (v2.2):** `inf_safe_water_pct` region `9507` sekarang `norm: 78.89` (bukan 100), flag tetap `IMPUTED_PROVINCE` dengan provenance provinsi Papua Pegunungan.
 
@@ -241,9 +242,9 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
 {
   "status": "success",
   "meta": {
-    "snapshot_id": "2026.10.0-official-live",
+    "snapshot_id": "2026.10.0-live-<sha16>",
     "mode": "LIVE",
-    "total_count": 33,
+    "total_count": 30,
     "coverage": {
       "available": 29,
       "total_regions": 514,
@@ -252,15 +253,12 @@ GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
     }
   },
   "data": {
-    "snapshot_id": "2026.10.0-official-live",
+    "snapshot_id": "2026.10.0-live-<sha16>",
     "mode": "LIVE",
-    "total_indicators": 33,
+    "total_indicators": 30,
     "available_indicators_count": 29,
-    "empty_indicators_count": 4,
+    "empty_indicators_count": 1,
     "empty_indicators": [
-      "meta_dapodik_sync_rate",
-      "edu_school_travel_time_p90",
-      "hlt_realtime_icu_occupancy",
       "inf_asphalt_road_village_pct"
     ],
     "indicators": {
@@ -359,7 +357,7 @@ Endpoint gempabumi terhubung langsung ke feed terbuka BMKG dengan in-memory cach
 | 2 | `GET` | `/api/v1/health` | Status database & environment |
 | 3 | `GET` | `/api/v1/regions` | Daftar 514 wilayah (filter `level`, `parent_id`, `q`) |
 | 4 | `GET` | `/api/v1/regions/{id}` | Detail profil lengkap wilayah & skor indikator |
-| 5 | `GET` | `/api/v1/indicators` | Katalog 33 indikator (disertai `live_available`) |
+| 5 | `GET` | `/api/v1/indicators` | Katalog 30 indikator publik (disertai `live_available`) |
 | 6 | `GET` | `/api/v1/indicators/coverage` | **Matriks ketersediaan layer per mode** |
 | 7 | `GET` | `/api/v1/indicators/{id}/values` | Matriks nilai indikator 514 wilayah (`values_by_region`) |
 | 8 | `POST` | `/api/v1/indicators/composite-query` | **Kalkulasi skor komposit tertimbang (auto-renormalize)** |

@@ -14,6 +14,14 @@ from httpx import AsyncClient, ASGITransport
 # Ensure project root is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Test-client host and security headers need deterministic configuration before
+# any test module imports app.config/app.main during collection.
+os.environ.setdefault(
+    "NM_ALLOWED_HOSTS",
+    '["test","testserver","localhost","127.0.0.1","api.orangkeren.me"]',
+)
+os.environ.setdefault("NM_RATE_LIMIT_REPORT_ONLY", "true")
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():

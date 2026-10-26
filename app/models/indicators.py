@@ -6,6 +6,8 @@ Matches API_CONTRACT_DRAFT.md Sections 4.1, 4.2, 4.3.
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 
+from app.config import settings
+
 
 class IndicatorProvenance(BaseModel):
     """Dataset provenance for an indicator."""
@@ -112,6 +114,11 @@ class CompositeQueryRequest(BaseModel):
     def validate_weights(cls, w: dict[str, int]) -> dict[str, int]:
         if not w:
             raise ValueError("weights tidak boleh kosong (weights must not be empty)")
+        if len(w) > settings.max_composite_components:
+            raise ValueError(
+                f"weights may contain at most {settings.max_composite_components} indicators, "
+                f"got {len(w)}"
+            )
         for k, v in w.items():
             if not (0 <= v <= 10000):
                 raise ValueError(

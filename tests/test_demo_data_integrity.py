@@ -52,7 +52,7 @@ def test_demo_every_available_indicator_covers_514(demo):
            FROM dim_indicators i
            LEFT JOIN fact_indicator_values f
              ON f.indicator_id = i.indicator_id AND f.snapshot_id = ?
-           WHERE i.availability_status != 'UNAVAILABLE'
+           WHERE i.is_public = 1 AND i.availability_status != 'UNAVAILABLE'
            GROUP BY i.indicator_id""",
         (SNAPSHOT,),
     ).fetchall()

@@ -16,6 +16,7 @@ import os
 import random
 import sqlite3
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Deterministic seed for reproducible DEMO data
@@ -25,6 +26,10 @@ random.seed(42)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from app.services.indicator_policy import (
+    RETIRED_PUBLIC_INDICATORS,
+    retirement_reason,
+)
 from app.services.snapshot_integrity import ensure_snapshot_schema
 
 DB_PATH = REPO_ROOT / "data" / "nusa_matra_demo.db"
@@ -437,13 +442,18 @@ def main():
             else:
                 n_mean = n_median = n_min = n_max = None
 
+            is_public = 0 if ind_id in RETIRED_PUBLIC_INDICATORS else 1
+            retired_at = (
+                datetime.now(timezone.utc).isoformat() if not is_public else None
+            )
             conn.execute(
                 """INSERT INTO dim_indicators
                    (indicator_id, indicator_name, category, unit, polarity,
                     availability_status, primary_dataset_id, derivation_formula,
                     description, national_mean, national_median,
-                    national_min, national_max)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    national_min, national_max, is_public, retired_at,
+                    retirement_reason)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     ind_id,
                     row["indicator_name"].strip(),
@@ -455,6 +465,7 @@ def main():
                     row.get("derivation_formula_or_notes", "").strip() or None,
                     row["indicator_name"].strip(),
                     n_mean, n_median, n_min, n_max,
+                    is_public, retired_at, retirement_reason(ind_id),
                 ),
             )
             indicators.append((ind_id, row["availability_status"].strip(), dataset_id))
@@ -467,7 +478,9 @@ def main():
 
     available_indicators = [
         (iid, dsid) for iid, status, dsid in indicators
-        if status != "UNAVAILABLE" and dsid is not None
+        if status != "UNAVAILABLE"
+        and dsid is not None
+        and iid not in RETIRED_PUBLIC_INDICATORS
     ]
     print(f"       Generating values for {len(available_indicators)} available indicators * {len(region_ids)} regions...")
 
@@ -558,7 +571,8 @@ def main():
         ("Kab/Kota", "SELECT COUNT(*) FROM dim_regions WHERE level IN ('kabupaten', 'kota')", 514),
         ("Total Regions", "SELECT COUNT(*) FROM dim_regions", 552),
         ("Indicators", "SELECT COUNT(*) FROM dim_indicators", 33),
-        ("Available Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE availability_status != 'UNAVAILABLE'", 31),
+        ("Public Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1", 30),
+        ("Public Available Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1 AND availability_status != 'UNAVAILABLE'", 30),
         ("Datasets", "SELECT COUNT(*) FROM dim_datasets", len(DATASETS)),
         ("Snapshots", "SELECT COUNT(*) FROM data_snapshots", 1),
     ]
