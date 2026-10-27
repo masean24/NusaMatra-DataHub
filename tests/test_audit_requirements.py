@@ -159,9 +159,8 @@ async def test_composite_weights_sum_below_10000_returns_422(client):
     )
     assert resp.status_code == 422
     body = resp.json()
-    # Our custom error shape is nested under `detail`
-    detail = body.get("detail", body)
-    assert "10000" in str(detail)
+    assert body["code"] == "WEIGHT_VALIDATION_ERROR"
+    assert "10000" in body["message"]
 
 
 @pytest.mark.asyncio
@@ -179,8 +178,8 @@ async def test_composite_weights_sum_above_10000_returns_422(client):
     )
     assert resp.status_code == 422
     body = resp.json()
-    detail = body.get("detail", body)
-    assert "10000" in str(detail)
+    assert body["code"] == "WEIGHT_VALIDATION_ERROR"
+    assert "10000" in body["message"]
 
 
 @pytest.mark.asyncio

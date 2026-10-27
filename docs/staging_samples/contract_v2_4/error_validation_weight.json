@@ -1,0 +1,9 @@
+{
+  "http_status": 422,
+  "body": {
+    "status": "error",
+    "code": "WEIGHT_VALIDATION_ERROR",
+    "message": "body.weights: Weights must sum to 10000 basis points, got 8000",
+    "detail": "body.weights: Weights must sum to 10000 basis points, got 8000"
+  }
+}

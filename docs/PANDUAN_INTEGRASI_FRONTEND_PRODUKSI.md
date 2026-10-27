@@ -4,7 +4,7 @@
 | Parameter | Keterangan |
 |---|---|
 | **Base URL Produksi** | `https://api.orangkeren.me` |
-| **Status API** | ✅ **159/159 Unit & Integration Tests Passing** |
+| **Status API** | ✅ **164/164 Unit & Integration Tests Passing** |
 | **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
 | **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
 | **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
@@ -27,8 +27,11 @@
 10. **Coverage Eksplisit (v2.2):** snapshot baru v2.3: `indicator_completeness_pct` = 29/30 = 96.7; snapshot lama tetap 29/33 = 87.9. `meta.coverage.available` = cakupan wilayah (514), sedangkan hitungan indikator ada di `meta.indicator_coverage`.
 11. **Composite Rankability (v2.2):** periksa `data.rankable`. Jika false, `regions` kosong dan `not_rankable_reason` menjelaskan ambang yang gagal; jangan render ranking.
 12. **Normalisasi Lanny Jaya (v2.2):** `inf_safe_water_pct` region `9507` sekarang `norm: 78.89` (bukan 100), flag tetap `IMPUTED_PROVINCE` dengan provenance provinsi Papua Pegunungan.
+13. **Error envelope (v2.4):** semua `422` memakai `{status, code, message, detail}`. `detail` berupa string, bukan array. Validasi bobot memakai `WEIGHT_VALIDATION_ERROR`.
+14. **Boundary metadata (v2.4):** `meta.boundary_version` terisi dari snapshot aktif di values, coverage, datasets, snapshots, regions, boundaries, dan composite.
+15. **Snapshot aktif (v2.4):** field penanda di `GET /snapshots` adalah `is_active_default`.
 
-> Handoff lengkap: `docs/FRONTEND_HANDOFF_V2_2.md` · Spesifikasi snapshot: `docs/SNAPSHOT_VERSIONING_V2_2.md` · Root cause: `docs/INTEGRITY_FIX_V2_2.md`.
+> Handoff lengkap: `docs/FRONTEND_HANDOFF_V2_2.md` · Handoff v2.4: `docs/FRONTEND_HANDOFF_V2_4.md` · Spesifikasi snapshot: `docs/SNAPSHOT_VERSIONING_V2_2.md` · Root cause: `docs/INTEGRITY_FIX_V2_2.md`.
 
 ---
 

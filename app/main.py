@@ -9,12 +9,14 @@ import json
 from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.openapi.docs import get_redoc_html
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.config import settings
@@ -64,6 +66,91 @@ app = FastAPI(
     redoc_url=None,
     openapi_url=f"{settings.api_prefix}/openapi.json" if settings.enable_docs else None,
 )
+
+_HTTP_ERROR_CODES = {
+    400: "BAD_REQUEST",
+    401: "UNAUTHORIZED",
+    403: "FORBIDDEN",
+    404: "NOT_FOUND",
+    405: "METHOD_NOT_ALLOWED",
+    409: "CONFLICT",
+    413: "PAYLOAD_TOO_LARGE",
+    415: "UNSUPPORTED_MEDIA_TYPE",
+    422: "VALIDATION_ERROR",
+    429: "RATE_LIMITED",
+    500: "INTERNAL_ERROR",
+    503: "SERVICE_UNAVAILABLE",
+}
+
+
+def _clean_validation_message(message: object) -> str:
+    """Strip Pydantic's internal prefix so clients get a usable message."""
+    text = str(message or "").strip()
+    prefix = "Value error, "
+    return text[len(prefix):] if text.startswith(prefix) else text
+
+
+def _format_validation_detail(errors: list[dict]) -> str:
+    """Render Pydantic validation errors as one readable string."""
+    parts = []
+    for error in errors:
+        location = ".".join(str(part) for part in error.get("loc", ()))
+        message = _clean_validation_message(error.get("msg", "Invalid value"))
+        parts.append(f"{location}: {message}" if location else message)
+    return "; ".join(parts) or "Request validation failed."
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
+    """Return every validation failure in the standard API error envelope."""
+    errors = exc.errors()
+    is_weight_error = any(
+        tuple(error.get("loc", ()))[:2] == ("body", "weights") for error in errors
+    )
+    detail = _format_validation_detail(errors)
+    return JSONResponse(
+        status_code=422,
+        content={
+            "status": "error",
+            "code": "WEIGHT_VALIDATION_ERROR" if is_weight_error else "VALIDATION_ERROR",
+            "message": detail if is_weight_error else "Request validation failed.",
+            "detail": detail,
+        },
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(
+    request: Request, exc: StarletteHTTPException
+) -> JSONResponse:
+    """Normalize HTTPException responses and unwrap structured detail payloads."""
+    detail = exc.detail
+    code = _HTTP_ERROR_CODES.get(exc.status_code, "HTTP_ERROR")
+
+    if isinstance(detail, dict) and detail.get("code") and detail.get("message"):
+        payload = {
+            "status": detail.get("status", "error"),
+            "code": detail["code"],
+            "message": str(detail["message"]),
+        }
+        if detail.get("detail") is not None:
+            payload["detail"] = str(detail["detail"])
+    else:
+        message = str(detail) if detail else "Request failed."
+        payload = {
+            "status": "error",
+            "code": code,
+            "message": message,
+        }
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=payload,
+        headers=exc.headers,
+    )
+
 
 # --- Static files & Favicon ---
 if STATIC_DIR.exists():

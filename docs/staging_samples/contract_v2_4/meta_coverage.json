@@ -1,0 +1,261 @@
+{
+  "http_status": 200,
+  "body": {
+    "status": "success",
+    "meta": {
+      "snapshot_id": "2026.10.0-live-0de6ac68f0d55b3a",
+      "mode": "LIVE",
+      "boundary_version": "BIG-20260601",
+      "total_count": 30,
+      "coverage": {
+        "available": 514,
+        "total_regions": 514,
+        "missing_region_ids": [],
+        "mode": "LIVE",
+        "total_indicators": 30,
+        "available_indicators": 29,
+        "indicator_completeness_pct": 96.7
+      },
+      "indicator_coverage": {
+        "total_indicators": 30,
+        "available_indicators": 29,
+        "unavailable_indicators": 1,
+        "indicator_completeness_pct": 96.7,
+        "available_indicator_data_pct": 100.0
+      },
+      "content_sha256": "0de6ac68f0d55b3ad82cfd4640507db88096589de27fdfa972fdb5c90d1d1c85",
+      "snapshot_immutable": true,
+      "snapshot_reproducible": true,
+      "methodology_version": "v2.2-minmax-full-range",
+      "data_origin": null,
+      "last_success_at": null,
+      "is_stale": null
+    },
+    "data": {
+      "snapshot_id": "2026.10.0-live-0de6ac68f0d55b3a",
+      "mode": "LIVE",
+      "total_indicators": 30,
+      "available_indicators_count": 29,
+      "empty_indicators_count": 1,
+      "empty_indicators": [
+        "inf_asphalt_road_village_pct"
+      ],
+      "indicator_completeness_pct": 96.7,
+      "available_indicator_data_pct": 100.0,
+      "total_regions": 514,
+      "region_coverage_pct": 100.0,
+      "indicators": {
+        "meta_freshness_lag_years": {
+          "name": "Rata-rata Usia Data Indikator (Freshness Lag)",
+          "category": "data_reliability",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "meta_indicator_completeness": {
+          "name": "Skor Kelengkapan Indikator Wilayah (Data Completeness)",
+          "category": "data_reliability",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "dis_affected_pop_per_10k": {
+          "name": "Penduduk Terdampak & Mengungsi per 10.000 Jiwa",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "dis_earthquake_hazard_idx": {
+          "name": "Indeks Bahaya Gempabumi (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 510,
+          "coverage_pct": 99.2
+        },
+        "dis_events_5yr_freq": {
+          "name": "Frekuensi Kejadian Bencana (Akumulasi 5 Tahun)",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 510,
+          "coverage_pct": 99.2
+        },
+        "dis_flood_hazard_idx": {
+          "name": "Indeks Bahaya Banjir (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 396,
+          "coverage_pct": 77.0
+        },
+        "dis_landslide_hazard_idx": {
+          "name": "Indeks Bahaya Tanah Longsor (Rata-rata Wilayah)",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 510,
+          "coverage_pct": 99.2
+        },
+        "dis_multihazard_index": {
+          "name": "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana",
+          "category": "disaster_risk",
+          "available": true,
+          "coverage_count": 511,
+          "coverage_pct": 99.4
+        },
+        "edu_damaged_classrooms_pct": {
+          "name": "Persentase Ruang Kelas Rusak Sedang/Berat (SD & SMP)",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "edu_expected_years_schooling": {
+          "name": "Harapan Lama Sekolah (HLS / EYS)",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "edu_mean_years_schooling": {
+          "name": "Rata-rata Lama Sekolah (RLS / MYS)",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "edu_net_enrollment_sma": {
+          "name": "Angka Partisipasi Murni (APM) SMA/SMK/MA",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "edu_net_enrollment_smp": {
+          "name": "Angka Partisipasi Murni (APM) SMP/MTs",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "edu_student_teacher_ratio_sd": {
+          "name": "Rasio Murid terhadap Guru Jenjang SD",
+          "category": "education_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "hlt_doctors_per_10k": {
+          "name": "Rasio Dokter per 10.000 Penduduk",
+          "category": "healthcare_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "hlt_facilities_per_10k": {
+          "name": "Rasio Rumah Sakit & Puskesmas per 10.000 Penduduk",
+          "category": "healthcare_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "hlt_jkn_coverage_pct": {
+          "name": "Cakupan Kepesertaan Jaminan Kesehatan (JKN/BPJS)",
+          "category": "healthcare_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "hlt_life_expectancy": {
+          "name": "Umur Harapan Hidup Saat Lahir (UHH)",
+          "category": "healthcare_access",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "hlt_stunting_prevalence": {
+          "name": "Prevalensi Balita Stunting",
+          "category": "healthcare_access",
+          "available": true,
+          "coverage_count": 487,
+          "coverage_pct": 94.7
+        },
+        "inf_asphalt_road_village_pct": {
+          "name": "Persentase Desa dengan Jalan Utama Aspal/Beton Dapat Dilalui Sepanjang Tahun",
+          "category": "infrastructure",
+          "available": false,
+          "coverage_count": 0,
+          "coverage_pct": 0.0
+        },
+        "inf_electrification_pct": {
+          "name": "Persentase Rumah Tangga Pengguna Listrik (PLN & Non-PLN)",
+          "category": "infrastructure",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "inf_internet_household_pct": {
+          "name": "Persentase Rumah Tangga Mengakses Internet",
+          "category": "infrastructure",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "inf_safe_sanitation_pct": {
+          "name": "Persentase Rumah Tangga Akses Sanitasi Layak",
+          "category": "infrastructure",
+          "available": true,
+          "coverage_count": 513,
+          "coverage_pct": 99.8
+        },
+        "inf_safe_water_pct": {
+          "name": "Persentase Rumah Tangga Akses Air Minum Layak",
+          "category": "infrastructure",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_dependency_ratio": {
+          "name": "Rasio Ketergantungan (Dependency Ratio)",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_expenditure_per_capita": {
+          "name": "Pengeluaran per Kapita Disesuaikan",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_hdi": {
+          "name": "Indeks Pembangunan Manusia (IPM / HDI)",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_poverty_rate": {
+          "name": "Persentase Penduduk Miskin (P0)",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_poverty_severity_p2": {
+          "name": "Indeks Keparahan Kemiskinan (P2)",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        },
+        "soc_unemployment_rate": {
+          "name": "Tingkat Pengangguran Terbuka (TPT)",
+          "category": "socioeconomic",
+          "available": true,
+          "coverage_count": 514,
+          "coverage_pct": 100.0
+        }
+      }
+    }
+  }
+}

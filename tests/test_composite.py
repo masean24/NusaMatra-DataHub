@@ -133,7 +133,7 @@ async def test_composite_query_all_indicators_unavailable_rejected(
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
     assert resp.status_code == 422
-    assert "unavailable" in resp.json()["detail"]["message"].lower()
+    assert "unavailable" in resp.json()["message"].lower()
 
 
 @pytest.mark.asyncio
@@ -147,7 +147,7 @@ async def test_composite_query_retired_indicator_rejected(client):
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
     assert resp.status_code == 422
-    assert "public catalog" in resp.json()["detail"]["message"].lower()
+    assert "public catalog" in resp.json()["message"].lower()
 
 
 @pytest.mark.asyncio

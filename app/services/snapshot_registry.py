@@ -57,6 +57,7 @@ async def resolve_snapshot(
 def snapshot_meta_fields(request) -> dict[str, Any]:
     meta = getattr(request.state, "snapshot_meta", None) or {}
     return {
+        "boundary_version": meta.get("boundary_version") or settings.boundary_version,
         "content_sha256": meta.get("content_sha256"),
         "snapshot_immutable": bool(meta.get("is_immutable", 0)),
         "snapshot_reproducible": bool(meta.get("is_reproducible", 0))

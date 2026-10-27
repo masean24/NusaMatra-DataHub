@@ -1,0 +1,947 @@
+{
+  "http_status": 200,
+  "body": {
+    "status": "success",
+    "meta": {
+      "snapshot_id": "2026.10.0-live-0de6ac68f0d55b3a",
+      "mode": "LIVE",
+      "boundary_version": "BIG-20260601",
+      "total_count": 27,
+      "coverage": null,
+      "indicator_coverage": null,
+      "content_sha256": "0de6ac68f0d55b3ad82cfd4640507db88096589de27fdfa972fdb5c90d1d1c85",
+      "snapshot_immutable": true,
+      "snapshot_reproducible": true,
+      "methodology_version": "v2.2-minmax-full-range",
+      "data_origin": null,
+      "last_success_at": null,
+      "is_stale": null
+    },
+    "data": {
+      "total_regions": 27,
+      "total_eligible_national": 513,
+      "total_excluded": 0,
+      "rankable": true,
+      "not_rankable_reason": null,
+      "national_coverage_pct": 100.0,
+      "available_weight_basis_points": 10000,
+      "available_indicators": [
+        "soc_poverty_rate",
+        "hlt_stunting_prevalence",
+        "inf_safe_water_pct",
+        "inf_safe_sanitation_pct"
+      ],
+      "score_direction": "higher_is_need",
+      "min_coverage_pct": 70,
+      "min_components": 2,
+      "weights_basis_points": {
+        "soc_poverty_rate": 3000,
+        "hlt_stunting_prevalence": 3000,
+        "inf_safe_water_pct": 2000,
+        "inf_safe_sanitation_pct": 2000
+      },
+      "regions": [
+        {
+          "region_id": "3206",
+          "region_name": "Kabupaten Tasikmalaya",
+          "composite_score": 33.75,
+          "rank": 1,
+          "national_rank": 91,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 20.29,
+            "hlt_stunting_prevalence": 52.47,
+            "inf_safe_water_pct": 17.88,
+            "inf_safe_sanitation_pct": 41.71
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3278",
+          "region_name": "Kota Tasikmalaya",
+          "composite_score": 31.65,
+          "rank": 2,
+          "national_rank": 120,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 21.99,
+            "hlt_stunting_prevalence": 52.47,
+            "inf_safe_water_pct": 2.43,
+            "inf_safe_sanitation_pct": 44.13
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3205",
+          "region_name": "Kabupaten Garut",
+          "composite_score": 31.58,
+          "rank": 3,
+          "national_rank": 122,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 18.42,
+            "hlt_stunting_prevalence": 46.3,
+            "inf_safe_water_pct": 13.65,
+            "inf_safe_sanitation_pct": 47.18
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3217",
+          "region_name": "Kabupaten Bandung Barat",
+          "composite_score": 31.33,
+          "rank": 4,
+          "national_rank": 127,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 19.6,
+            "hlt_stunting_prevalence": 48.35,
+            "inf_safe_water_pct": 10.19,
+            "inf_safe_sanitation_pct": 44.55
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3272",
+          "region_name": "Kota Sukabumi",
+          "composite_score": 30.26,
+          "rank": 5,
+          "national_rank": 135,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 12.3,
+            "hlt_stunting_prevalence": 52.06,
+            "inf_safe_water_pct": 0.78,
+            "inf_safe_sanitation_pct": 54.0
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3202",
+          "region_name": "Kabupaten Sukabumi",
+          "composite_score": 29.48,
+          "rank": 6,
+          "national_rank": 148,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 11.09,
+            "hlt_stunting_prevalence": 52.06,
+            "inf_safe_water_pct": 11.45,
+            "inf_safe_sanitation_pct": 41.22
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3214",
+          "region_name": "Kabupaten Purwakarta",
+          "composite_score": 25.09,
+          "rank": 7,
+          "national_rank": 213,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 14.68,
+            "hlt_stunting_prevalence": 46.09,
+            "inf_safe_water_pct": 8.36,
+            "inf_safe_sanitation_pct": 25.92
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3207",
+          "region_name": "Kabupaten Ciamis",
+          "composite_score": 24.84,
+          "rank": 8,
+          "national_rank": 217,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 13.01,
+            "hlt_stunting_prevalence": 48.97,
+            "inf_safe_water_pct": 6.78,
+            "inf_safe_sanitation_pct": 24.44
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3210",
+          "region_name": "Kabupaten Majalengka",
+          "composite_score": 24.66,
+          "rank": 9,
+          "national_rank": 226,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 20.68,
+            "hlt_stunting_prevalence": 46.3,
+            "inf_safe_water_pct": 4.49,
+            "inf_safe_sanitation_pct": 18.36
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3203",
+          "region_name": "Kabupaten Cianjur",
+          "composite_score": 22.88,
+          "rank": 10,
+          "national_rank": 262,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 19.48,
+            "hlt_stunting_prevalence": 20.16,
+            "inf_safe_water_pct": 15.6,
+            "inf_safe_sanitation_pct": 39.33
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3218",
+          "region_name": "Kabupaten Pangandaran",
+          "composite_score": 22.61,
+          "rank": 11,
+          "national_rank": 267,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 15.08,
+            "hlt_stunting_prevalence": 45.88,
+            "inf_safe_water_pct": 14.53,
+            "inf_safe_sanitation_pct": 7.06
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3279",
+          "region_name": "Kota Banjar",
+          "composite_score": 22.58,
+          "rank": 12,
+          "national_rank": 269,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 9.42,
+            "hlt_stunting_prevalence": 58.64,
+            "inf_safe_water_pct": 3.76,
+            "inf_safe_sanitation_pct": 7.06
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3208",
+          "region_name": "Kabupaten Kuningan",
+          "composite_score": 22.34,
+          "rank": 13,
+          "national_rank": 274,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 21.74,
+            "hlt_stunting_prevalence": 44.86,
+            "inf_safe_water_pct": 1.05,
+            "inf_safe_sanitation_pct": 10.74
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3201",
+          "region_name": "Kabupaten Bogor",
+          "composite_score": 20.99,
+          "rank": 14,
+          "national_rank": 304,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 10.72,
+            "hlt_stunting_prevalence": 34.16,
+            "inf_safe_water_pct": 4.4,
+            "inf_safe_sanitation_pct": 33.21
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3277",
+          "region_name": "Kota Cimahi",
+          "composite_score": 20.21,
+          "rank": 15,
+          "national_rank": 318,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 5.66,
+            "hlt_stunting_prevalence": 47.12,
+            "inf_safe_water_pct": 0.8,
+            "inf_safe_sanitation_pct": 21.06
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3209",
+          "region_name": "Kabupaten Cirebon",
+          "composite_score": 19.83,
+          "rank": 16,
+          "national_rank": 323,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 20.49,
+            "hlt_stunting_prevalence": 37.65,
+            "inf_safe_water_pct": 2.6,
+            "inf_safe_sanitation_pct": 9.33
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3273",
+          "region_name": "Kota Bandung",
+          "composite_score": 19.34,
+          "rank": 17,
+          "national_rank": 332,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 4.62,
+            "hlt_stunting_prevalence": 30.25,
+            "inf_safe_water_pct": 0.4,
+            "inf_safe_sanitation_pct": 44.0
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3212",
+          "region_name": "Kabupaten Indramayu",
+          "composite_score": 18.89,
+          "rank": 18,
+          "national_rank": 341,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 22.43,
+            "hlt_stunting_prevalence": 34.57,
+            "inf_safe_water_pct": 2.3,
+            "inf_safe_sanitation_pct": 6.67
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3271",
+          "region_name": "Kota Bogor",
+          "composite_score": 18.37,
+          "rank": 19,
+          "national_rank": 349,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 9.81,
+            "hlt_stunting_prevalence": 34.16,
+            "inf_safe_water_pct": 0.0,
+            "inf_safe_sanitation_pct": 25.88
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3204",
+          "region_name": "Kabupaten Bandung",
+          "composite_score": 18.33,
+          "rank": 20,
+          "national_rank": 350,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 10.18,
+            "hlt_stunting_prevalence": 30.25,
+            "inf_safe_water_pct": 1.08,
+            "inf_safe_sanitation_pct": 29.94
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3274",
+          "region_name": "Kota Cirebon",
+          "composite_score": 17.98,
+          "rank": 21,
+          "national_rank": 361,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 16.63,
+            "hlt_stunting_prevalence": 37.65,
+            "inf_safe_water_pct": 1.05,
+            "inf_safe_sanitation_pct": 7.41
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3213",
+          "region_name": "Kabupaten Subang",
+          "composite_score": 17.94,
+          "rank": 22,
+          "national_rank": 363,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 18.03,
+            "hlt_stunting_prevalence": 35.19,
+            "inf_safe_water_pct": 0.32,
+            "inf_safe_sanitation_pct": 9.55
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3215",
+          "region_name": "Kabupaten Karawang",
+          "composite_score": 16.7,
+          "rank": 23,
+          "national_rank": 393,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 12.74,
+            "hlt_stunting_prevalence": 31.89,
+            "inf_safe_water_pct": 3.17,
+            "inf_safe_sanitation_pct": 13.36
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3211",
+          "region_name": "Kabupaten Sumedang",
+          "composite_score": 16.54,
+          "rank": 24,
+          "national_rank": 395,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 16.99,
+            "hlt_stunting_prevalence": 26.34,
+            "inf_safe_water_pct": 4.35,
+            "inf_safe_sanitation_pct": 13.38
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3216",
+          "region_name": "Kabupaten Bekasi",
+          "composite_score": 9.56,
+          "rank": 25,
+          "national_rank": 488,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 6.05,
+            "hlt_stunting_prevalence": 17.9,
+            "inf_safe_water_pct": 2.01,
+            "inf_safe_sanitation_pct": 9.87
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3276",
+          "region_name": "Kota Depok",
+          "composite_score": 8.7,
+          "rank": 26,
+          "national_rank": 493,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 1.01,
+            "hlt_stunting_prevalence": 26.13,
+            "inf_safe_water_pct": 0.42,
+            "inf_safe_sanitation_pct": 2.35
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        },
+        {
+          "region_id": "3275",
+          "region_name": "Kota Bekasi",
+          "composite_score": 7.33,
+          "rank": 27,
+          "national_rank": 500,
+          "coverage_pct": 100.0,
+          "components_used": [
+            "hlt_stunting_prevalence",
+            "inf_safe_sanitation_pct",
+            "inf_safe_water_pct",
+            "soc_poverty_rate"
+          ],
+          "missing_indicators": [],
+          "effective_weights_region": {
+            "hlt_stunting_prevalence": 3000,
+            "inf_safe_sanitation_pct": 2000,
+            "inf_safe_water_pct": 2000,
+            "soc_poverty_rate": 3000
+          },
+          "component_scores": {
+            "soc_poverty_rate": 5.07,
+            "hlt_stunting_prevalence": 17.9,
+            "inf_safe_water_pct": 0.12,
+            "inf_safe_sanitation_pct": 2.09
+          },
+          "quality_flags": {
+            "hlt_stunting_prevalence": "VERIFIED",
+            "inf_safe_sanitation_pct": "VERIFIED",
+            "inf_safe_water_pct": "VERIFIED",
+            "soc_poverty_rate": "VERIFIED"
+          }
+        }
+      ],
+      "unavailable_indicators": [],
+      "effective_weights": {
+        "soc_poverty_rate": 3000,
+        "hlt_stunting_prevalence": 3000,
+        "inf_safe_water_pct": 2000,
+        "inf_safe_sanitation_pct": 2000
+      },
+      "renormalized": false,
+      "insufficient_data": []
+    }
+  }
+}

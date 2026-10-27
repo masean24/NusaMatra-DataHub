@@ -16,7 +16,7 @@ import json
 
 from app.database import get_db
 from app.models.common import ApiResponse, ResponseMeta, LiveUnavailableError
-from app.config import settings
+from app.services.snapshot_registry import snapshot_meta_fields
 
 router = APIRouter(prefix="/boundaries", tags=["Boundaries"])
 
@@ -133,7 +133,7 @@ async def get_kabupaten_boundaries(
             meta=ResponseMeta(
                 snapshot_id=_snapshot_id,
                 mode=request.state.data_mode,
-                boundary_version=settings.boundary_version,
+                **snapshot_meta_fields(request),
                 total_count=len(features),
             ),
             data=geojson,
@@ -204,7 +204,7 @@ async def get_kabupaten_boundaries(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
-            boundary_version=settings.boundary_version,
+            **snapshot_meta_fields(request),
             total_count=len(features),
         ),
         data=geojson,
@@ -253,7 +253,7 @@ async def get_provinsi_boundaries(
             meta=ResponseMeta(
                 snapshot_id=_snapshot_id,
                 mode=request.state.data_mode,
-                boundary_version=settings.boundary_version,
+                **snapshot_meta_fields(request),
                 total_count=len(features),
             ),
             data=geojson,
@@ -306,7 +306,7 @@ async def get_provinsi_boundaries(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
-            boundary_version=settings.boundary_version,
+            **snapshot_meta_fields(request),
             total_count=len(features),
         ),
         data=geojson,

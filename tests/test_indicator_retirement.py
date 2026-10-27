@@ -160,7 +160,7 @@ async def test_composite_rejects_retired_indicator_on_new_snapshot(client, retir
         json={"weights": {"meta_dapodik_sync_rate": 5000, "soc_poverty_rate": 5000}},
     )
     assert response.status_code == 422
-    assert "public catalog" in response.json()["detail"]["message"].lower()
+    assert "public catalog" in response.json()["message"].lower()
 
 
 @pytest.mark.asyncio

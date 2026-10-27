@@ -1,0 +1,8 @@
+{
+  "http_status": 404,
+  "body": {
+    "status": "error",
+    "code": "NOT_FOUND",
+    "message": "Indicator 'does_not_exist' not found."
+  }
+}

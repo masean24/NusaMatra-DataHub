@@ -1,0 +1,9 @@
+{
+  "http_status": 422,
+  "body": {
+    "status": "error",
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "detail": "query.level: String should match pattern '^(kabupaten_kota|provinsi|all)$'"
+  }
+}

@@ -4,9 +4,25 @@
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
 > **Production Domain:** `api.orangkeren.me`  
-> **Active Branch:** `main` (v2.2 + security/retirement v2.3 local, 159/159 Pytest Green, `origin/main` = `f94200c`, production v2.2 verified)
+> **Active Branch:** `main` (v2.2 + security/retirement v2.3 + contract hardening v2.4 in working tree, 164/164 Pytest Green, production deploy `2d51cd9` verified healthy)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
-> **Date Generated:** 24 Oktober 2026 (v2.2 verified in production; security + indicator retirement v2.3 implemented locally)
+> **Date Generated:** 26 Oktober 2026 (v2.3 deployed; v2.4 contract hardening implemented locally)
+
+---
+
+## 0.4. Contract Hardening v2.4 — Error Envelope & Boundary Metadata (26 Oktober 2026)
+
+Status: **implemented in working tree; 164/164 tests pass; not committed or deployed yet.**
+
+- Semua validation error memakai `{status, code, message, detail}`. `detail` berupa string; tidak ada lagi `{"detail": [...]}` atau nested `detail.message`.
+- Validasi bobot composite memakai `WEIGHT_VALIDATION_ERROR`.
+- `meta.boundary_version` terisi dari snapshot aktif untuk values, coverage, datasets, snapshots, regions, boundaries, dan composite.
+- `GET /snapshots` memakai `is_active_default` sebagai penanda snapshot aktif.
+- CORS produksi tetap diatur lewat env Coolify (`NM_CORS_ORIGINS`), bukan kode.
+- Preset `bencana_infrastruktur` tidak diubah karena bobotnya masuk ke `compute_content_digest()`; perubahan preset bisa merusak verifikasi snapshot lama.
+- Dokumentasi: `docs/FRONTEND_HANDOFF_V2_4.md`.
+- Contract samples: `docs/staging_samples/contract_v2_4/`.
+- Script sample: `scripts/capture_contract_samples_v2_4.py`.
 
 ---
 
