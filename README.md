@@ -5,8 +5,11 @@
 
 Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris warehouse; 3 indikator restricted di-retire) pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
+**Frontend resmi:** [masean24/NusaMatra](https://github.com/masean24/NusaMatra) — React 19 + TypeScript + Vite, mengonsumsi API ini melalui `/api/v1`.
+
 [![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
-[![Tests](https://img.shields.io/badge/Tests-164%2F164%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Frontend Repo](https://img.shields.io/badge/Frontend-NusaMatra%20Web-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://github.com/masean24/NusaMatra)
+[![Tests](https://img.shields.io/badge/Tests-165%2F165%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -18,6 +21,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 ---
 
 [🚀 Status Produksi](#-status-produksi--deployment) •
+[🔗 Ekosistem & Integrasi Frontend](#-ekosistem--integrasi-frontend) •
 [📌 Ringkasan Eksekutif](#-ringkasan-eksekutif) •
 [🏛️ Sumber Data Pemerintah](#-katalog-sumber-data-pemerintah-6-instansi) •
 [🌋 Integrasi Real-Time BMKG](#-integrasi-pemantauan-gempa-bumi-real-time-bmkg) •
@@ -37,6 +41,96 @@ Nusa Matra Data Hub telah **aktif secara live di production** dengan SSL terenkr
 - 🌟 **Interactive Scalar API Reference:** [`https://api.orangkeren.me/docs`](https://api.orangkeren.me/docs) *(atau [`/scalar`](https://api.orangkeren.me/scalar))*
 - 📖 **Formal ReDoc Schema View:** [`https://api.orangkeren.me/redoc`](https://api.orangkeren.me/redoc)
 - 📄 **OpenAPI 3.1 JSON Specification:** [`https://api.orangkeren.me/openapi.json`](https://api.orangkeren.me/openapi.json)
+
+---
+
+## 🔗 Ekosistem & Integrasi Frontend
+
+Repo ini adalah **backend/Data Hub**. Antarmuka pengguna berada di repo terpisah dan tidak diimplementasikan di sini.
+
+| Komponen | Repo | Stack | Peran |
+|---|---|---|---|
+| **Nusa Matra Data Hub** | repo ini | FastAPI + SQLite (DEMO/LIVE) | API, snapshot immutable, composite query, boundary, BMKG |
+| **Nusa Matra Web** | [masean24/NusaMatra](https://github.com/masean24/NusaMatra) | React 19 + TypeScript + Vite | Landing, Jelajahi, Bandingkan, Lab Prioritas |
+
+```mermaid
+flowchart LR
+    Browser[Browser] --> FE[Nusa Matra Web<br/>React + Vite]
+    FE -->|REST /api/v1| API[Nusa Matra Data Hub<br/>FastAPI]
+    API --> DB[(SQLite<br/>DEMO / LIVE snapshots)]
+    API --> BMKG[BMKG earthquake feed]
+```
+
+### Menjalankan backend + frontend secara lokal
+
+**1. Backend** (dari root repo ini):
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+Cek: `http://localhost:8000/api/v1/health`
+
+**2. CORS lokal** — `localhost` sudah diizinkan oleh regex, tetapi tetap bisa eksplisit:
+
+```env
+NM_CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+```
+
+**3. Frontend**:
+
+```bash
+git clone https://github.com/masean24/NusaMatra.git
+cd NusaMatra
+npm install
+```
+
+Buat `.env.local`:
+
+```env
+VITE_DATA_MODE=live
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+> `VITE_API_BASE_URL` berisi **origin saja**, bukan `http://localhost:8000/api/v1`.
+> Frontend menambahkan `/api/v1` sendiri dan akan membuang suffix `/api/v1` jika tidak sengaja dimasukkan.
+
+Jalankan:
+
+```bash
+npm run dev
+```
+
+Buka `http://localhost:5173`.
+
+### Konfigurasi production
+
+Backend (Coolify):
+
+```env
+NM_ENABLE_LIVE_MODE=true
+NM_CORS_ORIGINS=https://domain-frontend-production
+```
+
+Frontend (Coolify build argument):
+
+```env
+VITE_DATA_MODE=live
+VITE_API_BASE_URL=https://api.orangkeren.me
+```
+
+Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_CORS_ORIGINS`.
+
+### Kontrak yang dipakai frontend
+
+- [`docs/FRONTEND_HANDOFF_V2_4.md`](docs/FRONTEND_HANDOFF_V2_4.md) — error envelope, `boundary_version`, snapshot aktif, rate limit, arah persentil.
+- [`docs/staging_samples/contract_v2_4/`](docs/staging_samples/contract_v2_4/) — fixture JSON untuk tes kontrak FE.
+- `GET /api/v1/health` — health check.
+- `GET /docs`, `/redoc`, `/openapi.json` — referensi API.
+- `meta.score_direction = "higher_is_need"` — persentil dan skor tinggi berarti kebutuhan intervensi lebih tinggi.
+- `data[].is_active_default` — penanda snapshot aktif; tidak ada field `status`/`is_active`.
+- Error `422`/`404`/`429` memakai envelope `{status, code, message, detail?}`.
 
 ---
 
@@ -116,7 +210,8 @@ Semua respons terstruktur konsisten dengan generic envelope `ApiResponse[T]`:
     "content_sha256": "<64-char canonical dataset digest>",
     "snapshot_immutable": true,
     "snapshot_reproducible": true,
-    "boundary_version": "BIG-Kepmendagri-300.2.2-2430-2025",
+    "score_direction": "higher_is_need",
+    "boundary_version": "BIG-20260601",
     "total_count": 514,
     "coverage": {
       "available": 487,
@@ -168,10 +263,10 @@ cd d:\wia2
 # Install dependensi
 pip install -r requirements.txt
 
-# Jalankan 164 unit tests
+# Jalankan 165 unit tests
 python -m pytest -v
 ```
-*(Hasil: **164 passed**).*
+*(Hasil: **165 passed**).*
 
 ---
 
@@ -188,5 +283,7 @@ python -m pytest -v
 
 **Nusa Matra Data Hub — Wilayah Indonesia (WIA) 2026**  
 *Membangun Fondasi Pengambilan Keputusan Geospasial yang Terukur, Transparan, dan Tepercaya untuk Indonesia.*
+
+Backend: repo ini · Frontend: [masean24/NusaMatra](https://github.com/masean24/NusaMatra)
 
 </div>
