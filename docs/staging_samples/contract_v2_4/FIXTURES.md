@@ -26,6 +26,7 @@ Each JSON file is:
 | `error_validation_query.json` | `GET /regions?level=invalid` | `422`, `VALIDATION_ERROR`, `detail` string |
 | `error_validation_weight.json` | `POST /composite-query` with weight sum 8000 | `422`, `WEIGHT_VALIDATION_ERROR`, message contains `10000` |
 | `error_not_found.json` | `GET /indicators/does_not_exist/values` | `404`, `NOT_FOUND` |
+| `error_rate_limited.json` | second `GET /regions` after burst exhausted | `429`, `RATE_LIMITED`, `Retry-After` |
 | `meta_values.json` | `GET /indicators/soc_poverty_rate/values?mode=live` | `200`, `meta.boundary_version`, `meta.content_sha256` |
 | `meta_region_detail.json` | `GET /regions/1101?mode=live` | `200`, `meta.score_direction`, per-indicator `polarity` |
 | `meta_coverage.json` | `GET /indicators/coverage?mode=live` | `200`, 30 indicators, 29 available, `meta.boundary_version` |
@@ -51,6 +52,9 @@ Expected error shape:
 `higher_is_need`, and each region-detail indicator carries `polarity`. Do not
 interpret a high percentile as a high raw value without checking polarity.
 
-`429` is not included because the production rate limiter is still
-`report_only=true`. Before enforcement, the frontend must render
-`message` and `Retry-After`.
+`error_rate_limited.json` was captured locally with enforcement on
+(`rate_limit_report_only=false`). Production is still `report_only=true`.
+Before enforcement, the frontend must render `message` and `Retry-After`.
+The relevant headers are `Retry-After`, `X-RateLimit-Limit`,
+`X-RateLimit-Remaining`, `X-RateLimit-Reset`, `X-RateLimit-Bucket`, and
+`X-RateLimit-Exceeded`.

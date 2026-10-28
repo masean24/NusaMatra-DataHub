@@ -1,0 +1,17 @@
+{
+  "http_status": 429,
+  "body": {
+    "status": "error",
+    "code": "RATE_LIMITED",
+    "message": "Terlalu banyak permintaan dalam waktu singkat. Silakan tunggu beberapa detik lalu coba lagi."
+  },
+  "headers": {
+    "Retry-After": "60",
+    "X-RateLimit-Limit": "1",
+    "X-RateLimit-Remaining": "0",
+    "X-RateLimit-Reset": "1793173807",
+    "X-RateLimit-Bucket": "read",
+    "X-RateLimit-Exceeded": "true",
+    "access-control-allow-origin": "http://localhost:5173"
+  }
+}

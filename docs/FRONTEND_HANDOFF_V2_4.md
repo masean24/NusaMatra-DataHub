@@ -116,10 +116,34 @@ hapus origin development dari env produksi. Kirim origin FE final ke backend.
 Rate limiter masih `NM_RATE_LIMIT_REPORT_ONLY=true`. Response belum mengembalikan
 `429`; header `X-RateLimit-*` tetap dikirim.
 
+Bentuk `429` saat enforcement aktif:
+
+```json
+{
+  "status": "error",
+  "code": "RATE_LIMITED",
+  "message": "Terlalu banyak permintaan dalam waktu singkat. Silakan tunggu beberapa detik lalu coba lagi."
+}
+```
+
+Header yang ikut dikirim:
+
+```text
+Retry-After: 60
+X-RateLimit-Limit: 1
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1793173807
+X-RateLimit-Bucket: read
+X-RateLimit-Exceeded: true
+```
+
+Contoh lengkap ada di `docs/staging_samples/contract_v2_4/error_rate_limited.json`.
+Catatan: sample itu dibuat dengan enforcement lokal; production masih report-only.
+
 Sebelum enforcement diaktifkan:
 
 1. FE pastikan `429` tampil sebagai pesan yang jelas.
-2. FE membaca `Retry-After`.
+2. FE membaca `Retry-After` dan menampilkan durasi tunggu.
 3. Backend set `NM_RATE_LIMIT_REPORT_ONLY=false`.
 
 ---
