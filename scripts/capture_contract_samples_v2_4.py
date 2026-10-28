@@ -101,6 +101,10 @@ def main() -> int:
                 ),
             )
             write(
+                "meta_region_detail",
+                await client.get("/api/v1/regions/1101", params=params),
+            )
+            write(
                 "meta_coverage",
                 await client.get("/api/v1/indicators/coverage", params=params),
             )
@@ -157,6 +161,13 @@ Weight validation uses `code: "WEIGHT_VALIDATION_ERROR"` with the same envelope.
 `meta.boundary_version` is populated for snapshot-backed endpoints, including
 `/indicators/coverage`, `/indicators/{{id}}/values`, `/datasets`,
 `/snapshots`, `/regions`, `/boundaries/*`, and `/composite-query`.
+
+## Percentile direction
+
+Every response includes `meta.score_direction = "higher_is_need"`. Region detail
+items also include `polarity` (`positive` or `negative`). `national_percentile`
+is a need percentile: higher means greater need, regardless of raw-value
+polarity.
 
 ## Snapshot active marker
 

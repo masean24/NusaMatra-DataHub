@@ -42,6 +42,10 @@ class ResponseMeta(BaseModel):
 
     snapshot_id: str = Field(..., examples=["2026.10.0-wia-demo"])
     mode: str = Field(..., examples=["DEMO"])
+    score_direction: str = Field(
+        "higher_is_need",
+        description="Percentile and score semantics: higher values mean greater need.",
+    )
     boundary_version: Optional[str] = None
     total_count: Optional[int] = None
     coverage: Optional[CoverageMeta] = None

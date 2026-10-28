@@ -5,6 +5,7 @@
     "meta": {
       "snapshot_id": "2026.10.0-live-0de6ac68f0d55b3a",
       "mode": "LIVE",
+      "score_direction": "higher_is_need",
       "boundary_version": "BIG-20260601",
       "total_count": 30,
       "coverage": {

@@ -26,6 +26,13 @@ Weight validation uses `code: "WEIGHT_VALIDATION_ERROR"` with the same envelope.
 `/indicators/coverage`, `/indicators/{id}/values`, `/datasets`,
 `/snapshots`, `/regions`, `/boundaries/*`, and `/composite-query`.
 
+## Percentile direction
+
+Every response includes `meta.score_direction = "higher_is_need"`. Region detail
+items also include `polarity` (`positive` or `negative`). `national_percentile`
+is a need percentile: higher means greater need, regardless of raw-value
+polarity.
+
 ## Snapshot active marker
 
 `GET /snapshots` exposes the active marker as `data[].is_active_default`.

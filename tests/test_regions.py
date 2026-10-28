@@ -71,10 +71,18 @@ async def test_get_region_detail(client):
     resp = await client.get(f"/api/v1/regions/{region_id}")
     assert resp.status_code == 200
 
-    data = resp.json()["data"]
+    body = resp.json()
+    data = body["data"]
     assert "region" in data
     assert "composite_scores" in data
     assert "indicators" in data
+
+    # The frontend needs the score direction to interpret national percentiles.
+    assert body["meta"]["score_direction"] == "higher_is_need"
+    assert data["indicators"]
+    for indicator in data["indicators"]:
+        assert indicator["polarity"] in {"positive", "negative"}
+        assert indicator["national_percentile"] is not None
 
     # Check indicators have DEMO_EXAMPLE flag
     if data["indicators"]:

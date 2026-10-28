@@ -109,6 +109,7 @@ async def get_region_detail(
             COALESCE(si.indicator_name, i.indicator_name) AS indicator_name,
             COALESCE(si.category, i.category) AS category,
             COALESCE(si.unit, i.unit) AS unit,
+            COALESCE(si.polarity, i.polarity) AS polarity,
             d.agency_code, d.official_portal_url
         FROM fact_indicator_values f
         JOIN dim_indicators i ON f.indicator_id = i.indicator_id
@@ -138,6 +139,7 @@ async def get_region_detail(
                 category=cat,
                 raw_value=ir["raw_value"],
                 unit=ir["unit"],
+                polarity=ir["polarity"],
                 normalized_score=ns,
                 national_percentile=ir["national_percentile"],
                 national_rank=ir["national_rank"],

@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-28",
+  "base_url": "https://api.orangkeren.me/api/v1",
+  "checks": [
+    {
+      "request": "GET /regions?level=invalid",
+      "http_status": 422,
+      "code": "VALIDATION_ERROR",
+      "message": "Request validation failed.",
+      "detail_is_string": true
+    },
+    {
+      "request": "POST /indicators/composite-query (weight sum 8000)",
+      "http_status": 422,
+      "code": "WEIGHT_VALIDATION_ERROR",
+      "message": "body.weights: Weights must sum to 10000 basis points, got 8000",
+      "detail_is_string": true
+    },
+    {
+      "request": "GET /indicators/does_not_exist/values",
+      "http_status": 404,
+      "code": "NOT_FOUND",
+      "message": "Indicator 'does_not_exist' not found."
+    },
+    {
+      "request": "GET /indicators/coverage?mode=live",
+      "http_status": 200,
+      "boundary_version": "BIG-20260601",
+      "total_count": 30,
+      "content_sha256_prefix": "0de6ac68f0d55b3a"
+    },
+    {
+      "request": "GET /indicators/soc_poverty_rate/values?mode=live",
+      "http_status": 200,
+      "boundary_version": "BIG-20260601",
+      "total_count": 514,
+      "snapshot_id": "2026.10.0-live-0de6ac68f0d55b3a"
+    },
+    {
+      "request": "GET /snapshots?mode=live",
+      "http_status": 200,
+      "snapshot_count": 2,
+      "active_snapshot": "2026.10.0-live-0de6ac68f0d55b3a",
+      "active_boundary_version": "BIG-20260601"
+    }
+  ]
+}

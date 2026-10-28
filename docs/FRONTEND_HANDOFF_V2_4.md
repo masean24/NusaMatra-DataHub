@@ -141,7 +141,42 @@ snapshot lama gagal. Kalau indikator harus dikeluarkan, buat preset baru
 
 ---
 
-## 7. QA checklist
+## 7. Arah persentil indikator
+
+Semua response sekarang membawa:
+
+```json
+"meta": {
+  "score_direction": "higher_is_need"
+}
+```
+
+`GET /api/v1/regions/{region_id}` juga mengirim `polarity` pada setiap item
+`indicators[]`:
+
+```json
+{
+  "indicator_id": "soc_hdi",
+  "raw_value": 69.1,
+  "polarity": "positive",
+  "normalized_score": 37.49,
+  "national_percentile": 72.71,
+  "national_rank": 141
+}
+```
+
+Arti persentil:
+
+- `national_percentile` adalah **persentil kebutuhan**, bukan persentil nilai mentah.
+- `higher_is_need`: persentil tinggi berarti kebutuhan intervensi lebih tinggi.
+- `polarity` menjelaskan arah nilai mentah: `positive` berarti nilai mentah tinggi
+  lebih baik; `negative` berarti nilai mentah tinggi lebih buruk.
+
+Contoh: IPM `69,1` dengan `polarity: positive` dan persentil `72,71` berarti
+kebutuhan relatif tinggi, bukan “IPM lebih tinggi dari 72,71% wilayah”.
+Frontend tidak perlu lagi menampilkan “Tidak dinilai” bila ketiga field ini ada.
+
+## 8. QA checklist
 
 - `GET /api/v1/regions?level=invalid` → `422 VALIDATION_ERROR`, bukan array.
 - `POST /api/v1/indicators/composite-query` dengan total bobot 8000 →
@@ -151,3 +186,5 @@ snapshot lama gagal. Kalau indikator harus dikeluarkan, buat preset baru
 - `GET /api/v1/indicators/{id}/values?mode=live` → `meta.boundary_version` terisi.
 - `GET /api/v1/snapshots?mode=live` → item aktif punya
   `is_active_default: true`.
+- `GET /api/v1/regions/{id}?mode=live` → `meta.score_direction` terisi dan
+  setiap item `indicators[]` punya `polarity`.

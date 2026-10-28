@@ -57,6 +57,7 @@ class RegionIndicatorValue(BaseModel):
     category: str
     raw_value: Optional[float] = None
     unit: str
+    polarity: str
     normalized_score: Optional[float] = None
     national_percentile: Optional[float] = None
     national_rank: Optional[int] = None
