@@ -360,12 +360,29 @@
 
     function formatUptime(ms) {
       const totalSec = Math.floor(ms / 1000);
-      const d = Math.floor(totalSec / 86400);
-      const h = Math.floor((totalSec % 86400) / 3600);
-      const m = Math.floor((totalSec % 3600) / 60);
-      const s = totalSec % 60;
-      const pad = n => String(n).padStart(2, '0');
-      return d > 0 ? `${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s` : `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+      const day = 86400;
+      const week = 7 * day;
+      const month = 30 * day;
+      let units;
+      if (totalSec >= month) {
+        units = [['bulan', month], ['minggu', week], ['hari', day], ['jam', 3600]];
+      } else if (totalSec >= week) {
+        units = [['minggu', week], ['hari', day], ['jam', 3600]];
+      } else if (totalSec >= day) {
+        units = [['hari', day], ['jam', 3600], ['menit', 60]];
+      } else if (totalSec >= 3600) {
+        units = [['jam', 3600], ['menit', 60], ['detik', 1]];
+      } else {
+        units = [['menit', 60], ['detik', 1]];
+      }
+      let remaining = totalSec;
+      const parts = [];
+      for (const [label, size] of units) {
+        const value = Math.floor(remaining / size);
+        remaining %= size;
+        if (value) parts.push(`${value} ${label}`);
+      }
+      return parts.length ? parts.join(' ') : '0 detik';
     }
 
     function generateSimulatedData() {

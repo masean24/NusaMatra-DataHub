@@ -44,10 +44,35 @@ def _iso(timestamp: Optional[float]) -> Optional[str]:
 
 
 def _format_uptime(seconds: int) -> str:
-    hours = seconds // 3600
-    minutes = (seconds % 3600) // 60
-    remaining = seconds % 60
-    return f"{hours}h {minutes}m {remaining}s"
+    """Return a compact Indonesian uptime string.
+
+    Months are 30-day display months and weeks are 7 days. Only the most
+    useful leading units are shown, so 118 hours becomes
+    ``"4 hari 22 jam 19 menit"`` rather than ``"0 bulan 0 minggu ..."``.
+    """
+    total = max(0, int(seconds))
+    day = 86400
+    week = 7 * day
+    month = 30 * day
+
+    if total >= month:
+        units = (("bulan", month), ("minggu", week), ("hari", day), ("jam", 3600))
+    elif total >= week:
+        units = (("minggu", week), ("hari", day), ("jam", 3600))
+    elif total >= day:
+        units = (("hari", day), ("jam", 3600), ("menit", 60))
+    elif total >= 3600:
+        units = (("jam", 3600), ("menit", 60), ("detik", 1))
+    else:
+        units = (("menit", 60), ("detik", 1))
+
+    parts: list[str] = []
+    remaining = total
+    for label, size in units:
+        value, remaining = divmod(remaining, size)
+        if value:
+            parts.append(f"{value} {label}")
+    return " ".join(parts) or "0 detik"
 
 
 class TelemetryCollector:

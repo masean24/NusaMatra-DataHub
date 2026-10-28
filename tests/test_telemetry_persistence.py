@@ -5,7 +5,15 @@ import sqlite3
 
 import pytest
 
-from app.services.telemetry_service import TelemetryCollector
+from app.services.telemetry_service import TelemetryCollector, _format_uptime
+
+
+def test_format_uptime_uses_readable_units():
+    assert _format_uptime(118 * 3600 + 19 * 60 + 54) == "4 hari 22 jam 19 menit"
+    assert _format_uptime(8 * 86400 + 3 * 3600) == "1 minggu 1 hari 3 jam"
+    assert _format_uptime(31 * 86400 + 2 * 3600) == "1 bulan 1 hari 2 jam"
+    assert _format_uptime(14 * 3600 + 28 * 60 + 19) == "14 jam 28 menit 19 detik"
+    assert _format_uptime(0) == "0 detik"
 
 
 @pytest.mark.asyncio
