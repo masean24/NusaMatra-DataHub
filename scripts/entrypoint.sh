@@ -22,7 +22,8 @@ try:
         "WHERE environment_tag = 'LIVE' AND is_active_default = 1 LIMIT 1"
     ).fetchone()
     if not row:
-        sys.exit(1)
+        # No active LIVE snapshot: the seeder must run.
+        sys.exit(0)
     snapshot_id = row[0]
     has_dataset = con.execute(
         "SELECT 1 FROM dim_datasets WHERE dataset_id = 'kemenkes_ssgi_2024'"
@@ -79,7 +80,8 @@ try:
         and affected_dataset
         and affected_count == 514
     )
-    sys.exit(0 if ready else 1)
+    # Shell convention: exit 0 means "needs seed"; exit 1 means "ready".
+    sys.exit(0 if not ready else 1)
 except Exception:
     sys.exit(1)
 finally:
