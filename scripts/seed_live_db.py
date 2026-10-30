@@ -138,6 +138,16 @@ OFFICIAL_DATASETS = [
      "https://data.kemendikdasmen.go.id/dataset/p/sarana-dan-prasarana",
      "https://cdn.data-portal.belajar.id/Aset-Dataset/20241105/1d05febc22bb5ad9f749ccfa6eee06e9444c08256b3f48977f7ff465c78af9d6.xlsx",
      "XLSX_DOWNLOAD", "Data Terbuka Kemendikdasmen", "Tahunan"),
+    ("kemendikdasmen_npd_2025", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
+     "Neraca Pendidikan Daerah (NPD) 2025 — Rasio Pendidik : Peserta Didik SD",
+     "https://npd.kemendikdasmen.go.id/grafik?tahun=2025",
+     "https://npd.kemendikdasmen.go.id/grafik?tahun=2025",
+     "DASHBOARD_TABLE", "Data Terbuka Kemendikdasmen", "Tahunan"),
+    ("kemendikdasmen_statistik_2025", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
+     "Jumlah Ruang Kelas Menurut Kondisi — SD & SMP, 2025",
+     "https://data.kemendikdasmen.go.id/dataset/td/sarana-dan-prasarana-qraac/jumlah-ruang-kelas-menurut-kondisi-2025-semua-wilayah-sd-mi-sederajat-1",
+     "https://api.data.belajar.id/data-portal-backend/v2/datasets",
+     "REST_API", "Data Terbuka Kemendikdasmen", "Tahunan"),
     ("kemenkes_sirs_regpus_2026", "KEMENKES", "Kementerian Kesehatan",
      "RS Online dan Data Puskesmas Teregistrasi Semester II 2025 (kab/kota)",
      "https://sirs.kemkes.go.id/fo/home/dashboard_rs?id=0",
@@ -326,8 +336,10 @@ def main():
             elif "Nusa Matra" in r["primary_source_agency"]:
                 ds_id = "nusa_matra_internal_audit"
 
-            if ind_id in ("edu_student_teacher_ratio_sd", "edu_damaged_classrooms_pct"):
-                ds_id = "kemendikdasmen_statistik_2026"
+            if ind_id == "edu_student_teacher_ratio_sd":
+                ds_id = "kemendikdasmen_npd_2025"
+            elif ind_id == "edu_damaged_classrooms_pct":
+                ds_id = "kemendikdasmen_statistik_2025"
             elif ind_id == "hlt_facilities_per_10k":
                 ds_id = "kemenkes_sirs_regpus_2026"
             elif ind_id == "hlt_doctors_per_10k":
@@ -793,36 +805,54 @@ def main():
         conn.commit()
         print(f"       [OK] Province-imputed disaster impact: {len(affected_rows)} rows")
 
-    # 6g. Verified Kemendikdasmen education indicators (TA 2022/2023).
-    verified_edu_csv = REPO_ROOT / "data" / "kemendikdasmen_edu_kabkota_2023.csv"
-    if verified_edu_csv.exists():
-        with open(verified_edu_csv, "r", encoding="utf-8") as f:
-            edu_rows = list(csv.DictReader(f))
+    # 6g. Verified Kemendikdasmen education indicators (2025).
+    # Mixed by indicator: NPD supplies the SD ratio; the 2025 statistics API
+    # supplies exact classroom-condition counts for SD + SMP.
+    verified_edu_csv = REPO_ROOT / "data" / "kemendikdasmen_edu_kabkota_2025.csv"
+    if not verified_edu_csv.exists():
+        print(f"[ERROR] Missing required Kemendikdasmen 2025 CSV: {verified_edu_csv}")
+        sys.exit(1)
+    with open(verified_edu_csv, "r", encoding="utf-8") as f:
+        edu_rows = list(csv.DictReader(f))
 
-        for ind_id, column in (
-            ("edu_student_teacher_ratio_sd", "edu_student_teacher_ratio_sd"),
-            ("edu_damaged_classrooms_pct", "edu_damaged_classrooms_pct"),
-        ):
-            values = []
-            for row in edu_rows:
-                raw = (row.get(column) or "").strip()
-                if not raw:
-                    continue
-                try:
-                    values.append((row["region_id"], float(raw), "VERIFIED"))
-                except (KeyError, ValueError):
-                    continue
-            if values:
-                _seed_facts(
-                    ind_id,
-                    2023,
-                    "kemendikdasmen_statistik_2026",
-                    "Kemendikdasmen Pusdatin TA 2022/2023 (kab/kota)",
-                    values,
-                    indicators_meta[ind_id]["polarity"],
-                )
-        conn.commit()
-        print(f"       [OK] Verified Kemendikdasmen education: {len(edu_rows)} rows")
+    for ind_id, column, ds_id, label in (
+        (
+            "edu_student_teacher_ratio_sd",
+            "edu_student_teacher_ratio_sd",
+            "kemendikdasmen_npd_2025",
+            "NPD 2025 — Rasio Pendidik : Peserta Didik SD (kab/kota)",
+        ),
+        (
+            "edu_damaged_classrooms_pct",
+            "edu_damaged_classrooms_pct",
+            "kemendikdasmen_statistik_2025",
+            "Kemendikdasmen 2025 — Ruang Kelas Menurut Kondisi, SD+SMP (kab/kota)",
+        ),
+    ):
+        values = []
+        for row in edu_rows:
+            raw = (row.get(column) or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "VERIFIED"))
+            except (KeyError, ValueError):
+                continue
+        if len(values) != 514:
+            print(
+                f"[ERROR] {ind_id} coverage is {len(values)}/514; refusing partial education series."
+            )
+            sys.exit(1)
+        _seed_facts(
+            ind_id,
+            2025,
+            ds_id,
+            label,
+            values,
+            indicators_meta[ind_id]["polarity"],
+        )
+    conn.commit()
+    print(f"       [OK] Verified Kemendikdasmen 2025 education: {len(edu_rows)} rows")
 
     # 6h. Verified Kemenkes facilities per 10k (Puskesmas + SIRS hospitals).
     verified_health_csv = REPO_ROOT / "data" / "kemenkes_health_access_2026.csv"

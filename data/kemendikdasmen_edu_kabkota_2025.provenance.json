@@ -1,0 +1,30 @@
+{
+  "retrieved_at": "2026-10-30T14:10:49.734646+00:00",
+  "agency": "Kementerian Pendidikan Dasar dan Menengah (Pusdatin)",
+  "reference_year": 2025,
+  "sources": {
+    "student_teacher_ratio_sd": {
+      "title": "Neraca Pendidikan Daerah (NPD) 2025 — Rasio Pendidik : Peserta Didik",
+      "url": "https://npd.kemendikdasmen.go.id/grafik?tahun=2025",
+      "cut_off": "Data Verifikasi Pusdatin, November 2025",
+      "note": "Ratio is displayed by NPD as a rounded integer (for example 1:12). This is the official NPD ratio; it preserves the existing 'Rasio Murid terhadap Guru' definition."
+    },
+    "damaged_classrooms_pct": {
+      "title": "Jumlah Ruang Kelas Menurut Kondisi — SD dan SMP, 2025",
+      "url": "https://data.kemendikdasmen.go.id/dataset/td/sarana-dan-prasarana-qraac/jumlah-ruang-kelas-menurut-kondisi-2025-semua-wilayah-sd-mi-sederajat-1",
+      "api": "https://api.data.belajar.id/data-portal-backend/v2/datasets",
+      "cut_off": "Dapodik, 2025",
+      "note": "Computed from official counts: Rusak Sedang + Rusak Berat divided by total classrooms (Baik + RR + RS + RB), SD + SMP."
+    }
+  },
+  "derived_csv": {
+    "path": "data/kemendikdasmen_edu_kabkota_2025.csv",
+    "rows": 514,
+    "sha256": "fd661d1b900e2318a121c70905fc41c4222a753a8dfaa390eff61ec29861b944"
+  },
+  "coverage": {
+    "kabupaten_kota": 514,
+    "missing": 0
+  },
+  "notes": "Mixed by indicator, not by region: NPD supplies the SD student-teacher ratio; the Kemendikdasmen 2025 API supplies classroom-condition counts. Both are 2025 and cover 514/514 domestic kab/kota."
+}

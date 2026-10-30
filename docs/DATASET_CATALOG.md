@@ -115,9 +115,9 @@ Dokumen ini memuat katalog sumber data resmi pemerintah Indonesia yang telah div
 
 ### 5.1 Portal Data Pendidikan & Neraca Pendidikan Daerah (NPD)
 * **URL Portal Resmi:** `https://data.kemendikdasmen.go.id/` (sebelumnya `data.kemdikbud.go.id`)
-* **Metode Akses:** Unduhan publik berkas dataset master dalam format XLSX/CSV/PDF (`Statistik Persekolahan 2025/2026`, `Ikhtisar Pendidikan 2025/2026`, `Analisis Sanitasi Sekolah 2025`, `Neraca Pendidikan Daerah`). **Tidak tersedia REST API publik terbuka dengan token pihak ketiga.**
+* **Metode Akses:** REST API Portal Data (`https://api.data.belajar.id/data-portal-backend/v2/datasets`) untuk tabel dinamis per kab/kota, serta unduhan publik XLSX/CSV/PDF (`Statistik Persekolahan 2025/2026`, `Ikhtisar Pendidikan 2025/2026`, `Neraca Pendidikan Daerah`).
 * **Granularitas Geografis:** Provinsi (38) dan Kabupaten/Kota (514).
-* **Tahun Data Terbaru:** Tahun Ajaran 2025/2026 (dirilis Maret–April 2026) dan berjalan Semester Ganjil 2026/2027.
+* **Tahun Data Terbaru:** Data Dapodik 2025 (cut-off 30 November 2025), NPD 2025, dan publikasi Statistik Persekolahan 2025/2026.
 * **Lisensi:** Data Terbuka Pemerintah (Pusdatin Kemendikdasmen).
 * **Frekuensi Pembaruan:** Semesteran (*cut-off* Oktober untuk Semester Ganjil dan Maret/April untuk Semester Genap).
 * **Identifier Utama:** Kode Wilayah internal Kemendikdasmen (6 digit, contoh `020500`) dan Nama Kabupaten/Kota; satuan pendidikan menggunakan `NPSN` (8 digit).
