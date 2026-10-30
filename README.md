@@ -20,6 +20,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 ---
 
+[📋 Profil Proyek](#-profil-proyek) •
 [🚀 Status Produksi](#-status-produksi--deployment) •
 [🔗 Ekosistem & Integrasi Frontend](#-ekosistem--integrasi-frontend) •
 [📌 Ringkasan Eksekutif](#-ringkasan-eksekutif) •
@@ -32,6 +33,22 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 ---
 
 </div>
+
+---
+
+## 📋 Profil Proyek
+
+**Judul:** Nusa Matra Data Hub — *National Geographic Decision-Support Engine* (WIA 2026)
+
+**Deskripsi:** Backend API geospasial yang menyatukan data pembangunan, kebencanaan, infrastruktur, dan kesehatan dari enam instansi resmi untuk 514 kabupaten/kota dan 38 provinsi. API ini menyediakan snapshot immutable, skor prioritas yang transparan, batas wilayah resmi BIG, dan feed gempa bumi BMKG secara real-time.
+
+**Tech stack:** Python 3.11–3.13, FastAPI, Pydantic v2, aiosqlite/SQLite, Docker, pytest, BMKG API, serta BIG ArcGIS/GeoJSON.
+
+**Cara menjalankan:** clone repo → buat virtualenv → `pip install -r requirements.txt` → `uvicorn app.main:app --reload --port 8000`. Detail lengkap ada di [Menjalankan backend + frontend secara lokal](#menjalankan-backend--frontend-secara-lokal).
+
+**Progress saat ini:** LIVE API aktif di `api.orangkeren.me`; batas 514/514 kab/kota; 29 indikator berdata; 6 instansi terintegrasi; feed gempa BMKG; snapshot immutable; **165 tests passing**.
+
+---
 
 ## 🚀 Status Produksi & Deployment
 
@@ -66,6 +83,11 @@ flowchart LR
 **1. Backend** (dari root repo ini):
 
 ```bash
+git clone https://github.com/masean24/NusaMatra-DataHub.git
+cd NusaMatra-DataHub
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
