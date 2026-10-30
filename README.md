@@ -177,8 +177,8 @@ Backend mengintegrasikan data terverifikasi dari 6 kementerian dan lembaga resmi
 | Instansi | Jenis Data Terintegrasi | Cakupan Wilayah | Status di Hub |
 |---|---|---|---|
 | **Badan Informasi Geospasial (BIG)** | Batas administrasi resmi polygon 2026 (Kepmendagri No. 300.2.2-2430) | 514 Kab/Kota & 38 Provinsi | ✅ Low & High Resolution GeoJSON |
-| **Badan Pusat Statistik (BPS)** | 11 indikator sosial-ekonomi + 3 indikator infrastruktur SDGs | 514 Kab/Kota | ✅ WebAPI Resmi (Live Ingested) |
-| **BNPB (InaRISK / IRBI 2024)** | Indeks Risiko Bencana Indonesia multi-hazard & spesifik | 514 Kab/Kota | ✅ IRBI 2024 Terbitan Resmi |
+| **Badan Pusat Statistik (BPS)** | 11 indikator sosial-ekonomi + 3 indikator infrastruktur SDGs, termasuk IPM/UHH 2025 | 514 Kab/Kota | ✅ WebAPI Resmi (Live Ingested) |
+| **BNPB (InaRISK / IRBI)** | Indeks Risiko Bencana 2025 (multi, gempa, banjir), dampak terdampak/mengungsi 2025 (provinsi), dan tanah longsor 2024 | 514 Kab/Kota | ✅ IRBI 2025 + DIBI 2025 |
 | **Kementerian Kesehatan (Kemenkes)** | Prevalensi stunting balita (Survei Status Gizi Indonesia 2024) | 514 Kab/Kota | ✅ SSGI 2024 Resmi |
 | **Kemendikdasmen** | Statistik sarana prasarana, rasio murid-guru SD, dan data pokok pendidikan | 514 Kab/Kota | ✅ NPD & Dapodik 2025 |
 | **BMKG** | Feed kejadian gempa bumi terkini, M ≥ 5.0, dan gempa dirasakan | Nasional Real-Time | ✅ Auto-Feed dengan Cache TTL 60s |

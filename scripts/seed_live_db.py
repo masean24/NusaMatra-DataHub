@@ -58,11 +58,21 @@ OFFICIAL_DATASETS = [
      "https://webapi.bps.go.id/developer/",
      "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/",
      "REST_API", "Data Terbuka BPS", "Tahunan"),
+    ("bps_ipm_2025", "BPS", "Badan Pusat Statistik",
+     "Indeks Pembangunan Manusia (IPM) dan Umur Harapan Hidup (UHH) 2025",
+     "https://www.bps.go.id/id/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html",
+     "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2205/th/125/",
+     "REST_API", "Data Terbuka BPS", "Tahunan"),
     ("bnpb_irbi_2024", "BNPB", "Badan Nasional Penanggulangan Bencana",
      "Indeks Risiko Bencana Indonesia (IRBI) Multi-Bencana & Per Ancaman 2024",
      "https://inarisk.bnpb.go.id/",
      "https://inarisk.bnpb.go.id/IRBI-2024/",
      "FLIPBOOK_HTML", "Data Terbuka BNPB", "Tahunan"),
+    ("bnpb_irbi_2025", "BNPB", "Badan Nasional Penanggulangan Bencana",
+     "Indeks Risiko Bencana Indonesia (IRBI) 2025 — Multi-Bencana, Gempa, Banjir",
+     "https://inarisk.bnpb.go.id/irbi",
+     "https://inarisk.bnpb.go.id/irbi",
+     "DASHBOARD_TABLE", "Data Terbuka BNPB", "Tahunan"),
     ("kemenkes_ski_2023", "KEMENKES", "Kementerian Kesehatan",
      "Survei Kesehatan Indonesia (SKI) 2023 Prevalensi Status Gizi Balita",
      "https://badankebijakan.kemkes.go.id/",
@@ -132,6 +142,11 @@ OFFICIAL_DATASETS = [
      "BNPB DIBI 2024 - Korban Terdampak dan Mengungsi Menurut Provinsi",
      "https://data.bnpb.go.id/dataset/data-bencana-indonesia",
      "https://data.bnpb.go.id/api/3/action/datastore_search?resource_id=39ceb577-b49f-45c9-b909-7dd8daef417a",
+     "CKAN_API", "Lisensi Terbuka Satu Data Indonesia", "Tahunan"),
+    ("bnpb_dibi_affected_2025", "BNPB", "Badan Nasional Penanggulangan Bencana",
+     "BNPB DIBI 2025 - Korban Terdampak dan Mengungsi Menurut Provinsi",
+     "https://data.bnpb.go.id/dataset/kompilasi-data-kejadian-dan-dampak-bencana-2025",
+     "https://data.bnpb.go.id/api/3/action/datastore_search?resource_id=8d8db1c8-d79b-4fb1-b735-d8b9c1e0517a",
      "CKAN_API", "Lisensi Terbuka Satu Data Indonesia", "Tahunan"),
     ("kemendikdasmen_statistik_2026", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
      "Statistik Ruang Kelas dan Rasio Murid-Guru SD Tahun Ajaran 2022/2023 (kab/kota)",
@@ -325,7 +340,19 @@ def main():
         for r in reader:
             ind_id = r["indicator_id"]
             ds_id = "bps_susenas_sakernas_2025"
-            if "BNPB" in r["primary_source_agency"]:
+            if ind_id in ("soc_hdi", "hlt_life_expectancy"):
+                ds_id = "bps_ipm_2025"
+            elif ind_id == "dis_affected_pop_per_10k":
+                ds_id = "bnpb_dibi_affected_2025"
+            elif ind_id == "dis_events_5yr_freq":
+                ds_id = "bnpb_dibi_kabkota_2024"
+            elif ind_id in (
+                "dis_multihazard_index",
+                "dis_flood_hazard_idx",
+                "dis_earthquake_hazard_idx",
+            ):
+                ds_id = "bnpb_irbi_2025"
+            elif "BNPB" in r["primary_source_agency"]:
                 ds_id = "bnpb_irbi_2024"
             elif ind_id == "hlt_stunting_prevalence":
                 ds_id = "kemenkes_ssgi_2024"
@@ -422,8 +449,6 @@ def main():
 
     # Column to indicator mapping: (indicator_id, reference_year, dataset_id, source_label)
     col_to_ind = {
-        "soc_hdi": ("soc_hdi", 2024, "bps_susenas_sakernas_2025", "BPS IPM Metode Baru 2024"),
-        "hlt_life_expectancy": ("hlt_life_expectancy", 2024, "bps_susenas_sakernas_2025", "BPS UHH 2024"),
         "edu_mean_years_schooling": ("edu_mean_years_schooling", 2025, "bps_susenas_sakernas_2025", "BPS RLS 2025"),
         "edu_expected_years_schooling": ("edu_expected_years_schooling", 2025, "bps_susenas_sakernas_2025", "BPS HLS 2025"),
         "soc_expenditure_per_capita": ("soc_expenditure_per_capita", 2025, "bps_susenas_sakernas_2025", "BPS Pengeluaran Riil 2025"),
@@ -431,9 +456,6 @@ def main():
         "soc_poverty_count": ("soc_poverty_count", 2025, "bps_susenas_sakernas_2025", "BPS Jumlah Miskin 2025"),
         "soc_poverty_severity_p2": ("soc_poverty_severity_p2", 2025, "bps_susenas_sakernas_2025", "BPS P2 Susenas 2025"),
         "soc_unemployment_rate": ("soc_unemployment_rate", 2025, "bps_susenas_sakernas_2025", "BPS TPT Sakernas 2025"),
-        "dis_multihazard_index": ("dis_multihazard_index", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Multi-Hazard"),
-        "dis_flood_score": ("dis_flood_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Banjir"),
-        "dis_earthquake_score": ("dis_earthquake_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Gempa"),
         "dis_landslide_score": ("dis_landslide_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Longsor"),
         "inf_electrification_prov_pct": ("inf_electrification_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
     }
@@ -530,6 +552,86 @@ def main():
         )
 
     conn.commit()
+
+    # 6-bps-ipm. BPS IPM 2025 (variables 2205/2206) covers all 514 kab/kota.
+    # This replaces the 2024 IPM/UHH values from the older master snapshot.
+    ipm_2025_csv = REPO_ROOT / "data" / "bps_ipm_2025_kabkota.csv"
+    if not ipm_2025_csv.exists():
+        print(f"[ERROR] Missing required BPS IPM 2025 CSV: {ipm_2025_csv}")
+        sys.exit(1)
+    with open(ipm_2025_csv, "r", encoding="utf-8") as f:
+        ipm_rows = list(csv.DictReader(f))
+
+    for ind_id, column in (
+        ("soc_hdi", "soc_hdi"),
+        ("hlt_life_expectancy", "hlt_life_expectancy"),
+    ):
+        values = []
+        for row in ipm_rows:
+            raw = (row.get(column) or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "VERIFIED"))
+            except (KeyError, ValueError):
+                continue
+        if len(values) != 514:
+            print(
+                f"[ERROR] {ind_id} IPM 2025 coverage is {len(values)}/514; "
+                "refusing partial series."
+            )
+            sys.exit(1)
+        _seed_facts(
+            ind_id,
+            2025,
+            "bps_ipm_2025",
+            f"BPS IPM 2025 — {column} (kab/kota)",
+            values,
+            indicators_meta[ind_id]["polarity"],
+        )
+    conn.commit()
+    print(f"       [OK] BPS IPM/UHH 2025: {len(ipm_rows)} rows")
+
+    # 6-irbi. IRBI 2025 from the InaRISK web export. Only multi-hazard,
+    # earthquake, and flood are replaced; landslide remains the 2024 series
+    # because its 2025 coverage (455/514) is lower than 2024 (510/514).
+    irbi_2025_csv = REPO_ROOT / "data" / "bnpb_irbi_2025_hazards.csv"
+    if not irbi_2025_csv.exists():
+        print(f"[ERROR] Missing required IRBI 2025 CSV: {irbi_2025_csv}")
+        sys.exit(1)
+    with open(irbi_2025_csv, "r", encoding="utf-8") as f:
+        irbi_rows = list(csv.DictReader(f))
+
+    for ind_id, column, expected in (
+        ("dis_multihazard_index", "dis_multihazard_index", 514),
+        ("dis_earthquake_hazard_idx", "dis_earthquake_hazard_idx", 514),
+        ("dis_flood_hazard_idx", "dis_flood_hazard_idx", 510),
+    ):
+        values = []
+        for row in irbi_rows:
+            raw = (row.get(column) or "").strip()
+            if not raw:
+                continue
+            try:
+                values.append((row["region_id"], float(raw), "VERIFIED"))
+            except (KeyError, ValueError):
+                continue
+        if len(values) != expected:
+            print(
+                f"[ERROR] {ind_id} IRBI 2025 coverage is {len(values)}/{expected}; "
+                "refusing partial series."
+            )
+            sys.exit(1)
+        _seed_facts(
+            ind_id,
+            2025,
+            "bnpb_irbi_2025",
+            f"BNPB IRBI 2025 — {column} (kab/kota)",
+            values,
+            indicators_meta[ind_id]["polarity"],
+        )
+    conn.commit()
+    print(f"       [OK] IRBI 2025 multi/gempa/banjir: {len(irbi_rows)} rows")
 
     # 6-stunting. Verified SSGI 2024 has full 514 kab/kota coverage, including
     # the 27 regions absent from SKI 2023. This replaces the older stunting
@@ -778,8 +880,8 @@ def main():
         conn.commit()
         print(f"       [OK] Province-imputed internet & JKN: {len(province_rows)} rows")
 
-    # 6f. Province-imputed disaster impact per 10k population (BNPB DIBI 2024).
-    verified_affected_csv = REPO_ROOT / "data" / "bnpb_affected_per_10k_2024.csv"
+    # 6f. Province-imputed disaster impact per 10k population (BNPB DIBI 2025).
+    verified_affected_csv = REPO_ROOT / "data" / "bnpb_affected_per_10k_2025.csv"
     if verified_affected_csv.exists():
         with open(verified_affected_csv, "r", encoding="utf-8") as f:
             affected_rows = list(csv.DictReader(f))
@@ -796,9 +898,9 @@ def main():
         if values:
             _seed_facts(
                 "dis_affected_pop_per_10k",
-                2024,
-                "bnpb_dibi_affected_2024",
-                "BNPB DIBI 2024 (province-imputed)",
+                2025,
+                "bnpb_dibi_affected_2025",
+                "BNPB DIBI 2025 (province-imputed)",
                 values,
                 indicators_meta["dis_affected_pop_per_10k"]["polarity"],
             )

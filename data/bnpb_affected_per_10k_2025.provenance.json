@@ -1,0 +1,30 @@
+{
+  "dataset_id": "bnpb_dibi_affected_2025",
+  "retrieved_at": "2026-10-30T15:45:48.707450+00:00",
+  "agency": "Badan Nasional Penanggulangan Bencana (BNPB)",
+  "reference_year": 2025,
+  "source": {
+    "dataset": "Kompilasi Data Kejadian dan Dampak Bencana 2025",
+    "page": "https://data.bnpb.go.id/dataset/kompilasi-data-kejadian-dan-dampak-bencana-2025",
+    "resources": {
+      "affected": {
+        "resource_id": "8d8db1c8-d79b-4fb1-b735-d8b9c1e0517a",
+        "sha256": "cf527ae799e329acdf7e0bd28d528a66fb2896888f6430d6147aa9776222d59a",
+        "rows": 39
+      },
+      "displaced": {
+        "resource_id": "eefa5746-5c65-4156-ac74-2eff2bfac767",
+        "sha256": "9b416528fd9dcf396ea5bb40202cac2f4b5c98727c501d57f59e35ebcf331af1",
+        "rows": 39
+      }
+    }
+  },
+  "formula": "(affected + displaced) / province population * 10.000",
+  "denominator": "BPS Proyeksi Penduduk 2026 (sum kab/kota per province)",
+  "derived_csv": {
+    "path": "data/bnpb_affected_per_10k_2025.csv",
+    "rows": 514,
+    "sha256": "04d5cf7d5b91ed2f8b47fc04e8c06bb11eb8df1caf83df3cb3da70aef27e00b1"
+  },
+  "notes": "Official BNPB 2025 impact values are province-level. They are imputed to kab/kota and must remain flagged IMPUTED_PROVINCE; no kab/kota 2025 impact table was published."
+}

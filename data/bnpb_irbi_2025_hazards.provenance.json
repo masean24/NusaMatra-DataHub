@@ -1,0 +1,33 @@
+{
+  "dataset_id": "bnpb_irbi_2025",
+  "retrieved_at": "2026-10-30T15:12:05.953451+00:00",
+  "agency": "Badan Nasional Penanggulangan Bencana (BNPB)",
+  "reference_year": 2025,
+  "source": {
+    "title": "Indeks Risiko Bencana Indonesia (IRBI) 2025",
+    "page": "https://inarisk.bnpb.go.id/irbi",
+    "extraction": "Inline `var irbimapdata` on the InaRISK IRBI page; KODE_KAB (4 digit) maps directly to dim_regions.region_id.",
+    "official_report": "https://dkms.bnpb.go.id/api/backend/uploads/documents/1782358147_Indeks%20Risiko%20Bencana%20Indonesia%20(IRBI)%20Tahun%202025_opt.pdf",
+    "published": "Januari 2026"
+  },
+  "hazard_ids": {
+    "1": "Gempabumi",
+    "3": "Banjir",
+    "13": "Multi Bahaya"
+  },
+  "coverage": {
+    "dis_multihazard_index": 514,
+    "dis_earthquake_hazard_idx": 514,
+    "dis_flood_hazard_idx": 510
+  },
+  "derived_csv": {
+    "path": "data/bnpb_irbi_2025_hazards.csv",
+    "rows": 514,
+    "sha256": "997449391de40140df794d537082e4105639792e348ae36aa4697d50b20d38cf"
+  },
+  "notes": [
+    "Skor IRBI adalah skor risiko per ancaman, bukan nilai raster hazard 0-1.",
+    "Tanah longsor sengaja tidak diganti ke 2025: coverage 2025 hanya 455/514, sedangkan seri 2024 di repo mencakup 510/514.",
+    "Empat wilayah tanpa skor banjir 2025 dibiarkan kosong; tidak ada imputasi."
+  ]
+}

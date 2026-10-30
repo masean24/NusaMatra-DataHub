@@ -1,0 +1,26 @@
+{
+  "dataset_id": "bps_ipm_2025",
+  "retrieved_at": "2026-10-30T15:38:09.431327+00:00",
+  "agency": "Badan Pusat Statistik (BPS)",
+  "reference_year": 2025,
+  "source": {
+    "title": "Indeks Pembangunan Manusia (IPM) 2025",
+    "publication": "https://www.bps.go.id/id/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html",
+    "api": "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2205/th/125/",
+    "uhh_api": "https://webapi.bps.go.id/v1/api/list/model/data/domain/0000/var/2206/th/125/",
+    "variables": {
+      "soc_hdi": 2205,
+      "hlt_life_expectancy": 2206
+    }
+  },
+  "coverage": {
+    "kabupaten_kota": 514,
+    "missing": 0
+  },
+  "derived_csv": {
+    "path": "data/bps_ipm_2025_kabkota.csv",
+    "rows": 514,
+    "sha256": "4f6946058d178461ccf7951ce6080bf6d2249d2a68a3451eaafc46dcfb810c2c"
+  },
+  "notes": "IPM and UHH use BPS long-form SP2020 series (variables 2205/2206), reference year 2025."
+}

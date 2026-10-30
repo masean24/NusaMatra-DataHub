@@ -67,8 +67,8 @@ def test_kabupaten_and_kota_with_same_name_are_not_swapped(live):
         (SNAPSHOT,),
     ).fetchone()
     assert kab and kota
-    assert round(kab[0], 2) == 72.39
-    assert round(kota[0], 2) == 78.52
+    assert round(kab[0], 2) == 74.53
+    assert round(kota[0], 2) == 79.75
 
 
 def test_score_direction_is_vulnerability_in_live(live):

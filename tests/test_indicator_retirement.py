@@ -210,7 +210,7 @@ def test_retirement_is_idempotent_and_preserves_digests(retired_live_db):
 
 
 @pytest.mark.asyncio
-async def test_two_cities_stay_insufficient_without_zero(client, retired_live_db):
+async def test_regions_stay_insufficient_without_zero(client, retired_live_db):
     _, _, new_id = retired_live_db
     response = await client.post(
         "/api/v1/indicators/composite-query",
@@ -229,11 +229,11 @@ async def test_two_cities_stay_insufficient_without_zero(client, retired_live_db
     assert data["rankable"] is True
 
     excluded = {row["region_id"]: row for row in data["insufficient_data"]}
-    for region_id in ("1277", "7371"):
+    for region_id in ("8271", "5106"):
         assert region_id in excluded
         row = excluded[region_id]
         assert row["coverage_pct"] < 70
-        assert "dis_multihazard_index" in row["missing_indicators"]
+        assert "dis_flood_hazard_idx" in row["missing_indicators"]
         assert "composite_score" not in row
         assert all(
             score is None or isinstance(score, (int, float))
