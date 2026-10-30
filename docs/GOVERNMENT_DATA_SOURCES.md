@@ -13,7 +13,7 @@ flowchart TD
         BPS["Badan Pusat Statistik (BPS)<br/>• WebAPI & SIG Bridging"]
         BNPB["Badan Nasional Penanggulangan Bencana (BNPB)<br/>• Satu Data CKAN & InaRISK"]
         KEMENDIK["Kemendikdasmen<br/>• Portal Data & Dapodik"]
-        KEMENKES["Kemenkes & SDI<br/>• Satu Data Indonesia & SKI/SSGI"]
+        KEMENKES["Kemenkes & SDI<br/>• Satu Data Indonesia & SSGI 2024"]
         BIG["Badan Informasi Geospasial (BIG)<br/>• Ina-Geoportal Batas RBI"]
     end
 
@@ -37,7 +37,7 @@ flowchart TD
 | **BIG** | `tanahair.indonesia.go.id/` | GeoPackage / WMS | Provinsi s.d. Desa | Per Regulasi Kepmendagri |
 | **Kemendikdasmen**| `data.kemendikdasmen.go.id/` | Batch XLSX / CSV | Kab/Kota (514), Sekolah | Semesteran (Statistik Persekolahan) |
 | **Dapodik** | `dapo.kemendikdasmen.go.id/` | Web XHR Internal | Kab/Kota (514), Sekolah | Semesteran (Sinkronisasi Sekolah) |
-| **Kemenkes & SDI** | `data.go.id/` | CKAN API / Batch | Kab/Kota (514), Prov (38) | Tahunan (Profil Kesehatan & SKI) |
+| **Kemenkes & SDI** | `data.go.id/` | CKAN API / Batch | Kab/Kota (514), Prov (38) | Tahunan (Profil Kesehatan & SSGI) |
 
 ---
 
@@ -112,7 +112,7 @@ Penyedia data status kesehatan masyarakat, prevalensi gizi buruk, serta ketersed
   * **RS Online (SIRS):** [`https://sirs.kemkes.go.id/fo/home/dashboard_rs`](https://sirs.kemkes.go.id/fo/home/dashboard_rs) (daftar RS per kab/kota, endpoint JSON publik)
   * **SATUSEHAT Data:** [`https://satusehat.kemkes.go.id/data/`](https://satusehat.kemkes.go.id/data/) (dataset dokter per provinsi)
 * **Daftar Indikator:**
-  1. `hlt_stunting_prevalence` — **Prevalensi Balita Stunting** (Persentase balita pendek/sangat pendek hasil survei SKI/SSGI)
+  1. `hlt_stunting_prevalence` — ✅ **514/514 VERIFIED** (Prevalensi Balita Stunting, SSGI 2024 Kemenkes)
   2. `hlt_facilities_per_10k` — ✅ **514/514 VERIFIED** (Puskesmas Semester II 2025 + RS SIRS / penduduk 2026)
   3. `hlt_doctors_per_10k` — ✅ **514/514 `IMPUTED_PROVINCE`** (dokter per provinsi dari SATUSEHAT Data)
   4. `hlt_jkn_coverage_pct` — **Cakupan Kepesertaan Jaminan Kesehatan Nasional (JKN/BPJS)**

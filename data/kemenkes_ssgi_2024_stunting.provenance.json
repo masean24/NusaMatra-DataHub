@@ -1,0 +1,44 @@
+{
+  "retrieved_at": "2026-10-29T16:37:20.773328+00:00",
+  "agency": "Kementerian Kesehatan RI ? Badan Kebijakan Pembangunan Kesehatan (BKPK)",
+  "source": {
+    "title": "Survei Status Gizi Indonesia (SSGI) 2024 Dalam Angka",
+    "catalog_url": "https://www.badankebijakan.kemkes.go.id/perpustakaanbkpkkemkes/index.php?id=40008&p=show_detail",
+    "pdf_url": "https://drive.google.com/file/d/1FmhMtFsElv0l95YNGqsoKy5xJh-m-glM/view",
+    "pdf_pages_used": "44-61",
+    "tables_used": "Tabel 4.3?4.40 (prevalensi balita stunting menurut kabupaten/kota)",
+    "national_stunting_pct": 19.8
+  },
+  "derived_csv": {
+    "path": "data/kemenkes_ssgi_2024_stunting.csv",
+    "rows": 514,
+    "columns": [
+      "region_id",
+      "parent_region_id",
+      "name",
+      "level",
+      "bps_code",
+      "kemendagri_code",
+      "province_name",
+      "region_name",
+      "hlt_stunting_prevalence",
+      "raw_stunting",
+      "pdf_page",
+      "source"
+    ],
+    "sha256": "7db878c26a682bac75a4732fd21418f85c9f0769735193e27fac20266f67f7d5"
+  },
+  "raw_pdf": {
+    "sha256": "06eae149a5f84888c1f0dab6ce8506a2dbf2e3ad93da3c2809f09e091e2a7c65",
+    "bytes": 16198994
+  },
+  "coverage": {
+    "kabupaten_kota": 514,
+    "matched_to_dim_regions": 514,
+    "unmatched": 0,
+    "missing_values": 0
+  },
+  "applied_snapshot": "2026.10.0-live-c68381fcca708ecf",
+  "method": "Text extraction from the official SSGI 2024 PDF tables. Stunting is the first percentage column in each kabupaten/kota row. Rows were matched to 2026 dim_regions by normalized name, administrative level, and province; no values were imputed or fabricated.",
+  "notes": "Applied as the full 514 kab/kota stunting series in the active LIVE snapshot. The previous snapshot remains immutable for audit."
+}

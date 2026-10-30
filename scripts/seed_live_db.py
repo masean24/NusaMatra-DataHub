@@ -68,6 +68,11 @@ OFFICIAL_DATASETS = [
      "https://badankebijakan.kemkes.go.id/",
      "https://badankebijakan.kemkes.go.id/ski-2023-dalam-angka/",
      "PDF_TABLE", "Data Terbuka Kemenkes", "Tahunan"),
+    ("kemenkes_ssgi_2024", "KEMENKES", "Kementerian Kesehatan",
+     "Survei Status Gizi Indonesia (SSGI) 2024 Dalam Angka",
+     "https://www.badankebijakan.kemkes.go.id/perpustakaanbkpkkemkes/index.php?id=40008&p=show_detail",
+     "https://drive.google.com/file/d/1FmhMtFsElv0l95YNGqsoKy5xJh-m-glM/view",
+     "PDF_TABLE", "Data Terbuka Kemenkes", "Tahunan"),
     ("kemendikdasmen_ref_2026", "KEMENDIKDASMEN", "Kementerian Pendidikan Dasar dan Menengah",
      "Data Referensi Satuan Pendidikan Persekolahan (SD, SMP, SMA, SMK) 2026",
      "https://referensi.data.kemendikdasmen.go.id/",
@@ -312,6 +317,8 @@ def main():
             ds_id = "bps_susenas_sakernas_2025"
             if "BNPB" in r["primary_source_agency"]:
                 ds_id = "bnpb_irbi_2024"
+            elif ind_id == "hlt_stunting_prevalence":
+                ds_id = "kemenkes_ssgi_2024"
             elif "Kemenkes" in r["primary_source_agency"]:
                 ds_id = "kemenkes_ski_2023"
             elif "Kemendikdasmen" in r["primary_source_agency"]:
@@ -416,7 +423,6 @@ def main():
         "dis_flood_score": ("dis_flood_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Banjir"),
         "dis_earthquake_score": ("dis_earthquake_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Gempa"),
         "dis_landslide_score": ("dis_landslide_hazard_idx", 2024, "bnpb_irbi_2024", "BNPB IRBI 2024 Longsor"),
-        "hlt_stunting_prevalence": ("hlt_stunting_prevalence", 2023, "kemenkes_ski_2023", "Kemenkes SKI 2023 Bab 15"),
         "inf_electrification_prov_pct": ("inf_electrification_pct", 2025, "bps_susenas_sakernas_2025", "BPS Susenas Prov 2025"),
     }
     master_columns = list(master_rows[0].keys())
@@ -512,6 +518,52 @@ def main():
         )
 
     conn.commit()
+
+    # 6-stunting. Verified SSGI 2024 has full 514 kab/kota coverage, including
+    # the 27 regions absent from SKI 2023. This replaces the older stunting
+    # vintage for the new snapshot instead of mixing survey years.
+    stunting_csv = REPO_ROOT / "data" / "kemenkes_ssgi_2024_stunting.csv"
+    if not stunting_csv.exists():
+        print(f"[ERROR] Missing required SSGI 2024 CSV: {stunting_csv}")
+        sys.exit(1)
+    with open(stunting_csv, "r", encoding="utf-8") as f:
+        stunting_rows = list(csv.DictReader(f))
+
+    stunting_values = []
+    for row in stunting_rows:
+        raw = (row.get("hlt_stunting_prevalence") or "").strip()
+        if not raw:
+            continue
+        try:
+            stunting_values.append(
+                (
+                    row["region_id"],
+                    float(raw),
+                    "VERIFIED",
+                    "kemenkes_ssgi_2024",
+                    f"Kemenkes SSGI 2024 p.{row.get('pdf_page', '?')}",
+                )
+            )
+        except (KeyError, ValueError):
+            continue
+
+    if len(stunting_values) != 514:
+        print(
+            f"[ERROR] SSGI 2024 stunting coverage is {len(stunting_values)}/514; "
+            "refusing to publish a partial series."
+        )
+        sys.exit(1)
+
+    _seed_facts(
+        "hlt_stunting_prevalence",
+        2024,
+        "kemenkes_ssgi_2024",
+        "Kemenkes SSGI 2024 (kab/kota)",
+        stunting_values,
+        indicators_meta["hlt_stunting_prevalence"]["polarity"],
+    )
+    conn.commit()
+    print(f"       [OK] Verified SSGI 2024 stunting: {len(stunting_values)}/514 kab/kota")
 
     # 6a. Build the canonical water/sanitation sets.
     # Verified kab/kota values come from BPS WebAPI (var 2830 & 2748, th 125).
@@ -884,7 +936,10 @@ def main():
         SNAPSHOT_ID,
         label="Nusa Matra Official LIVE Snapshot (BIG, BPS, BNPB, Kemenkes, Kemendikdasmen)",
         boundary_version=BOUNDARY_VER,
-        notes="Verified official data compiled from primary government sources.",
+        notes=(
+            "Verified official data compiled from primary government sources. "
+            "Stunting uses Kemenkes SSGI 2024 (514/514 kab/kota), replacing SKI 2023."
+        ),
         supersedes=previous_active[0] if previous_active else None,
     )
     final_snapshot_id = snapshot_result["snapshot_id"]

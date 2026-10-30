@@ -19,7 +19,7 @@ Dokumen ini memuat katalog sumber data resmi pemerintah Indonesia yang telah div
 | **BNPB (InaRISK)** | Peta Bahaya & Risiko Multi-Bencana (Raster/Vektor) | Grid 100m $\times$ 100m & Kab/Kota | **Tidak** | ArcGIS REST `ImageServer` / `MapServer` (`gis.bnpb.go.id`) |
 | **BIG** | Batas Wilayah Administrasi Resmi (RBI) | Provinsi (38), Kab/Kota (514), Kecamatan, Desa | **Ya** (Akun Portal) | Unduh GPKG/SHP (`tanahair.indonesia.go.id`) & WMS/ArcGIS REST |
 | **Kemendikdasmen** | Statistik Sekolah, Guru, Ruang Kelas, APM/APK | Provinsi (38), Kab/Kota (514), Sekolah | **Tidak** | Unduh Batch XLSX/CSV (`data.kemendikdasmen.go.id`) & XHR Dapodik |
-| **Kemenkes & SDI** | Stunting (SKI/SSGI), Faskes, Rasio Tenaga Medis | Provinsi (38), Kab/Kota (514) | **Tidak** | CKAN API & Batch File (`data.go.id` & Profil Kesehatan) |
+| **Kemenkes & SDI** | Stunting (SSGI 2024), Faskes, Rasio Tenaga Medis | Provinsi (38), Kab/Kota (514) | **Tidak** | CKAN API & Batch File (`data.go.id` & Profil Kesehatan) |
 
 ---
 
@@ -135,12 +135,12 @@ Dokumen ini memuat katalog sumber data resmi pemerintah Indonesia yang telah div
 
 ### 6.1 Portal Satu Data Indonesia (SDI) & Publikasi Profil Kesehatan Kemenkes
 * **URL Portal Resmi:** `https://data.go.id/` dan `https://kemkes.go.id/`
-* **Metode Akses:** Katalog CKAN REST API (`https://data.go.id/api/`) serta unduhan tabel resmi XLSX/CSV untuk dataset berstatus `Terbuka` (*Profil Kesehatan Indonesia*, *Survei Kesehatan Indonesia / SKI*, dan *SSGI*).
+* **Metode Akses:** Katalog CKAN REST API (`https://data.go.id/api/`) serta unduhan tabel resmi XLSX/CSV untuk dataset berstatus `Terbuka` (*Profil Kesehatan Indonesia* dan *Survei Status Gizi Indonesia / SSGI 2024*).
 * **Granularitas Geografis:** Provinsi (38) dan Kabupaten/Kota (514).
-* **Tahun Data Terbaru:** *Profil Kesehatan Indonesia 2025* (rilis 2026), data prevalensi stunting SKI/SSGI 2024/2025, serta modul kesehatan Susenas BPS 2025.
+* **Tahun Data Terbaru:** *Profil Kesehatan Indonesia 2025* (rilis 2026), data prevalensi stunting **SSGI 2024 (514/514 kab/kota)**, serta modul kesehatan Susenas BPS 2025.
 * **Lisensi:** Satu Data Indonesia (Perpres No. 39 Tahun 2019).
 * **Frekuensi Pembaruan:** Tahunan.
 * **Identifier Utama:** Kode Kabupaten/Kota (Kemendagri/BPS) dan Nama Wilayah.
 * **Batasan Teknis & Klarifikasi Penting:**
   * API klinis **SATUSEHAT** (`https://satusehat.kemkes.go.id/`) berbasis HL7 FHIR R4 bersifat **TERBATAS (Restricted)** — mewajibkan kredensial OAuth2 institusi fasilitas pelayanan kesehatan (`client_id` & `client_secret`) untuk pertukaran rekam medis, bukan untuk agregasi statistik wilayah publik.
-  * Oleh karena itu, indikator kesehatan Kabupaten/Kota pada Nusa Matra wajib bersumber dari kompilasi nasional *Profil Kesehatan Indonesia* Kemenkes, tabel *SKI/SSGI*, serta tabel *Susenas Kesehatan & Podes* dari BPS WebAPI agar menjamin kelengkapan 514 Kabupaten/Kota.
+  * Oleh karena itu, indikator kesehatan Kabupaten/Kota pada Nusa Matra wajib bersumber dari kompilasi nasional *Profil Kesehatan Indonesia* Kemenkes, tabel *SSGI 2024*, serta tabel *Susenas Kesehatan & Podes* dari BPS WebAPI agar menjamin kelengkapan 514 Kabupaten/Kota.

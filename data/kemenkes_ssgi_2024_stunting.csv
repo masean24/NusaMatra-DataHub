@@ -1,0 +1,515 @@
+region_id,parent_region_id,name,level,bps_code,kemendagri_code,province_name,region_name,hlt_stunting_prevalence,raw_stunting,pdf_page,source
+1109,11,Kabupaten Simeulue,kabupaten,1109,11.09,Aceh,Simeulue,25.5,"25,5",44,Kemenkes SSGI 2024
+1110,11,Kabupaten Aceh Singkil,kabupaten,1110,11.10,Aceh,Aceh Singkil,34.2,"34,2",44,Kemenkes SSGI 2024
+1101,11,Kabupaten Aceh Selatan,kabupaten,1101,11.01,Aceh,Aceh Selatan,34.2,"34,2",44,Kemenkes SSGI 2024
+1102,11,Kabupaten Aceh Tenggara,kabupaten,1102,11.02,Aceh,Aceh Tenggara,30.9,"30,9",44,Kemenkes SSGI 2024
+1103,11,Kabupaten Aceh Timur,kabupaten,1103,11.03,Aceh,Aceh Timur,36.7,"36,7",44,Kemenkes SSGI 2024
+1104,11,Kabupaten Aceh Tengah,kabupaten,1104,11.04,Aceh,Aceh Tengah,31.4,"31,4",44,Kemenkes SSGI 2024
+1105,11,Kabupaten Aceh Barat,kabupaten,1105,11.05,Aceh,Aceh Barat,25.6,"25,6",44,Kemenkes SSGI 2024
+1106,11,Kabupaten Aceh Besar,kabupaten,1106,11.06,Aceh,Aceh Besar,32.3,"32,3",44,Kemenkes SSGI 2024
+1107,11,Kabupaten Pidie,kabupaten,1107,11.07,Aceh,Pidie,32.6,"32,6",44,Kemenkes SSGI 2024
+1111,11,Kabupaten Bireuen,kabupaten,1111,11.11,Aceh,Bireuen,27.1,"27,1",44,Kemenkes SSGI 2024
+1108,11,Kabupaten Aceh Utara,kabupaten,1108,11.08,Aceh,Aceh Utara,19.2,"19,2",44,Kemenkes SSGI 2024
+1112,11,Kabupaten Aceh Barat Daya,kabupaten,1112,11.12,Aceh,Aceh Barat Daya,36.2,"36,2",44,Kemenkes SSGI 2024
+1113,11,Kabupaten Gayo Lues,kabupaten,1113,11.13,Aceh,Gayo Lues,20.6,"20,6",44,Kemenkes SSGI 2024
+1116,11,Kabupaten Aceh Tamiang,kabupaten,1116,11.16,Aceh,Aceh Tamiang,27.4,"27,4",44,Kemenkes SSGI 2024
+1115,11,Kabupaten Nagan Raya,kabupaten,1115,11.15,Aceh,Nagan Raya,35.5,"35,5",44,Kemenkes SSGI 2024
+1114,11,Kabupaten Aceh Jaya,kabupaten,1114,11.14,Aceh,Aceh Jaya,31.0,"31,0",44,Kemenkes SSGI 2024
+1117,11,Kabupaten Bener Meriah,kabupaten,1117,11.17,Aceh,Bener Meriah,32.8,"32,8",44,Kemenkes SSGI 2024
+1118,11,Kabupaten Pidie Jaya,kabupaten,1118,11.18,Aceh,Pidie Jaya,31.6,"31,6",44,Kemenkes SSGI 2024
+1171,11,Kota Banda Aceh,kota,1171,11.71,Aceh,Kota Banda Aceh,23.7,"23,7",44,Kemenkes SSGI 2024
+1172,11,Kota Sabang,kota,1172,11.72,Aceh,Kota Sabang,23.4,"23,4",44,Kemenkes SSGI 2024
+1174,11,Kota Langsa,kota,1174,11.74,Aceh,Kota Langsa,15.6,"15,6",44,Kemenkes SSGI 2024
+1173,11,Kota Lhokseumawe,kota,1173,11.73,Aceh,Kota Lhokseumawe,20.8,"20,8",44,Kemenkes SSGI 2024
+1175,11,Kota Subulussalam,kota,1175,11.75,Aceh,Kota Subulussalam,27.5,"27,5",44,Kemenkes SSGI 2024
+1204,12,Kabupaten Nias,kabupaten,1204,12.04,Sumatera Utara,Nias,26.1,"26,1",45,Kemenkes SSGI 2024
+1213,12,Kabupaten Mandailing Natal,kabupaten,1213,12.13,Sumatera Utara,Mandailing Natal,22.2,"22,2",45,Kemenkes SSGI 2024
+1203,12,Kabupaten Tapanuli Selatan,kabupaten,1203,12.03,Sumatera Utara,Tapanuli Selatan,6.6,"6,6",45,Kemenkes SSGI 2024
+1201,12,Kabupaten Tapanuli Tengah,kabupaten,1201,12.01,Sumatera Utara,Tapanuli Tengah,32.3,"32,3",45,Kemenkes SSGI 2024
+1202,12,Kabupaten Tapanuli Utara,kabupaten,1202,12.02,Sumatera Utara,Tapanuli Utara,32.5,"32,5",45,Kemenkes SSGI 2024
+1212,12,Kabupaten Toba,kabupaten,1212,12.12,Sumatera Utara,Toba,27.1,"27,1",45,Kemenkes SSGI 2024
+1210,12,Kabupaten Labuhanbatu,kabupaten,1210,12.10,Sumatera Utara,Labuhanbatu,25.3,"25,3",45,Kemenkes SSGI 2024
+1209,12,Kabupaten Asahan,kabupaten,1209,12.09,Sumatera Utara,Asahan,13.9,"13,9",45,Kemenkes SSGI 2024
+1208,12,Kabupaten Simalungun,kabupaten,1208,12.08,Sumatera Utara,Simalungun,26.0,"26,0",45,Kemenkes SSGI 2024
+1211,12,Kabupaten Dairi,kabupaten,1211,12.11,Sumatera Utara,Dairi,29.0,"29,0",45,Kemenkes SSGI 2024
+1206,12,Kabupaten Karo,kabupaten,1206,12.06,Sumatera Utara,Karo,17.6,"17,6",45,Kemenkes SSGI 2024
+1207,12,Kabupaten Deli Serdang,kabupaten,1207,12.07,Sumatera Utara,Deli Serdang,19.6,"19,6",45,Kemenkes SSGI 2024
+1205,12,Kabupaten Langkat,kabupaten,1205,12.05,Sumatera Utara,Langkat,16.0,"16,0",45,Kemenkes SSGI 2024
+1214,12,Kabupaten Nias Selatan,kabupaten,1214,12.14,Sumatera Utara,Nias Selatan,37.6,"37,6",45,Kemenkes SSGI 2024
+1216,12,Kabupaten Humbang Hasundutan,kabupaten,1216,12.16,Sumatera Utara,Humbang Hasundutan,18.3,"18,3",45,Kemenkes SSGI 2024
+1215,12,Kabupaten Pakpak Bharat,kabupaten,1215,12.15,Sumatera Utara,Pakpak Bharat,27.5,"27,5",45,Kemenkes SSGI 2024
+1217,12,Kabupaten Samosir,kabupaten,1217,12.17,Sumatera Utara,Samosir,28.6,"28,6",45,Kemenkes SSGI 2024
+1218,12,Kabupaten Serdang Bedagai,kabupaten,1218,12.18,Sumatera Utara,Serdang Bedagai,19.0,"19,0",45,Kemenkes SSGI 2024
+1219,12,Kabupaten Batu Bara,kabupaten,1219,12.19,Sumatera Utara,Batu Bara,23.0,"23,0",45,Kemenkes SSGI 2024
+1220,12,Kabupaten Padang Lawas Utara,kabupaten,1220,12.20,Sumatera Utara,Padang Lawas Utara,30.0,"30,0",45,Kemenkes SSGI 2024
+1221,12,Kabupaten Padang Lawas,kabupaten,1221,12.21,Sumatera Utara,Padang Lawas,25.2,"25,2",45,Kemenkes SSGI 2024
+1222,12,Kabupaten Labuhanbatu Selatan,kabupaten,1222,12.22,Sumatera Utara,Labuhanbatu Selatan,22.0,"22,0",45,Kemenkes SSGI 2024
+1223,12,Kabupaten Labuhanbatu Utara,kabupaten,1223,12.23,Sumatera Utara,Labuhanbatu Utara,17.5,"17,5",45,Kemenkes SSGI 2024
+1224,12,Kabupaten Nias Utara,kabupaten,1224,12.24,Sumatera Utara,Nias Utara,25.8,"25,8",45,Kemenkes SSGI 2024
+1225,12,Kabupaten Nias Barat,kabupaten,1225,12.25,Sumatera Utara,Nias Barat,34.4,"34,4",45,Kemenkes SSGI 2024
+1273,12,Kota Sibolga,kota,1273,12.73,Sumatera Utara,Sibolga,18.1,"18,1",45,Kemenkes SSGI 2024
+1274,12,Kota Tanjungbalai,kota,1274,12.74,Sumatera Utara,Kota Tanjungbalai,5.6,"5,6",45,Kemenkes SSGI 2024
+1272,12,Kota Pematangsiantar,kota,1272,12.72,Sumatera Utara,Kota Pematang Siantar,12.2,"12,2",45,Kemenkes SSGI 2024
+1276,12,Kota Tebing Tinggi,kota,1276,12.76,Sumatera Utara,Kota Tebing Tinggi,17.6,"17,6",45,Kemenkes SSGI 2024
+1271,12,Kota Medan,kota,1271,12.71,Sumatera Utara,Kota Medan,15.4,"15,4",45,Kemenkes SSGI 2024
+1275,12,Kota Binjai,kota,1275,12.75,Sumatera Utara,Kota Binjai,25.6,"25,6",45,Kemenkes SSGI 2024
+1277,12,Kota Padangsidimpuan,kota,1277,12.77,Sumatera Utara,Kota Padangsidimpuan,30.3,"30,3",45,Kemenkes SSGI 2024
+1278,12,Kota Gunungsitoli,kota,1278,12.78,Sumatera Utara,Kota Gunungsitoli,17.4,"17,4",45,Kemenkes SSGI 2024
+1309,13,Kabupaten Kepulauan Mentawai,kabupaten,1309,13.09,Sumatera Barat,Kepulauan Mentawai,26.2,"26,2",46,Kemenkes SSGI 2024
+1301,13,Kabupaten Pesisir Selatan,kabupaten,1301,13.01,Sumatera Barat,Pesisir Selatan,26.5,"26,5",46,Kemenkes SSGI 2024
+1302,13,Kabupaten Solok,kabupaten,1302,13.02,Sumatera Barat,Solok,29.5,"29,5",46,Kemenkes SSGI 2024
+1303,13,Kabupaten Sijunjung,kabupaten,1303,13.03,Sumatera Barat,Sijunjung,28.2,"28,2",46,Kemenkes SSGI 2024
+1304,13,Kabupaten Tanah Datar,kabupaten,1304,13.04,Sumatera Barat,Tanah Datar,26.9,"26,9",46,Kemenkes SSGI 2024
+1305,13,Kabupaten Padang Pariaman,kabupaten,1305,13.05,Sumatera Barat,Padang Pariaman,26.6,"26,6",46,Kemenkes SSGI 2024
+1306,13,Kabupaten Agam,kabupaten,1306,13.06,Sumatera Barat,Agam,27.0,"27,0",46,Kemenkes SSGI 2024
+1307,13,Kabupaten Lima Puluh Kota,kabupaten,1307,13.07,Sumatera Barat,Lima Puluh Kota,26.6,"26,6",46,Kemenkes SSGI 2024
+1308,13,Kabupaten Pasaman,kabupaten,1308,13.08,Sumatera Barat,Pasaman,29.1,"29,1",46,Kemenkes SSGI 2024
+1311,13,Kabupaten Solok Selatan,kabupaten,1311,13.11,Sumatera Barat,Solok Selatan,21.5,"21,5",46,Kemenkes SSGI 2024
+1310,13,Kabupaten Dharmasraya,kabupaten,1310,13.10,Sumatera Barat,Dharmasraya,20.5,"20,5",46,Kemenkes SSGI 2024
+1312,13,Kabupaten Pasaman Barat,kabupaten,1312,13.12,Sumatera Barat,Pasaman Barat,26.6,"26,6",46,Kemenkes SSGI 2024
+1371,13,Kota Padang,kota,1371,13.71,Sumatera Barat,Kota Padang,20.6,"20,6",46,Kemenkes SSGI 2024
+1372,13,Kota Solok,kota,1372,13.72,Sumatera Barat,Kota Solok,18.6,"18,6",46,Kemenkes SSGI 2024
+1373,13,Kota Sawahlunto,kota,1373,13.73,Sumatera Barat,Kota Sawahlunto,20.0,"20,0",46,Kemenkes SSGI 2024
+1374,13,Kota Padang Panjang,kota,1374,13.74,Sumatera Barat,Kota Padang Panjang,19.0,"19,0",46,Kemenkes SSGI 2024
+1375,13,Kota Bukittinggi,kota,1375,13.75,Sumatera Barat,Kota Bukittinggi,16.8,"16,8",46,Kemenkes SSGI 2024
+1376,13,Kota Payakumbuh,kota,1376,13.76,Sumatera Barat,Kota Payakumbuh,16.4,"16,4",46,Kemenkes SSGI 2024
+1377,13,Kota Pariaman,kota,1377,13.77,Sumatera Barat,Kota Pariaman,15.7,"15,7",46,Kemenkes SSGI 2024
+1409,14,Kabupaten Kuantan Singingi,kabupaten,1409,14.09,Riau,Kuantan Singingi,23.1,"23,1",46,Kemenkes SSGI 2024
+1402,14,Kabupaten Indragiri Hulu,kabupaten,1402,14.02,Riau,Indragiri Hulu,20.0,"20,0",46,Kemenkes SSGI 2024
+1404,14,Kabupaten Indragiri Hilir,kabupaten,1404,14.04,Riau,Indragiri Hilir,25.0,"25,0",46,Kemenkes SSGI 2024
+1405,14,Kabupaten Pelalawan,kabupaten,1405,14.05,Riau,Pelalawan,16.8,"16,8",46,Kemenkes SSGI 2024
+1408,14,Kabupaten Siak,kabupaten,1408,14.08,Riau,Siak,16.2,"16,2",46,Kemenkes SSGI 2024
+1401,14,Kabupaten Kampar,kabupaten,1401,14.01,Riau,Kampar,16.2,"16,2",46,Kemenkes SSGI 2024
+1406,14,Kabupaten Rokan Hulu,kabupaten,1406,14.06,Riau,Rokan Hulu,21.4,"21,4",46,Kemenkes SSGI 2024
+1403,14,Kabupaten Bengkalis,kabupaten,1403,14.03,Riau,Bengkalis,12.5,"12,5",46,Kemenkes SSGI 2024
+1407,14,Kabupaten Rokan Hilir,kabupaten,1407,14.07,Riau,Rokan Hilir,24.5,"24,5",46,Kemenkes SSGI 2024
+1410,14,Kabupaten Kepulauan Meranti,kabupaten,1410,14.10,Riau,Kepulauan Meranti,18.0,"18,0",46,Kemenkes SSGI 2024
+1471,14,Kota Pekanbaru,kota,1471,14.71,Riau,Kota Pekanbaru,14.5,"14,5",46,Kemenkes SSGI 2024
+1472,14,Kota Dumai,kota,1472,14.72,Riau,Kota Dumai,16.9,"16,9",46,Kemenkes SSGI 2024
+1501,15,Kabupaten Kerinci,kabupaten,1501,15.01,Jambi,Kerinci,16.4,"16,4",47,Kemenkes SSGI 2024
+1502,15,Kabupaten Merangin,kabupaten,1502,15.02,Jambi,Merangin,9.6,"9,6",47,Kemenkes SSGI 2024
+1503,15,Kabupaten Sarolangun,kabupaten,1503,15.03,Jambi,Sarolangun,6.6,"6,6",47,Kemenkes SSGI 2024
+1504,15,Kabupaten Batanghari,kabupaten,1504,15.04,Jambi,Batang Hari,18.4,"18,4",47,Kemenkes SSGI 2024
+1505,15,Kabupaten Muaro Jambi,kabupaten,1505,15.05,Jambi,Muaro Jambi,18.8,"18,8",47,Kemenkes SSGI 2024
+1507,15,Kabupaten Tanjung Jabung Timur,kabupaten,1507,15.07,Jambi,Tanjung Jabung Timur,23.9,"23,9",47,Kemenkes SSGI 2024
+1506,15,Kabupaten Tanjung Jabung Barat,kabupaten,1506,15.06,Jambi,Tanjung Jabung Barat,7.0,"7,0",47,Kemenkes SSGI 2024
+1509,15,Kabupaten Tebo,kabupaten,1509,15.09,Jambi,Tebo,24.2,"24,2",47,Kemenkes SSGI 2024
+1508,15,Kabupaten Bungo,kabupaten,1508,15.08,Jambi,Bungo,20.4,"20,4",47,Kemenkes SSGI 2024
+1571,15,Kota Jambi,kota,1571,15.71,Jambi,Kota Jambi,10.3,"10,3",47,Kemenkes SSGI 2024
+1572,15,Kota Sungai Penuh,kota,1572,15.72,Jambi,Kota Sungai Penuh,8.0,"8,0",47,Kemenkes SSGI 2024
+1601,16,Kabupaten Ogan Komering Ulu,kabupaten,1601,16.01,Sumatera Selatan,Ogan Komering Ulu,22.0,"22,0",47,Kemenkes SSGI 2024
+1602,16,Kabupaten Ogan Komering Ilir,kabupaten,1602,16.02,Sumatera Selatan,Ogan Komering Ilir,24.3,"24,3",47,Kemenkes SSGI 2024
+1603,16,Kabupaten Muara Enim,kabupaten,1603,16.03,Sumatera Selatan,Muara Enim,20.4,"20,4",47,Kemenkes SSGI 2024
+1604,16,Kabupaten Lahat,kabupaten,1604,16.04,Sumatera Selatan,Lahat,12.9,"12,9",47,Kemenkes SSGI 2024
+1605,16,Kabupaten Musi Rawas,kabupaten,1605,16.05,Sumatera Selatan,Musi Rawas,19.3,"19,3",47,Kemenkes SSGI 2024
+1606,16,Kabupaten Musi Banyuasin,kabupaten,1606,16.06,Sumatera Selatan,Musi Banyuasin,14.8,"14,8",47,Kemenkes SSGI 2024
+1607,16,Kabupaten Banyuasin,kabupaten,1607,16.07,Sumatera Selatan,Banyu Asin,16.8,"16,8",47,Kemenkes SSGI 2024
+1609,16,Kabupaten Ogan Komering Ulu Selatan,kabupaten,1609,16.09,Sumatera Selatan,Ogan Komering Ulu Selatan,16.6,"16,6",47,Kemenkes SSGI 2024
+1608,16,Kabupaten Ogan Komering Ulu Timur,kabupaten,1608,16.08,Sumatera Selatan,Ogan Komering Ulu Timur,17.4,"17,4",47,Kemenkes SSGI 2024
+1610,16,Kabupaten Ogan Ilir,kabupaten,1610,16.10,Sumatera Selatan,Ogan Ilir,27.4,"27,4",47,Kemenkes SSGI 2024
+1611,16,Kabupaten Empat Lawang,kabupaten,1611,16.11,Sumatera Selatan,Empat Lawang,31.9,"31,9",47,Kemenkes SSGI 2024
+1612,16,Kabupaten Penukal Abab Lematang Ilir,kabupaten,1612,16.12,Sumatera Selatan,Penukal Abab Lematang Ilir,20.5,"20,5",47,Kemenkes SSGI 2024
+1613,16,Kabupaten Musi Rawas Utara,kabupaten,1613,16.13,Sumatera Selatan,Musi Rawas Utara,22.0,"22,0",47,Kemenkes SSGI 2024
+1671,16,Kota Palembang,kota,1671,16.71,Sumatera Selatan,Kota Palembang,10.6,"10,6",47,Kemenkes SSGI 2024
+1674,16,Kota Prabumulih,kota,1674,16.74,Sumatera Selatan,Kota Prabumulih,11.6,"11,6",47,Kemenkes SSGI 2024
+1672,16,Kota Pagar Alam,kota,1672,16.72,Sumatera Selatan,Kota Pagar Alam,20.0,"20,0",47,Kemenkes SSGI 2024
+1673,16,Kota Lubuk Linggau,kota,1673,16.73,Sumatera Selatan,Kota Lubuk linggau,20.9,"20,9",47,Kemenkes SSGI 2024
+1701,17,Kabupaten Bengkulu Selatan,kabupaten,1701,17.01,Bengkulu,Bengkulu Selatan,18.3,"18,3",48,Kemenkes SSGI 2024
+1702,17,Kabupaten Rejang Lebong,kabupaten,1702,17.02,Bengkulu,Rejang Lebong,24.7,"24,7",48,Kemenkes SSGI 2024
+1703,17,Kabupaten Bengkulu Utara,kabupaten,1703,17.03,Bengkulu,Bengkulu Utara,20.7,"20,7",48,Kemenkes SSGI 2024
+1704,17,Kabupaten Kaur,kabupaten,1704,17.04,Bengkulu,Kaur,15.9,"15,9",48,Kemenkes SSGI 2024
+1705,17,Kabupaten Seluma,kabupaten,1705,17.05,Bengkulu,Seluma,22.6,"22,6",48,Kemenkes SSGI 2024
+1706,17,Kabupaten Mukomuko,kabupaten,1706,17.06,Bengkulu,Mukomuko,22.0,"22,0",48,Kemenkes SSGI 2024
+1707,17,Kabupaten Lebong,kabupaten,1707,17.07,Bengkulu,Lebong,22.7,"22,7",48,Kemenkes SSGI 2024
+1708,17,Kabupaten Kepahiang,kabupaten,1708,17.08,Bengkulu,Kepahiang,17.0,"17,0",48,Kemenkes SSGI 2024
+1709,17,Kabupaten Bengkulu Tengah,kabupaten,1709,17.09,Bengkulu,Bengkulu Tengah,23.4,"23,4",48,Kemenkes SSGI 2024
+1771,17,Kota Bengkulu,kota,1771,17.71,Bengkulu,Kota Bengkulu,16.1,"16,1",48,Kemenkes SSGI 2024
+1804,18,Kabupaten Lampung Barat,kabupaten,1804,18.04,Lampung,Lampung Barat,20.5,"20,5",48,Kemenkes SSGI 2024
+1806,18,Kabupaten Tanggamus,kabupaten,1806,18.06,Lampung,Tanggamus,24.9,"24,9",48,Kemenkes SSGI 2024
+1801,18,Kabupaten Lampung Selatan,kabupaten,1801,18.01,Lampung,Lampung Selatan,10.4,"10,4",48,Kemenkes SSGI 2024
+1807,18,Kabupaten Lampung Timur,kabupaten,1807,18.07,Lampung,Lampung Timur,14.0,"14,0",48,Kemenkes SSGI 2024
+1802,18,Kabupaten Lampung Tengah,kabupaten,1802,18.02,Lampung,Lampung Tengah,15.5,"15,5",48,Kemenkes SSGI 2024
+1803,18,Kabupaten Lampung Utara,kabupaten,1803,18.03,Lampung,Lampung Utara,20.0,"20,0",48,Kemenkes SSGI 2024
+1808,18,Kabupaten Way Kanan,kabupaten,1808,18.08,Lampung,Way Kanan,13.9,"13,9",48,Kemenkes SSGI 2024
+1805,18,Kabupaten Tulang Bawang,kabupaten,1805,18.05,Lampung,Tulangbawang,18.3,"18,3",48,Kemenkes SSGI 2024
+1809,18,Kabupaten Pesawaran,kabupaten,1809,18.09,Lampung,Pesawaran,15.5,"15,5",48,Kemenkes SSGI 2024
+1810,18,Kabupaten Pringsewu,kabupaten,1810,18.10,Lampung,Pringsewu,19.5,"19,5",48,Kemenkes SSGI 2024
+1811,18,Kabupaten Mesuji,kabupaten,1811,18.11,Lampung,Mesuji,11.1,"11,1",48,Kemenkes SSGI 2024
+1812,18,Kabupaten Tulang Bawang Barat,kabupaten,1812,18.12,Lampung,Tulang Bawang Barat,13.4,"13,4",48,Kemenkes SSGI 2024
+1813,18,Kabupaten Pesisir Barat,kabupaten,1813,18.13,Lampung,Pesisir Barat,19.8,"19,8",48,Kemenkes SSGI 2024
+1871,18,Kota Bandar Lampung,kota,1871,18.71,Lampung,Kota Bandar Lampung,14.8,"14,8",48,Kemenkes SSGI 2024
+1872,18,Kota Metro,kota,1872,18.72,Lampung,Kota Metro,14.8,"14,8",48,Kemenkes SSGI 2024
+1901,19,Kabupaten Bangka,kabupaten,1901,19.01,Kep. Bangka Belitung,Bangka,21.2,"21,2",49,Kemenkes SSGI 2024
+1902,19,Kabupaten Belitung,kabupaten,1902,19.02,Kep. Bangka Belitung,Belitung,18.1,"18,1",49,Kemenkes SSGI 2024
+1905,19,Kabupaten Bangka Barat,kabupaten,1905,19.05,Kep. Bangka Belitung,Bangka Barat,19.9,"19,9",49,Kemenkes SSGI 2024
+1904,19,Kabupaten Bangka Tengah,kabupaten,1904,19.04,Kep. Bangka Belitung,Bangka Tengah,21.2,"21,2",49,Kemenkes SSGI 2024
+1903,19,Kabupaten Bangka Selatan,kabupaten,1903,19.03,Kep. Bangka Belitung,Bangka Selatan,24.6,"24,6",49,Kemenkes SSGI 2024
+1906,19,Kabupaten Belitung Timur,kabupaten,1906,19.06,Kep. Bangka Belitung,Belitung Timur,17.1,"17,1",49,Kemenkes SSGI 2024
+1971,19,Kota Pangkal Pinang,kota,1971,19.71,Kep. Bangka Belitung,Kota Pangkal Pinang,17.3,"17,3",49,Kemenkes SSGI 2024
+2102,21,Kabupaten Karimun,kabupaten,2102,21.02,Kepulauan Riau,Karimun,21.4,"21,4",49,Kemenkes SSGI 2024
+2101,21,Kabupaten Bintan,kabupaten,2101,21.01,Kepulauan Riau,Bintan,16.3,"16,3",49,Kemenkes SSGI 2024
+2103,21,Kabupaten Natuna,kabupaten,2103,21.03,Kepulauan Riau,Natuna,18.5,"18,5",49,Kemenkes SSGI 2024
+2104,21,Kabupaten Lingga,kabupaten,2104,21.04,Kepulauan Riau,Lingga,19.8,"19,8",49,Kemenkes SSGI 2024
+2105,21,Kabupaten Kepulauan Anambas,kabupaten,2105,21.05,Kepulauan Riau,Kepulauan Anambas,15.8,"15,8",49,Kemenkes SSGI 2024
+2171,21,Kota Batam,kota,2171,21.71,Kepulauan Riau,Kota Batam,14.0,"14,0",49,Kemenkes SSGI 2024
+2172,21,Kota Tanjung Pinang,kota,2172,21.72,Kepulauan Riau,Kota Tanjung Pinang,12.9,"12,9",49,Kemenkes SSGI 2024
+3101,31,Kabupaten Administrasi Kepulauan Seribu,kabupaten,3101,31.01,DKI Jakarta,Kepulauan Seribu,16.9,"16,9",49,Kemenkes SSGI 2024
+3174,31,Kota Administrasi Jakarta Selatan,kota,3174,31.74,DKI Jakarta,Kota Jakarta Selatan,14.9,"14,9",49,Kemenkes SSGI 2024
+3175,31,Kota Administrasi Jakarta Timur,kota,3175,31.75,DKI Jakarta,Kota Jakarta Timur,16.4,"16,4",49,Kemenkes SSGI 2024
+3171,31,Kota Administrasi Jakarta Pusat,kota,3171,31.71,DKI Jakarta,Kota Jakarta Pusat,20.3,"20,3",49,Kemenkes SSGI 2024
+3173,31,Kota Administrasi Jakarta Barat,kota,3173,31.73,DKI Jakarta,Kota Jakarta Barat,17.4,"17,4",49,Kemenkes SSGI 2024
+3172,31,Kota Administrasi Jakarta Utara,kota,3172,31.72,DKI Jakarta,Kota Jakarta Utara,19.7,"19,7",49,Kemenkes SSGI 2024
+3201,32,Kabupaten Bogor,kabupaten,3201,32.01,Jawa Barat,Bogor,18.9,"18,9",50,Kemenkes SSGI 2024
+3202,32,Kabupaten Sukabumi,kabupaten,3202,32.02,Jawa Barat,Sukabumi,20.5,"20,5",50,Kemenkes SSGI 2024
+3203,32,Kabupaten Cianjur,kabupaten,3203,32.03,Jawa Barat,Cianjur,7.2,"7,2",50,Kemenkes SSGI 2024
+3204,32,Kabupaten Bandung,kabupaten,3204,32.04,Jawa Barat,Bandung,24.1,"24,1",50,Kemenkes SSGI 2024
+3205,32,Kabupaten Garut,kabupaten,3205,32.05,Jawa Barat,Garut,14.2,"14,2",50,Kemenkes SSGI 2024
+3206,32,Kabupaten Tasikmalaya,kabupaten,3206,32.06,Jawa Barat,Tasikmalaya,17.0,"17,0",50,Kemenkes SSGI 2024
+3207,32,Kabupaten Ciamis,kabupaten,3207,32.07,Jawa Barat,Ciamis,20.3,"20,3",50,Kemenkes SSGI 2024
+3208,32,Kabupaten Kuningan,kabupaten,3208,32.08,Jawa Barat,Kuningan,22.7,"22,7",50,Kemenkes SSGI 2024
+3209,32,Kabupaten Cirebon,kabupaten,3209,32.09,Jawa Barat,Cirebon,18.0,"18,0",50,Kemenkes SSGI 2024
+3210,32,Kabupaten Majalengka,kabupaten,3210,32.10,Jawa Barat,Majalengka,18.0,"18,0",50,Kemenkes SSGI 2024
+3211,32,Kabupaten Sumedang,kabupaten,3211,32.11,Jawa Barat,Sumedang,17.0,"17,0",50,Kemenkes SSGI 2024
+3212,32,Kabupaten Indramayu,kabupaten,3212,32.12,Jawa Barat,Indramayu,9.8,"9,8",50,Kemenkes SSGI 2024
+3213,32,Kabupaten Subang,kabupaten,3213,32.13,Jawa Barat,Subang,12.4,"12,4",50,Kemenkes SSGI 2024
+3214,32,Kabupaten Purwakarta,kabupaten,3214,32.14,Jawa Barat,Purwakarta,14.4,"14,4",50,Kemenkes SSGI 2024
+3215,32,Kabupaten Karawang,kabupaten,3215,32.15,Jawa Barat,Karawang,17.6,"17,6",50,Kemenkes SSGI 2024
+3216,32,Kabupaten Bekasi,kabupaten,3216,32.16,Jawa Barat,Bekasi,18.2,"18,2",50,Kemenkes SSGI 2024
+3217,32,Kabupaten Bandung Barat,kabupaten,3217,32.17,Jawa Barat,Bandung Barat,30.8,"30,8",50,Kemenkes SSGI 2024
+3218,32,Kabupaten Pangandaran,kabupaten,3218,32.18,Jawa Barat,Pangandaran,17.3,"17,3",50,Kemenkes SSGI 2024
+3271,32,Kota Bogor,kota,3271,32.71,Jawa Barat,Kota Bogor,21.1,"21,1",50,Kemenkes SSGI 2024
+3272,32,Kota Sukabumi,kota,3272,32.72,Jawa Barat,Kota Sukabumi,19.7,"19,7",50,Kemenkes SSGI 2024
+3273,32,Kota Bandung,kota,3273,32.73,Jawa Barat,Kota Bandung,22.8,"22,8",50,Kemenkes SSGI 2024
+3274,32,Kota Cirebon,kota,3274,32.74,Jawa Barat,Kota Cirebon,14.9,"14,9",50,Kemenkes SSGI 2024
+3275,32,Kota Bekasi,kota,3275,32.75,Jawa Barat,Kota Bekasi,11.7,"11,7",50,Kemenkes SSGI 2024
+3276,32,Kota Depok,kota,3276,32.76,Jawa Barat,Kota Depok,12.5,"12,5",50,Kemenkes SSGI 2024
+3277,32,Kota Cimahi,kota,3277,32.77,Jawa Barat,Kota Cimahi,22.3,"22,3",50,Kemenkes SSGI 2024
+3278,32,Kota Tasikmalaya,kota,3278,32.78,Jawa Barat,Kota Tasikmalaya,19.6,"19,6",50,Kemenkes SSGI 2024
+3279,32,Kota Banjar,kota,3279,32.79,Jawa Barat,Kota Banjar,18.8,"18,8",50,Kemenkes SSGI 2024
+3301,33,Kabupaten Cilacap,kabupaten,3301,33.01,Jawa Tengah,Cilacap,15.6,"15,6",51,Kemenkes SSGI 2024
+3302,33,Kabupaten Banyumas,kabupaten,3302,33.02,Jawa Tengah,Banyumas,19.6,"19,6",51,Kemenkes SSGI 2024
+3303,33,Kabupaten Purbalingga,kabupaten,3303,33.03,Jawa Tengah,Purbalingga,22.3,"22,3",51,Kemenkes SSGI 2024
+3304,33,Kabupaten Banjarnegara,kabupaten,3304,33.04,Jawa Tengah,Banjarnegara,20.6,"20,6",51,Kemenkes SSGI 2024
+3305,33,Kabupaten Kebumen,kabupaten,3305,33.05,Jawa Tengah,Kebumen,18.0,"18,0",51,Kemenkes SSGI 2024
+3306,33,Kabupaten Purworejo,kabupaten,3306,33.06,Jawa Tengah,Purworejo,14.9,"14,9",51,Kemenkes SSGI 2024
+3307,33,Kabupaten Wonosobo,kabupaten,3307,33.07,Jawa Tengah,Wonosobo,23.9,"23,9",51,Kemenkes SSGI 2024
+3308,33,Kabupaten Magelang,kabupaten,3308,33.08,Jawa Tengah,Magelang,19.3,"19,3",51,Kemenkes SSGI 2024
+3309,33,Kabupaten Boyolali,kabupaten,3309,33.09,Jawa Tengah,Boyolali,24.5,"24,5",51,Kemenkes SSGI 2024
+3310,33,Kabupaten Klaten,kabupaten,3310,33.10,Jawa Tengah,Klaten,20.8,"20,8",51,Kemenkes SSGI 2024
+3311,33,Kabupaten Sukoharjo,kabupaten,3311,33.11,Jawa Tengah,Sukoharjo,16.8,"16,8",51,Kemenkes SSGI 2024
+3312,33,Kabupaten Wonogiri,kabupaten,3312,33.12,Jawa Tengah,Wonogiri,15.1,"15,1",51,Kemenkes SSGI 2024
+3313,33,Kabupaten Karanganyar,kabupaten,3313,33.13,Jawa Tengah,Karanganyar,17.4,"17,4",51,Kemenkes SSGI 2024
+3314,33,Kabupaten Sragen,kabupaten,3314,33.14,Jawa Tengah,Sragen,15.8,"15,8",51,Kemenkes SSGI 2024
+3315,33,Kabupaten Grobogan,kabupaten,3315,33.15,Jawa Tengah,Grobogan,25.6,"25,6",51,Kemenkes SSGI 2024
+3316,33,Kabupaten Blora,kabupaten,3316,33.16,Jawa Tengah,Blora,21.7,"21,7",51,Kemenkes SSGI 2024
+3317,33,Kabupaten Rembang,kabupaten,3317,33.17,Jawa Tengah,Rembang,15.8,"15,8",51,Kemenkes SSGI 2024
+3318,33,Kabupaten Pati,kabupaten,3318,33.18,Jawa Tengah,Pati,16.5,"16,5",51,Kemenkes SSGI 2024
+3319,33,Kabupaten Kudus,kabupaten,3319,33.19,Jawa Tengah,Kudus,13.2,"13,2",51,Kemenkes SSGI 2024
+3320,33,Kabupaten Jepara,kabupaten,3320,33.20,Jawa Tengah,Jepara,15.6,"15,6",51,Kemenkes SSGI 2024
+3321,33,Kabupaten Demak,kabupaten,3321,33.21,Jawa Tengah,Demak,10.0,"10,0",51,Kemenkes SSGI 2024
+3322,33,Kabupaten Semarang,kabupaten,3322,33.22,Jawa Tengah,Semarang,14.5,"14,5",51,Kemenkes SSGI 2024
+3323,33,Kabupaten Temanggung,kabupaten,3323,33.23,Jawa Tengah,Temanggung,27.3,"27,3",51,Kemenkes SSGI 2024
+3324,33,Kabupaten Kendal,kabupaten,3324,33.24,Jawa Tengah,Kendal,19.2,"19,2",51,Kemenkes SSGI 2024
+3325,33,Kabupaten Batang,kabupaten,3325,33.25,Jawa Tengah,Batang,20.7,"20,7",51,Kemenkes SSGI 2024
+3326,33,Kabupaten Pekalongan,kabupaten,3326,33.26,Jawa Tengah,Pekalongan,19.5,"19,5",51,Kemenkes SSGI 2024
+3327,33,Kabupaten Pemalang,kabupaten,3327,33.27,Jawa Tengah,Pemalang,19.1,"19,1",51,Kemenkes SSGI 2024
+3328,33,Kabupaten Tegal,kabupaten,3328,33.28,Jawa Tengah,Tegal,15.9,"15,9",51,Kemenkes SSGI 2024
+3329,33,Kabupaten Brebes,kabupaten,3329,33.29,Jawa Tengah,Brebes,23.1,"23,1",51,Kemenkes SSGI 2024
+3371,33,Kota Magelang,kota,3371,33.71,Jawa Tengah,Kota Magelang,15.3,"15,3",51,Kemenkes SSGI 2024
+3372,33,Kota Surakarta,kota,3372,33.72,Jawa Tengah,Kota Surakarta,16.2,"16,2",51,Kemenkes SSGI 2024
+3373,33,Kota Salatiga,kota,3373,33.73,Jawa Tengah,Kota Salatiga,14.0,"14,0",51,Kemenkes SSGI 2024
+3374,33,Kota Semarang,kota,3374,33.74,Jawa Tengah,Kota Semarang,11.2,"11,2",51,Kemenkes SSGI 2024
+3375,33,Kota Pekalongan,kota,3375,33.75,Jawa Tengah,Kota Pekalongan,19.3,"19,3",51,Kemenkes SSGI 2024
+3376,33,Kota Tegal,kota,3376,33.76,Jawa Tengah,Kota Tegal,18.0,"18,0",51,Kemenkes SSGI 2024
+3401,34,Kabupaten Kulon Progo,kabupaten,3401,34.01,DI Yogyakarta,Kulon Progo,18.0,"18,0",51,Kemenkes SSGI 2024
+3402,34,Kabupaten Bantul,kabupaten,3402,34.02,DI Yogyakarta,Bantul,16.5,"16,5",51,Kemenkes SSGI 2024
+3403,34,Kabupaten Gunungkidul,kabupaten,3403,34.03,DI Yogyakarta,Gunung Kidul,19.7,"19,7",51,Kemenkes SSGI 2024
+3404,34,Kabupaten Sleman,kabupaten,3404,34.04,DI Yogyakarta,Sleman,17.3,"17,3",51,Kemenkes SSGI 2024
+3471,34,Kota Yogyakarta,kota,3471,34.71,DI Yogyakarta,Kota Yogyakarta,14.8,"14,8",51,Kemenkes SSGI 2024
+3501,35,Kabupaten Pacitan,kabupaten,3501,35.01,Jawa Timur,Pacitan,11.7,"11,7",52,Kemenkes SSGI 2024
+3502,35,Kabupaten Ponorogo,kabupaten,3502,35.02,Jawa Timur,Ponorogo,13.4,"13,4",52,Kemenkes SSGI 2024
+3503,35,Kabupaten Trenggalek,kabupaten,3503,35.03,Jawa Timur,Trenggalek,6.7,"6,7",52,Kemenkes SSGI 2024
+3504,35,Kabupaten Tulungagung,kabupaten,3504,35.04,Jawa Timur,Tulungagung,13.6,"13,6",52,Kemenkes SSGI 2024
+3505,35,Kabupaten Blitar,kabupaten,3505,35.05,Jawa Timur,Blitar,17.8,"17,8",52,Kemenkes SSGI 2024
+3506,35,Kabupaten Kediri,kabupaten,3506,35.06,Jawa Timur,Kediri,7.9,"7,9",52,Kemenkes SSGI 2024
+3507,35,Kabupaten Malang,kabupaten,3507,35.07,Jawa Timur,Malang,23.3,"23,3",52,Kemenkes SSGI 2024
+3508,35,Kabupaten Lumajang,kabupaten,3508,35.08,Jawa Timur,Lumajang,23.4,"23,4",52,Kemenkes SSGI 2024
+3509,35,Kabupaten Jember,kabupaten,3509,35.09,Jawa Timur,Jember,30.4,"30,4",52,Kemenkes SSGI 2024
+3510,35,Kabupaten Banyuwangi,kabupaten,3510,35.10,Jawa Timur,Banyuwangi,17.6,"17,6",52,Kemenkes SSGI 2024
+3511,35,Kabupaten Bondowoso,kabupaten,3511,35.11,Jawa Timur,Bondowoso,11.2,"11,2",52,Kemenkes SSGI 2024
+3512,35,Kabupaten Situbondo,kabupaten,3512,35.12,Jawa Timur,Situbondo,10.6,"10,6",52,Kemenkes SSGI 2024
+3513,35,Kabupaten Probolinggo,kabupaten,3513,35.13,Jawa Timur,Probolinggo,26.3,"26,3",52,Kemenkes SSGI 2024
+3514,35,Kabupaten Pasuruan,kabupaten,3514,35.14,Jawa Timur,Pasuruan,26.1,"26,1",52,Kemenkes SSGI 2024
+3515,35,Kabupaten Sidoarjo,kabupaten,3515,35.15,Jawa Timur,Sidoarjo,10.6,"10,6",52,Kemenkes SSGI 2024
+3516,35,Kabupaten Mojokerto,kabupaten,3516,35.16,Jawa Timur,Mojokerto,15.2,"15,2",52,Kemenkes SSGI 2024
+3517,35,Kabupaten Jombang,kabupaten,3517,35.17,Jawa Timur,Jombang,17.2,"17,2",52,Kemenkes SSGI 2024
+3518,35,Kabupaten Nganjuk,kabupaten,3518,35.18,Jawa Timur,Nganjuk,22.8,"22,8",52,Kemenkes SSGI 2024
+3519,35,Kabupaten Madiun,kabupaten,3519,35.19,Jawa Timur,Madiun,12.1,"12,1",52,Kemenkes SSGI 2024
+3520,35,Kabupaten Magetan,kabupaten,3520,35.20,Jawa Timur,Magetan,10.3,"10,3",52,Kemenkes SSGI 2024
+3521,35,Kabupaten Ngawi,kabupaten,3521,35.21,Jawa Timur,Ngawi,11.4,"11,4",52,Kemenkes SSGI 2024
+3522,35,Kabupaten Bojonegoro,kabupaten,3522,35.22,Jawa Timur,Bojonegoro,12.0,"12,0",52,Kemenkes SSGI 2024
+3523,35,Kabupaten Tuban,kabupaten,3523,35.23,Jawa Timur,Tuban,11.3,"11,3",52,Kemenkes SSGI 2024
+3524,35,Kabupaten Lamongan,kabupaten,3524,35.24,Jawa Timur,Lamongan,6.9,"6,9",52,Kemenkes SSGI 2024
+3525,35,Kabupaten Gresik,kabupaten,3525,35.25,Jawa Timur,Gresik,15.2,"15,2",52,Kemenkes SSGI 2024
+3526,35,Kabupaten Bangkalan,kabupaten,3526,35.26,Jawa Timur,Bangkalan,17.6,"17,6",52,Kemenkes SSGI 2024
+3527,35,Kabupaten Sampang,kabupaten,3527,35.27,Jawa Timur,Sampang,18.9,"18,9",52,Kemenkes SSGI 2024
+3528,35,Kabupaten Pamekasan,kabupaten,3528,35.28,Jawa Timur,Pamekasan,22.3,"22,3",52,Kemenkes SSGI 2024
+3529,35,Kabupaten Sumenep,kabupaten,3529,35.29,Jawa Timur,Sumenep,11.2,"11,2",52,Kemenkes SSGI 2024
+3571,35,Kota Kediri,kota,3571,35.71,Jawa Timur,Kota Kediri,17.6,"17,6",52,Kemenkes SSGI 2024
+3572,35,Kota Blitar,kota,3572,35.72,Jawa Timur,Kota Blitar,11.4,"11,4",52,Kemenkes SSGI 2024
+3573,35,Kota Malang,kota,3573,35.73,Jawa Timur,Kota Malang,22.8,"22,8",52,Kemenkes SSGI 2024
+3574,35,Kota Probolinggo,kota,3574,35.74,Jawa Timur,Kota Probolinggo,23.1,"23,1",52,Kemenkes SSGI 2024
+3575,35,Kota Pasuruan,kota,3575,35.75,Jawa Timur,Kota Pasuruan,18.3,"18,3",52,Kemenkes SSGI 2024
+3576,35,Kota Mojokerto,kota,3576,35.76,Jawa Timur,Kota Mojokerto,11.7,"11,7",52,Kemenkes SSGI 2024
+3577,35,Kota Madiun,kota,3577,35.77,Jawa Timur,Kota Madiun,11.8,"11,8",52,Kemenkes SSGI 2024
+3578,35,Kota Surabaya,kota,3578,35.78,Jawa Timur,Kota Surabaya,8.5,"8,5",52,Kemenkes SSGI 2024
+3579,35,Kota Batu,kota,3579,35.79,Jawa Timur,Kota Batu,24.5,"24,5",52,Kemenkes SSGI 2024
+3601,36,Kabupaten Pandeglang,kabupaten,3601,36.01,Banten,Pandeglang,26.4,"26,4",53,Kemenkes SSGI 2024
+3602,36,Kabupaten Lebak,kabupaten,3602,36.02,Banten,Lebak,32.4,"32,4",53,Kemenkes SSGI 2024
+3603,36,Kabupaten Tangerang,kabupaten,3603,36.03,Banten,Tangerang,23.4,"23,4",53,Kemenkes SSGI 2024
+3604,36,Kabupaten Serang,kabupaten,3604,36.04,Banten,Serang,20.2,"20,2",53,Kemenkes SSGI 2024
+3671,36,Kota Tangerang,kota,3671,36.71,Banten,Kota Tangerang,11.2,"11,2",53,Kemenkes SSGI 2024
+3672,36,Kota Cilegon,kota,3672,36.72,Banten,Kota Cilegon,19.0,"19,0",53,Kemenkes SSGI 2024
+3673,36,Kota Serang,kota,3673,36.73,Banten,Kota Serang,22.9,"22,9",53,Kemenkes SSGI 2024
+3674,36,Kota Tangerang Selatan,kota,3674,36.74,Banten,Kota Tangerang Selatan,10.5,"10,5",53,Kemenkes SSGI 2024
+5101,51,Kabupaten Jembrana,kabupaten,5101,51.01,Bali,Jembrana,7.5,"7,5",53,Kemenkes SSGI 2024
+5102,51,Kabupaten Tabanan,kabupaten,5102,51.02,Bali,Tabanan,7.5,"7,5",53,Kemenkes SSGI 2024
+5103,51,Kabupaten Badung,kabupaten,5103,51.03,Bali,Badung,7.2,"7,2",53,Kemenkes SSGI 2024
+5104,51,Kabupaten Gianyar,kabupaten,5104,51.04,Bali,Gianyar,5.4,"5,4",53,Kemenkes SSGI 2024
+5105,51,Kabupaten Klungkung,kabupaten,5105,51.05,Bali,Klungkung,5.2,"5,2",53,Kemenkes SSGI 2024
+5106,51,Kabupaten Bangli,kabupaten,5106,51.06,Bali,Bangli,8.3,"8,3",53,Kemenkes SSGI 2024
+5107,51,Kabupaten Karangasem,kabupaten,5107,51.07,Bali,Karangasem,13.0,"13,0",53,Kemenkes SSGI 2024
+5108,51,Kabupaten Buleleng,kabupaten,5108,51.08,Bali,Buleleng,14.8,"14,8",53,Kemenkes SSGI 2024
+5171,51,Kota Denpasar,kota,5171,51.71,Bali,Kota Denpasar,10.4,"10,4",53,Kemenkes SSGI 2024
+5201,52,Kabupaten Lombok Barat,kabupaten,5201,52.01,Nusa Tenggara Barat,Lombok Barat,27.3,"27,3",53,Kemenkes SSGI 2024
+5202,52,Kabupaten Lombok Tengah,kabupaten,5202,52.02,Nusa Tenggara Barat,Lombok Tengah,24.9,"24,9",53,Kemenkes SSGI 2024
+5203,52,Kabupaten Lombok Timur,kabupaten,5203,52.03,Nusa Tenggara Barat,Lombok Timur,33.0,"33,0",53,Kemenkes SSGI 2024
+5204,52,Kabupaten Sumbawa,kabupaten,5204,52.04,Nusa Tenggara Barat,Sumbawa,29.8,"29,8",53,Kemenkes SSGI 2024
+5205,52,Kabupaten Dompu,kabupaten,5205,52.05,Nusa Tenggara Barat,Dompu,19.8,"19,8",53,Kemenkes SSGI 2024
+5206,52,Kabupaten Bima,kabupaten,5206,52.06,Nusa Tenggara Barat,Bima,23.8,"23,8",53,Kemenkes SSGI 2024
+5207,52,Kabupaten Sumbawa Barat,kabupaten,5207,52.07,Nusa Tenggara Barat,Sumbawa Barat,18.2,"18,2",53,Kemenkes SSGI 2024
+5208,52,Kabupaten Lombok Utara,kabupaten,5208,52.08,Nusa Tenggara Barat,Lombok Utara,35.3,"35,3",53,Kemenkes SSGI 2024
+5271,52,Kota Mataram,kota,5271,52.71,Nusa Tenggara Barat,Kota Mataram,23.5,"23,5",53,Kemenkes SSGI 2024
+5272,52,Kota Bima,kota,5272,52.72,Nusa Tenggara Barat,Kota Bima,28.4,"28,4",53,Kemenkes SSGI 2024
+5312,53,Kabupaten Sumba Barat,kabupaten,5312,53.12,Nusa Tenggara Timur,Sumba Barat,35.2,"35,2",54,Kemenkes SSGI 2024
+5311,53,Kabupaten Sumba Timur,kabupaten,5311,53.11,Nusa Tenggara Timur,Sumba Timur,30.9,"30,9",54,Kemenkes SSGI 2024
+5301,53,Kabupaten Kupang,kabupaten,5301,53.01,Nusa Tenggara Timur,Kupang,39.5,"39,5",54,Kemenkes SSGI 2024
+5302,53,Kabupaten Timor Tengah Selatan,kabupaten,5302,53.02,Nusa Tenggara Timur,Timor Tengah Selatan,56.8,"56,8",54,Kemenkes SSGI 2024
+5303,53,Kabupaten Timor Tengah Utara,kabupaten,5303,53.03,Nusa Tenggara Timur,Timor Tengah Utara,47.3,"47,3",54,Kemenkes SSGI 2024
+5304,53,Kabupaten Belu,kabupaten,5304,53.04,Nusa Tenggara Timur,Belu,44.3,"44,3",54,Kemenkes SSGI 2024
+5305,53,Kabupaten Alor,kabupaten,5305,53.05,Nusa Tenggara Timur,Alor,37.4,"37,4",54,Kemenkes SSGI 2024
+5313,53,Kabupaten Lembata,kabupaten,5313,53.13,Nusa Tenggara Timur,Lembata,25.7,"25,7",54,Kemenkes SSGI 2024
+5306,53,Kabupaten Flores Timur,kabupaten,5306,53.06,Nusa Tenggara Timur,Flores Timur,31.3,"31,3",54,Kemenkes SSGI 2024
+5307,53,Kabupaten Sikka,kabupaten,5307,53.07,Nusa Tenggara Timur,Sikka,32.3,"32,3",54,Kemenkes SSGI 2024
+5308,53,Kabupaten Ende,kabupaten,5308,53.08,Nusa Tenggara Timur,Ende,30.7,"30,7",54,Kemenkes SSGI 2024
+5309,53,Kabupaten Ngada,kabupaten,5309,53.09,Nusa Tenggara Timur,Ngada,28.9,"28,9",54,Kemenkes SSGI 2024
+5310,53,Kabupaten Manggarai,kabupaten,5310,53.10,Nusa Tenggara Timur,Manggarai,41.0,"41,0",54,Kemenkes SSGI 2024
+5314,53,Kabupaten Rote Ndao,kabupaten,5314,53.14,Nusa Tenggara Timur,Rote Ndao,32.4,"32,4",54,Kemenkes SSGI 2024
+5315,53,Kabupaten Manggarai Barat,kabupaten,5315,53.15,Nusa Tenggara Timur,Manggarai Barat,31.1,"31,1",54,Kemenkes SSGI 2024
+5317,53,Kabupaten Sumba Tengah,kabupaten,5317,53.17,Nusa Tenggara Timur,Sumba Tengah,37.4,"37,4",54,Kemenkes SSGI 2024
+5318,53,Kabupaten Sumba Barat Daya,kabupaten,5318,53.18,Nusa Tenggara Timur,Sumba Barat Daya,47.5,"47,5",54,Kemenkes SSGI 2024
+5316,53,Kabupaten Nagekeo,kabupaten,5316,53.16,Nusa Tenggara Timur,Nagekeo,25.0,"25,0",54,Kemenkes SSGI 2024
+5319,53,Kabupaten Manggarai Timur,kabupaten,5319,53.19,Nusa Tenggara Timur,Manggarai Timur,38.8,"38,8",54,Kemenkes SSGI 2024
+5320,53,Kabupaten Sabu Raijua,kabupaten,5320,53.20,Nusa Tenggara Timur,Sabu Raijua,32.2,"32,2",54,Kemenkes SSGI 2024
+5321,53,Kabupaten Malaka,kabupaten,5321,53.21,Nusa Tenggara Timur,Malaka,31.6,"31,6",54,Kemenkes SSGI 2024
+5371,53,Kota Kupang,kota,5371,53.71,Nusa Tenggara Timur,Kota Kupang,26.9,"26,9",54,Kemenkes SSGI 2024
+6101,61,Kabupaten Sambas,kabupaten,6101,61.01,Kalimantan Barat,Sambas,36.4,"36,4",54,Kemenkes SSGI 2024
+6107,61,Kabupaten Bengkayang,kabupaten,6107,61.07,Kalimantan Barat,Bengkayang,23.4,"23,4",54,Kemenkes SSGI 2024
+6108,61,Kabupaten Landak,kabupaten,6108,61.08,Kalimantan Barat,Landak,28.6,"28,6",54,Kemenkes SSGI 2024
+6102,61,Kabupaten Mempawah,kabupaten,6102,61.02,Kalimantan Barat,Mempawah,28.6,"28,6",54,Kemenkes SSGI 2024
+6103,61,Kabupaten Sanggau,kabupaten,6103,61.03,Kalimantan Barat,Sanggau,21.3,"21,3",54,Kemenkes SSGI 2024
+6104,61,Kabupaten Ketapang,kabupaten,6104,61.04,Kalimantan Barat,Ketapang,17.9,"17,9",54,Kemenkes SSGI 2024
+6105,61,Kabupaten Sintang,kabupaten,6105,61.05,Kalimantan Barat,Sintang,31.0,"31,0",54,Kemenkes SSGI 2024
+6106,61,Kabupaten Kapuas Hulu,kabupaten,6106,61.06,Kalimantan Barat,Kapuas Hulu,23.6,"23,6",54,Kemenkes SSGI 2024
+6109,61,Kabupaten Sekadau,kabupaten,6109,61.09,Kalimantan Barat,Sekadau,14.4,"14,4",54,Kemenkes SSGI 2024
+6110,61,Kabupaten Melawi,kabupaten,6110,61.10,Kalimantan Barat,Melawi,35.2,"35,2",54,Kemenkes SSGI 2024
+6111,61,Kabupaten Kayong Utara,kabupaten,6111,61.11,Kalimantan Barat,Kayong Utara,23.8,"23,8",54,Kemenkes SSGI 2024
+6112,61,Kabupaten Kubu Raya,kabupaten,6112,61.12,Kalimantan Barat,Kubu Raya,30.2,"30,2",54,Kemenkes SSGI 2024
+6171,61,Kota Pontianak,kota,6171,61.71,Kalimantan Barat,Kota Pontianak,22.3,"22,3",54,Kemenkes SSGI 2024
+6172,61,Kota Singkawang,kota,6172,61.72,Kalimantan Barat,Kota Singkawang,21.9,"21,9",54,Kemenkes SSGI 2024
+6201,62,Kotawaringin Barat,kabupaten,6201,62.01,Kalimantan Tengah,Kotawaringin Barat,16.5,"16,5",55,Kemenkes SSGI 2024
+6202,62,Kotawaringin Timur,kabupaten,6202,62.02,Kalimantan Tengah,Kotawaringin Timur,21.6,"21,6",55,Kemenkes SSGI 2024
+6203,62,Kabupaten Kapuas,kabupaten,6203,62.03,Kalimantan Tengah,Kapuas,22.5,"22,5",55,Kemenkes SSGI 2024
+6204,62,Kabupaten Barito Selatan,kabupaten,6204,62.04,Kalimantan Tengah,Barito Selatan,33.3,"33,3",55,Kemenkes SSGI 2024
+6205,62,Kabupaten Barito Utara,kabupaten,6205,62.05,Kalimantan Tengah,Barito Utara,20.4,"20,4",55,Kemenkes SSGI 2024
+6208,62,Kabupaten Sukamara,kabupaten,6208,62.08,Kalimantan Tengah,Sukamara,20.0,"20,0",55,Kemenkes SSGI 2024
+6209,62,Kabupaten Lamandau,kabupaten,6209,62.09,Kalimantan Tengah,Lamandau,18.3,"18,3",55,Kemenkes SSGI 2024
+6207,62,Kabupaten Seruyan,kabupaten,6207,62.07,Kalimantan Tengah,Seruyan,32.2,"32,2",55,Kemenkes SSGI 2024
+6206,62,Kabupaten Katingan,kabupaten,6206,62.06,Kalimantan Tengah,Katingan,19.6,"19,6",55,Kemenkes SSGI 2024
+6211,62,Kabupaten Pulang Pisau,kabupaten,6211,62.11,Kalimantan Tengah,Pulang Pisau,27.9,"27,9",55,Kemenkes SSGI 2024
+6210,62,Kabupaten Gunung Mas,kabupaten,6210,62.10,Kalimantan Tengah,Gunung Mas,14.1,"14,1",55,Kemenkes SSGI 2024
+6213,62,Kabupaten Barito Timur,kabupaten,6213,62.13,Kalimantan Tengah,Barito Timur,21.7,"21,7",55,Kemenkes SSGI 2024
+6212,62,Kabupaten Murung Raya,kabupaten,6212,62.12,Kalimantan Tengah,Murung Raya,15.8,"15,8",55,Kemenkes SSGI 2024
+6271,62,Kota Palangkaraya,kota,6271,62.71,Kalimantan Tengah,Kota Palangka Raya,19.1,"19,1",55,Kemenkes SSGI 2024
+6301,63,Kabupaten Tanah Laut,kabupaten,6301,63.01,Kalimantan Selatan,Tanah Laut,22.5,"22,5",55,Kemenkes SSGI 2024
+6302,63,Kotabaru,kabupaten,6302,63.02,Kalimantan Selatan,Kotabaru,23.2,"23,2",55,Kemenkes SSGI 2024
+6303,63,Kabupaten Banjar,kabupaten,6303,63.03,Kalimantan Selatan,Banjar,32.3,"32,3",55,Kemenkes SSGI 2024
+6304,63,Kabupaten Barito Kuala,kabupaten,6304,63.04,Kalimantan Selatan,Barito Kuala,16.5,"16,5",55,Kemenkes SSGI 2024
+6305,63,Kabupaten Tapin,kabupaten,6305,63.05,Kalimantan Selatan,Tapin,13.2,"13,2",55,Kemenkes SSGI 2024
+6306,63,Kabupaten Hulu Sungai Selatan,kabupaten,6306,63.06,Kalimantan Selatan,Hulu Sungai Selatan,19.8,"19,8",55,Kemenkes SSGI 2024
+6307,63,Kabupaten Hulu Sungai Tengah,kabupaten,6307,63.07,Kalimantan Selatan,Hulu Sungai Tengah,19.6,"19,6",55,Kemenkes SSGI 2024
+6308,63,Kabupaten Hulu Sungai Utara,kabupaten,6308,63.08,Kalimantan Selatan,Hulu Sungai Utara,27.6,"27,6",55,Kemenkes SSGI 2024
+6309,63,Kabupaten Tabalong,kabupaten,6309,63.09,Kalimantan Selatan,Tabalong,23.1,"23,1",55,Kemenkes SSGI 2024
+6310,63,Kabupaten Tanah Bumbu,kabupaten,6310,63.10,Kalimantan Selatan,Tanah Bumbu,21.6,"21,6",55,Kemenkes SSGI 2024
+6311,63,Kabupaten Balangan,kabupaten,6311,63.11,Kalimantan Selatan,Balangan,16.0,"16,0",55,Kemenkes SSGI 2024
+6371,63,Kota Banjarmasin,kota,6371,63.71,Kalimantan Selatan,Kota Banjarmasin,26.5,"26,5",55,Kemenkes SSGI 2024
+6372,63,Kota Banjarbaru,kota,6372,63.72,Kalimantan Selatan,Kota Banjarbaru,15.4,"15,4",55,Kemenkes SSGI 2024
+6401,64,Kabupaten Paser,kabupaten,6401,64.01,Kalimantan Timur,Paser,23.4,"23,4",56,Kemenkes SSGI 2024
+6407,64,Kabupaten Kutai Barat,kabupaten,6407,64.07,Kalimantan Timur,Kutai Barat,27.6,"27,6",56,Kemenkes SSGI 2024
+6402,64,Kabupaten Kutai Kartanegara,kabupaten,6402,64.02,Kalimantan Timur,Kutai Kartanegara,14.3,"14,3",56,Kemenkes SSGI 2024
+6408,64,Kabupaten Kutai Timur,kabupaten,6408,64.08,Kalimantan Timur,Kutai Timur,26.9,"26,9",56,Kemenkes SSGI 2024
+6403,64,Kabupaten Berau,kabupaten,6403,64.03,Kalimantan Timur,Berau,23.4,"23,4",56,Kemenkes SSGI 2024
+6409,64,Kabupaten Penajam Paser Utara,kabupaten,6409,64.09,Kalimantan Timur,Penajam Paser Utara,32.0,"32,0",56,Kemenkes SSGI 2024
+6411,64,Kabupaten Mahakam Ulu,kabupaten,6411,64.11,Kalimantan Timur,Mahakam Ulu,23.2,"23,2",56,Kemenkes SSGI 2024
+6471,64,Kota Balikpapan,kota,6471,64.71,Kalimantan Timur,Kota Balikpapan,24.8,"24,8",56,Kemenkes SSGI 2024
+6472,64,Kota Samarinda,kota,6472,64.72,Kalimantan Timur,Kota Samarinda,20.3,"20,3",56,Kemenkes SSGI 2024
+6474,64,Kota Bontang,kota,6474,64.74,Kalimantan Timur,Kota Bontang,20.7,"20,7",56,Kemenkes SSGI 2024
+6502,65,Kabupaten Malinau,kabupaten,6502,65.02,Kalimantan Utara,Malinau,26.0,"26,0",56,Kemenkes SSGI 2024
+6501,65,Kabupaten Bulungan,kabupaten,6501,65.01,Kalimantan Utara,Bulungan,15.9,"15,9",56,Kemenkes SSGI 2024
+6504,65,Kabupaten Tana Tidung,kabupaten,6504,65.04,Kalimantan Utara,Tana Tidung,7.4,"7,4",56,Kemenkes SSGI 2024
+6503,65,Kabupaten Nunukan,kabupaten,6503,65.03,Kalimantan Utara,Nunukan,21.7,"21,7",56,Kemenkes SSGI 2024
+6571,65,Kota Tarakan,kota,6571,65.71,Kalimantan Utara,Kota Tarakan,12.6,"12,6",56,Kemenkes SSGI 2024
+7101,71,Kabupaten Bolaang Mongondow,kabupaten,7101,71.01,Sulawesi Utara,Bolaang Mongondow,19.3,"19,3",56,Kemenkes SSGI 2024
+7102,71,Kabupaten Minahasa,kabupaten,7102,71.02,Sulawesi Utara,Minahasa,19.4,"19,4",56,Kemenkes SSGI 2024
+7103,71,Kabupaten Kepulauan Sangihe,kabupaten,7103,71.03,Sulawesi Utara,Kepulauan Sangihe,24.2,"24,2",56,Kemenkes SSGI 2024
+7104,71,Kabupaten Kepulauan Talaud,kabupaten,7104,71.04,Sulawesi Utara,Kepulauan Talaud,11.6,"11,6",56,Kemenkes SSGI 2024
+7105,71,Kabupaten Minahasa Selatan,kabupaten,7105,71.05,Sulawesi Utara,Minahasa Selatan,28.1,"28,1",56,Kemenkes SSGI 2024
+7106,71,Kabupaten Minahasa Utara,kabupaten,7106,71.06,Sulawesi Utara,Minahasa Utara,18.9,"18,9",56,Kemenkes SSGI 2024
+7108,71,Kabupaten Bolaang Mongondow Utara,kabupaten,7108,71.08,Sulawesi Utara,Bolaang Mongondow Utara,26.3,"26,3",56,Kemenkes SSGI 2024
+7109,71,Kabupaten Kep. Siau Tagulandang Biaro,kabupaten,7109,71.09,Sulawesi Utara,Siau Tagulandang Biaro,19.9,"19,9",56,Kemenkes SSGI 2024
+7107,71,Kabupaten Minahasa Tenggara,kabupaten,7107,71.07,Sulawesi Utara,Minahasa Tenggara,21.9,"21,9",56,Kemenkes SSGI 2024
+7111,71,Kabupaten Bolaang Mongondow Selatan,kabupaten,7111,71.11,Sulawesi Utara,Bolaang Mongondow Selatan,23.6,"23,6",56,Kemenkes SSGI 2024
+7110,71,Kabupaten Bolaang Mongondow Timur,kabupaten,7110,71.10,Sulawesi Utara,Bolaang Mongondow Timur,18.8,"18,8",56,Kemenkes SSGI 2024
+7171,71,Kota Manado,kota,7171,71.71,Sulawesi Utara,Kota Manado,18.8,"18,8",56,Kemenkes SSGI 2024
+7172,71,Kota Bitung,kota,7172,71.72,Sulawesi Utara,Kota Bitung,25.1,"25,1",56,Kemenkes SSGI 2024
+7173,71,Kota Tomohon,kota,7173,71.73,Sulawesi Utara,Kota Tomohon,10.8,"10,8",56,Kemenkes SSGI 2024
+7174,71,Kota Kotamobagu,kota,7174,71.74,Sulawesi Utara,Kota Kotamobagu,23.1,"23,1",56,Kemenkes SSGI 2024
+7207,72,Kabupaten Banggai Kepulauan,kabupaten,7207,72.07,Sulawesi Tengah,Banggai Kepulauan,28.4,"28,4",57,Kemenkes SSGI 2024
+7201,72,Kabupaten Banggai,kabupaten,7201,72.01,Sulawesi Tengah,Banggai,28.7,"28,7",57,Kemenkes SSGI 2024
+7206,72,Kabupaten Morowali,kabupaten,7206,72.06,Sulawesi Tengah,Morowali,22.6,"22,6",57,Kemenkes SSGI 2024
+7202,72,Kabupaten Poso,kabupaten,7202,72.02,Sulawesi Tengah,Poso,21.1,"21,1",57,Kemenkes SSGI 2024
+7203,72,Kabupaten Donggala,kabupaten,7203,72.03,Sulawesi Tengah,Donggala,29.6,"29,6",57,Kemenkes SSGI 2024
+7204,72,Kabupaten Toli-Toli,kabupaten,7204,72.04,Sulawesi Tengah,Toli-Toli,26.9,"26,9",57,Kemenkes SSGI 2024
+7205,72,Kabupaten Buol,kabupaten,7205,72.05,Sulawesi Tengah,Buol,36.9,"36,9",57,Kemenkes SSGI 2024
+7208,72,Kabupaten Parigi Moutong,kabupaten,7208,72.08,Sulawesi Tengah,Parigi Moutong,22.3,"22,3",57,Kemenkes SSGI 2024
+7209,72,Kabupaten Tojo Una Una,kabupaten,7209,72.09,Sulawesi Tengah,Tojo Una-Una,16.5,"16,5",57,Kemenkes SSGI 2024
+7210,72,Kabupaten Sigi,kabupaten,7210,72.10,Sulawesi Tengah,Sigi,33.0,"33,0",57,Kemenkes SSGI 2024
+7211,72,Kabupaten Banggai Laut,kabupaten,7211,72.11,Sulawesi Tengah,Banggai Laut,26.6,"26,6",57,Kemenkes SSGI 2024
+7212,72,Kabupaten Morowali Utara,kabupaten,7212,72.12,Sulawesi Tengah,Morowali Utara,20.4,"20,4",57,Kemenkes SSGI 2024
+7271,72,Kota Palu,kota,7271,72.71,Sulawesi Tengah,Kota Palu,25.6,"25,6",57,Kemenkes SSGI 2024
+7301,73,Kabupaten Kepulauan Selayar,kabupaten,7301,73.01,Sulawesi Selatan,Kepulauan Selayar,25.7,"25,7",57,Kemenkes SSGI 2024
+7302,73,Kabupaten Bulukumba,kabupaten,7302,73.02,Sulawesi Selatan,Bulukumba,25.2,"25,2",57,Kemenkes SSGI 2024
+7303,73,Kabupaten Bantaeng,kabupaten,7303,73.03,Sulawesi Selatan,Bantaeng,24.3,"24,3",57,Kemenkes SSGI 2024
+7304,73,Kabupaten Jeneponto,kabupaten,7304,73.04,Sulawesi Selatan,Jeneponto,37.0,"37,0",57,Kemenkes SSGI 2024
+7305,73,Kabupaten Takalar,kabupaten,7305,73.05,Sulawesi Selatan,Takalar,24.0,"24,0",57,Kemenkes SSGI 2024
+7306,73,Kabupaten Gowa,kabupaten,7306,73.06,Sulawesi Selatan,Gowa,17.0,"17,0",57,Kemenkes SSGI 2024
+7307,73,Kabupaten Sinjai,kabupaten,7307,73.07,Sulawesi Selatan,Sinjai,28.6,"28,6",57,Kemenkes SSGI 2024
+7309,73,Kabupaten Maros,kabupaten,7309,73.09,Sulawesi Selatan,Maros,22.4,"22,4",57,Kemenkes SSGI 2024
+7310,73,Kabupaten Pangkajene Dan Kepulauan,kabupaten,7310,73.10,Sulawesi Selatan,Pangkajene Dan Kepulauan,25.2,"25,2",57,Kemenkes SSGI 2024
+7311,73,Kabupaten Barru,kabupaten,7311,73.11,Sulawesi Selatan,Barru,26.9,"26,9",57,Kemenkes SSGI 2024
+7308,73,Kabupaten Bone,kabupaten,7308,73.08,Sulawesi Selatan,Bone,26.0,"26,0",57,Kemenkes SSGI 2024
+7312,73,Kabupaten Soppeng,kabupaten,7312,73.12,Sulawesi Selatan,Soppeng,26.6,"26,6",57,Kemenkes SSGI 2024
+7313,73,Kabupaten Wajo,kabupaten,7313,73.13,Sulawesi Selatan,Wajo,20.5,"20,5",57,Kemenkes SSGI 2024
+7314,73,Kabupaten Sidenreng Rappang,kabupaten,7314,73.14,Sulawesi Selatan,Sidenreng Rappang,20.3,"20,3",57,Kemenkes SSGI 2024
+7315,73,Kabupaten Pinrang,kabupaten,7315,73.15,Sulawesi Selatan,Pinrang,22.2,"22,2",57,Kemenkes SSGI 2024
+7316,73,Kabupaten Enrekang,kabupaten,7316,73.16,Sulawesi Selatan,Enrekang,34.3,"34,3",57,Kemenkes SSGI 2024
+7317,73,Kabupaten Luwu,kabupaten,7317,73.17,Sulawesi Selatan,Luwu,23.6,"23,6",57,Kemenkes SSGI 2024
+7318,73,Kabupaten Tana Toraja,kabupaten,7318,73.18,Sulawesi Selatan,Tana Toraja,27.5,"27,5",57,Kemenkes SSGI 2024
+7322,73,Kabupaten Luwu Utara,kabupaten,7322,73.22,Sulawesi Selatan,Luwu Utara,23.6,"23,6",57,Kemenkes SSGI 2024
+7324,73,Kabupaten Luwu Timur,kabupaten,7324,73.24,Sulawesi Selatan,Luwu Timur,21.8,"21,8",57,Kemenkes SSGI 2024
+7326,73,Kabupaten Toraja Utara,kabupaten,7326,73.26,Sulawesi Selatan,Toraja Utara,27.6,"27,6",57,Kemenkes SSGI 2024
+7371,73,Kota Makassar,kota,7371,73.71,Sulawesi Selatan,Kota Makassar,22.9,"22,9",57,Kemenkes SSGI 2024
+7372,73,Kota Parepare,kota,7372,73.72,Sulawesi Selatan,Kota Parepare,26.1,"26,1",57,Kemenkes SSGI 2024
+7373,73,Kota Palopo,kota,7373,73.73,Sulawesi Selatan,Kota Palopo,22.7,"22,7",57,Kemenkes SSGI 2024
+7404,74,Kabupaten Buton,kabupaten,7404,74.04,Sulawesi Tenggara,Buton,28.8,"28,8",58,Kemenkes SSGI 2024
+7403,74,Kabupaten Muna,kabupaten,7403,74.03,Sulawesi Tenggara,Muna,25.0,"25,0",58,Kemenkes SSGI 2024
+7402,74,Kabupaten Konawe,kabupaten,7402,74.02,Sulawesi Tenggara,Konawe,25.0,"25,0",58,Kemenkes SSGI 2024
+7401,74,Kabupaten Kolaka,kabupaten,7401,74.01,Sulawesi Tenggara,Kolaka,29.7,"29,7",58,Kemenkes SSGI 2024
+7405,74,Kabupaten Konawe Selatan,kabupaten,7405,74.05,Sulawesi Tenggara,Konawe Selatan,21.3,"21,3",58,Kemenkes SSGI 2024
+7406,74,Kabupaten Bombana,kabupaten,7406,74.06,Sulawesi Tenggara,Bombana,24.7,"24,7",58,Kemenkes SSGI 2024
+7407,74,Kabupaten Wakatobi,kabupaten,7407,74.07,Sulawesi Tenggara,Wakatobi,24.1,"24,1",58,Kemenkes SSGI 2024
+7408,74,Kabupaten Kolaka Utara,kabupaten,7408,74.08,Sulawesi Tenggara,Kolaka Utara,23.6,"23,6",58,Kemenkes SSGI 2024
+7410,74,Kabupaten Buton Utara,kabupaten,7410,74.10,Sulawesi Tenggara,Buton Utara,30.5,"30,5",58,Kemenkes SSGI 2024
+7409,74,Kabupaten Konawe Utara,kabupaten,7409,74.09,Sulawesi Tenggara,Konawe Utara,27.0,"27,0",58,Kemenkes SSGI 2024
+7411,74,Kabupaten Kolaka Timur,kabupaten,7411,74.11,Sulawesi Tenggara,Kolaka Timur,22.0,"22,0",58,Kemenkes SSGI 2024
+7412,74,Kabupaten Konawe Kepulauan,kabupaten,7412,74.12,Sulawesi Tenggara,Konawe Kepulauan,26.5,"26,5",58,Kemenkes SSGI 2024
+7413,74,Kabupaten Muna Barat,kabupaten,7413,74.13,Sulawesi Tenggara,Muna Barat,28.4,"28,4",58,Kemenkes SSGI 2024
+7414,74,Kabupaten Buton Tengah,kabupaten,7414,74.14,Sulawesi Tenggara,Buton Tengah,31.8,"31,8",58,Kemenkes SSGI 2024
+7415,74,Kabupaten Buton Selatan,kabupaten,7415,74.15,Sulawesi Tenggara,Buton Selatan,38.9,"38,9",58,Kemenkes SSGI 2024
+7471,74,Kota Kendari,kota,7471,74.71,Sulawesi Tenggara,Kota Kendari,24.4,"24,4",58,Kemenkes SSGI 2024
+7472,74,Kota Bau Bau,kota,7472,74.72,Sulawesi Tenggara,Kota Baubau,29.8,"29,8",58,Kemenkes SSGI 2024
+7502,75,Kabupaten Boalemo,kabupaten,7502,75.02,Gorontalo,Boalemo,8.0,"8,0",58,Kemenkes SSGI 2024
+7501,75,Kabupaten Gorontalo,kabupaten,7501,75.01,Gorontalo,Gorontalo,28.3,"28,3",58,Kemenkes SSGI 2024
+7504,75,Kabupaten Pohuwato,kabupaten,7504,75.04,Gorontalo,Pohuwato,18.0,"18,0",58,Kemenkes SSGI 2024
+7503,75,Kabupaten Bone Bolango,kabupaten,7503,75.03,Gorontalo,Bone Bolango,23.0,"23,0",58,Kemenkes SSGI 2024
+7505,75,Kabupaten Gorontalo Utara,kabupaten,7505,75.05,Gorontalo,Gorontalo Utara,25.6,"25,6",58,Kemenkes SSGI 2024
+7571,75,Kota Gorontalo,kota,7571,75.71,Gorontalo,Kota Gorontalo,31.2,"31,2",58,Kemenkes SSGI 2024
+7605,76,Kabupaten Majene,kabupaten,7605,76.05,Sulawesi Barat,Majene,37.5,"37,5",58,Kemenkes SSGI 2024
+7604,76,Kabupaten Polewali Mandar,kabupaten,7604,76.04,Sulawesi Barat,Polewali Mandar,31.5,"31,5",58,Kemenkes SSGI 2024
+7603,76,Kabupaten Mamasa,kabupaten,7603,76.03,Sulawesi Barat,Mamasa,35.7,"35,7",58,Kemenkes SSGI 2024
+7602,76,Kabupaten Mamuju,kabupaten,7602,76.02,Sulawesi Barat,Mamuju,38.7,"38,7",58,Kemenkes SSGI 2024
+7601,76,Kabupaten Pasangkayu,kabupaten,7601,76.01,Sulawesi Barat,Pasangkayu,36.7,"36,7",58,Kemenkes SSGI 2024
+7606,76,Kabupaten Mamuju Tengah,kabupaten,7606,76.06,Sulawesi Barat,Mamuju Tengah,31.5,"31,5",58,Kemenkes SSGI 2024
+8103,81,Kabupaten Kepulauan Tanimbar,kabupaten,8103,81.03,Maluku,Kep.Tanimbar,29.5,"29,5",59,Kemenkes SSGI 2024
+8102,81,Kabupaten Maluku Tenggara,kabupaten,8102,81.02,Maluku,Maluku Tenggara,28.1,"28,1",59,Kemenkes SSGI 2024
+8101,81,Kabupaten Maluku Tengah,kabupaten,8101,81.01,Maluku,Maluku Tengah,27.0,"27,0",59,Kemenkes SSGI 2024
+8104,81,Kabupaten Buru,kabupaten,8104,81.04,Maluku,Buru,25.4,"25,4",59,Kemenkes SSGI 2024
+8107,81,Kabupaten Kepulauan Aru,kabupaten,8107,81.07,Maluku,Kepulauan Aru,37.6,"37,6",59,Kemenkes SSGI 2024
+8106,81,Kabupaten Seram Bagian Barat,kabupaten,8106,81.06,Maluku,Seram Bagian Barat,33.8,"33,8",59,Kemenkes SSGI 2024
+8105,81,Kabupaten Seram Bagian Timur,kabupaten,8105,81.05,Maluku,Seram Bagian Timur,35.0,"35,0",59,Kemenkes SSGI 2024
+8108,81,Kabupaten Maluku Barat Daya,kabupaten,8108,81.08,Maluku,Maluku Barat Daya,23.8,"23,8",59,Kemenkes SSGI 2024
+8109,81,Kabupaten Buru Selatan,kabupaten,8109,81.09,Maluku,Buru Selatan,39.7,"39,7",59,Kemenkes SSGI 2024
+8171,81,Kota Ambon,kota,8171,81.71,Maluku,Kota Ambon,19.7,"19,7",59,Kemenkes SSGI 2024
+8172,81,Kota Tual,kota,8172,81.72,Maluku,Kota Tual,25.2,"25,2",59,Kemenkes SSGI 2024
+8201,82,Kabupaten Halmahera Barat,kabupaten,8201,82.01,Maluku Utara,Halmahera Barat,22.1,"22,1",59,Kemenkes SSGI 2024
+8202,82,Kabupaten Halmahera Tengah,kabupaten,8202,82.02,Maluku Utara,Halmahera Tengah,19.7,"19,7",59,Kemenkes SSGI 2024
+8205,82,Kabupaten Kepulauan Sula,kabupaten,8205,82.05,Maluku Utara,Kepulauan Sula,22.5,"22,5",59,Kemenkes SSGI 2024
+8204,82,Kabupaten Halmahera Selatan,kabupaten,8204,82.04,Maluku Utara,Halmahera Selatan,32.3,"32,3",59,Kemenkes SSGI 2024
+8203,82,Kabupaten Halmahera Utara,kabupaten,8203,82.03,Maluku Utara,Halmahera Utara,21.8,"21,8",59,Kemenkes SSGI 2024
+8206,82,Kabupaten Halmahera Timur,kabupaten,8206,82.06,Maluku Utara,Halmahera Timur,24.3,"24,3",59,Kemenkes SSGI 2024
+8207,82,Kabupaten Pulau Morotai,kabupaten,8207,82.07,Maluku Utara,Pulau Morotai,17.7,"17,7",59,Kemenkes SSGI 2024
+8208,82,Kabupaten Pulau Taliabu,kabupaten,8208,82.08,Maluku Utara,Pulau Taliabu,24.9,"24,9",59,Kemenkes SSGI 2024
+8271,82,Kota Ternate,kota,8271,82.71,Maluku Utara,Kota Ternate,16.6,"16,6",59,Kemenkes SSGI 2024
+8272,82,Kota Tidore Kepulauan,kota,8272,82.72,Maluku Utara,Tidore Kepulauan,16.6,"16,6",59,Kemenkes SSGI 2024
+9203,92,Kabupaten Fak Fak,kabupaten,9203,92.03,Papua Barat,Fakfak,21.0,"21,0",59,Kemenkes SSGI 2024
+9208,92,Kabupaten Kaimana,kabupaten,9208,92.08,Papua Barat,Kaimana,20.2,"20,2",59,Kemenkes SSGI 2024
+9207,92,Kabupaten Teluk Wondama,kabupaten,9207,92.07,Papua Barat,Teluk Wondama,29.2,"29,2",59,Kemenkes SSGI 2024
+9206,92,Kabupaten Teluk Bintuni,kabupaten,9206,92.06,Papua Barat,Teluk Bintuni,22.3,"22,3",59,Kemenkes SSGI 2024
+9202,92,Kabupaten Manokwari,kabupaten,9202,92.02,Papua Barat,Manokwari,23.5,"23,5",59,Kemenkes SSGI 2024
+9211,92,Kabupaten Manokwari Selatan,kabupaten,9211,92.11,Papua Barat,Manokwari Selatan,26.4,"26,4",59,Kemenkes SSGI 2024
+9212,92,Kabupaten Pegunungan Arfak,kabupaten,9212,92.12,Papua Barat,Pegunungan Arfak,39.3,"39,3",59,Kemenkes SSGI 2024
+9603,96,Kabupaten Raja Ampat,kabupaten,9603,96.03,Papua Barat Daya,Raja Ampat,37.4,"37,4",60,Kemenkes SSGI 2024
+9601,96,Kabupaten Sorong,kabupaten,9601,96.01,Papua Barat Daya,Sorong,25.1,"25,1",60,Kemenkes SSGI 2024
+9602,96,Kabupaten Sorong Selatan,kabupaten,9602,96.02,Papua Barat Daya,Sorong Selatan,31.3,"31,3",60,Kemenkes SSGI 2024
+9605,96,Kabupaten Maybrat,kabupaten,9605,96.05,Papua Barat Daya,Maybrat,30.7,"30,7",60,Kemenkes SSGI 2024
+9604,96,Kabupaten Tambrauw,kabupaten,9604,96.04,Papua Barat Daya,Tambrauw,37.9,"37,9",60,Kemenkes SSGI 2024
+9671,96,Kota Sorong,kota,9671,96.71,Papua Barat Daya,Kota Sorong,29.3,"29,3",60,Kemenkes SSGI 2024
+9103,91,Kabupaten Jayapura,kabupaten,9103,91.03,Papua,Jayapura,22.5,"22,5",60,Kemenkes SSGI 2024
+9105,91,Kabupaten Kepulauan Yapen,kabupaten,9105,91.05,Papua,Kepulauan Yapen,33.5,"33,5",60,Kemenkes SSGI 2024
+9106,91,Kabupaten Biak Numfor,kabupaten,9106,91.06,Papua,Biak Numfor,20.6,"20,6",60,Kemenkes SSGI 2024
+9110,91,Kabupaten Sarmi,kabupaten,9110,91.10,Papua,Sarmi,31.6,"31,6",60,Kemenkes SSGI 2024
+9111,91,Kabupaten Keerom,kabupaten,9111,91.11,Papua,Keerom,24.4,"24,4",60,Kemenkes SSGI 2024
+9115,91,Kabupaten Waropen,kabupaten,9115,91.15,Papua,Waropen,22.3,"22,3",60,Kemenkes SSGI 2024
+9119,91,Kabupaten Supiori,kabupaten,9119,91.19,Papua,Supiori,37.5,"37,5",60,Kemenkes SSGI 2024
+9120,91,Kabupaten Mamberamo Raya,kabupaten,9120,91.20,Papua,Mamberamo Raya,33.8,"33,8",60,Kemenkes SSGI 2024
+9171,91,Kota Jayapura,kota,9171,91.71,Papua,Kota Jayapura,24.1,"24,1",60,Kemenkes SSGI 2024
+9301,93,Kabupaten Merauke,kabupaten,9301,93.01,Papua Selatan,Merauke,18.5,"18,5",60,Kemenkes SSGI 2024
+9302,93,Kabupaten Boven Digoel,kabupaten,9302,93.02,Papua Selatan,Boven Digoel,30.2,"30,2",60,Kemenkes SSGI 2024
+9303,93,Kabupaten Mappi,kabupaten,9303,93.03,Papua Selatan,Mappi,29.9,"29,9",60,Kemenkes SSGI 2024
+9304,93,Kabupaten Asmat,kabupaten,9304,93.04,Papua Selatan,Asmat,28.3,"28,3",60,Kemenkes SSGI 2024
+9404,94,Kabupaten Mimika,kabupaten,9404,94.04,Papua Tengah,Mimika,28.4,"28,4",61,Kemenkes SSGI 2024
+9406,94,Kabupaten Dogiyai,kabupaten,9406,94.06,Papua Tengah,Dogiyai,55.8,"55,8",61,Kemenkes SSGI 2024
+9408,94,Kabupaten Deiyai,kabupaten,9408,94.08,Papua Tengah,Deiyai,30.6,"30,6",61,Kemenkes SSGI 2024
+9401,94,Kabupaten Nabire,kabupaten,9401,94.01,Papua Tengah,Nabire,21.7,"21,7",61,Kemenkes SSGI 2024
+9403,94,Kabupaten Paniai,kabupaten,9403,94.03,Papua Tengah,Paniai,29.6,"29,6",61,Kemenkes SSGI 2024
+9407,94,Kabupaten Intan Jaya,kabupaten,9407,94.07,Papua Tengah,Intan Jaya,48.4,"48,4",61,Kemenkes SSGI 2024
+9405,94,Kabupaten Puncak,kabupaten,9405,94.05,Papua Tengah,Puncak,42.5,"42,5",61,Kemenkes SSGI 2024
+9402,94,Kabupaten Puncak Jaya,kabupaten,9402,94.02,Papua Tengah,Puncak Jaya,36.3,"36,3",61,Kemenkes SSGI 2024
+9508,95,Kabupaten Nduga,kabupaten,9508,95.08,Papua Pegunungan,Nduga,36.0,"36,0",61,Kemenkes SSGI 2024
+9501,95,Kabupaten Jayawijaya,kabupaten,9501,95.01,Papua Pegunungan,Jayawijaya,41.3,"41,3",61,Kemenkes SSGI 2024
+9507,95,Kabupaten Lanny Jaya,kabupaten,9507,95.07,Papua Pegunungan,Lanny jaya,35.4,"35,4",61,Kemenkes SSGI 2024
+9504,95,Kabupaten Tolikara,kabupaten,9504,95.04,Papua Pegunungan,Tolikara,46.4,"46,4",61,Kemenkes SSGI 2024
+9505,95,Kabupaten Mamberamo Tengah,kabupaten,9505,95.05,Papua Pegunungan,Mamberamo Tengah,42.0,"42,0",61,Kemenkes SSGI 2024
+9506,95,Kabupaten Yalimo,kabupaten,9506,95.06,Papua Pegunungan,Yalimo,35.1,"35,1",61,Kemenkes SSGI 2024
+9503,95,Kabupaten Yahukimo,kabupaten,9503,95.03,Papua Pegunungan,Yahukimo,37.7,"37,7",61,Kemenkes SSGI 2024
+9502,95,Kabupaten Pegunungan Bintang,kabupaten,9502,95.02,Papua Pegunungan,Pegunungan Bintang,41.4,"41,4",61,Kemenkes SSGI 2024

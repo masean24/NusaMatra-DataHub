@@ -132,8 +132,8 @@ def test_lanny_jaya_composite_recalculated_after_correction():
     scored.sort(key=lambda item: (-item[1], item[0]))
     rank = next(index for index, item in enumerate(scored, 1) if item[0] == "9507")
     score = next(item[1] for item in scored if item[0] == "9507")
-    assert score == 80.18
-    assert rank == 3
+    assert score == 74.34
+    assert rank == 5
 
 
 @live_only

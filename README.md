@@ -157,7 +157,7 @@ Backend mengintegrasikan data terverifikasi dari 6 kementerian dan lembaga resmi
 | **Badan Informasi Geospasial (BIG)** | Batas administrasi resmi polygon 2026 (Kepmendagri No. 300.2.2-2430) | 514 Kab/Kota & 38 Provinsi | ✅ Low & High Resolution GeoJSON |
 | **Badan Pusat Statistik (BPS)** | 11 indikator sosial-ekonomi + 3 indikator infrastruktur SDGs | 514 Kab/Kota | ✅ WebAPI Resmi (Live Ingested) |
 | **BNPB (InaRISK / IRBI 2024)** | Indeks Risiko Bencana Indonesia multi-hazard & spesifik | 514 Kab/Kota | ✅ IRBI 2024 Terbitan Resmi |
-| **Kementerian Kesehatan (Kemenkes)** | Prevalensi stunting balita (Survei Kesehatan Indonesia 2023) | 507 Kab/Kota | ✅ SKI 2023 Resmi |
+| **Kementerian Kesehatan (Kemenkes)** | Prevalensi stunting balita (Survei Status Gizi Indonesia 2024) | 514 Kab/Kota | ✅ SSGI 2024 Resmi |
 | **Kemendikdasmen** | Jumlah sekolah & peserta didik (SD, SMP, SMA, SMK, SLB) | 514 Kab/Kota | ✅ Data Pokok Pendidikan 2026 |
 | **BMKG** | Feed kejadian gempa bumi terkini, M ≥ 5.0, dan gempa dirasakan | Nasional Real-Time | ✅ Auto-Feed dengan Cache TTL 60s |
 

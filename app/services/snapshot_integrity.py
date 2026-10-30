@@ -236,15 +236,46 @@ def _region_rows(conn: sqlite3.Connection) -> list[dict]:
     ]
 
 
-def _dataset_rows(conn: sqlite3.Connection) -> list[dict]:
+def _dataset_rows(
+    conn: sqlite3.Connection, snapshot_id: Optional[str] = None
+) -> list[dict]:
+    dataset_ids: list[str] | None = None
+    if snapshot_id:
+        row = conn.execute(
+            "SELECT source_manifest FROM data_snapshots WHERE snapshot_id = ?",
+            (snapshot_id,),
+        ).fetchone()
+        if row and row[0]:
+            try:
+                manifest = json.loads(row[0])
+            except (TypeError, ValueError):
+                manifest = None
+            if isinstance(manifest, list):
+                dataset_ids = [
+                    str(item["dataset_id"])
+                    for item in manifest
+                    if isinstance(item, dict) and item.get("dataset_id")
+                ]
+
+    where = ""
+    params: list[str] = []
+    if dataset_ids is not None:
+        if not dataset_ids:
+            return []
+        placeholders = ",".join("?" for _ in dataset_ids)
+        where = f"WHERE dataset_id IN ({placeholders})"
+        params = dataset_ids
+
     rows = conn.execute(
-        """
+        f"""
         SELECT dataset_id, agency_code, agency_name, dataset_title,
                official_portal_url, api_or_download_url, access_method,
                license_name, update_frequency, raw_sha256
         FROM dim_datasets
+        {where}
         ORDER BY dataset_id
-        """
+        """,
+        params,
     ).fetchall()
     return [
         {
@@ -303,7 +334,7 @@ def _payload(conn: sqlite3.Connection, snapshot_id: str) -> dict[str, Any]:
         "boundary_version": header["boundary_version"],
         "methodology_version": header["methodology_version"],
         "scoring": _scoring_config(),
-        "datasets": _dataset_rows(conn),
+        "datasets": _dataset_rows(conn, snapshot_id),
         "indicators": indicators,
         "regions": _region_rows(conn),
         "reference_periods": weeks,
@@ -517,7 +548,9 @@ def finalize_staging_snapshot(
         (staging_id,),
     ).fetchone()[0]
     dataset_count = conn.execute("SELECT COUNT(*) FROM dim_datasets").fetchone()[0]
-    source_manifest = json.dumps(_dataset_rows(conn), sort_keys=True, ensure_ascii=False)
+    source_manifest = json.dumps(
+        _dataset_rows(conn, staging_id), sort_keys=True, ensure_ascii=False
+    )
 
     conn.execute(
         "UPDATE data_snapshots SET is_active_default = 0 WHERE environment_tag = 'LIVE'"
