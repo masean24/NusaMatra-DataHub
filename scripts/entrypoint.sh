@@ -33,7 +33,27 @@ try:
         "AND raw_value IS NOT NULL",
         (snapshot_id,),
     ).fetchone()[0]
-    sys.exit(0 if has_dataset and stunting_count == 514 else 1)
+    education_datasets = con.execute(
+        "SELECT COUNT(*) FROM dim_datasets WHERE dataset_id IN "
+        "('kemendikdasmen_npd_2025', 'kemendikdasmen_statistik_2025')"
+    ).fetchone()[0]
+    education_counts = dict(
+        con.execute(
+            "SELECT indicator_id, COUNT(*) FROM fact_indicator_values "
+            "WHERE snapshot_id = ? AND indicator_id IN "
+            "('edu_student_teacher_ratio_sd', 'edu_damaged_classrooms_pct') "
+            "AND raw_value IS NOT NULL GROUP BY indicator_id",
+            (snapshot_id,),
+        ).fetchall()
+    )
+    ready = (
+        has_dataset
+        and stunting_count == 514
+        and education_datasets == 2
+        and education_counts.get("edu_student_teacher_ratio_sd") == 514
+        and education_counts.get("edu_damaged_classrooms_pct") == 514
+    )
+    sys.exit(0 if ready else 1)
 except Exception:
     sys.exit(1)
 finally:
@@ -45,10 +65,10 @@ PY
 }
 
 if needs_seed; then
-    echo "[entrypoint] LIVE database missing or not on SSGI 2024; seeding $LIVE_DB"
+    echo "[entrypoint] LIVE database missing current SSGI 2024 / education 2025 data; seeding $LIVE_DB"
     python scripts/seed_live_db.py
 else
-    echo "[entrypoint] LIVE snapshot already has SSGI 2024 stunting."
+    echo "[entrypoint] LIVE snapshot already has SSGI 2024 stunting and education 2025."
 fi
 
 echo "[entrypoint] Applying public indicator retirement..."
