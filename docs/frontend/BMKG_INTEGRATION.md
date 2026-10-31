@@ -128,7 +128,7 @@ Cache-Control: no-cache, no-store, must-revalidate
 ```javascript
 async function loadEarthquakeLayer(map) {
   try {
-    const res = await fetch('https://api.orangkeren.me/api/v1/earthquakes/geojson?mode=live');
+    const res = await fetch('https://api.nusamatra.site/api/v1/earthquakes/geojson?mode=live');
     
     // Periksa jika backend melaporkan upstream BMKG tidak tersedia
     if (res.status === 503) {

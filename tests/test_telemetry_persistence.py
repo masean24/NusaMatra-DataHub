@@ -72,6 +72,26 @@ async def test_telemetry_persistence_can_be_disabled(tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_latency_percentiles_and_range_summary(tmp_path):
+    collector = TelemetryCollector(
+        db_path=str(tmp_path / "telemetry.db"),
+        persistence_enabled=False,
+    )
+    for latency in (10.0, 20.0, 30.0, 40.0, 50.0):
+        collector.record_request("GET", "/api/v1/regions", 200, latency, "LIVE")
+
+    summary = collector.get_summary()
+    assert summary["latency"]["p50_ms"] == 30.0
+    assert summary["latency"]["p95_ms"] == 48.0
+    assert summary["latency"]["p99_ms"] == 49.6
+
+    recent = collector.get_summary("15m")
+    assert recent["range"] == "15m"
+    assert recent["total_requests"] == 5
+    assert recent["latency"]["p50_ms"] == 30.0
+
+
+@pytest.mark.asyncio
 async def test_scanner_paths_are_ignored_and_time_is_wib(tmp_path):
     collector = TelemetryCollector(
         db_path=str(tmp_path / "telemetry.db"),

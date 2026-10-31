@@ -63,7 +63,7 @@ Engine peta Gemini mengharapkan `GeographyDataset` berupa `FeatureCollection` de
 
 ```bash
 # Run on a machine that can reach the public API:
-BASE='https://api.orangkeren.me'
+BASE='https://api.nusamatra.site'
 curl -i "$BASE/api/v1/health"
 curl -i "$BASE/api/v1/regions?level=kabupaten_kota&q=bogor"
 curl -i "$BASE/api/v1/indicators"

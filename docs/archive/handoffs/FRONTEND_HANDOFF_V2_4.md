@@ -103,7 +103,7 @@ Tidak ada field `status`, `is_active`, atau `active`. Gunakan
 CORS diatur lewat environment Coolify, bukan lewat kode:
 
 ```env
-NM_CORS_ORIGINS=https://domain-fe-produksi,https://api.orangkeren.me
+NM_CORS_ORIGINS=https://domain-fe-produksi,https://api.nusamatra.site
 ```
 
 Origin Codespace dan `localhost` hanya untuk development. Sebelum rilis publik,

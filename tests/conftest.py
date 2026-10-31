@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # any test module imports app.config/app.main during collection.
 os.environ.setdefault(
     "NM_ALLOWED_HOSTS",
-    '["test","testserver","localhost","127.0.0.1","api.orangkeren.me"]',
+    '["test","testserver","localhost","127.0.0.1","api.nusamatra.site"]',
 )
 os.environ.setdefault("NM_RATE_LIMIT_REPORT_ONLY", "true")
 

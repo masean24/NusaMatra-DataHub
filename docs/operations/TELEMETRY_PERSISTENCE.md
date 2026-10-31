@@ -68,7 +68,7 @@ LIVE database **dan** telemetry.
 
 ## Verifikasi
 
-1. Buka `https://api.orangkeren.me/api/v1/stats`.
+1. Buka `https://api.nusamatra.site/api/v1/stats`.
 2. Pastikan:
    ```json
    "persistence": {

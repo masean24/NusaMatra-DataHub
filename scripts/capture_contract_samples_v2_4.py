@@ -30,7 +30,7 @@ def main() -> int:
     os.environ["NM_ENABLE_LIVE_MODE"] = "true"
     os.environ.setdefault(
         "NM_ALLOWED_HOSTS",
-        '["test","localhost","127.0.0.1","api.orangkeren.me"]',
+        '["test","localhost","127.0.0.1","api.nusamatra.site"]',
     )
 
     from httpx import ASGITransport, AsyncClient

@@ -3,11 +3,11 @@
 
 | Parameter | Keterangan |
 |---|---|
-| **Base URL Produksi** | `https://api.orangkeren.me` |
+| **Base URL Produksi** | `https://api.nusamatra.site` |
 | **Status API** | ✅ **164/164 Unit & Integration Tests Passing** |
-| **Dokumentasi Interaktif (Scalar)** | [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs) |
-| **Formal Schema (ReDoc)** | [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc) |
-| **OpenAPI 3.1 Raw Spec** | [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json) |
+| **Dokumentasi Interaktif (Scalar)** | [https://api.nusamatra.site/docs](https://api.nusamatra.site/docs) |
+| **Formal Schema (ReDoc)** | [https://api.nusamatra.site/redoc](https://api.nusamatra.site/redoc) |
+| **OpenAPI 3.1 Raw Spec** | [https://api.nusamatra.site/openapi.json](https://api.nusamatra.site/openapi.json) |
 | **Runtime Data Modes** | Dual: `mode=demo` (514 wilayah ilustratif) & `mode=live` (data resmi kementerian) |
 
 ---
@@ -76,7 +76,7 @@ Angka **68.42** pada dokumen v2 sebelumnya salah dan tidak dapat direproduksi da
 ### Contoh Request
 
 ```typescript
-const response = await fetch("https://api.orangkeren.me/api/v1/indicators/composite-query?mode=live", {
+const response = await fetch("https://api.nusamatra.site/api/v1/indicators/composite-query?mode=live", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -237,7 +237,7 @@ const result = await response.json();
 Sebelum merender toggle layer indikator di sidebar peta 3D, frontend dapat memanggil endpoint matriks ketersediaan:
 
 ```http
-GET https://api.orangkeren.me/api/v1/indicators/coverage?mode=live
+GET https://api.nusamatra.site/api/v1/indicators/coverage?mode=live
 ```
 
 ### Format Response:

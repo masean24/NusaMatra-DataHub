@@ -245,7 +245,7 @@
         "agency_code": "NUSAMATRA",
         "agency_name": "Nusa Matra Data Hub",
         "dataset_title": "Internal Ingestion Audit (completeness & freshness derived from active snapshot)",
-        "official_portal_url": "https://api.orangkeren.me",
+        "official_portal_url": "https://api.nusamatra.site",
         "api_or_download_url": "internal://ingestion-audit",
         "access_method": "INTERNAL_DERIVATION",
         "license_name": "Internal",

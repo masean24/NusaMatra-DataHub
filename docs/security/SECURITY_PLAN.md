@@ -24,7 +24,7 @@
 ```env
 NM_RATE_LIMIT_ENABLED=true
 NM_RATE_LIMIT_REPORT_ONLY=false
-NM_ALLOWED_HOSTS=api.orangkeren.me,localhost
+NM_ALLOWED_HOSTS=api.nusamatra.site,localhost
 NM_CORS_ORIGINS=https://domain-web-lomba.example
 NM_TRUSTED_PROXY_IPS=10.0.0.0/8
 ```
@@ -325,7 +325,7 @@ Untuk response API JSON:
 
 ### 7.3 TrustedHost
 
-- `TrustedHostMiddleware` dengan `api.orangkeren.me`.
+- `TrustedHostMiddleware` dengan `api.nusamatra.site`.
 - Tolak Host header asing.
 - Jangan mengaktifkan `allowed_hosts=["*"]` di production.
 
@@ -442,8 +442,8 @@ Target:
 | `NM_RATE_LIMIT_JUDGE_KEY_PER_MINUTE` | `300` | Kuota key juri |
 | `NM_RATE_LIMIT_ADMIN_KEY_PER_MINUTE` | `60` | Kuota admin |
 | `NM_RATE_LIMIT_REPORT_ONLY` | `true` | Log-only sebelum enforcement |
-| `NM_ALLOWED_HOSTS` | `api.orangkeren.me,localhost,127.0.0.1` | Host header yang diterima |
-| `NM_CORS_ORIGINS` | localhost + `https://api.orangkeren.me` | Origin frontend yang diizinkan |
+| `NM_ALLOWED_HOSTS` | `api.nusamatra.site,localhost,127.0.0.1` | Host header yang diterima |
+| `NM_CORS_ORIGINS` | localhost + `https://api.nusamatra.site` | Origin frontend yang diizinkan |
 | `NM_MAX_REQUEST_BODY_BYTES` | `16384` | Body maksimum |
 | `NM_MAX_COMPOSITE_COMPONENTS` | `33` | Batas jumlah indikator |
 | `NM_COMPOSITE_CACHE_MAX_ENTRIES` | `256` | Kapasitas cache |

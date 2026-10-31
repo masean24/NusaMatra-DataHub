@@ -1,6 +1,6 @@
 {
   "checked_at": "2026-10-28",
-  "base_url": "https://api.orangkeren.me/api/v1",
+  "base_url": "https://api.nusamatra.site/api/v1",
   "checks": [
     {
       "request": "GET /regions?level=invalid",

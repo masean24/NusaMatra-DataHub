@@ -75,6 +75,29 @@ def _format_uptime(seconds: int) -> str:
     return " ".join(parts) or "0 detik"
 
 
+RANGE_SECONDS = {
+    "15m": 15 * 60,
+    "1h": 60 * 60,
+    "24h": 24 * 60 * 60,
+    "7d": 7 * 24 * 60 * 60,
+}
+
+
+def _percentile(values: list[float], fraction: float) -> float:
+    """Linear-interpolated percentile for a bounded latency sample."""
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return round(ordered[0], 2)
+    position = (len(ordered) - 1) * fraction
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    weight = position - lower
+    return round(ordered[lower] + (ordered[upper] - ordered[lower]) * weight, 2)
+
+
+
 class TelemetryCollector:
     """In-memory metrics collector with optional periodic SQLite snapshots."""
 
@@ -139,6 +162,8 @@ class TelemetryCollector:
         self.mode_counts: dict[str, int] = {"DEMO": 0, "LIVE": 0}
 
         self.recent_requests: deque[dict[str, Any]] = deque(maxlen=max_recent)
+        self.request_events: deque[dict[str, Any]] = deque(maxlen=20000)
+        self.latency_samples: deque[float] = deque(maxlen=5000)
 
         self.db_path = db_path if db_path is not None else settings.telemetry_db_path
         self.flush_interval = (
@@ -212,6 +237,7 @@ class TelemetryCollector:
                         endpoint_counts TEXT NOT NULL DEFAULT '{}',
                         mode_counts TEXT NOT NULL DEFAULT '{}',
                         recent_requests TEXT NOT NULL DEFAULT '[]',
+                        latency_samples TEXT NOT NULL DEFAULT '[]',
                         updated_at REAL,
                         state_version INTEGER NOT NULL DEFAULT 1
                     )
@@ -223,6 +249,11 @@ class TelemetryCollector:
                     await db.execute(
                         "ALTER TABLE telemetry_state "
                         "ADD COLUMN state_version INTEGER NOT NULL DEFAULT 1"
+                    )
+                if "latency_samples" not in columns:
+                    await db.execute(
+                        "ALTER TABLE telemetry_state "
+                        "ADD COLUMN latency_samples TEXT NOT NULL DEFAULT '[]'"
                     )
                 cursor = await db.execute("SELECT * FROM telemetry_state WHERE id = 1")
                 row = await cursor.fetchone()
@@ -243,6 +274,8 @@ class TelemetryCollector:
         self.endpoint_counts = {}
         self.mode_counts = {"DEMO": 0, "LIVE": 0}
         self.recent_requests.clear()
+        self.request_events.clear()
+        self.latency_samples.clear()
 
     def _restore(self, row: aiosqlite.Row) -> None:
         first_started_at = row["first_started_at"]
@@ -271,6 +304,12 @@ class TelemetryCollector:
         recent = self._load_json(row["recent_requests"], [])
         self.recent_requests.clear()
         self.recent_requests.extend(recent)
+        self.latency_samples.clear()
+        for value in self._load_json(row["latency_samples"], []):
+            try:
+                self.latency_samples.append(float(value))
+            except (TypeError, ValueError):
+                continue
         self.last_flush_at = row["updated_at"]
 
     @staticmethod
@@ -295,9 +334,9 @@ class TelemetryCollector:
                     INSERT INTO telemetry_state (
                         id, first_started_at, total_requests, total_latency_ms,
                         min_latency_ms, max_latency_ms, status_counts,
-                        endpoint_counts, mode_counts, recent_requests, updated_at,
-                        state_version
-                    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        endpoint_counts, mode_counts, recent_requests,
+                        latency_samples, updated_at, state_version
+                    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(id) DO UPDATE SET
                         first_started_at = excluded.first_started_at,
                         total_requests = excluded.total_requests,
@@ -308,6 +347,7 @@ class TelemetryCollector:
                         endpoint_counts = excluded.endpoint_counts,
                         mode_counts = excluded.mode_counts,
                         recent_requests = excluded.recent_requests,
+                        latency_samples = excluded.latency_samples,
                         updated_at = excluded.updated_at,
                         state_version = excluded.state_version
                     """,
@@ -321,6 +361,7 @@ class TelemetryCollector:
                         json.dumps(self.endpoint_counts),
                         json.dumps(self.mode_counts),
                         json.dumps(list(self.recent_requests)),
+                        json.dumps(list(self.latency_samples)),
                         time.time(),
                         STATE_VERSION,
                     ),
@@ -395,9 +436,11 @@ class TelemetryCollector:
 
         mode_upper = mode.upper() if mode else "DEMO"
         self.mode_counts[mode_upper] = self.mode_counts.get(mode_upper, 0) + 1
+        self.latency_samples.append(latency_ms)
 
         # Append to recent requests queue (WIB, independent of VPS timezone)
-        now_iso = datetime.now(WIB).strftime("%H:%M:%S")
+        observed_at = time.time()
+        now_iso = datetime.fromtimestamp(observed_at, tz=WIB).strftime("%H:%M:%S")
         self.recent_requests.append({
             "time": now_iso,
             "method": method,
@@ -406,16 +449,75 @@ class TelemetryCollector:
             "latency_ms": round(latency_ms, 2),
             "mode": mode_upper,
         })
+        self.request_events.append({
+            "ts": observed_at,
+            "method": method,
+            "path": clean_path,
+            "endpoint": endpoint_key,
+            "status": status_code,
+            "latency_ms": round(latency_ms, 2),
+            "mode": mode_upper,
+        })
 
-    def get_summary(self) -> dict[str, Any]:
-        """Generate comprehensive telemetry statistics dictionary."""
+    def get_summary(self, range_key: str = "all") -> dict[str, Any]:
+        """Generate comprehensive telemetry statistics dictionary.
+
+        ``range_key`` accepts ``all``, ``15m``, ``1h``, ``24h``, or ``7d``.
+        Range views use the bounded in-memory event log; lifetime counters
+        remain the source of truth for ``all``.
+        """
         now = time.time()
         process_uptime = max(0, int(now - self.process_started_at))
         service_uptime = max(0, int(now - self.first_started_at))
+        range_key = (range_key or "all").lower()
+        if range_key not in RANGE_SECONDS:
+            range_key = "all"
+
+        if range_key == "all":
+            total_requests = self.total_requests
+            total_latency_ms = self.total_latency_ms
+            min_latency = self.min_latency_ms
+            max_latency = self.max_latency_ms
+            status_counts = self.status_counts
+            endpoint_counts = self.endpoint_counts
+            mode_counts = self.mode_counts
+            latency_values = list(self.latency_samples)
+            if not latency_values:
+                latency_values = [row["latency_ms"] for row in self.recent_requests]
+            recent_requests = list(self.recent_requests)[::-1]
+        else:
+            cutoff = now - RANGE_SECONDS[range_key]
+            events = [event for event in self.request_events if event["ts"] >= cutoff]
+            total_requests = len(events)
+            total_latency_ms = sum(event["latency_ms"] for event in events)
+            latency_values = [event["latency_ms"] for event in events]
+            min_latency = min(latency_values) if latency_values else None
+            max_latency = max(latency_values) if latency_values else None
+            status_counts = {}
+            endpoint_counts = {}
+            mode_counts = {"DEMO": 0, "LIVE": 0}
+            for event in events:
+                status_key = str(event["status"])
+                status_counts[status_key] = status_counts.get(status_key, 0) + 1
+                endpoint_key = event["endpoint"]
+                endpoint_counts[endpoint_key] = endpoint_counts.get(endpoint_key, 0) + 1
+                mode = event["mode"]
+                mode_counts[mode] = mode_counts.get(mode, 0) + 1
+            recent_requests = [
+                {
+                    "time": datetime.fromtimestamp(event["ts"], tz=WIB).strftime("%H:%M:%S"),
+                    "method": event["method"],
+                    "path": event["path"],
+                    "status": event["status"],
+                    "latency_ms": event["latency_ms"],
+                    "mode": event["mode"],
+                }
+                for event in sorted(events, key=lambda row: row["ts"], reverse=True)[:20]
+            ]
 
         avg_latency = (
-            round(self.total_latency_ms / self.total_requests, 2)
-            if self.total_requests > 0
+            round(total_latency_ms / total_requests, 2)
+            if total_requests > 0
             else 0.0
         )
 
@@ -423,7 +525,7 @@ class TelemetryCollector:
         top_endpoints = sorted(
             [
                 {"path": p, "count": c}
-                for p, c in self.endpoint_counts.items()
+                for p, c in endpoint_counts.items()
                 if self.is_trackable_path(p)
             ],
             key=lambda x: x["count"],
@@ -432,11 +534,11 @@ class TelemetryCollector:
 
         # Calculate success rate (2xx)
         success_count = sum(
-            c for code, c in self.status_counts.items() if code.startswith("2")
+            c for code, c in status_counts.items() if code.startswith("2")
         )
         success_rate = (
-            round((success_count / self.total_requests) * 100, 1)
-            if self.total_requests > 0
+            round((success_count / total_requests) * 100, 1)
+            if total_requests > 0
             else 100.0
         )
 
@@ -445,6 +547,7 @@ class TelemetryCollector:
             # which survives redeploys when persistence is enabled.
             "timezone": "Asia/Jakarta",
             "server_time": datetime.now(WIB).isoformat(),
+            "range": range_key,
             "uptime_seconds": service_uptime,
             "uptime_formatted": _format_uptime(service_uptime),
             "service_uptime_seconds": service_uptime,
@@ -458,17 +561,20 @@ class TelemetryCollector:
                 "flush_interval_seconds": self.flush_interval,
                 "last_flush_at": _iso(self.last_flush_at),
             },
-            "total_requests": self.total_requests,
+            "total_requests": total_requests,
             "success_rate_pct": success_rate,
             "latency": {
                 "avg_ms": avg_latency,
-                "min_ms": round(self.min_latency_ms or 0.0, 2),
-                "max_ms": round(self.max_latency_ms or 0.0, 2),
+                "min_ms": round(min_latency or 0.0, 2),
+                "max_ms": round(max_latency or 0.0, 2),
+                "p50_ms": _percentile(latency_values, 0.50),
+                "p95_ms": _percentile(latency_values, 0.95),
+                "p99_ms": _percentile(latency_values, 0.99),
             },
-            "status_codes": self.status_counts,
-            "modes": self.mode_counts,
+            "status_codes": status_counts,
+            "modes": mode_counts,
             "top_endpoints": top_endpoints,
-            "recent_requests": list(self.recent_requests)[::-1],
+            "recent_requests": recent_requests,
         }
 
 

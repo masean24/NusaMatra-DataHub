@@ -1,6 +1,6 @@
 # Verifikasi Production v2.1 (historis) — Nusa Matra Data Hub
 
-**Base URL:** `https://api.orangkeren.me`  
+**Base URL:** `https://api.nusamatra.site`  
 **Snapshot:** `2026.10.0-official-live`  
 **Waktu verifikasi:** 23 Oktober 2026  
 **Status historis:** LIVE v2.1, 25 indikator, 12.689 observasi, 514/514 wilayah

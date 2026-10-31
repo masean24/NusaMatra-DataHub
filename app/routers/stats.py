@@ -6,7 +6,7 @@ Provides:
 """
 
 from pathlib import Path
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Query, Request
 
 from app.models.common import ApiResponse, ResponseMeta
 from app.services.telemetry_service import telemetry
@@ -29,7 +29,15 @@ def get_stats_html() -> str:
     response_model=ApiResponse[dict],
     summary="Get real-time system usage and telemetry metrics (JSON)",
 )
-async def get_stats_json(request: Request):
+async def get_stats_json(
+    request: Request,
+    range_key: str = Query(
+        "all",
+        alias="range",
+        pattern="^(all|15m|1h|24h|7d)$",
+        description="Telemetry window: all, 15m, 1h, 24h, or 7d",
+    ),
+):
     """
     Return comprehensive API telemetry:
     - Uptime and total requests
@@ -37,7 +45,7 @@ async def get_stats_json(request: Request):
     - Most active endpoints and runtime mode ratios (DEMO vs LIVE)
     - Recent requests stream
     """
-    summary = telemetry.get_summary()
+    summary = telemetry.get_summary(range_key)
     # Public dashboard: retain operational metrics, omit persistence internals
     # (flush interval, database state, timestamps that are not useful to judges).
     summary.pop("persistence", None)

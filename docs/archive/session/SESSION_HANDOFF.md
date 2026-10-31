@@ -3,7 +3,7 @@
 > **Project:** Nusa Matra Data Hub — Geographic Decision-Support Backend API  
 > **Target Event:** WIA (World Innovation Award) 2026  
 > **Repository:** `d:\wia2`  
-> **Production Domain:** `api.orangkeren.me`  
+> **Production Domain:** `api.nusamatra.site`  
 > **Active Branch:** `main` (v2.2 + security/retirement v2.3 + contract hardening v2.4 in working tree, 164/164 Pytest Green, production deploy `2d51cd9` verified healthy)
 > **Author/Maintainer:** Antigravity AI Pair Programmer & Raihan  
 > **Date Generated:** 26 Oktober 2026 (v2.3 deployed; v2.4 contract hardening implemented locally)
@@ -74,7 +74,7 @@ Commit: **`6141749`** (`fix: enforce v2.2 data integrity and reliable telemetry`
 
 ### Production verification v2.2 (24 Oktober 2026, 13:52 WIB)
 
-Sudah redeploy dan dicek langsung ke `https://api.orangkeren.me`:
+Sudah redeploy dan dicek langsung ke `https://api.nusamatra.site`:
 
 - Snapshot aktif: `2026.10.0-live-62354dfad392d985`
   - `is_immutable: true`, `is_reproducible: true`
@@ -216,7 +216,7 @@ flowchart TD
 
 2. **Fase 2 — Dockerization & Infrastructure (`9dfd9b7`, `2a7ccf6`, `16fae73`)**
    - Konfigurasi `Dockerfile` multi-stage dan `docker-compose.yml` yang disesuaikan untuk platform Coolify.
-   - Penataan middleware CORS agar mengizinkan origin lokal dan produksi (`api.orangkeren.me`), serta memastikan header CORS tetap terinjeksi meskipun request mengembalikan HTTP 503 (*fail-closed*).
+   - Penataan middleware CORS agar mengizinkan origin lokal dan produksi (`api.nusamatra.site`), serta memastikan header CORS tetap terinjeksi meskipun request mengembalikan HTTP 503 (*fail-closed*).
 
 3. **Fase 3 — Ultra-Modern Interactive Documentation (`42a3df7`, `9052051`, `fa8fa44`)**
    - Menggantikan Swagger biasa dengan **Scalar API Reference** interaktif yang terpasang di `/docs` dan `/scalar`.

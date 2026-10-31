@@ -1,664 +1,986 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nusa Matra Data Hub — System Status & Telemetry</title>
-  <link rel="icon" type="image/png" href="/static/favicon.png" />
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            bg: '#09090b',       // Zinc 950
-            surface: '#121215',  // Elevated dark surface
-            subtle: '#18181b',   // Zinc 900
-            border: '#27272a',   // Zinc 800
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nusa Matra Data Hub — Telemetri API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Sora', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        ink: 'rgb(var(--bg) / <alpha-value>)',
+                        panel: 'rgb(var(--panel) / <alpha-value>)',
+                        panel2: 'rgb(var(--panel2) / <alpha-value>)',
+                        line: 'rgb(var(--line) / <alpha-value>)',
+                        fg: 'rgb(var(--fg) / <alpha-value>)',
+                        fg2: 'rgb(var(--fg2) / <alpha-value>)',
+                        muted: 'rgb(var(--muted) / <alpha-value>)',
+                        bar: 'rgb(var(--bar) / <alpha-value>)',
+                        accent: 'rgb(var(--accent) / <alpha-value>)',
+                        accentfg: 'rgb(var(--accent-fg) / <alpha-value>)',
+                        onaccent: 'rgb(var(--on-accent) / <alpha-value>)',
+                        ok: 'rgb(var(--ok) / <alpha-value>)',
+                        amber: 'rgb(var(--warn) / <alpha-value>)',
+                        rose: 'rgb(var(--bad) / <alpha-value>)',
+                    },
+                }
+            }
         }
-      }
-    }
-  </script>
-  <style>
-    body {
-      background-color: #09090b;
-      color: #fafafa;
-      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    }
-    .tabular-nums {
-      font-variant-numeric: tabular-nums;
-    }
-    .card {
-      background-color: #121215;
-      border: 1px solid #27272a;
-      border-radius: 0.5rem;
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #09090b;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #27272a;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #3f3f46;
-    }
-    :focus-visible { outline: 2px solid #a1a1aa; outline-offset: 2px; border-radius: 4px; }
-    .card { transition: border-color .2s; }
-    .card:hover { border-color: #3f3f46; }
-    .tick { position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: #a1a1aa; opacity: .7; }
-    .tick.run { animation: tick 5s linear forwards; }
-    @keyframes tick { to { width: 100%; } }
-    .skel { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #18181b, #27272a, #18181b); background-size: 200% 100%; animation: shim 1.4s infinite; }
-    @keyframes shim { to { background-position: -200% 0; } }
-    .row-new { animation: rowflash 1.8s ease-out; }
-    @keyframes rowflash { from { background: rgba(250, 250, 250, .09); } to { background: transparent; } }
-    .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; pointer-events: none; background: #fafafa; color: #09090b; font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: 8px; transition: .2s; z-index: 30; }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-    @media (prefers-reduced-motion: reduce) { * { animation: none!important; transition: none!important; } }
-  </style>
+    </script>
+    <style>
+        /* Palet mengikuti mode Normal app Nusa Matra (krem + oranye).
+           Semua nilai berupa triplet RGB agar bisa dipakai dengan alpha. */
+        :root {
+            color-scheme: light;
+            --bg: 242 241 236;        /* #f2f1ec */
+            --panel: 251 250 246;     /* #fbfaf6 */
+            --panel2: 237 233 223;    /* #ede9df */
+            --line: 226 222 211;
+            --fg: 18 24 38;           /* #121826 */
+            --fg2: 62 69 84;
+            --muted: 95 102 114;
+            --bar: 201 194 176;
+            --accent: 255 138 61;     /* #ff8a3d */
+            --accent-fg: 176 54 8;    /* oranye gelap untuk teks di atas krem */
+            --on-accent: 18 24 38;
+            --ok: 20 112 54;
+            --warn: 142 82 8;
+            --bad: 190 18 60;
+        }
+
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: rgb(var(--bg));
+            color: rgb(var(--fg));
+            overflow-x: hidden;
+            font-variant-numeric: tabular-nums;
+        }
+
+
+        main,
+        header > div,
+        .grid > *,
+        .panel,
+        .integration-card,
+        .log-scroll {
+            min-width: 0;
+        }
+
+        .panel {
+            background: rgb(var(--panel));
+            border: 1px solid rgb(var(--line));
+            border-radius: 12px;
+        }
+
+        .panel-hero {
+            border-color: rgb(var(--fg) / 0.28);
+        }
+
+        .card-title {
+            font-size: 13px;
+            line-height: 1.4;
+            font-weight: 500;
+            color: rgb(var(--fg2));
+        }
+
+        .metric {
+            font-family: 'Sora', sans-serif;
+            letter-spacing: -0.04em;
+        }
+
+        /* Kontrol segmen (rentang waktu): aktif = oranye penuh, seperti toggle di app */
+        .time-btn {
+            border: 1px solid transparent;
+            color: rgb(var(--muted));
+            transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+        }
+
+        .time-btn:hover { color: rgb(var(--fg)); }
+
+        .time-btn.is-active {
+            color: rgb(var(--on-accent));
+            background: rgb(var(--accent));
+            border-color: rgb(var(--accent));
+            font-weight: 600;
+        }
+
+        .endpoint-row {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 10px 12px;
+            transition: background-color 160ms ease, border-color 160ms ease;
+        }
+
+        .endpoint-row:hover {
+            background: rgb(var(--fg) / 0.05);
+            border-color: rgb(var(--line));
+        }
+
+        .endpoint-row:focus-visible,
+        .status-row:focus-visible,
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid rgb(var(--accent-fg) / 0.9);
+            outline-offset: 2px;
+        }
+
+        .status-row {
+            border: 1px solid transparent;
+            transition: background-color 160ms ease, border-color 160ms ease;
+        }
+
+        .status-row:hover {
+            background: rgb(var(--fg) / 0.05);
+            border-color: rgb(var(--line));
+        }
+
+        /* Satu-satunya animasi ambient: titik Live di header */
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgb(var(--ok) / 0.65);
+            animation: pulse-ok 2.4s infinite;
+        }
+
+        @keyframes pulse-ok {
+            0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgb(var(--ok) / 0.65); }
+            70%  { transform: scale(1);    box-shadow: 0 0 0 7px rgb(var(--ok) / 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgb(var(--ok) / 0); }
+        }
+
+        /* Baris log baru: sorot singkat lalu memudar */
+        @keyframes row-flash {
+            from { background-color: rgb(var(--accent) / 0.22); }
+            to   { background-color: transparent; }
+        }
+
+        .row-new { animation: row-flash 1.6s ease-out; }
+
+        .log-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgb(var(--bar)) transparent;
+        }
+
+        .log-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .log-scroll::-webkit-scrollbar-track { background: transparent; }
+        .log-scroll::-webkit-scrollbar-thumb { background: rgb(var(--bar)); border-radius: 999px; }
+
+        .integration-card {
+            background: rgb(var(--panel2) / 0.5);
+            border: 1px solid rgb(var(--line));
+            border-radius: 10px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
-<body class="min-h-screen font-sans antialiased selection:bg-zinc-800 selection:text-white">
+<body class="min-h-screen font-sans antialiased selection:bg-accent/30 selection:text-fg pb-16">
 
-  <header class="border-b border-border bg-bg/80 backdrop-blur-md sticky top-0 z-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Identity -->
-      <div class="flex items-center gap-3.5 min-w-0">
-        <div class="w-9 h-9 rounded-lg bg-subtle border border-border flex items-center justify-center shrink-0 overflow-hidden">
-          <img src="/static/favicon.png" alt="Nusa Matra" class="w-6 h-6 object-contain" onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';" />
-          <div id="fallback-logo" class="hidden items-center justify-center text-zinc-200 font-semibold text-xs tracking-tight">
-            NM
-          </div>
-        </div>
-        <div class="truncate">
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm font-semibold text-zinc-100 tracking-tight truncate">Nusa Matra Data Hub</h1>
-            <span class="px-1.5 py-0.5 text-[11px] font-mono font-medium bg-zinc-800/80 text-zinc-300 rounded border border-zinc-700/60">v0.1.0</span>
-            <span id="feed-source-badge" class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 bg-subtle rounded border border-border">
-              Connecting...
-            </span>
-          </div>
-          <p class="text-xs text-zinc-400 truncate">Geographic Decision-Support Engine &amp; API Telemetry</p>
-        </div>
-      </div>
+    <!-- Top command bar -->
+    <header class="sticky top-0 z-40 border-b border-line bg-panel">
+        <div class="mx-auto max-w-[1480px] px-4 sm:px-6">
+            <div class="flex min-h-[76px] flex-wrap items-center justify-between gap-3 py-3">
+                <div class="flex items-center gap-3.5">
+                    <div class="grid h-10 w-10 place-items-center rounded-lg border border-line bg-panel2">
+                        <svg class="h-5 w-5 text-accentfg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="font-display text-[15px] font-semibold tracking-tight text-fg sm:text-base">Nusa Matra Data Hub</h1>
+                            <span class="rounded-md border border-line bg-panel2 px-2 py-0.5 font-mono text-[11px] text-muted">API v0.1.0</span>
+                            <span id="liveBadge" title="All Systems Operational" class="inline-flex items-center gap-1.5 rounded-md border border-ok/30 bg-ok/10 px-2 py-0.5 text-[11px] font-medium text-ok">
+                                <span id="liveDot" class="h-1.5 w-1.5 rounded-full bg-ok pulse-dot"></span>
+                                <span id="liveText">Live</span>
+                            </span>
+                        </div>
+                        <p class="mt-1 text-[11px] text-muted">Pemantauan API data wilayah Indonesia</p>
+                    </div>
+                </div>
 
-      <!-- Actions & Status -->
-      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <div id="health-pill" role="status" aria-live="polite" title="All Systems Operational" class="flex items-center gap-2 px-2.5 py-1 rounded-full border text-xs font-medium bg-zinc-500/10 border-zinc-500/20 text-zinc-400">
-          <span id="health-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
-          <span id="health-text" class="hidden sm:inline">All Systems Operational</span>
-        </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div title="Riwayat rentang dimulai saat layanan ini berjalan" class="flex items-center rounded-full border border-line bg-panel2 px-1 py-0.5 text-[11px] font-mono">
+                        <button type="button" onclick="setTimeRange('all', this)" class="time-btn is-active rounded-full px-3 py-1.5">Semua</button>
+                        <button type="button" onclick="setTimeRange('15m', this)" class="time-btn rounded-full px-3 py-1.5">15 mnt</button>
+                        <button type="button" onclick="setTimeRange('1h', this)" class="time-btn rounded-full px-3 py-1.5">1 jam</button>
+                        <button type="button" onclick="setTimeRange('24h', this)" class="time-btn rounded-full px-3 py-1.5">24 jam</button>
+                        <button type="button" onclick="setTimeRange('7d', this)" class="time-btn rounded-full px-3 py-1.5">7 hari</button>
+                    </div>
 
-        <button id="toggle-pause-btn" aria-pressed="false" onclick="togglePolling()" class="px-2.5 py-1.5 rounded-md bg-subtle hover:bg-zinc-800 border border-border text-zinc-300 text-xs font-medium flex items-center gap-1.5 transition" title="Jeda atau lanjutkan pembaruan otomatis">
-          <span id="poll-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span id="poll-label" class="font-mono text-[11px]">Auto 5s</span>
-        </button>
+                    <button id="autoRefreshBtn" type="button" onclick="toggleAutoRefresh()" class="flex items-center gap-2 rounded-full border border-line bg-panel2 px-3 py-1.5 font-mono text-[11px] text-fg2 transition hover:border-fg/30 hover:text-fg">
+                        <span id="refreshDot" class="h-2 w-2 rounded-full bg-ok"></span>
+                        <span id="refreshLabel">Auto 5 dtk</span>
+                    </button>
 
-        <div class="h-4 w-px bg-border hidden sm:block"></div>
-
-        <a href="/docs" class="px-3 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-medium transition">
-          API Docs
-        </a>
-        <a href="/openapi.json" target="_blank" class="hidden sm:inline-flex px-3 py-1.5 rounded-md bg-subtle hover:bg-zinc-800 border border-border text-zinc-300 text-xs font-medium transition">
-          OpenAPI
-        </a>
-      </div>
-
-    </div>
-    <div id="tick" class="tick" aria-hidden="true"></div>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-
-    <div id="banner" class="hidden" role="status"><span id="banner-text"></span></div>
-
-    <!-- Key Metrics Row -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- Total Requests -->
-      <div class="card p-5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-medium text-zinc-400">Total Permintaan API</span>
-          <span id="stat-req-delta" class="text-[11px] font-mono text-emerald-400">--</span>
-        </div>
-        <div class="my-3">
-          <div id="stat-total-requests" class="text-2xl font-semibold text-white font-mono tabular-nums tracking-tight">--</div>
-        </div>
-        <div class="text-xs text-zinc-500 flex items-center justify-between pt-3 border-t border-border/60">
-          <span>Tingkat sukses (non-5xx)</span>
-          <span id="stat-success" class="text-zinc-300 font-mono">--</span>
-        </div>
-      </div>
-
-      <!-- Average Latency -->
-      <div class="card p-5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-medium text-zinc-400">Rata-Rata Latensi</span>
-          <span id="lat-badge" class="text-[11px] font-mono px-1.5 py-0.5 rounded text-zinc-400 bg-subtle">--</span>
-        </div>
-        <div class="my-3 flex items-end justify-between gap-2">
-          <div id="stat-avg-latency" class="text-2xl font-semibold text-white font-mono tabular-nums tracking-tight">-- ms</div>
-          <svg id="latency-sparkline" class="w-24 h-8 overflow-visible" viewBox="0 0 100 28">
-            <polyline id="latency-sparkline-path" fill="none" stroke="#10b981" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" points="" />
-            <circle id="spark-dot" r="2.5" cx="100" cy="14" fill="#10b981" style="display:none" />
-          </svg>
-        </div>
-        <div class="text-xs text-zinc-500 flex items-center justify-between pt-3 border-t border-border/60">
-          <span>Min–maks sesi ini</span>
-          <span id="lat-range" class="text-zinc-300 font-mono">--</span>
-        </div>
-      </div>
-
-      <!-- Spatial Coverage -->
-      <div class="card p-5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-medium text-zinc-400">Cakupan Wilayah</span>
-          <span class="text-[11px] font-mono text-zinc-400">BIG 2026</span>
-        </div>
-        <div class="my-3 flex items-baseline gap-1.5">
-          <div class="text-2xl font-semibold text-white font-mono tabular-nums tracking-tight">514</div>
-          <span class="text-xs text-zinc-400">Kab/Kota</span>
-        </div>
-        <div class="text-xs text-zinc-500 flex items-center justify-between pt-3 border-t border-border/60">
-          <span>38 Provinsi</span>
-          <span class="text-zinc-300">33 Indikator</span>
-        </div>
-      </div>
-
-      <!-- BMKG Seismic Feed -->
-      <div class="card p-5 flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-medium text-zinc-400">Integrasi BMKG</span>
-          <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-            Real-Time
-          </span>
-        </div>
-        <div class="my-3">
-          <div class="flex items-baseline gap-1.5"><span class="text-2xl font-semibold text-white font-mono tabular-nums tracking-tight">60</span><span class="text-xs text-zinc-400">detik cache, fail-closed</span></div>
-        </div>
-        <div class="text-xs text-zinc-500 flex items-center justify-between pt-3 border-t border-border/60">
-          <span>Terakhir di log permintaan</span>
-          <span id="seismic-last" class="text-zinc-300 font-mono">--</span>
-        </div>
-      </div>
-
-    </section>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- Left Column (7 Cols): Endpoints & Runtime Breakdown -->
-      <div class="lg:col-span-7 flex flex-col gap-6">
-        
-        <!-- Top Endpoints -->
-        <div class="card p-6 flex-1">
-          <div class="flex items-center justify-between mb-1">
-            <h2 class="text-sm font-semibold text-zinc-100">Distribusi Pemanggilan Endpoint</h2>
-            <span class="text-xs text-zinc-500">Berdasarkan volume</span>
-          </div>
-          <p class="text-xs text-zinc-400 mb-6">Proporsi trafik permintaan pada rute geospasial dan seismik utama.</p>
-
-          <div id="top-endpoints-container" class="space-y-4">
-            <div class="space-y-5 py-2"><div class="skel w-full"></div><div class="skel w-4/5"></div><div class="skel w-3/5"></div><div class="skel w-2/5"></div></div>
-          </div>
-        </div>
-
-        <!-- Status Codes & Mode Split -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          
-          <!-- HTTP Status Distribution -->
-          <div class="card p-5">
-            <h3 class="text-sm font-semibold text-zinc-100 mb-1">Status Respons HTTP</h3>
-            <p class="text-xs text-zinc-400 mb-4">Klasifikasi kode balikan server</p>
-            <div id="status-codes-container" class="space-y-2.5">
-              <div class="text-xs text-zinc-500 py-4">Memuat status...</div>
+                    <a href="/docs" target="_blank" rel="noopener" class="rounded-full bg-accent px-3.5 py-1.5 text-[11px] font-semibold text-onaccent transition hover:brightness-110">
+                        API Docs
+                    </a>
+                    <a href="/openapi.json" target="_blank" rel="noopener" class="rounded-full border border-line bg-panel2 px-3.5 py-1.5 text-[11px] font-medium text-fg2 transition hover:border-fg/30 hover:text-fg">
+                        OpenAPI
+                    </a>
+                </div>
             </div>
-          </div>
+        </div>
+    </header>
 
-          <!-- Runtime Mode Ratio -->
-          <div class="card p-5 flex flex-col justify-between">
+    <main class="mx-auto max-w-[1480px] space-y-6 px-4 pt-6 sm:px-6">
+
+        <!-- Section heading -->
+        <div class="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h3 class="text-sm font-semibold text-zinc-100 mb-1">Rasio Mode Runtime</h3>
-              <p class="text-xs text-zinc-400 mb-4">Proporsi trafik produksi vs demonstrasi</p>
-
-              <!-- Progress Bar -->
-              <div class="h-2 w-full bg-subtle rounded-full overflow-hidden flex gap-0.5 mb-4">
-                <div id="mode-live-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 75%"></div>
-                <div id="mode-demo-bar" class="bg-blue-500 h-full transition-all duration-500" style="width: 25%"></div>
-              </div>
-
-              <div class="space-y-2.5 text-xs">
-                <div class="flex items-center justify-between py-1.5 border-b border-border/60">
-                  <span class="flex items-center gap-2 text-zinc-300">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    Official (LIVE)
-                  </span>
-                  <span id="mode-live-count" class="font-mono font-medium text-zinc-200 tabular-nums">--</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5">
-                  <span class="flex items-center gap-2 text-zinc-300">
-                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    Sandbox (DEMO)
-                  </span>
-                  <span id="mode-demo-count" class="font-mono font-medium text-zinc-200 tabular-nums">--</span>
-                </div>
-              </div>
+                <h2 class="font-display text-2xl font-semibold tracking-tight text-fg sm:text-3xl">Ringkasan</h2>
+                <p class="mt-1 max-w-2xl text-sm leading-relaxed text-muted">Ringkasan trafik, latensi, dan kesehatan layanan dalam satu pandangan.</p>
             </div>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Right Column (5 Cols): Live Request Log -->
-      <div class="lg:col-span-5">
-        <div class="card p-6 h-full flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <h2 class="text-sm font-semibold text-zinc-100">Log Permintaan Terakhir</h2>
-              <span id="last-updated" class="text-[11px] font-mono text-zinc-400 tabular-nums">--:--:--</span>
+        <!-- Vital signs -->
+        <section aria-label="Metrik utama" class="grid grid-cols-1 gap-4 lg:grid-cols-12">
+            <!-- Total requests -->
+            <article class="panel panel-hero relative overflow-hidden p-5 sm:p-6 lg:col-span-5">
+                <div class="relative">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="card-title">Total permintaan API</p>
+                            <p id="rangeLabel" class="mt-1 text-[11px] text-muted">Semua endpoint, sepanjang layanan aktif</p>
+                        </div>
+                        <span class="rounded-full border border-line bg-panel2 px-2.5 py-1 font-mono text-[11px] text-fg"><span id="rpsValue">14.2</span> req/dtk</span>
+                    </div>
+
+                    <div class="mt-7 flex items-end justify-between gap-4">
+                        <div>
+                            <div id="totalRequests" class="metric text-4xl font-semibold text-fg sm:text-6xl">10.067</div>
+                            <p class="mt-2 text-[11px] font-mono text-muted">akumulasi request</p>
+                        </div>
+                        <div class="h-14 w-24 shrink-0 sm:h-16 sm:w-44">
+                            <svg class="h-full w-full overflow-visible" viewBox="0 0 100 30" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="reqGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" style="stop-color:rgb(var(--accent))" stop-opacity="0.35"/>
+                                        <stop offset="100%" style="stop-color:rgb(var(--accent))" stop-opacity="0.0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path id="reqSparkArea" d="M0,25 L15,22 L30,26 L45,15 L60,18 L75,8 L90,12 L100,5 L100,30 L0,30 Z" fill="url(#reqGrad)" />
+                                <path id="reqSparkLine" d="M0,25 L15,22 L30,26 L45,15 L60,18 L75,8 L90,12 L100,5" fill="none" style="stroke:rgb(var(--accent))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="mt-7 grid grid-cols-2 gap-3 border-t border-line/80 pt-4 text-xs">
+                        <div>
+                            <p class="text-[11px] text-muted">Tingkat sukses</p>
+                            <p id="successRateValue" class="mt-1 font-mono font-semibold text-ok">100.00%</p>
+                        </div>
+                        <div class="border-l border-line/80 pl-3">
+                            <p class="text-[11px] text-muted">Dihitung dari</p>
+                            <p class="mt-1 font-medium text-fg">selain error 5xx</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Latency -->
+            <article class="panel p-5 sm:p-6 lg:col-span-4">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <p class="card-title">Latensi respons</p>
+                        <p class="mt-1 text-[11px] text-muted">Persentil P95</p>
+                    </div>
+                    <span class="rounded-full border border-line bg-panel2 px-2.5 py-1 font-mono text-[11px] text-fg2">SLA &lt; 100 ms</span>
+                </div>
+
+                <div class="mt-7 flex items-end justify-between gap-4">
+                    <div class="flex items-baseline gap-1.5">
+                        <span id="p95Value" class="metric text-4xl font-semibold text-fg sm:text-6xl">41.8</span>
+                        <span class="font-mono text-lg text-muted">ms</span>
+                    </div>
+                    <div class="h-14 w-24 shrink-0 sm:w-36">
+                        <svg class="h-full w-full overflow-visible" viewBox="0 0 100 30" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="latGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" style="stop-color:rgb(var(--accent))" stop-opacity="0.3"/>
+                                    <stop offset="100%" style="stop-color:rgb(var(--accent))" stop-opacity="0.0"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M0,18 L15,20 L30,17 L45,22 L60,12 L75,19 L90,16 L100,15 L100,30 L0,30 Z" fill="url(#latGrad)" />
+                            <path d="M0,18 L15,20 L30,17 L45,22 L60,12 L75,19 L90,16 L100,15" fill="none" style="stroke:rgb(var(--accent))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="mt-7 grid grid-cols-3 gap-2 border-t border-line/80 pt-4 font-mono text-xs">
+                    <div>
+                        <p class="text-[11px] text-muted">P50</p>
+                        <p id="p50Value" class="mt-1 font-medium text-fg">3.1 ms</p>
+                    </div>
+                    <div class="border-l border-line/80 pl-2">
+                        <p class="text-[11px] text-muted">P95</p>
+                        <p id="p95SmallValue" class="mt-1 font-medium text-fg">41.8 ms</p>
+                    </div>
+                    <div class="border-l border-line/80 pl-2">
+                        <p class="text-[11px] text-muted">P99</p>
+                        <p id="p99Value" class="mt-1 font-medium text-amber">118.4 ms</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Coverage and BMKG -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-3 lg:grid-cols-1">
+                <article class="panel p-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="card-title">Cakupan wilayah</p>
+                        <span class="rounded-md border border-line bg-panel2 px-2 py-0.5 font-mono text-[11px] text-muted">BIG 2026</span>
+                    </div>
+                    <div class="mt-4 flex items-baseline gap-2">
+                        <span class="metric text-4xl font-semibold text-fg">514</span>
+                        <span class="text-xs font-medium text-muted">Kab/Kota</span>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between border-t border-line/80 pt-3 text-[11px]">
+                        <span class="text-muted">38 provinsi</span>
+                        <span class="rounded-md bg-panel2 px-2 py-0.5 font-mono text-fg">33 indikator</span>
+                    </div>
+                </article>
+
+                <article class="panel p-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="card-title">Integrasi seismik</p>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-amber/20 bg-amber/8 px-2 py-0.5 font-mono text-[11px] text-amber">
+                            <span class="h-1.5 w-1.5 rounded-full bg-amber"></span>
+                            Real-time
+                        </span>
+                    </div>
+                    <div class="mt-4 flex items-end justify-between gap-2">
+                        <div>
+                            <span class="metric text-3xl font-semibold text-fg">60 dtk</span>
+                            <p class="mt-1 text-[11px] text-muted">Cache TTL</p>
+                        </div>
+                        <div class="text-right font-mono text-[11px]">
+                            <p class="text-muted">TTL: 60 dtk</p>
+                            <p class="mt-1 text-ok">Fail-closed aktif</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between border-t border-line/80 pt-3 text-[11px]">
+                        <span class="text-muted">Sinkronisasi upstream</span>
+                        <span id="bmkgSyncTime" class="font-mono font-medium text-fg">12 dtk lalu (142 ms)</span>
+                    </div>
+                </article>
             </div>
-            <p class="text-xs text-zinc-400 mb-5">10 transaksi terakhir yang diproses oleh server.</p>
+        </section>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="border-b border-border text-[11px] font-medium text-zinc-400">
-                    <th class="pb-2.5 pr-2 font-medium">Waktu (WIB)</th>
-                    <th class="pb-2.5 px-2 font-medium">Metode</th>
-                    <th class="pb-2.5 px-2 font-medium">Endpoint</th>
-                    <th class="pb-2.5 px-2 font-medium">Status</th>
-                    <th class="pb-2.5 pl-2 text-right font-medium">Latensi</th>
-                  </tr>
-                </thead>
-                <tbody id="recent-requests-tbody" class="divide-y border-border/60 text-xs font-mono tabular-nums">
-                  <tr>
-                    <td colspan="5" class="py-8 text-center text-zinc-500 font-sans">
-                      Menunggu data permintaan...
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <!-- Operations -->
+        <section aria-label="Operasional API" class="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
+            <div class="space-y-4 xl:col-span-7">
+                <!-- Endpoint distribution -->
+                <article class="panel p-5 sm:p-6">
+                    <div class="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                            <h2 class="font-display text-lg font-semibold text-fg">Distribusi pemanggilan endpoint</h2>
+                            <p class="mt-1 text-xs text-muted">Proporsi trafik pada rute geospasial dan seismik utama.</p>
+                        </div>
+                        <span class="rounded-full border border-line bg-panel2 px-2.5 py-1 font-mono text-[11px] text-muted">Berdasarkan volume</span>
+                    </div>
+
+                    <div id="endpointList" class="mt-5 space-y-1.5 font-mono text-xs"></div>
+                </article>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <!-- HTTP status -->
+                    <article class="panel p-5">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <h2 class="font-display text-base font-semibold text-fg">Status respons HTTP</h2>
+                            </div>
+                            <span class="font-mono text-[11px] text-muted">Klik untuk filter</span>
+                        </div>
+
+                        <div id="statusBar" class="mt-4 flex h-2.5 w-full gap-0.5 overflow-hidden rounded-full bg-panel2"></div>
+                        <div id="statusList" class="mt-4 space-y-1 font-mono text-xs">
+                            <div class="py-4 text-center text-xs text-muted">Memuat status...</div>
+                        </div>
+                    </article>
+
+                    <!-- Runtime mix -->
+                    <article class="panel flex flex-col justify-between p-5">
+                        <div>
+                            <h2 class="font-display text-base font-semibold text-fg">Rasio mode runtime</h2>
+                            <p class="mt-1 text-[11px] text-muted">Produksi vs demonstrasi</p>
+
+                            <div class="mt-5 flex h-2.5 w-full gap-1 overflow-hidden rounded-full bg-panel2">
+                                <div id="modeLiveBar" class="h-full rounded-l-full bg-accent" style="width: 60.4%"></div>
+                                <div id="modeDemoBar" class="h-full rounded-r-full bg-muted" style="width: 39.6%"></div>
+                            </div>
+
+                            <div class="mt-5 space-y-2.5 font-mono text-xs">
+                                <div class="flex items-center justify-between rounded-xl border border-line/70 bg-ink/40 p-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-accent"></span>
+                                        <div>
+                                            <span class="block font-sans font-medium text-fg">Official (LIVE)</span>
+                                            <span class="text-[11px] font-sans text-muted">API key terautentikasi</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span id="modeLiveCount" class="block font-bold text-fg">6.083</span>
+                                        <span id="modeLivePct" class="text-[11px] text-accentfg">60.4%</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between rounded-xl border border-line/70 bg-ink/40 p-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-muted"></span>
+                                        <div>
+                                            <span class="block font-sans font-medium text-fg">Sandbox (DEMO)</span>
+                                            <span class="text-[11px] font-sans text-muted">Eksplorasi publik / UI</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span id="modeDemoCount" class="block font-bold text-fg">3.984</span>
+                                        <span id="modeDemoPct" class="text-[11px] text-muted">39.6%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-between border-t border-line/80 pt-3 text-[11px]">
+                            <span class="text-muted">Batas rate sandbox</span>
+                            <span class="font-mono text-fg2">60 req / menit / IP</span>
+                        </div>
+                    </article>
+                </div>
             </div>
-          </div>
 
-          <!-- Uptime Footer -->
-          <div class="mt-6 pt-4 border-t border-border flex items-center justify-between text-xs">
-            <span class="text-zinc-400">Waktu Aktif Layanan (Uptime)</span>
-            <span id="stat-uptime" class="font-mono font-medium text-zinc-200 tabular-nums">--</span>
-          </div>
+            <!-- Live request feed -->
+            <div class="xl:col-span-5 xl:sticky xl:top-24">
+                <article class="panel flex h-full flex-col justify-between p-5 sm:p-6">
+                    <div>
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h2 class="font-display text-lg font-semibold text-fg">Log permintaan terakhir</h2>
+                                    <span id="activeFilterBadge" class="hidden items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 font-mono text-[11px] text-accentfg">
+                                        <span id="filterText">Status: 200</span>
+                                        <button type="button" onclick="resetLogFilter()" class="ml-1 hover:text-fg" aria-label="Reset filter">&times;</button>
+                                    </span>
+                                </div>
+                                <p class="mt-1 text-xs text-muted">Transaksi terbaru dengan resolusi otomatis kode wilayah BPS.</p>
+                            </div>
+                            <span id="lastUpdateText" class="font-mono text-[11px] text-muted">Diperbarui baru saja</span>
+                        </div>
+
+                        <div class="relative mt-4">
+                            <input
+                                type="text"
+                                id="logSearchInput"
+                                oninput="renderLogs()"
+                                placeholder="Cari kode wilayah, nama daerah, atau endpoint..."
+                                class="w-full rounded-xl border border-line bg-ink/60 py-2 pl-8 pr-3 font-mono text-xs text-fg placeholder:text-muted focus:border-accent/60 focus:outline-none"
+                            >
+                            <svg class="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+
+                        <div class="log-scroll mt-4 max-h-[430px] overflow-auto">
+                            <table class="w-full min-w-[460px] table-fixed border-collapse text-left">
+                                <colgroup>
+                                    <col class="w-[72px]">
+                                    <col class="w-[50px]">
+                                    <col>
+                                    <col class="w-[54px]">
+                                    <col class="w-[62px]">
+                                </colgroup>
+                                <thead class="sticky top-0 z-10 bg-panel">
+                                    <tr class="border-b border-line text-[11px] text-muted">
+                                        <th class="py-2 pr-2 font-medium">Waktu (WIB)</th>
+                                        <th class="py-2 pr-2 font-medium">Metode</th>
+                                        <th class="py-2 pr-2 font-medium">Endpoint &amp; wilayah</th>
+                                        <th class="py-2 pr-2 text-right font-medium">Status</th>
+                                        <th class="py-2 text-right font-medium">Latensi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logTableBody" class="divide-y divide-line/60 font-mono text-xs">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex items-center justify-between border-t border-line/80 pt-4 text-xs">
+                        <div class="flex items-center gap-2 text-muted">
+                            <span class="h-2 w-2 rounded-full bg-ok"></span>
+                            <span>Waktu aktif layanan</span>
+                        </div>
+                        <span id="uptimeValue" class="font-mono font-semibold tracking-tight text-fg">—</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Integrations -->
+        <section aria-label="Sumber data terintegrasi" class="panel p-5 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h2 class="font-display text-lg font-semibold text-fg">Sumber data instansi terintegrasi</h2>
+                    <p class="mt-1 text-xs text-muted">Dataset resmi yang dipakai Nusa Matra. Semua konektor aktif.</p>
+                </div>
+                <span class="rounded-full border border-line bg-panel2 px-3 py-1 font-mono text-[11px] text-fg2">6 instansi terhubung</span>
+            </div>
+
+            <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+                <div class="integration-card p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display text-sm font-semibold text-fg">BIG</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">Batas wilayah 514 kab/kota</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Geospasial</span>
+                        <span class="text-fg2">v2026.1</span>
+                    </div>
+                </div>
+
+                <div class="integration-card p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display text-sm font-semibold text-fg">BPS</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">14 indikator sosial-ekonomi</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Sinkronisasi</span>
+                        <span class="text-fg2">2 hari lalu</span>
+                    </div>
+                </div>
+
+                <div class="integration-card p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display text-sm font-semibold text-fg">BNPB</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">Indeks risiko bencana (IRBI)</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Sinkronisasi</span>
+                        <span class="text-fg2">5 hari lalu</span>
+                    </div>
+                </div>
+
+                <div class="integration-card p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display text-sm font-semibold text-fg">Kemenkes</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">Prevalensi stunting SSGI</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Dataset</span>
+                        <span class="text-fg2">SSGI 2024</span>
+                    </div>
+                </div>
+
+                <div class="integration-card p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex min-w-0 items-center gap-2">
+                            <span class="truncate font-display text-sm font-semibold text-fg" title="Kemendikdasmen">Kemendikdasmen</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">Rasio sekolah Dapodik</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Sinkronisasi</span>
+                        <span class="text-fg2">1 minggu lalu</span>
+                    </div>
+                </div>
+
+                <div class="integration-card border-amber/20 p-3.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display text-sm font-semibold text-fg">BMKG</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber/25 bg-amber/10 px-1.5 py-0.5 font-mono text-[11px] text-amber">
+                            <span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Live
+                        </span>
+                    </div>
+                    <p class="mt-3 text-xs leading-relaxed text-muted">Feed gempa bumi real-time</p>
+                    <div class="mt-3 flex items-center justify-between border-t border-line/60 pt-2 font-mono text-[11px] text-muted">
+                        <span>Polling</span>
+                        <span class="text-amber">Setiap 60 dtk</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast notification -->
+    <div id="toastBox" class="pointer-events-none fixed bottom-5 right-5 z-50 translate-y-16 opacity-0 transition-all duration-300" aria-live="polite">
+        <div class="flex items-center gap-2.5 rounded-xl border border-line bg-panel px-4 py-2.5 text-xs font-medium text-fg shadow-lg">
+            <span class="h-2 w-2 rounded-full bg-accent"></span>
+            <span id="toastMessage">Pesan notifikasi</span>
         </div>
-      </div>
-
     </div>
 
-    <footer class="card p-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-        <div>
-          <h3 class="text-sm font-semibold text-zinc-100">Sumber Data Instansi Terintegrasi</h3>
-          <p class="text-xs text-zinc-400 mt-0.5">Referensi dataset resmi yang terhubung pada engine Nusa Matra</p>
-        </div>
-        <span class="text-xs text-zinc-500 font-mono">6 Instansi Nasional</span>
-      </div>
+        <script>
+        const $ = (id) => document.getElementById(id);
+        const esc = (value) => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const nf = (value) => Number(value || 0).toLocaleString('id-ID');
+        const fmtMs = (value) => {
+            const number = Number(value);
+            return Number.isFinite(number) && number > 0 ? number.toFixed(1) + ' ms' : '—';
+        };
+        const rangeLabels = {
+            all: 'sepanjang layanan aktif',
+            '15m': '15 menit',
+            '1h': '1 jam',
+            '24h': '24 jam',
+            '7d': '7 hari'
+        };
+        const regionMap = {
+            '1311': 'Kab. Solok Selatan, Sumbar',
+            '1373': 'Kota Sawahlunto, Sumbar',
+            '1304': 'Kab. Tanah Datar, Sumbar',
+            '1501': 'Kab. Kerinci, Jambi',
+            '1303': 'Kab. Sijunjung, Sumbar',
+            '1371': 'Kota Padang, Sumbar',
+            '1305': 'Kab. Padang Pariaman, Sumbar',
+            '1301': 'Kab. Pesisir Selatan, Sumbar',
+            '1302': 'Kab. Solok, Sumbar',
+            '1308': 'Kab. Pasaman, Sumbar',
+            '3171': 'Kota Jakarta Pusat, DKI',
+            '3273': 'Kota Bandung, Jabar',
+            '3578': 'Kota Surabaya, Jatim',
+            '7371': 'Kota Makassar, Sulsel'
+        };
+        const HTTP_LABEL = {
+            '200': 'Sukses', '201': 'Created', '204': 'No content',
+            '301': 'Moved', '304': 'Not modified',
+            '400': 'Bad request', '401': 'Unauthorized', '403': 'Forbidden',
+            '404': 'Not found', '405': 'Method not allowed', '422': 'Invalid input',
+            '429': 'Rate limited', '500': 'Server error', '502': 'Bad gateway',
+            '503': 'Tidak tersedia'
+        };
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">BIG</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">Batas 514 Kab/Kota</div>
-        </div>
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">BPS</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">14 Indikator Sosial-Ek</div>
-        </div>
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">BNPB</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">Indeks Risiko IRBI</div>
-        </div>
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">Kemenkes</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">Prevalensi Stunting SSGI 2024</div>
-        </div>
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">Kemendikdasmen</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">Rasio Sekolah Dapodik</div>
-        </div>
-        <div class="p-3.5 rounded-md bg-subtle/60 border border-border/80">
-          <div class="text-xs font-semibold text-zinc-100">BMKG</div>
-          <div class="text-[11px] text-zinc-400 mt-0.5">Feed Gempa Real-Time</div>
-        </div>
-      </div>
-    </footer>
+        let selectedRange = 'all';
+        let logs = [];
+        let activeStatusFilter = null;
+        let activeEndpointFilter = null;
+        let autoRefresh = true;
+        let pollTimer = null;
+        let inflight = false;
+        let lastTotal = null;
+        let lastPollAt = 0;
+        let firstRender = true;
+        let seen = new Set();
+        let toastTimer;
 
-  </main>
+        function statusTone(code) {
+            const group = String(code)[0];
+            if (group === '2') return { dot: 'bg-ok', badge: 'text-ok bg-ok/10 border-ok/30' };
+            if (group === '3') return { dot: 'bg-muted', badge: 'text-muted bg-panel2 border-line' };
+            if (group === '4') return { dot: 'bg-amber', badge: 'text-amber bg-amber/10 border-amber/30' };
+            return { dot: 'bg-rose', badge: 'text-rose bg-rose/10 border-rose/30' };
+        }
 
-  <div id="toast" class="toast" role="status"></div>
+        function showToast(message) {
+            const box = $('toastBox');
+            $('toastMessage').textContent = message;
+            box.classList.remove('translate-y-16', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => box.classList.add('translate-y-16', 'opacity-0'), 2600);
+        }
 
-  <script>
-    let isPolling = true;
-    let pollTimer = null;
-    let lastTotalRequests = null;
-    const latencyHistory = [];
+        function setLive(state) {
+            const badge = $('liveBadge');
+            const dot = $('liveDot');
+            const label = $('liveText');
+            if (state === 'ok') {
+                badge.className = 'inline-flex items-center gap-1.5 rounded-md border border-ok/30 bg-ok/10 px-2 py-0.5 text-[11px] font-medium text-ok';
+                dot.className = 'h-1.5 w-1.5 rounded-full bg-ok pulse-dot';
+                label.textContent = 'Live';
+            } else {
+                badge.className = 'inline-flex items-center gap-1.5 rounded-md border border-rose/30 bg-rose/10 px-2 py-0.5 text-[11px] font-medium text-rose';
+                dot.className = 'h-1.5 w-1.5 rounded-full bg-rose';
+                label.textContent = 'Terputus';
+            }
+        }
 
-    // State untuk simulasi otomatis apabila dijalankan tanpa server backend
-    let simTotalRequests = 148920;
-    const simStartTime = Date.now() - (14 * 3600 + 28 * 60 + 19) * 1000;
+        function updateFilterBadge(text) {
+            const badge = $('activeFilterBadge');
+            $('filterText').textContent = text;
+            badge.classList.remove('hidden');
+            badge.classList.add('inline-flex');
+        }
 
-    function formatUptime(ms) {
-      const totalSec = Math.floor(ms / 1000);
-      const day = 86400;
-      const week = 7 * day;
-      const month = 30 * day;
-      let units;
-      if (totalSec >= month) {
-        units = [['bulan', month], ['minggu', week], ['hari', day], ['jam', 3600]];
-      } else if (totalSec >= week) {
-        units = [['minggu', week], ['hari', day], ['jam', 3600]];
-      } else if (totalSec >= day) {
-        units = [['hari', day], ['jam', 3600], ['menit', 60]];
-      } else if (totalSec >= 3600) {
-        units = [['jam', 3600], ['menit', 60], ['detik', 1]];
-      } else {
-        units = [['menit', 60], ['detik', 1]];
-      }
-      let remaining = totalSec;
-      const parts = [];
-      for (const [label, size] of units) {
-        const value = Math.floor(remaining / size);
-        remaining %= size;
-        if (value) parts.push(`${value} ${label}`);
-      }
-      return parts.length ? parts.join(' ') : '0 detik';
-    }
+        function resetLogFilter() {
+            activeStatusFilter = null;
+            activeEndpointFilter = null;
+            const badge = $('activeFilterBadge');
+            badge.classList.add('hidden');
+            badge.classList.remove('inline-flex');
+            renderLogs();
+        }
 
-    function generateSimulatedData() {
-      const increment = Math.floor(Math.random() * 8) + 1;
-      simTotalRequests += increment;
-      const currentLatency = +(3.2 + Math.random() * 1.8).toFixed(1);
+        function filterLogsByStatus(status) {
+            activeStatusFilter = activeStatusFilter === String(status) ? null : String(status);
+            activeEndpointFilter = null;
+            if (activeStatusFilter) updateFilterBadge(`Status: ${activeStatusFilter}`);
+            else resetLogFilter();
+            renderLogs();
+        }
 
-      const samplePaths = [
-        '/api/v1/regions/choropleth',
-        '/api/v1/earthquakes/geojson',
-        '/api/v1/regions/3273/profile',
-        '/api/v1/indicators/coverage',
-        '/api/v1/indicators/metadata',
-        '/api/v1/boundaries/kabupaten'
-      ];
+        function filterByEndpoint(endpoint) {
+            activeEndpointFilter = activeEndpointFilter === endpoint ? null : endpoint;
+            activeStatusFilter = null;
+            if (activeEndpointFilter) updateFilterBadge(`Rute: ${activeEndpointFilter}`);
+            else resetLogFilter();
+            renderLogs();
+        }
 
-      return {
-        total_requests: simTotalRequests,
-        uptime_formatted: formatUptime(Date.now() - simStartTime),
-        latency: { avg_ms: currentLatency },
-        top_endpoints: [
-          { path: '/api/v1/regions/choropleth', count: Math.floor(simTotalRequests * 0.42) },
-          { path: '/api/v1/earthquakes/geojson', count: Math.floor(simTotalRequests * 0.24) },
-          { path: '/api/v1/boundaries/kabupaten', count: Math.floor(simTotalRequests * 0.16) },
-          { path: '/api/v1/regions/3273/profile', count: Math.floor(simTotalRequests * 0.11) },
-          { path: '/api/v1/indicators/metadata', count: Math.floor(simTotalRequests * 0.07) }
-        ],
-        status_codes: {
-          '200': Math.floor(simTotalRequests * 0.965),
-          '304': Math.floor(simTotalRequests * 0.030),
-          '422': Math.floor(simTotalRequests * 0.004),
-          '503': Math.floor(simTotalRequests * 0.001)
-        },
-        modes: {
-          LIVE: Math.floor(simTotalRequests * 0.82),
-          DEMO: Math.floor(simTotalRequests * 0.18)
-        },
-        recent_requests: Array.from({ length: 10 }, (_, idx) => {
-          const d = new Date(Date.now() - idx * 1500);
-          const t = d.toLocaleTimeString('id-ID', { hour12: false });
-          const isPost = idx === 2 || idx === 6;
-          return {
-            time: t,
-            method: isPost ? 'POST' : 'GET',
-            path: samplePaths[(simTotalRequests + idx) % samplePaths.length],
-            status: idx === 7 ? 304 : 200,
-            latency_ms: +(2.5 + ((idx * 1.1) % 3.8)).toFixed(1)
-          };
-        })
-      };
-    }
+        function mapRecent(row) {
+            const match = String(row.path || '').match(/\/regions\/(\d{4})/);
+            return {
+                time: row.time,
+                method: row.method || 'GET',
+                endpoint: row.path,
+                regionCode: match ? match[1] : null,
+                status: String(row.status),
+                latency: fmtMs(row.latency_ms)
+            };
+        }
 
-    function updateSparkline(newVal) {
-      const v = parseFloat(newVal) || 0;
-      latencyHistory.push(v);
-      if (latencyHistory.length > 30) latencyHistory.shift();
-      sessMin = Math.min(sessMin, v); sessMax = Math.max(sessMax, v);
-      $('lat-range').textContent = `${sessMin.toFixed(1)}–${sessMax.toFixed(1)} ms`;
-      if (latencyHistory.length < 2) return;
-      const min = Math.min(...latencyHistory);
-      const range = Math.max(Math.max(...latencyHistory) - min, 0.5);
-      const n = latencyHistory.length - 1;
-      const pts = latencyHistory.map((val, i) => [Math.round(i / n * 100), +(24 - (val - min) / range * 20).toFixed(1)]);
-      $('latency-sparkline-path').setAttribute('points', pts.map(p => p.join(',')).join(' '));
-      const last = pts[pts.length - 1], dot = $('spark-dot');
-      dot.setAttribute('cx', last[0]); dot.setAttribute('cy', last[1]); dot.style.display = '';
-    }
+        function renderLogs() {
+            const tbody = $('logTableBody');
+            const query = ($('logSearchInput').value || '').toLowerCase();
+            const filtered = logs.filter(item => {
+                const regionName = item.regionCode && regionMap[item.regionCode] ? regionMap[item.regionCode].toLowerCase() : '';
+                const matchesStatus = activeStatusFilter ? item.status === activeStatusFilter : true;
+                const matchesEndpoint = activeEndpointFilter ? item.endpoint.includes(activeEndpointFilter) : true;
+                const matchesQuery = !query ||
+                    item.endpoint.toLowerCase().includes(query) ||
+                    regionName.includes(query) ||
+                    item.status.includes(query);
+                return matchesStatus && matchesEndpoint && matchesQuery;
+            });
 
-    const $ = id => document.getElementById(id);
-    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const nf = n => Number(n).toLocaleString('id-ID');
-    const POLL_MS = 5000;
-    let sessMin = Infinity, sessMax = 0, prevAt = 0, lastOk = 0;
-    let realOk = false, inflight = false, seen = new Set(), firstRender = true, toastT;
-    const HTTP_LABEL = { 200: 'OK', 201: 'Created', 304: 'Not modified', 400: 'Bad request', 401: 'Unauthorized', 404: 'Not found', 422: 'Input tidak valid', 429: 'Rate limited', 500: 'Server error', 502: 'Bad gateway', 503: 'Tidak tersedia' };
-    const BG = { 2: 'bg-emerald-400', 3: 'bg-sky-400', 4: 'bg-amber-400', 5: 'bg-rose-400' };
-    const TX = { 2: 'text-emerald-400', 3: 'text-sky-400', 4: 'text-amber-400', 5: 'text-rose-400' };
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-muted font-sans">Tidak ada log transaksi yang cocok dengan filter saat ini.</td></tr>';
+                return;
+            }
 
-    function setHealth(state) {
-      const c = {
-        ok: ['All Systems Operational', 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400', 'bg-emerald-400'],
-        sim: ['Simulasi (Pratinjau)', 'bg-amber-500/10 border-amber-500/20 text-amber-400', 'bg-amber-400'],
-        down: ['Terputus', 'bg-rose-500/10 border-rose-500/20 text-rose-400', 'bg-rose-400'],
-        paused: ['Dijeda', 'bg-zinc-500/10 border-zinc-500/20 text-zinc-400', 'bg-zinc-500']
-      }[state];
-      $('health-pill').className = 'flex items-center gap-2 px-2.5 py-1 rounded-full border text-xs font-medium ' + c[1];
-      $('health-dot').className = 'w-1.5 h-1.5 rounded-full ' + c[2];
-      $('health-text').textContent = c[0];
-    }
+            tbody.innerHTML = filtered.slice(0, 10).map(log => {
+                const tone = statusTone(log.status);
+                const regionLabel = log.regionCode ? (regionMap[log.regionCode] || log.regionCode) : 'Multi-Wilayah';
+                const methodClass = log.method === 'POST' ? 'text-accentfg' : 'text-fg2';
+                return `
+                    <tr class="${log.isNew ? 'row-new ' : ''}hover:bg-fg/5 transition group">
+                        <td class="py-2.5 text-muted whitespace-nowrap pr-2">${esc(log.time)}</td>
+                        <td class="py-2.5 font-semibold ${methodClass} pr-2">${esc(log.method)}</td>
+                        <td class="py-2.5 pr-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                                <span class="text-fg truncate max-w-[180px] xl:max-w-[220px]" title="${esc(log.endpoint)}">${esc(log.endpoint)}</span>
+                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-sans font-medium bg-panel2 text-fg2 border border-line whitespace-nowrap">${esc(regionLabel)}</span>
+                            </div>
+                        </td>
+                        <td class="py-2.5 text-right"><span class="px-1.5 py-0.5 rounded border text-[11px] font-semibold ${tone.badge}">${esc(log.status)}</span></td>
+                        <td class="py-2.5 text-right text-fg2 whitespace-nowrap pl-2">${esc(log.latency)}</td>
+                    </tr>`;
+            }).join('');
+        }
 
-    function setBanner(kind) {
-      const b = $('banner');
-      if (!kind) { b.className = 'hidden'; return; }
-      const m = {
-        sim: ['Mode pratinjau: API tidak terjangkau, jadi angka di bawah adalah data simulasi, bukan trafik sebenarnya.', 'border-amber-500/20 bg-amber-500/5 text-amber-300'],
-        down: ['Koneksi ke API terputus. Menampilkan data terakhir yang berhasil diterima, mencoba lagi setiap 5 detik.', 'border-rose-500/20 bg-rose-500/5 text-rose-300']
-      }[kind];
-      $('banner-text').textContent = m[0];
-      b.className = 'flex items-start gap-3 rounded-lg border px-4 py-3 text-xs ' + m[1];
-    }
+        function renderEndpoints(rows) {
+            const container = $('endpointList');
+            if (!rows || !rows.length) {
+                container.innerHTML = '<div class="py-8 text-center text-xs text-muted">Belum ada permintaan tercatat.</div>';
+                return;
+            }
+            const total = rows.reduce((sum, row) => sum + Number(row.count || 0), 0) || 1;
+            const max = Math.max(...rows.map(row => Number(row.count || 0)), 1);
+            container.innerHTML = rows.map((row, index) => {
+                const method = row.method || (String(row.path).includes('composite-query') ? 'POST' : 'GET');
+                const methodClass = method === 'POST' ? 'border-accent/30 bg-accent/10 text-accentfg' : 'border-line bg-panel2 text-muted';
+                return `
+                    <button type="button" data-endpoint="${esc(row.path)}" class="endpoint-row group w-full text-left">
+                        <div class="flex items-center gap-3">
+                            <span class="w-5 shrink-0 text-[11px] text-muted">${String(index + 1).padStart(2, '0')}</span>
+                            <span class="rounded border px-1.5 py-0.5 text-[11px] ${methodClass}">${method}</span>
+                            <span class="min-w-0 flex-1 truncate font-medium text-fg transition group-hover:text-accentfg">${esc(row.path)}</span>
+                            <span class="w-10 text-right text-[11px] text-muted">${(Number(row.count || 0) / total * 100).toFixed(1)}%</span>
+                            <span class="w-14 text-right font-semibold text-fg">${nf(row.count)}</span>
+                        </div>
+                        <div class="ml-8 mt-2 h-1.5 overflow-hidden rounded-full bg-panel2">
+                            <div class="h-full rounded-full ${index === 0 ? 'bg-accent' : 'bg-bar group-hover:bg-accent'}" style="width: ${Math.round(Number(row.count || 0) / max * 100)}%"></div>
+                        </div>
+                    </button>`;
+            }).join('');
+            container.querySelectorAll('[data-endpoint]').forEach(button => {
+                button.addEventListener('click', () => filterByEndpoint(button.dataset.endpoint));
+            });
+        }
 
-    function toast(msg) {
-      const t = $('toast'); t.textContent = msg; t.classList.add('show');
-      clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1600);
-    }
+        function renderStatus(statusCodes) {
+            const entries = Object.entries(statusCodes || {}).sort((a, b) => Number(a[0]) - Number(b[0]));
+            const total = entries.reduce((sum, [, count]) => sum + Number(count), 0);
+            const bar = $('statusBar');
+            const list = $('statusList');
+            if (!entries.length) {
+                bar.innerHTML = '';
+                list.innerHTML = '<div class="py-4 text-center text-xs text-muted">Belum ada status tercatat.</div>';
+                return;
+            }
+            bar.innerHTML = entries.map(([code, count]) => {
+                const tone = statusTone(code);
+                return `<div class="${tone.dot}" style="width:${Number(count) / total * 100}%" title="${esc(code)}: ${nf(count)}"></div>`;
+            }).join('');
+            list.innerHTML = entries.map(([code, count]) => {
+                const tone = statusTone(code);
+                return `
+                    <button type="button" data-status="${esc(code)}" class="status-row flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left">
+                        <div class="flex items-center gap-2.5">
+                            <span class="h-2 w-2 rounded-full ${tone.dot}"></span>
+                            <span class="font-bold text-fg">${esc(code)}</span>
+                            <span class="font-sans text-muted">${esc(HTTP_LABEL[code] || '')}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[11px] text-muted">${(Number(count) / total * 100).toFixed(1)}%</span>
+                            <span class="w-12 text-right font-semibold text-fg">${nf(count)}</span>
+                        </div>
+                    </button>`;
+            }).join('');
+            list.querySelectorAll('[data-status]').forEach(button => {
+                button.addEventListener('click', () => filterLogsByStatus(button.dataset.status));
+            });
+        }
 
-    function kickTick() {
-      const t = $('tick'); t.classList.remove('run'); void t.offsetWidth;
-      if (isPolling && !document.hidden) t.classList.add('run');
-    }
+        function renderModes(modes) {
+            const live = Number(modes?.LIVE || 0);
+            const demo = Number(modes?.DEMO || 0);
+            const total = live + demo;
+            const livePct = total ? live / total * 100 : 0;
+            $('modeLiveBar').style.width = `${livePct}%`;
+            $('modeDemoBar').style.width = `${100 - livePct}%`;
+            $('modeLiveCount').textContent = nf(live);
+            $('modeLivePct').textContent = `${livePct.toFixed(1)}%`;
+            $('modeDemoCount').textContent = nf(demo);
+            $('modeDemoPct').textContent = `${(100 - livePct).toFixed(1)}%`;
+        }
 
-    function renderTelemetry(d, sim) {
-      const badge = $('feed-source-badge');
-      badge.innerText = sim ? 'Pratinjau (simulasi)' : 'Live API';
-      badge.className = 'hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded border ' +
-        (sim ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20');
+        function renderStats(data) {
+            $('rangeLabel').textContent = `Semua endpoint, ${rangeLabels[selectedRange] || rangeLabels.all}`;
+            $('totalRequests').textContent = nf(data.total_requests);
+            $('successRateValue').textContent = `${Number(data.success_rate_pct || 0).toFixed(2)}%`;
 
-      // Total permintaan + laju
-      $('stat-total-requests').innerText = nf(d.total_requests);
-      const now = Date.now(), deltaEl = $('stat-req-delta');
-      if (lastTotalRequests !== null && prevAt && d.total_requests >= lastTotalRequests) {
-        const rate = (d.total_requests - lastTotalRequests) / ((now - prevAt) / 1000);
-        deltaEl.innerText = rate.toFixed(1) + ' req/dtk';
-        deltaEl.className = 'text-[11px] font-mono ' + (rate > 0 ? 'text-emerald-400' : 'text-zinc-500');
-      }
-      lastTotalRequests = d.total_requests; prevAt = now;
+            const latency = data.latency || {};
+            $('p95Value').textContent = fmtMs(latency.p95_ms).replace(' ms', '');
+            $('p95SmallValue').textContent = fmtMs(latency.p95_ms);
+            $('p50Value').textContent = fmtMs(latency.p50_ms);
+            $('p99Value').textContent = fmtMs(latency.p99_ms);
 
-      // Latensi
-      const av = Number(d.latency.avg_ms) || 0;
-      $('stat-avg-latency').innerText = `${av} ms`;
-      const tier = av < 10 ? ['< 10 ms', 'text-emerald-400 bg-emerald-500/10']
-        : av < 50 ? ['< 50 ms', 'text-zinc-300 bg-subtle']
-        : av < 200 ? ['Melambat', 'text-amber-400 bg-amber-500/10']
-        : ['Lambat', 'text-rose-400 bg-rose-500/10'];
-      $('lat-badge').textContent = tier[0];
-      $('lat-badge').className = 'text-[11px] font-mono px-1.5 py-0.5 rounded ' + tier[1];
-      updateSparkline(av);
-      $('stat-uptime').innerText = d.uptime_formatted;
+            const now = Date.now();
+            if (lastTotal !== null && lastPollAt && data.total_requests >= lastTotal) {
+                const rate = (data.total_requests - lastTotal) / ((now - lastPollAt) / 1000);
+                $('rpsValue').textContent = rate.toFixed(1);
+            }
+            lastTotal = data.total_requests;
+            lastPollAt = now;
 
-      // Tingkat sukses dihitung dari distribusi status
-      const sc = Object.entries(d.status_codes || {}).sort((a, b) => a[0] - b[0]);
-      const totalCodes = sc.reduce((a, [, c]) => a + c, 0);
-      const err5 = sc.filter(([c]) => c[0] === '5').reduce((a, [, c]) => a + c, 0);
-      const okEl = $('stat-success');
-      if (totalCodes) {
-        const r = (1 - err5 / totalCodes) * 100;
-        okEl.textContent = r.toFixed(2) + '%';
-        okEl.className = 'font-mono ' + (r >= 99 ? 'text-emerald-400' : r >= 95 ? 'text-amber-400' : 'text-rose-400');
-      }
+            renderEndpoints(data.top_endpoints || []);
+            renderStatus(data.status_codes || {});
+            renderModes(data.modes || {});
+            $('uptimeValue').textContent = data.service_uptime_formatted || '—';
 
-      // Endpoint terpopuler (klik path untuk menyalin)
-      const ec = $('top-endpoints-container'), eps = d.top_endpoints || [];
-      if (eps.length) {
-        const total = eps.reduce((a, x) => a + x.count, 0) || 1, max = Math.max(...eps.map(x => x.count), 1);
-        ec.innerHTML = eps.map((ep, i) => `
-          <div>
-            <div class="flex justify-between items-center text-xs mb-1.5 gap-4">
-              <button type="button" data-copy="${esc(ep.path)}" title="Klik untuk menyalin" class="font-mono text-zinc-200 hover:text-white truncate text-left cursor-copy">${esc(ep.path)}</button>
-              <div class="flex items-center gap-3 shrink-0 font-mono tabular-nums">
-                <span class="text-zinc-500">${(ep.count / total * 100).toFixed(1)}%</span>
-                <span class="text-zinc-200 font-medium w-16 text-right">${nf(ep.count)}</span>
-              </div>
-            </div>
-            <div class="w-full bg-subtle rounded-full h-1.5 overflow-hidden">
-              <div class="${i === 0 ? 'bg-white' : 'bg-zinc-500'} h-full rounded-full transition-all duration-500" style="width: ${Math.round(ep.count / max * 100)}%"></div>
-            </div>
-          </div>`).join('');
-      } else {
-        ec.innerHTML = '<div class="text-xs text-zinc-500 py-8 text-center">Belum ada permintaan tercatat.</div>';
-      }
+            const nextLogs = (data.recent_requests || []).map(mapRecent);
+            const keys = new Set(nextLogs.map(row => `${row.time}|${row.method}|${row.endpoint}|${row.status}|${row.latency}`));
+            if (!firstRender) {
+                nextLogs.forEach(row => {
+                    const key = `${row.time}|${row.method}|${row.endpoint}|${row.status}|${row.latency}`;
+                    row.isNew = !seen.has(key);
+                });
+            }
+            seen = keys;
+            firstRender = false;
+            logs = nextLogs;
+            renderLogs();
 
-      // Status HTTP: batang proporsi + daftar berlabel
-      if (sc.length) {
-        $('status-codes-container').innerHTML = `
-          <div class="flex h-1.5 w-full rounded-full overflow-hidden gap-px bg-subtle mb-4">
-            ${sc.map(([c, n]) => `<div class="${BG[c[0]] || 'bg-zinc-500'}" style="width:${n / totalCodes * 100}%" title="${esc(c)}"></div>`).join('')}
-          </div>` + sc.map(([c, n]) => `
-          <div class="flex items-center justify-between text-xs py-1">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-2 h-2 rounded-full shrink-0 ${BG[c[0]] || 'bg-zinc-500'}"></span>
-              <span class="font-mono font-medium text-zinc-200">${esc(c)}</span>
-              <span class="text-zinc-500 truncate">${esc(HTTP_LABEL[c] || '')}</span>
-            </div>
-            <div class="flex items-center gap-3 font-mono tabular-nums shrink-0">
-              <span class="text-zinc-500">${(n / totalCodes * 100).toFixed(1)}%</span>
-              <span class="text-zinc-300">${nf(n)}</span>
-            </div>
-          </div>`).join('');
-      }
+            const seismic = nextLogs.find(row => String(row.endpoint).includes('earthquake') || String(row.endpoint).includes('seismic'));
+            $('bmkgSyncTime').textContent = seismic ? `${seismic.time} lalu` : 'tidak ada';
+            $('lastUpdateText').textContent = `Diperbarui ${new Date().toLocaleTimeString('id-ID', { hour12: false })}`;
+        }
 
-      // Mode runtime
-      const liveC = (d.modes && d.modes.LIVE) || 0, demoC = (d.modes && d.modes.DEMO) || 0;
-      const livePct = Math.round(liveC / ((liveC + demoC) || 1) * 100);
-      $('mode-live-count').innerText = `${nf(liveC)} (${livePct}%)`;
-      $('mode-demo-count').innerText = `${nf(demoC)} (${100 - livePct}%)`;
-      $('mode-live-bar').style.width = livePct + '%';
-      $('mode-demo-bar').style.width = (100 - livePct) + '%';
+        async function updateStats() {
+            if (inflight) return;
+            inflight = true;
+            try {
+                const response = await fetch(`/api/v1/stats?range=${encodeURIComponent(selectedRange)}`, { cache: 'no-store' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const payload = await response.json();
+                renderStats(payload.data || {});
+                setLive('ok');
+            } catch (error) {
+                setLive('down');
+                showToast('Gagal memuat telemetry live.');
+            } finally {
+                inflight = false;
+            }
+        }
 
-      // Log permintaan
-      const rr = (d.recent_requests || []).slice(0, 10);
-      if (rr.length) {
-        const keys = new Set();
-        $('recent-requests-tbody').innerHTML = rr.map(r => {
-          const key = r.time + r.method + r.path + r.latency_ms; keys.add(key);
-          const cls = (!sim && !firstRender && !seen.has(key) ? 'row-new ' : '') + (r.status >= 400 ? 'bg-rose-500/5' : 'hover:bg-subtle/50');
-          const m = String(r.method), mc = m === 'GET' ? 'text-zinc-300' : m === 'POST' ? 'text-sky-300' : 'text-amber-300';
-          const p = esc(r.path);
-          return `
-            <tr class="${cls}">
-              <td class="py-2.5 pr-2 text-zinc-400 whitespace-nowrap">${esc(r.time)}</td>
-              <td class="py-2.5 px-2"><span class="text-[11px] font-medium ${mc}">${esc(m)}</span></td>
-              <td class="py-2.5 px-2"><button type="button" data-copy="${p}" title="${p}" class="block truncate max-w-[140px] sm:max-w-[180px] text-left text-zinc-200 hover:text-white cursor-copy">${p}</button></td>
-              <td class="py-2.5 px-2 font-medium ${TX[String(r.status)[0]] || 'text-zinc-300'}">${esc(r.status)}</td>
-              <td class="py-2.5 pl-2 text-right whitespace-nowrap ${r.latency_ms > 50 ? 'text-amber-400' : 'text-zinc-400'}">${esc(r.latency_ms)} ms</td>
-            </tr>`;
-        }).join('');
-        seen = keys; firstRender = false;
-      }
-      const sx = rr.find(r => String(r.path).includes('earthquake') || String(r.path).includes('seismic'));
-      $('seismic-last').textContent = sx ? sx.time : 'tidak ada';
-    }
+        function setTimeRange(range, button) {
+            selectedRange = range;
+            document.querySelectorAll('.time-btn').forEach(item => item.classList.remove('is-active'));
+            button.classList.add('is-active');
+            lastTotal = null;
+            lastPollAt = 0;
+            updateStats();
+        }
 
-    async function updateStats() {
-      if (inflight) return;
-      inflight = true;
-      try {
-        const res = await fetch('/api/v1/stats', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        realOk = true; lastOk = Date.now();
-        renderTelemetry(json.data, false); setHealth('ok'); setBanner(null);
-      } catch (err) {
-        if (realOk) { setHealth('down'); setBanner('down'); }
-        else { lastOk = Date.now(); renderTelemetry(generateSimulatedData(), true); setHealth('sim'); setBanner('sim'); }
-      } finally {
-        inflight = false; kickTick();
-      }
-    }
+        function startTimer() {
+            clearInterval(pollTimer);
+            pollTimer = setInterval(updateStats, 5000);
+        }
 
-    function startTimer() { clearInterval(pollTimer); pollTimer = setInterval(updateStats, POLL_MS); }
+        function toggleAutoRefresh() {
+            autoRefresh = !autoRefresh;
+            $('autoRefreshBtn').setAttribute('aria-pressed', String(!autoRefresh));
+            if (autoRefresh) {
+                $('refreshDot').className = 'h-2 w-2 rounded-full bg-ok';
+                $('refreshLabel').textContent = 'Auto 5 dtk';
+                updateStats();
+                startTimer();
+            } else {
+                $('refreshDot').className = 'h-2 w-2 rounded-full bg-muted';
+                $('refreshLabel').textContent = 'Dijeda';
+                clearInterval(pollTimer);
+            }
+        }
 
-    function togglePolling() {
-      isPolling = !isPolling;
-      $('toggle-pause-btn').setAttribute('aria-pressed', String(!isPolling));
-      $('poll-dot').className = 'w-1.5 h-1.5 rounded-full ' + (isPolling ? 'bg-emerald-400' : 'bg-zinc-500');
-      $('poll-label').innerText = isPolling ? 'Auto 5s' : 'Dijeda';
-      if (isPolling) { updateStats(); startTimer(); }
-      else { clearInterval(pollTimer); $('tick').classList.remove('run'); setHealth('paused'); }
-    }
+        document.addEventListener('visibilitychange', () => {
+            if (!autoRefresh) return;
+            if (document.hidden) clearInterval(pollTimer);
+            else { updateStats(); startTimer(); }
+        });
 
-    // Hemat request: berhenti saat tab tidak terlihat, lanjut saat kembali
-    document.addEventListener('visibilitychange', () => {
-      if (!isPolling) return;
-      if (document.hidden) { clearInterval(pollTimer); $('tick').classList.remove('run'); }
-      else { updateStats(); startTimer(); }
-    });
-
-    // Klik path untuk menyalin
-    document.addEventListener('click', e => {
-      const b = e.target.closest('[data-copy]');
-      if (!b) return;
-      (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.copy) : Promise.reject())
-        .then(() => toast('Path disalin'), () => toast('Gagal menyalin'));
-    });
-
-    // Penanda kesegaran data
-    setInterval(() => {
-      if (!lastOk) return;
-      const el = $('last-updated');
-      if (!isPolling) { el.innerText = 'Dijeda'; return; }
-      const sec = Math.round((Date.now() - lastOk) / 1000);
-      el.innerText = sec < 2 ? 'Diperbarui baru saja' : `Diperbarui ${sec} dtk lalu`;
-    }, 1000);
-
-    updateStats();
-    startTimer();
-  </script>
+        window.onload = function () {
+            updateStats();
+            startTimer();
+        };
+    </script>
 </body>
 </html>

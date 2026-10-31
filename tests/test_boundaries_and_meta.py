@@ -50,6 +50,21 @@ async def test_stats_api_json(client):
 
 
 @pytest.mark.asyncio
+async def test_stats_api_range_and_percentiles(client):
+    """Stats supports a range window and exposes latency percentiles."""
+    resp = await client.get("/api/v1/stats?range=15m")
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["range"] == "15m"
+    assert "p50_ms" in data["latency"]
+    assert "p95_ms" in data["latency"]
+    assert "p99_ms" in data["latency"]
+
+    bad = await client.get("/api/v1/stats?range=invalid")
+    assert bad.status_code == 422
+
+
+@pytest.mark.asyncio
 async def test_telemetry_excludes_system_and_health_paths(client):
     """Telemetry must filter out internal infrastructure, health probes, and /stats calls."""
     # Get baseline count

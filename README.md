@@ -54,7 +54,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 Nusa Matra Data Hub telah **aktif secara live di production** dengan SSL terenkripsi, CDN caching, dan dual runtime environment (DEMO & Official LIVE):
 
-> Domain lama `https://api.orangkeren.me` masih aktif selama masa transisi. Domain utama baru: `https://api.nusamatra.site`.
+> Domain utama API: `https://api.nusamatra.site`. Domain frontend: `https://nusamatra.site`.
 
 - 🌐 **Base Production URL:** [`https://api.nusamatra.site`](https://api.nusamatra.site)
 - 🌟 **Interactive Scalar API Reference:** [`https://api.nusamatra.site/docs`](https://api.nusamatra.site/docs) *(atau [`/scalar`](https://api.nusamatra.site/scalar))*
@@ -134,8 +134,8 @@ Backend (Coolify):
 
 ```env
 NM_ENABLE_LIVE_MODE=true
-NM_ALLOWED_HOSTS=api.nusamatra.site,api.orangkeren.me,localhost,127.0.0.1
-NM_CORS_ORIGINS=https://nusamatra.site,https://www.nusamatra.site,https://nm.orangkeren.me,http://localhost:5173,http://127.0.0.1:5173
+NM_ALLOWED_HOSTS=api.nusamatra.site,localhost,127.0.0.1
+NM_CORS_ORIGINS=https://nusamatra.site,https://www.nusamatra.site,http://localhost:5173,http://127.0.0.1:5173
 ```
 
 Frontend (Coolify build argument):
@@ -145,7 +145,7 @@ VITE_DATA_MODE=live
 VITE_API_BASE_URL=https://api.nusamatra.site
 ```
 
-Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_CORS_ORIGINS`. Domain API lama tetap dicantumkan di `NM_ALLOWED_HOSTS` selama masa transisi.
+Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_CORS_ORIGINS`.
 
 ### Kontrak yang dipakai frontend
 

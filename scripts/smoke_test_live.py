@@ -123,7 +123,7 @@ async def run_smoke_test(base_url: str = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Smoke test Nusa Matra Data Hub endpoints")
-    parser.add_argument("--base-url", type=str, default=None, help="Target remote base URL (e.g., https://api.orangkeren.me)")
+    parser.add_argument("--base-url", type=str, default=None, help="Target remote base URL (e.g., https://api.nusamatra.site)")
     args = parser.parse_args()
 
     asyncio.run(run_smoke_test(base_url=args.base_url))

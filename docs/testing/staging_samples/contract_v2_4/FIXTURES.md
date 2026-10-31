@@ -4,7 +4,7 @@ Generated from commit `ce49cdf` plus the percentile-direction patch in the
 working tree, using the local LIVE snapshot
 `2026.10.0-live-0de6ac68f0d55b3a`.
 
-Production smoke test already passed on `https://api.orangkeren.me` for the
+Production smoke test already passed on `https://api.nusamatra.site` for the
 base v2.4 changes: `422` envelope, `WEIGHT_VALIDATION_ERROR`, `404 NOT_FOUND`,
 `meta.boundary_version`, and `is_active_default`.
 

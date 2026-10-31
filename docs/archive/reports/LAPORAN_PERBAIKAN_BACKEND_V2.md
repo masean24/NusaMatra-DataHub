@@ -463,9 +463,9 @@ python scripts/seed_live_db.py
 Setelah deploy, cek:
 
 ```bash
-curl "https://api.orangkeren.me/api/v1/indicators/coverage?mode=live"
-curl "https://api.orangkeren.me/api/v1/indicators/composite-presets?mode=live"
-curl -X POST "https://api.orangkeren.me/api/v1/indicators/composite-query?mode=live" \
+curl "https://api.nusamatra.site/api/v1/indicators/coverage?mode=live"
+curl "https://api.nusamatra.site/api/v1/indicators/composite-presets?mode=live"
+curl -X POST "https://api.nusamatra.site/api/v1/indicators/composite-query?mode=live" \
   -H "Content-Type: application/json" \
   -d '{"weights":{"soc_poverty_rate":3000,"hlt_stunting_prevalence":3000,"inf_safe_water_pct":2000,"inf_safe_sanitation_pct":2000},"filter_province_id":"33"}'
 ```
