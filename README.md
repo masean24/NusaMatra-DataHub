@@ -7,7 +7,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 **Frontend resmi:** [masean24/NusaMatra](https://github.com/masean24/NusaMatra) — React 19 + TypeScript + Vite, mengonsumsi API ini melalui `/api/v1`.
 
-[![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.orangkeren.me-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.orangkeren.me)
+[![Production Status](https://img.shields.io/badge/Production-LIVE%20at%20api.nusamatra.site-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://api.nusamatra.site)
 [![Frontend Repo](https://img.shields.io/badge/Frontend-NusaMatra%20Web-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://github.com/masean24/NusaMatra)
 [![Tests](https://img.shields.io/badge/Tests-165%2F165%20Passing%20(100%25)-brightgreen.svg?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
@@ -16,7 +16,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 [![Pydantic v2](https://img.shields.io/badge/Pydantic-v2.10-E92063.svg?style=flat&logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
 [![Database](https://img.shields.io/badge/Database-aiosqlite%20%7C%20Dual%20DEMO%2FLIVE-003B57.svg?style=flat&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![BMKG Live](https://img.shields.io/badge/Realtime-BMKG%20Earthquakes-orange.svg?style=flat&logo=rss&logoColor=white)](https://data.bmkg.go.id)
-[![Documentation](https://img.shields.io/badge/API%20Docs-Scalar%20%26%20ReDoc-blue.svg?style=flat&logo=openapiinitiative&logoColor=white)](https://api.orangkeren.me/docs)
+[![Documentation](https://img.shields.io/badge/API%20Docs-Scalar%20%26%20ReDoc-blue.svg?style=flat&logo=openapiinitiative&logoColor=white)](https://api.nusamatra.site/docs)
 
 ---
 
@@ -46,7 +46,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 **Cara menjalankan:** clone repo → buat virtualenv → `pip install -r requirements.txt` → `uvicorn app.main:app --reload --port 8000`. Detail lengkap ada di [Menjalankan backend + frontend secara lokal](#menjalankan-backend--frontend-secara-lokal).
 
-**Progress saat ini:** LIVE API aktif di `api.orangkeren.me`; batas 514/514 kab/kota; 29 indikator berdata; 6 instansi terintegrasi; feed gempa BMKG; snapshot immutable; **165 tests passing**.
+**Progress saat ini:** LIVE API aktif di `api.nusamatra.site`; batas 514/514 kab/kota; 29 indikator berdata; 6 instansi terintegrasi; feed gempa BMKG; snapshot immutable; **165 tests passing**.
 
 ---
 
@@ -54,10 +54,12 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 Nusa Matra Data Hub telah **aktif secara live di production** dengan SSL terenkripsi, CDN caching, dan dual runtime environment (DEMO & Official LIVE):
 
-- 🌐 **Base Production URL:** [`https://api.orangkeren.me`](https://api.orangkeren.me)
-- 🌟 **Interactive Scalar API Reference:** [`https://api.orangkeren.me/docs`](https://api.orangkeren.me/docs) *(atau [`/scalar`](https://api.orangkeren.me/scalar))*
-- 📖 **Formal ReDoc Schema View:** [`https://api.orangkeren.me/redoc`](https://api.orangkeren.me/redoc)
-- 📄 **OpenAPI 3.1 JSON Specification:** [`https://api.orangkeren.me/openapi.json`](https://api.orangkeren.me/openapi.json)
+> Domain lama `https://api.orangkeren.me` masih aktif selama masa transisi. Domain utama baru: `https://api.nusamatra.site`.
+
+- 🌐 **Base Production URL:** [`https://api.nusamatra.site`](https://api.nusamatra.site)
+- 🌟 **Interactive Scalar API Reference:** [`https://api.nusamatra.site/docs`](https://api.nusamatra.site/docs) *(atau [`/scalar`](https://api.nusamatra.site/scalar))*
+- 📖 **Formal ReDoc Schema View:** [`https://api.nusamatra.site/redoc`](https://api.nusamatra.site/redoc)
+- 📄 **OpenAPI 3.1 JSON Specification:** [`https://api.nusamatra.site/openapi.json`](https://api.nusamatra.site/openapi.json)
 
 ---
 
@@ -132,17 +134,18 @@ Backend (Coolify):
 
 ```env
 NM_ENABLE_LIVE_MODE=true
-NM_CORS_ORIGINS=https://domain-frontend-production
+NM_ALLOWED_HOSTS=api.nusamatra.site,api.orangkeren.me,localhost,127.0.0.1
+NM_CORS_ORIGINS=https://nusamatra.site,https://www.nusamatra.site,https://nm.orangkeren.me,http://localhost:5173,http://127.0.0.1:5173
 ```
 
 Frontend (Coolify build argument):
 
 ```env
 VITE_DATA_MODE=live
-VITE_API_BASE_URL=https://api.orangkeren.me
+VITE_API_BASE_URL=https://api.nusamatra.site
 ```
 
-Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_CORS_ORIGINS`.
+Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_CORS_ORIGINS`. Domain API lama tetap dicantumkan di `NM_ALLOWED_HOSTS` selama masa transisi.
 
 ### Kontrak yang dipakai frontend
 
@@ -251,17 +254,17 @@ Semua respons terstruktur konsisten dengan generic envelope `ApiResponse[T]`:
 
 ## 🧪 Panduan Uji Coba Cepat (Live Production cURL)
 
-Anda dapat menguji langsung API production di `https://api.orangkeren.me` tanpa instalasi lokal:
+Anda dapat menguji langsung API production di `https://api.nusamatra.site` tanpa instalasi lokal:
 
 ### 1. Mengambil Feed GeoJSON Gempa BMKG Siap Render 3D
 ```bash
-curl -s "https://api.orangkeren.me/api/v1/earthquakes/geojson" | head -c 500
+curl -s "https://api.nusamatra.site/api/v1/earthquakes/geojson" | head -c 500
 ```
 
 ### 2. Simulasi Formula Prioritas Kebijakan (*Dynamic Composite Query*)
 Menghitung prioritas wilayah (Bencana 35% + Kemiskinan 25% + Ruang Rusak 20% + Stunting 20% = 10.000 bps):
 ```bash
-curl -X POST "https://api.orangkeren.me/api/v1/indicators/composite-query?mode=live" \
+curl -X POST "https://api.nusamatra.site/api/v1/indicators/composite-query?mode=live" \
      -H "Content-Type: application/json" \
      -d '{
        "weights": {
@@ -275,7 +278,7 @@ curl -X POST "https://api.orangkeren.me/api/v1/indicators/composite-query?mode=l
 
 ### 3. Cek Ketersediaan Indikator (Coverage Matrix)
 ```bash
-curl -s "https://api.orangkeren.me/api/v1/indicators/coverage?mode=live"
+curl -s "https://api.nusamatra.site/api/v1/indicators/coverage?mode=live"
 ```
 
 ### 4. Menjalankan Pengujian Lokal
@@ -295,10 +298,10 @@ python -m pytest -v
 
 ## 📖 Dokumentasi Interaktif API
 
-- **🌟 Scalar Interactive Reference:** [https://api.orangkeren.me/docs](https://api.orangkeren.me/docs)
+- **🌟 Scalar Interactive Reference:** [https://api.nusamatra.site/docs](https://api.nusamatra.site/docs)
   - Layout 3-kolom modern dengan live request playground, syntax highlighter, dan contoh kode multi-bahasa (cURL, Python, JS, dll).
-- **📖 ReDoc Formal Schema:** [https://api.orangkeren.me/redoc](https://api.orangkeren.me/redoc)
-- **📄 Raw OpenAPI Specification:** [https://api.orangkeren.me/openapi.json](https://api.orangkeren.me/openapi.json)
+- **📖 ReDoc Formal Schema:** [https://api.nusamatra.site/redoc](https://api.nusamatra.site/redoc)
+- **📄 Raw OpenAPI Specification:** [https://api.nusamatra.site/openapi.json](https://api.nusamatra.site/openapi.json)
 
 ---
 
