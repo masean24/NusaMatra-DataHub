@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nusa Matra Data Hub — Telemetri API</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,22 +102,6 @@
             letter-spacing: -0.04em;
         }
 
-        /* Kontrol segmen (rentang waktu): aktif = oranye penuh, seperti toggle di app */
-        .time-btn {
-            border: 1px solid transparent;
-            color: rgb(var(--muted));
-            transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
-        }
-
-        .time-btn:hover { color: rgb(var(--fg)); }
-
-        .time-btn.is-active {
-            color: rgb(var(--on-accent));
-            background: rgb(var(--accent));
-            border-color: rgb(var(--accent));
-            font-weight: 600;
-        }
-
         .endpoint-row {
             border: 1px solid transparent;
             border-radius: 10px;
@@ -200,10 +185,8 @@
         <div class="mx-auto max-w-[1480px] px-4 sm:px-6">
             <div class="flex min-h-[76px] flex-wrap items-center justify-between gap-3 py-3">
                 <div class="flex items-center gap-3.5">
-                    <div class="grid h-10 w-10 place-items-center rounded-lg border border-line bg-panel2">
-                        <svg class="h-5 w-5 text-accentfg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                    <div class="grid h-10 w-10 place-items-center overflow-hidden rounded-lg border border-line bg-white">
+                        <img src="/static/logo.png" alt="Nusa Matra" class="h-9 w-9 object-contain" width="36" height="36">
                     </div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
@@ -219,14 +202,6 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <div title="Riwayat rentang dimulai saat layanan ini berjalan" class="flex items-center rounded-full border border-line bg-panel2 px-1 py-0.5 text-[11px] font-mono">
-                        <button type="button" onclick="setTimeRange('all', this)" class="time-btn is-active rounded-full px-3 py-1.5">Semua</button>
-                        <button type="button" onclick="setTimeRange('15m', this)" class="time-btn rounded-full px-3 py-1.5">15 mnt</button>
-                        <button type="button" onclick="setTimeRange('1h', this)" class="time-btn rounded-full px-3 py-1.5">1 jam</button>
-                        <button type="button" onclick="setTimeRange('24h', this)" class="time-btn rounded-full px-3 py-1.5">24 jam</button>
-                        <button type="button" onclick="setTimeRange('7d', this)" class="time-btn rounded-full px-3 py-1.5">7 hari</button>
-                    </div>
-
                     <button id="autoRefreshBtn" type="button" onclick="toggleAutoRefresh()" class="flex items-center gap-2 rounded-full border border-line bg-panel2 px-3 py-1.5 font-mono text-[11px] text-fg2 transition hover:border-fg/30 hover:text-fg">
                         <span id="refreshDot" class="h-2 w-2 rounded-full bg-ok"></span>
                         <span id="refreshLabel">Auto 5 dtk</span>
@@ -261,7 +236,7 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p class="card-title">Total permintaan API</p>
-                            <p id="rangeLabel" class="mt-1 text-[11px] text-muted">Semua endpoint, sepanjang layanan aktif</p>
+                            <p class="mt-1 text-[11px] text-muted">Semua endpoint</p>
                         </div>
                         <span class="rounded-full border border-line bg-panel2 px-2.5 py-1 font-mono text-[11px] text-fg"><span id="rpsValue">14.2</span> req/dtk</span>
                     </div>
@@ -647,13 +622,6 @@
             const number = Number(value);
             return Number.isFinite(number) && number > 0 ? number.toFixed(1) + ' ms' : '—';
         };
-        const rangeLabels = {
-            all: 'sepanjang layanan aktif',
-            '15m': '15 menit',
-            '1h': '1 jam',
-            '24h': '24 jam',
-            '7d': '7 hari'
-        };
         const regionMap = {
             '1311': 'Kab. Solok Selatan, Sumbar',
             '1373': 'Kota Sawahlunto, Sumbar',
@@ -679,7 +647,6 @@
             '503': 'Tidak tersedia'
         };
 
-        let selectedRange = 'all';
         let logs = [];
         let activeStatusFilter = null;
         let activeEndpointFilter = null;
@@ -884,7 +851,6 @@
         }
 
         function renderStats(data) {
-            $('rangeLabel').textContent = `Semua endpoint, ${rangeLabels[selectedRange] || rangeLabels.all}`;
             $('totalRequests').textContent = nf(data.total_requests);
             $('successRateValue').textContent = `${Number(data.success_rate_pct || 0).toFixed(2)}%`;
 
@@ -929,7 +895,7 @@
             if (inflight) return;
             inflight = true;
             try {
-                const response = await fetch(`/api/v1/stats?range=${encodeURIComponent(selectedRange)}`, { cache: 'no-store' });
+                const response = await fetch('/api/v1/stats', { cache: 'no-store' });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const payload = await response.json();
                 renderStats(payload.data || {});
@@ -940,15 +906,6 @@
             } finally {
                 inflight = false;
             }
-        }
-
-        function setTimeRange(range, button) {
-            selectedRange = range;
-            document.querySelectorAll('.time-btn').forEach(item => item.classList.remove('is-active'));
-            button.classList.add('is-active');
-            lastTotal = null;
-            lastPollAt = 0;
-            updateStats();
         }
 
         function startTimer() {
