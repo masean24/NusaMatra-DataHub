@@ -182,4 +182,4 @@ Coverage includes:
 
 ## 6. Deployment and rollback
 
-See `docs/SNAPSHOT_VERSIONING_V2_2.md` sections **Migration** and **Rollback**. Do not deploy until the new image passes the full suite and the post-deploy checklist is run against the actual production endpoints.
+See `../architecture/SNAPSHOT_VERSIONING.md` sections **Migration** and **Rollback**. Do not deploy until the new image passes the full suite and the post-deploy checklist is run against the actual production endpoints.

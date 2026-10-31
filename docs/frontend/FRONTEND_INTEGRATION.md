@@ -14,7 +14,7 @@
 
 ## 📌 Ringkasan Pembaruan untuk Frontend (TL;DR)
 
-0. **Katalog v2.3:** tiga indikator restricted (`meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, `hlt_realtime_icu_occupancy`) tidak lagi ada di katalog publik. Snapshot baru 30 indikator / 29 berdata; snapshot lama 33 / 29 tetap bisa di-pin. Contoh response ada di `docs/staging_samples/retirement/`.
+0. **Katalog v2.3:** tiga indikator restricted (`meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, `hlt_realtime_icu_occupancy`) tidak lagi ada di katalog publik. Snapshot baru 30 indikator / 29 berdata; snapshot lama 33 / 29 tetap bisa di-pin. Contoh response ada di `../testing/staging_samples/retirement/`.
 1. **Semantik Skor Kanonik (v2.1):** `score_direction: "higher_is_need"`. Skor dan `normalized_score` bernilai 100 berarti **paling rentan / paling butuh intervensi**, konsisten di DEMO maupun LIVE. Rank 1 = wilayah paling prioritas.
 2. **Kebijakan Data Missing (v2.1):** Missing **tidak lagi dihitung nol**. Wilayah dengan cakupan bobot ≥70% dan minimal 2 komponen tetap diranking memakai bobot per wilayah (`effective_weights_region`). Wilayah di bawah ambang masuk `insufficient_data`, bukan ranking.
 3. **Rank Nasional + Rank Filter:** `national_rank` selalu posisi se-Indonesia; `rank` adalah posisi di dalam hasil filter provinsi.
@@ -31,7 +31,7 @@
 14. **Boundary metadata (v2.4):** `meta.boundary_version` terisi dari snapshot aktif di values, coverage, datasets, snapshots, regions, boundaries, dan composite.
 15. **Snapshot aktif (v2.4):** field penanda di `GET /snapshots` adalah `is_active_default`.
 
-> Handoff lengkap: `docs/FRONTEND_HANDOFF_V2_2.md` · Handoff v2.4: `docs/FRONTEND_HANDOFF_V2_4.md` · Spesifikasi snapshot: `docs/SNAPSHOT_VERSIONING_V2_2.md` · Root cause: `docs/INTEGRITY_FIX_V2_2.md`.
+> Handoff lengkap: `../archive/handoffs/FRONTEND_HANDOFF_V2_2.md` · Handoff v2.4: `../archive/handoffs/FRONTEND_HANDOFF_V2_4.md` · Spesifikasi snapshot: `../architecture/SNAPSHOT_VERSIONING.md` · Root cause: `../archive/reports/INTEGRITY_FIX_V2_2.md`.
 
 ---
 

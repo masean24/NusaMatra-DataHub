@@ -43,7 +43,7 @@ Counter yang persisten: `total_requests`, `status_codes`, `top_endpoints`, `mode
    NM_TELEMETRY_FLUSH_INTERVAL_SECONDS=5
    NM_ENABLE_LIVE_MODE=true
    ```
-6. **Sebelum redeploy pertama**, salin `nusa_matra_live.db` dari container lama ke volume ini. Lihat `docs/INDICATOR_RETIREMENT_V2_3.md` bagian one-time migration.
+6. **Sebelum redeploy pertama**, salin `nusa_matra_live.db` dari container lama ke volume ini. Lihat `../archive/reports/INDICATOR_RETIREMENT_V2_3.md` bagian one-time migration.
 7. Redeploy.
 
 ### Opsi 2 — Docker Compose

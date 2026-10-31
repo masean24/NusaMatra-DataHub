@@ -38,7 +38,7 @@ Arsitektur Data Hub dirancang untuk memisahkan secara tegas proses **Ingesti (Br
                                          v
 +-----------------------------------------------------------------------------------+
 |                     LAYER 4: API SERVING & SAFEGUARDS                             |
-|  - FastAPI / Go REST Service (`/api/v1/...`) matching `docs/08-API-SPECIFICATION` |
+|  - FastAPI / Go REST Service (`/api/v1/...`) matching `../api/API_SPECIFICATION.md` |
 |  - Redis + CDN Edge Caching (ETag / Immutable Snapshot Keys)                      |
 |  - Mode Router (`X-Data-Mode: DEMO | LIVE` + Static Bundle Circuit Breaker)       |
 +-----------------------------------------------------------------------------------+

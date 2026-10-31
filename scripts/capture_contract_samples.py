@@ -18,7 +18,7 @@ sys.path.insert(0, str(REPO_ROOT))
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", default="data/nusa_matra_live.db")
-    parser.add_argument("--out", default="docs/staging_samples/retirement")
+    parser.add_argument("--out", default="docs/testing/staging_samples/retirement")
     args = parser.parse_args()
 
     db_path = Path(args.db).resolve()

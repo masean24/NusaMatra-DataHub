@@ -464,7 +464,7 @@ Semua nilai harus bisa diubah dari Environment Variables Coolify tanpa rebuild k
 
 ### Dokumen
 
-- `SECURITY_PLAN.md` — dokumen ini.
+- `docs/security/SECURITY_PLAN.md` — dokumen ini.
 
 ### Kode (setelah dokumen disetujui)
 

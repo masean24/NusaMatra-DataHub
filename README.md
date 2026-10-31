@@ -146,8 +146,9 @@ Tanpa trailing slash. Origin frontend harus sama persis dengan yang ada di `NM_C
 
 ### Kontrak yang dipakai frontend
 
-- [`docs/FRONTEND_HANDOFF_V2_4.md`](docs/FRONTEND_HANDOFF_V2_4.md) — error envelope, `boundary_version`, snapshot aktif, rate limit, arah persentil.
-- [`docs/staging_samples/contract_v2_4/`](docs/staging_samples/contract_v2_4/) — fixture JSON untuk tes kontrak FE.
+- [`docs/frontend/FRONTEND_INTEGRATION.md`](docs/frontend/FRONTEND_INTEGRATION.md) — kontrak aktif, snapshot, error envelope, rate limit, dan arah persentil.
+- [`docs/frontend/FRONTEND_HANDOFF_2025_REFRESH.md`](docs/frontend/FRONTEND_HANDOFF_2025_REFRESH.md) — perubahan data terbaru untuk FE.
+- [`docs/testing/staging_samples/contract_v2_4/`](docs/testing/staging_samples/contract_v2_4/) — fixture JSON untuk tes kontrak FE.
 - `GET /api/v1/health` — health check.
 - `GET /docs`, `/redoc`, `/openapi.json` — referensi API.
 - `meta.score_direction = "higher_is_need"` — persentil dan skor tinggi berarti kebutuhan intervensi lebih tinggi.
@@ -166,7 +167,7 @@ Dalam perencanaan pembangunan dan mitigasi kebencanaan nasional, pengambil kebij
 3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** global dan **coverage gate per wilayah**: missing data tidak pernah dihitung nol, wilayah dengan cakupan bobot di bawah ambang dipindahkan ke `insufficient_data`.
 4. **Pemantauan Gempa Bumi *Real-Time* BMKG** dengan output GeoJSON (RFC 7946) lengkap dengan radius visual 3D, kedalaman hiposenter, dan status potensi tsunami.
 5. **Dual Architecture (DEMO vs LIVE Mode)** dengan prinsip integritas tinggi (*Fail-Closed Architecture*).
-6. **Immutable Snapshot v2.2:** setiap perubahan data menghasilkan ID baru `2026.10.0-live-<sha16>` dan `content_sha256` kanonik. Snapshot lama tidak ditimpa; `2026.10.0-official-live` ditandai `is_reproducible: false` karena ID-nya pernah dipakai ulang. Lihat `docs/SNAPSHOT_VERSIONING_V2_2.md`.
+6. **Immutable Snapshot v2.2:** setiap perubahan data menghasilkan ID baru `2026.10.0-live-<sha16>` dan `content_sha256` kanonik. Snapshot lama tidak ditimpa; `2026.10.0-official-live` ditandai `is_reproducible: false` karena ID-nya pernah dipakai ulang. Lihat `docs/architecture/SNAPSHOT_VERSIONING.md`.
 
 ---
 

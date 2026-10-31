@@ -6,7 +6,7 @@
 **Snapshot:** legacy `2026.10.0-official-live` (historis) → immutable `2026.10.0-live-<sha16>` (v2.2)
 **Status:** 134/134 test lulus · 29 indikator berdata · 14.745 observasi · 514/514 kab/kota
 
-> **Catatan v2.2 (24 Oktober 2026):** laporan ini mendokumentasikan perbaikan kontrak v2.1. Perbaikan integritas berikutnya—normalisasi Lanny Jaya, snapshot immutable berbasis `content_sha256`, definisi coverage yang eksplisit, dan rankability composite—ada di `docs/INTEGRITY_FIX_V2_2.md`, `docs/SNAPSHOT_VERSIONING_V2_2.md`, dan `docs/FRONTEND_HANDOFF_V2_2.md`.
+> **Catatan v2.2 (24 Oktober 2026):** laporan ini mendokumentasikan perbaikan kontrak v2.1. Perbaikan integritas berikutnya—normalisasi Lanny Jaya, snapshot immutable berbasis `content_sha256`, definisi coverage yang eksplisit, dan rankability composite—ada di `INTEGRITY_FIX_V2_2.md`, `../architecture/SNAPSHOT_VERSIONING.md`, dan `../archive/handoffs/FRONTEND_HANDOFF_V2_2.md`.
 
 ---
 
@@ -502,7 +502,7 @@ Yang harus terlihat:
 - `scripts/fetch_bps_sdgs_kabkota.py` — penarikan ulang air minum & sanitasi kab/kota.
 - `data/*.csv` + `data/*.provenance.json` — data turunan resmi + checksum.
 - `tests/` — 110 test, termasuk crosswalk, eligibility, arah skor, integritas LIVE, dan BMKG deterministik.
-- `docs/PANDUAN_INTEGRASI_FRONTEND_PRODUKSI.md`, `README.md`, `SESSION_HANDOFF.md` — dokumentasi diperbarui.
+- `../frontend/FRONTEND_INTEGRATION.md`, `README.md`, `SESSION_HANDOFF.md` — dokumentasi diperbarui.
 
 ---
 

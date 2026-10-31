@@ -83,7 +83,7 @@ empty volume creates a new 30-indicator snapshot but cannot recover the old one.
 python scripts/seed_live_db.py
 python scripts/retire_public_indicators.py
 python scripts/retire_public_indicators.py   # must be a no-op
-python scripts/capture_contract_samples.py  # writes docs/staging_samples/retirement
+python scripts/capture_contract_samples.py  # writes ../../testing/staging_samples/retirement
 python -m pytest -q
 ```
 
@@ -112,4 +112,4 @@ snapshot's `snapshot_indicators` or facts.
 - Old snapshot pin works after new publication and after process restart.
 - New snapshot has 30 indicators; only `inf_asphalt_road_village_pct` is empty.
 - Padangsidimpuan and Makassar remain in `insufficient_data`, never zero-filled.
-- Contract samples: `docs/staging_samples/retirement/`.
+- Contract samples: `../../testing/staging_samples/retirement/`.

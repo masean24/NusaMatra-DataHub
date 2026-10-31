@@ -1,6 +1,6 @@
 # Handoff FE — Stunting SSGI 2024
 
-> **Superseded:** untuk update data terbaru (IPM/UHH 2025, IRBI 2025, pendidikan 2025, DIBI 2025), gunakan [FRONTEND_HANDOFF_2025_REFRESH.md](./FRONTEND_HANDOFF_2025_REFRESH.md). Dokumen ini disimpan sebagai riwayat perubahan stunting.
+> **Superseded:** untuk update data terbaru (IPM/UHH 2025, IRBI 2025, pendidikan 2025, DIBI 2025), gunakan [FRONTEND_HANDOFF_2025_REFRESH.md](../../frontend/FRONTEND_HANDOFF_2025_REFRESH.md). Dokumen ini disimpan sebagai riwayat perubahan stunting.
 
 ## Snapshot aktif
 

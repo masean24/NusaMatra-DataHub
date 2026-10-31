@@ -2,9 +2,9 @@
 
 Backend v2.2 keeps the v2.1 field names used by the frontend. The changes below are additive except where noted.
 
-> **v2.3 retirement note:** `meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, and `hlt_realtime_icu_occupancy` are removed from the public catalog. New snapshot: 30 indicators / 29 available; historical snapshots remain 33 / 29 and remain pin-able. See `docs/INDICATOR_RETIREMENT_V2_3.md` and `docs/staging_samples/retirement/`.
+> **v2.3 retirement note:** `meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, and `hlt_realtime_icu_occupancy` are removed from the public catalog. New snapshot: 30 indicators / 29 available; historical snapshots remain 33 / 29 and remain pin-able. See `../reports/INDICATOR_RETIREMENT_V2_3.md` and `../../testing/staging_samples/retirement/`.
 >
-> **v2.4 contract note:** all validation errors now use the shared `{status, code, message, detail}` envelope, and `meta.boundary_version` is populated from the selected snapshot. See `docs/FRONTEND_HANDOFF_V2_4.md` and `docs/staging_samples/contract_v2_4/`.
+> **v2.4 contract note:** all validation errors now use the shared `{status, code, message, detail}` envelope, and `meta.boundary_version` is populated from the selected snapshot. See `FRONTEND_HANDOFF_V2_4.md` and `../../testing/staging_samples/contract_v2_4/`.
 
 ---
 

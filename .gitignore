@@ -37,3 +37,14 @@ data/boundaries/hdx_*
 data/boundaries/big_gdb/
 data/boundaries/big_*
 data/boundaries/*.gz
+
+# Local research / session artifacts
+irbi-web.txt
+docs/*.pdf
+.commandcode/
+README (4).md
+hasil-diskusi.md
+Proposal_NusaMatra_WIA2026.docx
+\[WIA\] Template Proposal .docx
+NusaMatra_Poster*
+WhatsApp Image*

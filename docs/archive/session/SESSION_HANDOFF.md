@@ -20,8 +20,8 @@ Status: **implemented in working tree; 164/164 tests pass; not committed or depl
 - `GET /snapshots` memakai `is_active_default` sebagai penanda snapshot aktif.
 - CORS produksi tetap diatur lewat env Coolify (`NM_CORS_ORIGINS`), bukan kode.
 - Preset `bencana_infrastruktur` tidak diubah karena bobotnya masuk ke `compute_content_digest()`; perubahan preset bisa merusak verifikasi snapshot lama.
-- Dokumentasi: `docs/FRONTEND_HANDOFF_V2_4.md`.
-- Contract samples: `docs/staging_samples/contract_v2_4/`.
+- Dokumentasi: `docs/archive/handoffs/FRONTEND_HANDOFF_V2_4.md`.
+- Contract samples: `docs/testing/staging_samples/contract_v2_4/`.
 - Script sample: `scripts/capture_contract_samples_v2_4.py`.
 
 ---
@@ -65,9 +65,9 @@ Commit: **`6141749`** (`fix: enforce v2.2 data integrity and reliable telemetry`
    - Waktu tetap WIB (`Asia/Jakarta`).
 
 6. **Dokumentasi**
-   - `docs/INTEGRITY_FIX_V2_2.md`
-   - `docs/SNAPSHOT_VERSIONING_V2_2.md`
-   - `docs/FRONTEND_HANDOFF_V2_2.md`
+   - `docs/archive/reports/INTEGRITY_FIX_V2_2.md`
+   - `docs/architecture/SNAPSHOT_VERSIONING.md`
+   - `docs/archive/handoffs/FRONTEND_HANDOFF_V2_2.md`
    - Update: README, PANDUAN integrasi frontend, GOVERNMENT_DATA_SOURCES, TELEMETRY_PERSISTENCE_COOLIFY.
 
 **Verifikasi:** `python -m pytest -q` → **159 passed**.
@@ -127,10 +127,10 @@ Status: **diimplementasikan lokal, belum di-commit/push/deploy.**
   lagi membangun ulang LIVE DB saat build.
 - **Sebelum deploy pertama:** salin `nusa_matra_live.db` dari container lama ke
   volume `/data`. Kalau volume dimulai kosong, snapshot lama `62354…` tidak bisa
-  dipulihkan. Prosedur ada di `docs/INDICATOR_RETIREMENT_V2_3.md`.
+  dipulihkan. Prosedur ada di `docs/archive/reports/INDICATOR_RETIREMENT_V2_3.md`.
 - Script idempotent: `scripts/retire_public_indicators.py`.
-- Contract samples: `docs/staging_samples/retirement/`.
-- Dokumentasi: `docs/INDICATOR_RETIREMENT_V2_3.md`.
+- Contract samples: `docs/testing/staging_samples/retirement/`.
+- Dokumentasi: `docs/archive/reports/INDICATOR_RETIREMENT_V2_3.md`.
 - Test: `159 passed`.
 
 ---
@@ -173,7 +173,7 @@ Perbaikan ini menutup tiga blocker yang ditemukan pada audit ranking LIVE:
    - Counter dan `recent_requests` di-flush ke SQLite tiap 5 detik (`NM_TELEMETRY_FLUSH_INTERVAL_SECONDS`).
    - `uptime` sekarang = uptime layanan lintas redeploy; `process_uptime` terpisah.
    - Di Coolify: mount volume ke `/data`, set `NM_TELEMETRY_DB_PATH=/data/telemetry.db`.
-   - Panduan lengkap: `docs/TELEMETRY_PERSISTENCE_COOLIFY.md`.
+   - Panduan lengkap: `docs/operations/TELEMETRY_PERSISTENCE.md`.
    - v2.3: hanya route API asli yang dihitung (probe scanner diabaikan), endpoint parameterized digabung per template, dan waktu tampil memakai WIB (`Asia/Jakarta`).
 
 **Snapshot LIVE saat ini:** 14.745 observasi, **30 indikator publik / 29 berdata**, 514/514 wilayah. Tiga indikator restricted sudah di-retire dari katalog publik; `inf_asphalt_road_village_pct` tetap publik dan menunggu microdata Podes. Snapshot lama 33/29 tetap disimpan dan bisa di-pin.
@@ -441,7 +441,7 @@ python scripts/seed_live_db.py
 
 Jika melanjutkan di sesi baru, cukup mulai dari dokumen ini lalu:
 
-1. Baca `docs/INTEGRITY_FIX_V2_2.md`, `docs/SNAPSHOT_VERSIONING_V2_2.md`, dan `docs/FRONTEND_HANDOFF_V2_2.md`.
+1. Baca `docs/archive/reports/INTEGRITY_FIX_V2_2.md`, `docs/architecture/SNAPSHOT_VERSIONING.md`, dan `docs/archive/handoffs/FRONTEND_HANDOFF_V2_2.md`.
 2. Pastikan `git status -sb` bersih dan `origin/main` = `f94200c`.
 3. Jalankan `python -m pytest -q` → harus **159 passed**.
 4. Production v2.2 sudah redeploy dan verified pada 24 Oktober 2026 13:52 WIB. Lanjutkan dari milestone berikutnya: monitoring telemetry, keputusan `inf_asphalt_road_village_pct`, metadata/provenance, atau pekerjaan frontend/Evidence Passport.

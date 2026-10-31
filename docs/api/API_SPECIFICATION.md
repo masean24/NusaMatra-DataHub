@@ -2,7 +2,7 @@
 
 **Document ID:** `NM-DH-06`  
 **Target Platform:** Nusa Matra — Geographic Decision-Support System (WIA 2026)  
-**Compatibility:** Dirancang selaras dengan kebutuhan frontend React & 3D Map Engine (`docs/08-API-SPECIFICATION.md`)  
+**Compatibility:** Dirancang selaras dengan kebutuhan frontend React & 3D Map Engine (`../archive/api/08-API-SPECIFICATION-from-fe.md`)
 
 ---
 

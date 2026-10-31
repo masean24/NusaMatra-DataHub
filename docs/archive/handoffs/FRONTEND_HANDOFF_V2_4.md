@@ -1,7 +1,7 @@
 # FRONTEND HANDOFF v2.4 — Error Envelope and Boundary Metadata
 
 Status: implemented in the working tree. Contract samples:
-`docs/staging_samples/contract_v2_4/`.
+`../../testing/staging_samples/contract_v2_4/`.
 
 Tidak ada field lama yang diganti nama atau diubah artinya. Perubahan di bawah
 ini additive, kecuali bentuk error validasi yang memang diseragamkan.
@@ -137,7 +137,7 @@ X-RateLimit-Bucket: read
 X-RateLimit-Exceeded: true
 ```
 
-Contoh lengkap ada di `docs/staging_samples/contract_v2_4/error_rate_limited.json`.
+Contoh lengkap ada di `../../testing/staging_samples/contract_v2_4/error_rate_limited.json`.
 Catatan: sample itu dibuat dengan enforcement lokal; production masih report-only.
 
 Sebelum enforcement diaktifkan:
