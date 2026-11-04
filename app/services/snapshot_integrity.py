@@ -28,6 +28,7 @@ SNAPSHOT_COLUMNS: dict[str, str] = {
     "is_immutable": "INTEGER NOT NULL DEFAULT 0",
     "is_reproducible": "INTEGER NOT NULL DEFAULT 1",
     "methodology_version": "TEXT",
+    "scoring_config": "TEXT",
     "reference_periods": "TEXT",
     "source_manifest": "TEXT",
     "supersedes": "TEXT",
@@ -131,8 +132,82 @@ def _json_bytes(payload: Any) -> bytes:
     ).encode("utf-8")
 
 
-def _scoring_config() -> dict[str, Any]:
+def _scoring_config(conn: sqlite3.Connection, snapshot_id: str) -> dict[str, Any]:
     # Imported lazily to avoid a module cycle during seeder startup.
+    from app.services.composite_service import (
+        SCORE_DIRECTION,
+        TOTAL_BASIS_POINTS,
+    )
+
+    def build(presets: list[dict[str, Any]]) -> dict[str, Any]:
+        return {
+            "score_direction": SCORE_DIRECTION,
+            "total_basis_points": TOTAL_BASIS_POINTS,
+            "min_coverage_pct": settings.composite_min_coverage_pct,
+            "min_components": settings.composite_min_components,
+            "presets": presets,
+        }
+
+    try:
+        row = conn.execute(
+            "SELECT scoring_config FROM data_snapshots WHERE snapshot_id = ?",
+            (snapshot_id,),
+        ).fetchone()
+    except sqlite3.OperationalError:
+        row = None
+    if row and row[0]:
+        try:
+            return json.loads(row[0])
+        except (TypeError, ValueError):
+            pass
+
+    # Historical snapshots predate snapshot-scoped scoring configuration. Their
+    # digest was computed with the original preset weights, so verification must
+    # keep using that frozen legacy configuration.
+    return build(
+        [
+            {
+                "preset_id": "bencana_infrastruktur",
+                "weights": {
+                    "dis_multihazard_index": 3500,
+                    "dis_flood_hazard_idx": 1500,
+                    "inf_asphalt_road_village_pct": 2500,
+                    "inf_electrification_pct": 2500,
+                },
+            },
+            {
+                "preset_id": "kemiskinan_stunting",
+                "weights": {
+                    "soc_poverty_rate": 3000,
+                    "hlt_stunting_prevalence": 3000,
+                    "inf_safe_water_pct": 2000,
+                    "inf_safe_sanitation_pct": 2000,
+                },
+            },
+            {
+                "preset_id": "pendidikan_daerah_3t",
+                "weights": {
+                    "edu_damaged_classrooms_pct": 3000,
+                    "edu_mean_years_schooling": 2500,
+                    "edu_student_teacher_ratio_sd": 2500,
+                    "inf_internet_household_pct": 2000,
+                },
+            },
+            {
+                "preset_id": "indeks_pembangunan_terpadu",
+                "weights": {
+                    "soc_hdi": 2500,
+                    "dis_multihazard_index": 2500,
+                    "edu_expected_years_schooling": 2500,
+                    "hlt_life_expectancy": 2500,
+                },
+            },
+        ]
+    )
+
+
+def current_scoring_config() -> dict[str, Any]:
+    """Return the scoring configuration used for newly published snapshots."""
     from app.services.composite_service import (
         COMPOSITE_PRESETS,
         SCORE_DIRECTION,
@@ -333,7 +408,7 @@ def _payload(conn: sqlite3.Connection, snapshot_id: str) -> dict[str, Any]:
         "environment_tag": header["environment_tag"],
         "boundary_version": header["boundary_version"],
         "methodology_version": header["methodology_version"],
-        "scoring": _scoring_config(),
+        "scoring": _scoring_config(conn, snapshot_id),
         "datasets": _dataset_rows(conn, snapshot_id),
         "indicators": indicators,
         "regions": _region_rows(conn),
@@ -491,6 +566,12 @@ def finalize_staging_snapshot(
 ) -> dict[str, Any]:
     """Freeze staging facts into a digest-addressed immutable snapshot."""
     populate_snapshot_indicators(conn, staging_id)
+    scoring_config = current_scoring_config()
+    conn.execute(
+        "UPDATE data_snapshots SET scoring_config = ? WHERE snapshot_id = ?",
+        (json.dumps(scoring_config, sort_keys=True), staging_id),
+    )
+    conn.commit()
     content_sha256 = compute_content_digest(conn, staging_id)
     metadata_checksum = compute_metadata_checksum(conn, staging_id)
     final_id = snapshot_id_from_digest(content_sha256)
@@ -599,6 +680,10 @@ def finalize_staging_snapshot(
     conn.execute(
         "UPDATE snapshot_indicators SET snapshot_id = ? WHERE snapshot_id = ?",
         (final_id, staging_id),
+    )
+    conn.execute(
+        "UPDATE data_snapshots SET scoring_config = ? WHERE snapshot_id = ?",
+        (json.dumps(scoring_config, sort_keys=True), final_id),
     )
     conn.execute(
         "DELETE FROM data_snapshots WHERE snapshot_id = ?", (staging_id,)

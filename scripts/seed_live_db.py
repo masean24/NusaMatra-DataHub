@@ -1070,7 +1070,9 @@ def main():
         boundary_version=BOUNDARY_VER,
         notes=(
             "Verified official data compiled from primary government sources. "
-            "Stunting uses Kemenkes SSGI 2024 (514/514 kab/kota), replacing SKI 2023."
+            "Stunting uses Kemenkes SSGI 2024 (514/514 kab/kota), replacing SKI 2023. "
+            "Data jalan belum tercakup: inf_asphalt_road_village_pct tetap di luar "
+            "katalog publik sampai data kabupaten/kota tersedia."
         ),
         supersedes=previous_active[0] if previous_active else None,
     )

@@ -2,8 +2,9 @@
 Public indicator visibility policy.
 
 Some indicators cannot be published because the underlying government source is
-restricted (PII, clinical credentials, or WAF-protected portals). They remain in
-the warehouse for audit/history but are retired from the public catalog.
+restricted (PII, clinical credentials, or WAF-protected portals), or because the
+required sub-national data is not available. They remain in the warehouse for
+audit/history but are retired from the public catalog.
 
 Snapshot immutability note: retiring an indicator must never delete rows from an
 already published ``snapshot_indicators`` table. The digest of historical
@@ -24,6 +25,11 @@ RETIRED_PUBLIC_INDICATORS: dict[str, str] = {
     "hlt_realtime_icu_occupancy": (
         "Keterisian ICU real-time memerlukan kredensial fasilitas kesehatan "
         "SATUSEHAT/SIRS dan tidak tersedia untuk konsumsi publik."
+    ),
+    "inf_asphalt_road_village_pct": (
+        "Data jalan aspal/beton per desa belum tersedia pada level kabupaten/kota; "
+        "indikator ditahan dari katalog publik sampai microdata Podes/SILASTIK "
+        "atau tabel resmi kabupaten/kota tersedia."
     ),
 }
 

@@ -507,15 +507,14 @@ async def compute_preset_availability(
 COMPOSITE_PRESETS: list[CompositePreset] = [
     CompositePreset(
         preset_id="bencana_infrastruktur",
-        title="Mitigasi Bencana & Ketahanan Infrastruktur",
+        title="Mitigasi Bencana & Ketahanan Elektrifikasi",
         category="disaster_and_infrastructure",
-        description="Menyorot kabupaten/kota rawan multi-bencana (IRBI & banjir) yang memerlukan penguatan infrastruktur jalan dan elektrifikasi.",
+        description="Menyorot kabupaten/kota rawan multi-bencana (IRBI & banjir) yang memerlukan penguatan elektrifikasi.",
         target_focus="Infrastruktur dan Mitigasi Bencana",
         weights={
-            "dis_multihazard_index": 3500,
-            "dis_flood_hazard_idx": 1500,
-            "inf_asphalt_road_village_pct": 2500,
-            "inf_electrification_pct": 2500,
+            "dis_multihazard_index": 4667,
+            "dis_flood_hazard_idx": 2000,
+            "inf_electrification_pct": 3333,
         },
     ),
     CompositePreset(

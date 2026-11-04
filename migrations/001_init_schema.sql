@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS data_snapshots (
     is_immutable INTEGER NOT NULL DEFAULT 0,
     is_reproducible INTEGER NOT NULL DEFAULT 1,
     methodology_version TEXT,
+    scoring_config TEXT,                                -- frozen scoring/preset config for this snapshot
     reference_periods TEXT,
     source_manifest TEXT,
     supersedes TEXT,

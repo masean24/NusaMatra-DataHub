@@ -22,6 +22,7 @@ RETIRED_IDS = {
     "meta_dapodik_sync_rate",
     "edu_school_travel_time_p90",
     "hlt_realtime_icu_occupancy",
+    "inf_asphalt_road_village_pct",
 }
 
 
@@ -99,7 +100,7 @@ async def test_catalog_is_snapshot_scoped(client, retired_live_db):
     assert old_catalog.status_code == 200
     assert new_catalog.status_code == 200
     assert old_catalog.json()["meta"]["total_count"] == 33
-    assert new_catalog.json()["meta"]["total_count"] == 30
+    assert new_catalog.json()["meta"]["total_count"] == 29
 
     def ids(payload):
         return {
@@ -127,10 +128,9 @@ async def test_coverage_and_values_follow_same_filter(client, retired_live_db):
     assert old_coverage.status_code == 200
     assert new_coverage.status_code == 200
     assert old_coverage.json()["data"]["total_indicators"] == 33
-    assert new_coverage.json()["data"]["total_indicators"] == 30
-    assert set(new_coverage.json()["data"]["empty_indicators"]) == {
-        "inf_asphalt_road_village_pct"
-    }
+    assert new_coverage.json()["data"]["total_indicators"] == 29
+    assert new_coverage.json()["data"]["empty_indicators"] == []
+    assert new_coverage.json()["data"]["available_indicator_data_pct"] == 100.0
 
     old_values = await client.get(
         f"/api/v1/indicators/meta_dapodik_sync_rate/values",
@@ -143,12 +143,17 @@ async def test_coverage_and_values_follow_same_filter(client, retired_live_db):
     assert old_values.status_code == 200
     assert new_values.status_code == 404
 
-    asphalt = await client.get(
+    old_asphalt = await client.get(
+        "/api/v1/indicators/inf_asphalt_road_village_pct/values",
+        params={"mode": "live", "snapshot_id": old_id},
+    )
+    new_asphalt = await client.get(
         "/api/v1/indicators/inf_asphalt_road_village_pct/values",
         params={"mode": "live", "snapshot_id": new_id},
     )
-    assert asphalt.status_code == 200
-    assert asphalt.json()["data"]["values_by_region"] == {}
+    assert old_asphalt.status_code == 200
+    assert old_asphalt.json()["data"]["values_by_region"] == {}
+    assert new_asphalt.status_code == 404
 
 
 @pytest.mark.asyncio
@@ -162,6 +167,14 @@ async def test_composite_rejects_retired_indicator_on_new_snapshot(client, retir
     assert response.status_code == 422
     assert "public catalog" in response.json()["message"].lower()
 
+    asphalt = await client.post(
+        "/api/v1/indicators/composite-query",
+        params={"mode": "live", "snapshot_id": new_id},
+        json={"weights": {"inf_asphalt_road_village_pct": 5000, "soc_poverty_rate": 5000}},
+    )
+    assert asphalt.status_code == 422
+    assert "public catalog" in asphalt.json()["message"].lower()
+
 
 @pytest.mark.asyncio
 async def test_snapshot_metadata_counts_and_aliases(client, retired_live_db):
@@ -173,8 +186,9 @@ async def test_snapshot_metadata_counts_and_aliases(client, retired_live_db):
     assert new.status_code == 200
     assert old.json()["data"]["indicator_count"] == 33
     assert old.json()["data"]["available_indicator_count"] == 29
-    assert new.json()["data"]["indicator_count"] == 30
+    assert new.json()["data"]["indicator_count"] == 29
     assert new.json()["data"]["available_indicator_count"] == 29
+    assert "jalan" in new.json()["data"]["notes"].lower()
 
     alias = await client.get(
         "/api/v1/indicators/coverage",
@@ -210,6 +224,34 @@ def test_retirement_is_idempotent_and_preserves_digests(retired_live_db):
 
 
 @pytest.mark.asyncio
+async def test_new_preset_makes_missing_flood_regions_eligible(client, retired_live_db):
+    _, _, new_id = retired_live_db
+    response = await client.post(
+        "/api/v1/indicators/composite-query",
+        params={"mode": "live", "snapshot_id": new_id},
+        json={
+            "weights": {
+                "dis_multihazard_index": 4667,
+                "dis_flood_hazard_idx": 2000,
+                "inf_electrification_pct": 3333,
+            }
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert data["rankable"] is True
+    assert data["total_regions"] == 514
+    assert data["insufficient_data"] == []
+
+    ranked = {row["region_id"]: row for row in data["regions"]}
+    for region_id in ("8271", "5106"):
+        row = ranked[region_id]
+        assert row["coverage_pct"] == 80.0
+        assert "dis_flood_hazard_idx" in row["missing_indicators"]
+        assert 0 <= row["composite_score"] <= 100
+
+
+@pytest.mark.asyncio
 async def test_regions_stay_insufficient_without_zero(client, retired_live_db):
     _, _, new_id = retired_live_db
     response = await client.post(
@@ -217,10 +259,8 @@ async def test_regions_stay_insufficient_without_zero(client, retired_live_db):
         params={"mode": "live", "snapshot_id": new_id},
         json={
             "weights": {
-                "dis_multihazard_index": 3500,
-                "dis_flood_hazard_idx": 1500,
-                "inf_asphalt_road_village_pct": 2500,
-                "inf_electrification_pct": 2500,
+                "dis_multihazard_index": 5000,
+                "dis_flood_hazard_idx": 5000,
             }
         },
     )
@@ -232,7 +272,7 @@ async def test_regions_stay_insufficient_without_zero(client, retired_live_db):
     for region_id in ("8271", "5106"):
         assert region_id in excluded
         row = excluded[region_id]
-        assert row["coverage_pct"] < 70
+        assert row["coverage_pct"] == 50.0
         assert "dis_flood_hazard_idx" in row["missing_indicators"]
         assert "composite_score" not in row
         assert all(

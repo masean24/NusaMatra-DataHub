@@ -244,6 +244,14 @@ async def test_get_composite_presets(client):
     presets = body["data"]
     assert len(presets) >= 4
 
+    disaster = next(p for p in presets if p["preset_id"] == "bencana_infrastruktur")
+    assert disaster["weights"] == {
+        "dis_multihazard_index": 4667,
+        "dis_flood_hazard_idx": 2000,
+        "inf_electrification_pct": 3333,
+    }
+    assert "jalan" not in (disaster["title"] + disaster["description"]).lower()
+
     for p in presets:
         assert "preset_id" in p
         assert "title" in p

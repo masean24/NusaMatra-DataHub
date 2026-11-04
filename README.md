@@ -3,7 +3,7 @@
 # 🗺️ Nusa Matra Data Hub
 ### *National Geographic Decision-Support Engine & Unified Data Hub (WIA 2026)*
 
-Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris warehouse; 3 indikator restricted di-retire) pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
+Backend API geospasial terintegrasi penyedia data 29 indikator publik (33 baris warehouse; 3 indikator restricted dan 1 indikator jalan tanpa data kab/kota di-retire) pembangunan, kebencanaan, infrastruktur, dan pemantauan gempa bumi *real-time* BMKG untuk 514 Kabupaten/Kota dan 38 Provinsi di Indonesia.
 
 **Frontend resmi:** [masean24/NusaMatra](https://github.com/masean24/NusaMatra) — React 19 + TypeScript + Vite, mengonsumsi API ini melalui `/api/v1`.
 
@@ -46,7 +46,7 @@ Backend API geospasial terintegrasi penyedia data 30 indikator publik (33 baris 
 
 **Cara menjalankan:** clone repo → buat virtualenv → `pip install -r requirements.txt` → `uvicorn app.main:app --reload --port 8000`. Detail lengkap ada di [Menjalankan backend + frontend secara lokal](#menjalankan-backend--frontend-secara-lokal).
 
-**Progress saat ini:** LIVE API aktif di `api.nusamatra.site`; batas 514/514 kab/kota; 29 indikator berdata; 6 instansi terintegrasi; feed gempa BMKG; snapshot immutable; **165 tests passing**.
+**Progress saat ini:** LIVE API aktif di `api.nusamatra.site`; batas 514/514 kab/kota; 29 indikator publik berdata; 6 instansi terintegrasi; feed gempa BMKG; snapshot immutable; **172 tests passing**.
 
 ---
 
@@ -166,7 +166,7 @@ Dalam perencanaan pembangunan dan mitigasi kebencanaan nasional, pengambil kebij
 
 **Nusa Matra Data Hub** hadir sebagai **lapisan agregasi data dan mesin pendukung keputusan geospasial (*decision-support backend engine*)** yang:
 1. **Menyelaraskan Kode Wilayah (*Cross-Agency Code Bridging*)** untuk 514 Kabupaten/Kota dan 38 Provinsi (termasuk 4 provinsi baru Papua).
-2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*). Snapshot LIVE saat ini memuat **29 indikator berdata** (mayoritas 514/514 kab/kota; frekuensi bencana 510/514). Empat indikator sisanya ditandai `UNAVAILABLE`: 2 memang tidak tersedia publik, 2 menunggu akses Dapodik sync dan microdata Podes tingkat kab/kota.
+2. **Menyajikan 33 Indikator Pembangunan Strategis** dalam format kamus ringkas `values_by_region` (*sub-10ms response time*). Snapshot LIVE saat ini memuat **29 indikator publik berdata** (mayoritas 514/514 kab/kota; frekuensi bencana 510/514). Empat baris warehouse di-retire dari katalog publik: 3 indikator restricted dan `inf_asphalt_road_village_pct` yang belum memiliki data kab/kota.
 3. **Dynamic Composite Query Engine berbasis Integer Basis-Points (10.000 bps = 100%)** dengan **Automatic Fair Renormalization** global dan **coverage gate per wilayah**: missing data tidak pernah dihitung nol, wilayah dengan cakupan bobot di bawah ambang dipindahkan ke `insufficient_data`.
 4. **Pemantauan Gempa Bumi *Real-Time* BMKG** dengan output GeoJSON (RFC 7946) lengkap dengan radius visual 3D, kedalaman hiposenter, dan status potensi tsunami.
 5. **Dual Architecture (DEMO vs LIVE Mode)** dengan prinsip integritas tinggi (*Fail-Closed Architecture*).
@@ -180,7 +180,7 @@ Backend mengintegrasikan data terverifikasi dari 6 kementerian dan lembaga resmi
 
 | Instansi | Jenis Data Terintegrasi | Cakupan Wilayah | Status di Hub |
 |---|---|---|---|
-| **Badan Informasi Geospasial (BIG)** | Batas administrasi resmi polygon 2026 (Kepmendagri No. 300.2.2-2430) | 514 Kab/Kota & 38 Provinsi | ✅ Low & High Resolution GeoJSON |
+| **Badan Informasi Geospasial (BIG)** | Batas administrasi resmi polygon 2026 (Kepmendagri No. 300.2.2-2430) | 514 Kab/Kota & 38 Provinsi | ✅ Low, Mobile & High Resolution GeoJSON |
 | **Badan Pusat Statistik (BPS)** | 11 indikator sosial-ekonomi + 3 indikator infrastruktur SDGs, termasuk IPM/UHH 2025 | 514 Kab/Kota | ✅ WebAPI Resmi (Live Ingested) |
 | **BNPB (InaRISK / IRBI)** | Indeks Risiko Bencana 2025 (multi, gempa, banjir), dampak terdampak/mengungsi 2025 (provinsi), dan tanah longsor 2024 | 514 Kab/Kota | ✅ IRBI 2025 + DIBI 2025 |
 | **Kementerian Kesehatan (Kemenkes)** | Prevalensi stunting balita (Survei Status Gizi Indonesia 2024) | 514 Kab/Kota | ✅ SSGI 2024 Resmi |

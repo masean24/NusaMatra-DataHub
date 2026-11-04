@@ -14,7 +14,7 @@
 
 ## 📌 Ringkasan Pembaruan untuk Frontend (TL;DR)
 
-0. **Katalog v2.3:** tiga indikator restricted (`meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, `hlt_realtime_icu_occupancy`) tidak lagi ada di katalog publik. Snapshot baru 30 indikator / 29 berdata; snapshot lama 33 / 29 tetap bisa di-pin. Contoh response ada di `../testing/staging_samples/retirement/`.
+0. **Katalog v2.5:** tiga indikator restricted (`meta_dapodik_sync_rate`, `edu_school_travel_time_p90`, `hlt_realtime_icu_occupancy`) dan `inf_asphalt_road_village_pct` (data kab/kota belum tersedia) tidak lagi ada di katalog publik. Snapshot baru 29 indikator / 29 berdata; snapshot lama tetap bisa di-pin dengan katalog historisnya.
 1. **Semantik Skor Kanonik (v2.1):** `score_direction: "higher_is_need"`. Skor dan `normalized_score` bernilai 100 berarti **paling rentan / paling butuh intervensi**, konsisten di DEMO maupun LIVE. Rank 1 = wilayah paling prioritas.
 2. **Kebijakan Data Missing (v2.1):** Missing **tidak lagi dihitung nol**. Wilayah dengan cakupan bobot ≥70% dan minimal 2 komponen tetap diranking memakai bobot per wilayah (`effective_weights_region`). Wilayah di bawah ambang masuk `insufficient_data`, bukan ranking.
 3. **Rank Nasional + Rank Filter:** `national_rank` selalu posisi se-Indonesia; `rank` adalah posisi di dalam hasil filter provinsi.
@@ -199,24 +199,23 @@ const result = await response.json();
   "total_regions": 32,
   "total_eligible_national": 511,
   "total_excluded": 1,
-  "unavailable_indicators": ["inf_asphalt_road_village_pct"],
+  "unavailable_indicators": [],
   "effective_weights": {
     "dis_multihazard_index": 4667,
     "dis_flood_hazard_idx": 2000,
     "inf_electrification_pct": 3333
   },
-  "renormalized": true,
+  "renormalized": false,
   "insufficient_data": [
     {
       "region_id": "1277",
       "region_name": "Kota Padangsidimpuan",
       "coverage_pct": 33.3,
       "components_used": ["inf_electrification_pct"],
-      "missing_indicators": ["dis_multihazard_index", "dis_flood_hazard_idx", "inf_asphalt_road_village_pct"],
+      "missing_indicators": ["dis_multihazard_index", "dis_flood_hazard_idx"],
       "component_scores": {
         "dis_multihazard_index": null,
         "dis_flood_hazard_idx": null,
-        "inf_asphalt_road_village_pct": null,
         "inf_electrification_pct": 0.9
       },
       "reason": "COVERAGE_BELOW_THRESHOLD"
@@ -247,7 +246,7 @@ GET https://api.nusamatra.site/api/v1/indicators/coverage?mode=live
   "meta": {
     "snapshot_id": "2026.10.0-live-<sha16>",
     "mode": "LIVE",
-    "total_count": 30,
+    "total_count": 29,
     "coverage": {
       "available": 29,
       "total_regions": 514,
@@ -258,12 +257,10 @@ GET https://api.nusamatra.site/api/v1/indicators/coverage?mode=live
   "data": {
     "snapshot_id": "2026.10.0-live-<sha16>",
     "mode": "LIVE",
-    "total_indicators": 30,
+    "total_indicators": 29,
     "available_indicators_count": 29,
-    "empty_indicators_count": 1,
-    "empty_indicators": [
-      "inf_asphalt_road_village_pct"
-    ],
+    "empty_indicators_count": 0,
+    "empty_indicators": [],
     "indicators": {
       "soc_poverty_rate": {
         "name": "Persentase Penduduk Miskin (P0)",
@@ -271,13 +268,6 @@ GET https://api.nusamatra.site/api/v1/indicators/coverage?mode=live
         "available": true,
         "coverage_count": 514,
         "coverage_pct": 100.0
-      },
-      "inf_asphalt_road_village_pct": {
-        "name": "Persentase Desa dengan Jalan Utama Aspal/Beton",
-        "category": "infrastructure",
-        "available": false,
-        "coverage_count": 0,
-        "coverage_pct": 0.0
       }
     }
   }
@@ -360,7 +350,7 @@ Endpoint gempabumi terhubung langsung ke feed terbuka BMKG dengan in-memory cach
 | 2 | `GET` | `/api/v1/health` | Status database & environment |
 | 3 | `GET` | `/api/v1/regions` | Daftar 514 wilayah (filter `level`, `parent_id`, `q`) |
 | 4 | `GET` | `/api/v1/regions/{id}` | Detail profil lengkap wilayah & skor indikator |
-| 5 | `GET` | `/api/v1/indicators` | Katalog 30 indikator publik (disertai `live_available`) |
+| 5 | `GET` | `/api/v1/indicators` | Katalog 29 indikator publik (disertai `live_available`) |
 | 6 | `GET` | `/api/v1/indicators/coverage` | **Matriks ketersediaan layer per mode** |
 | 7 | `GET` | `/api/v1/indicators/{id}/values` | Matriks nilai indikator 514 wilayah (`values_by_region`) |
 | 8 | `POST` | `/api/v1/indicators/composite-query` | **Kalkulasi skor komposit tertimbang (auto-renormalize)** |

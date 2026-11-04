@@ -5,7 +5,8 @@ snapshots.
 
 The active LIVE snapshot is copied into a new staging snapshot with only public
 indicators. The old snapshot and its zero-fact retired rows remain intact, so
-pinned Evidence Passport links continue to resolve.
+pinned Evidence Passport links continue to resolve. The new snapshot's notes
+record that road-access data is not yet covered.
 
 This script is idempotent: if the active snapshot already excludes every retired
 indicator, it exits without publishing a new snapshot.
@@ -299,8 +300,10 @@ def main() -> int:
         boundary_version=active["boundary_version"],
         notes=(
             "Public catalog retirement: restricted Dapodik, student-travel-time, "
-            "and real-time ICU indicators removed from this snapshot. "
-            "Historical snapshots remain immutable."
+            "and real-time ICU indicators removed from this snapshot; road-access "
+            "indicator inf_asphalt_road_village_pct is also excluded because "
+            "kabupaten/kota data is not yet available. Data jalan belum tercakup "
+            "dalam snapshot ini. Historical snapshots remain immutable."
         ),
         supersedes=old_id,
     )
