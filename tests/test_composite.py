@@ -65,13 +65,13 @@ async def test_composite_query_unavailable_indicator_transparency(
 ):
     """A scenario remains rankable at 80% weight coverage with two active components."""
     _demo_without_indicators(
-        tmp_path, monkeypatch, ["inf_asphalt_road_village_pct"]
+        tmp_path, monkeypatch, ["hlt_stunting_prevalence"]
     )
     body = {
         "weights": {
             "dis_multihazard_index": 6000,
             "soc_poverty_rate": 2000,
-            "inf_asphalt_road_village_pct": 2000,
+            "hlt_stunting_prevalence": 2000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
@@ -80,8 +80,8 @@ async def test_composite_query_unavailable_indicator_transparency(
     data = resp.json()["data"]
     assert data["rankable"] is True
     assert data["national_coverage_pct"] == 80.0
-    assert "inf_asphalt_road_village_pct" in data["unavailable_indicators"]
-    assert "inf_asphalt_road_village_pct" not in data["effective_weights"]
+    assert "hlt_stunting_prevalence" in data["unavailable_indicators"]
+    assert "hlt_stunting_prevalence" not in data["effective_weights"]
     assert data["renormalized"] is True
     # Available weights are rescaled to full 10,000 bp.
     assert data["effective_weights"]["dis_multihazard_index"] == 7500
@@ -95,12 +95,12 @@ async def test_composite_query_non_rankable_scenario_is_explicit(
 ):
     """A 50/50 scenario with one missing component must not return rankings."""
     _demo_without_indicators(
-        tmp_path, monkeypatch, ["inf_asphalt_road_village_pct"]
+        tmp_path, monkeypatch, ["hlt_stunting_prevalence"]
     )
     body = {
         "weights": {
             "dis_multihazard_index": 5000,
-            "inf_asphalt_road_village_pct": 5000,
+            "hlt_stunting_prevalence": 5000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)
@@ -112,7 +112,7 @@ async def test_composite_query_non_rankable_scenario_is_explicit(
     assert data["total_regions"] == 0
     assert data["national_coverage_pct"] == 50.0
     assert "below" in data["not_rankable_reason"].lower()
-    assert "inf_asphalt_road_village_pct" in data["unavailable_indicators"]
+    assert "hlt_stunting_prevalence" in data["unavailable_indicators"]
 
 
 @pytest.mark.asyncio
@@ -123,12 +123,12 @@ async def test_composite_query_all_indicators_unavailable_rejected(
     _demo_without_indicators(
         tmp_path,
         monkeypatch,
-        ["inf_asphalt_road_village_pct", "hlt_stunting_prevalence"],
+        ["hlt_stunting_prevalence", "soc_poverty_rate"],
     )
     body = {
         "weights": {
-            "inf_asphalt_road_village_pct": 5000,
             "hlt_stunting_prevalence": 5000,
+            "soc_poverty_rate": 5000,
         }
     }
     resp = await client.post("/api/v1/indicators/composite-query", json=body)

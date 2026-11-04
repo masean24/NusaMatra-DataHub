@@ -249,8 +249,8 @@ async def test_snapshot_alias_and_snapshot_id_are_equivalent(client):
 async def test_snapshot_metadata_and_coverage_are_consistent(client):
     body = (await client.get("/api/v1/snapshots?mode=demo")).json()
     snapshot = body["data"][0]
-    assert snapshot["indicator_count"] == 30
-    assert snapshot["available_indicator_count"] == 30
+    assert snapshot["indicator_count"] == 29
+    assert snapshot["available_indicator_count"] == 29
     assert snapshot["indicator_completeness_pct"] == 100.0
     assert snapshot["available_indicator_data_pct"] == 100.0
     assert snapshot["region_count"] == 514
@@ -258,10 +258,10 @@ async def test_snapshot_metadata_and_coverage_are_consistent(client):
 
     coverage = (await client.get("/api/v1/indicators/coverage?mode=demo")).json()
     data = coverage["data"]
-    assert data["total_indicators"] == 30
-    assert data["available_indicators_count"] == 30
+    assert data["total_indicators"] == 29
+    assert data["available_indicators_count"] == 29
     assert data["indicator_completeness_pct"] == 100.0
-    assert coverage["meta"]["indicator_coverage"]["available_indicators"] == 30
+    assert coverage["meta"]["indicator_coverage"]["available_indicators"] == 29
     assert coverage["meta"]["coverage"]["available"] == 514
     assert coverage["meta"]["coverage"]["total_regions"] == 514
 

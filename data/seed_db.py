@@ -571,8 +571,8 @@ def main():
         ("Kab/Kota", "SELECT COUNT(*) FROM dim_regions WHERE level IN ('kabupaten', 'kota')", 514),
         ("Total Regions", "SELECT COUNT(*) FROM dim_regions", 552),
         ("Indicators", "SELECT COUNT(*) FROM dim_indicators", 33),
-        ("Public Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1", 30),
-        ("Public Available Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1 AND availability_status != 'UNAVAILABLE'", 30),
+        ("Public Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1", 29),
+        ("Public Available Indicators", "SELECT COUNT(*) FROM dim_indicators WHERE is_public = 1 AND availability_status != 'UNAVAILABLE'", 29),
         ("Datasets", "SELECT COUNT(*) FROM dim_datasets", len(DATASETS)),
         ("Snapshots", "SELECT COUNT(*) FROM data_snapshots", 1),
     ]

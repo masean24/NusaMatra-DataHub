@@ -13,8 +13,8 @@ async def test_list_indicators(client):
 
     data = resp.json()
     assert data["status"] == "success"
-    # Total should be 30 public indicators; three restricted IDs are retired.
-    assert data["meta"]["total_count"] == 30
+    # Total should be 29 public indicators; four IDs are retired.
+    assert data["meta"]["total_count"] == 29
 
     # Data should be grouped by category
     categories = data["data"]
@@ -84,8 +84,8 @@ async def test_get_indicators_coverage_endpoint(client):
     body = resp.json()
     assert body["status"] == "success"
     data = body["data"]
-    assert data["total_indicators"] == 30
-    assert data["available_indicators_count"] == 30
+    assert data["total_indicators"] == 29
+    assert data["available_indicators_count"] == 29
     assert data["empty_indicators"] == []
     assert "indicators" in data
     assert "soc_poverty_rate" in data["indicators"]
