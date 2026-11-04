@@ -203,7 +203,7 @@ async def test_earthquakes_live_upstream_failure_simulation(monkeypatch):
         # Header checks
         assert resp.headers.get("X-NusaMatra-Mode") == "LIVE"
         assert resp.headers.get("X-Data-Fallback") == "UNAVAILABLE"
-        assert "no-cache" in resp.headers.get("Cache-Control", "")
+        assert resp.headers.get("Cache-Control") == "no-store"
 
         body = resp.json()
         assert body["status"] == "error"

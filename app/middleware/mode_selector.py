@@ -22,6 +22,16 @@ from app.config import settings
 from app.services.telemetry_service import telemetry
 from app.services.snapshot_registry import resolve_snapshot
 
+NO_STORE = "no-store"
+
+
+def _no_store_error(status_code: int, content: dict, headers: dict | None = None) -> JSONResponse:
+    """Return an error response that can never be cached by a browser or CDN."""
+    response_headers = {"Cache-Control": NO_STORE}
+    if headers:
+        response_headers.update(headers)
+    return JSONResponse(status_code=status_code, content=content, headers=response_headers)
+
 
 class ModeSelector(BaseHTTPMiddleware):
     """Resolve DEMO/LIVE mode and attach to request state."""
@@ -44,9 +54,9 @@ class ModeSelector(BaseHTTPMiddleware):
         if raw_mode is not None and raw_mode.strip() != "":
             mode_candidate = raw_mode.strip().upper()
             if mode_candidate not in ("DEMO", "LIVE"):
-                return JSONResponse(
-                    status_code=422,
-                    content={
+                return _no_store_error(
+                    422,
+                    {
                         "status": "error",
                         "code": "INVALID_MODE",
                         "message": f"Invalid mode '{raw_mode}'. Mode must be either 'demo' or 'live'.",
@@ -65,9 +75,9 @@ class ModeSelector(BaseHTTPMiddleware):
             and raw_snapshot_id
             and raw_snapshot_alias.strip() != raw_snapshot_id.strip()
         ):
-            return JSONResponse(
-                status_code=422,
-                content={
+            return _no_store_error(
+                422,
+                {
                     "status": "error",
                     "code": "SNAPSHOT_PARAM_CONFLICT",
                     "message": "Use either 'snapshot' or 'snapshot_id', not two different values.",
@@ -78,9 +88,9 @@ class ModeSelector(BaseHTTPMiddleware):
         # BLOCKER #1: LIVE must fail closed — unless explicitly enabled with verified database
         if mode == "LIVE":
             if not settings.enable_live_mode or not Path(settings.live_database_path).exists():
-                return JSONResponse(
-                    status_code=503,
-                    content={
+                return _no_store_error(
+                    503,
+                    {
                         "status": "error",
                         "code": "LIVE_UNAVAILABLE",
                         "message": (
@@ -100,9 +110,9 @@ class ModeSelector(BaseHTTPMiddleware):
             other_mode = "LIVE" if mode == "DEMO" else "DEMO"
             other_snapshot = await resolve_snapshot(other_mode, raw_snapshot)
             if other_snapshot is not None:
-                return JSONResponse(
-                    status_code=422,
-                    content={
+                return _no_store_error(
+                    422,
+                    {
                         "status": "error",
                         "code": "SNAPSHOT_MODE_MISMATCH",
                         "message": (
@@ -111,9 +121,9 @@ class ModeSelector(BaseHTTPMiddleware):
                         ),
                     },
                 )
-            return JSONResponse(
-                status_code=404,
-                content={
+            return _no_store_error(
+                404,
+                {
                     "status": "error",
                     "code": "SNAPSHOT_NOT_FOUND",
                     "message": (
@@ -124,9 +134,9 @@ class ModeSelector(BaseHTTPMiddleware):
             )
 
         if snapshot_meta is not None and snapshot_meta["environment_tag"] != mode:
-            return JSONResponse(
-                status_code=422,
-                content={
+            return _no_store_error(
+                422,
+                {
                     "status": "error",
                     "code": "SNAPSHOT_MODE_MISMATCH",
                     "message": (
@@ -137,9 +147,9 @@ class ModeSelector(BaseHTTPMiddleware):
             )
 
         if snapshot_meta is None and mode == "LIVE":
-            return JSONResponse(
-                status_code=503,
-                content={
+            return _no_store_error(
+                503,
+                {
                     "status": "error",
                     "code": "LIVE_SNAPSHOT_UNAVAILABLE",
                     "message": (
@@ -205,8 +215,13 @@ class ModeSelector(BaseHTTPMiddleware):
         if "X-Data-Fallback" not in response.headers:
             response.headers["X-Data-Fallback"] = "NONE"
 
-        # Apply specific cache policies: short/no-cache for earthquakes, long immutable for boundaries, standard for datasets
-        if "Cache-Control" not in response.headers:
+        # Apply specific cache policies: never cache errors or health probes;
+        # short/no-cache for earthquakes, long immutable for boundaries, standard
+        # for datasets.
+        is_health_probe = path in {"/health", f"{settings.api_prefix}/health"}
+        if response.status_code >= 400 or is_health_probe:
+            response.headers["Cache-Control"] = NO_STORE
+        elif "Cache-Control" not in response.headers:
             if request.url.path.startswith(f"{settings.api_prefix}/earthquakes"):
                 response.headers["Cache-Control"] = "no-cache, must-revalidate, max-age=0"
             elif request.url.path.startswith(f"{settings.api_prefix}/boundaries"):

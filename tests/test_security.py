@@ -110,6 +110,7 @@ async def test_read_rate_limit_returns_429_with_headers_and_cors(client, monkeyp
     assert second.headers["X-RateLimit-Limit"] == "1"
     assert second.headers["X-RateLimit-Remaining"] == "0"
     assert second.headers["access-control-allow-origin"] == "http://localhost:5173"
+    assert second.headers.get("Cache-Control") == "no-store"
 
 
 @pytest.mark.asyncio
@@ -134,6 +135,7 @@ async def test_body_size_limit_rejects_large_content_length(client):
     resp = await client.post("/api/v1/indicators/composite-query", json=payload)
     assert resp.status_code == 413
     assert resp.json()["code"] == "PAYLOAD_TOO_LARGE"
+    assert resp.headers.get("Cache-Control") == "no-store"
 
 
 @pytest.mark.asyncio
@@ -170,6 +172,7 @@ async def test_api_key_scopes_and_invalid_key(client, monkeypatch):
     invalid = await client.get("/api/v1/regions", headers={"X-API-Key": "wrong"})
     assert invalid.status_code == 401
     assert invalid.json()["code"] == "INVALID_API_KEY"
+    assert invalid.headers.get("Cache-Control") == "no-store"
 
     admin_on_composite = await client.post(
         "/api/v1/indicators/composite-query",

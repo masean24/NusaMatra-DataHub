@@ -187,10 +187,13 @@ def _error_response(
     message: str,
     headers: dict[str, str] | None = None,
 ) -> JSONResponse:
+    response_headers = {"Cache-Control": "no-store"}
+    if headers:
+        response_headers.update(headers)
     return JSONResponse(
         status_code=status_code,
         content={"status": "error", "code": code, "message": message},
-        headers=headers,
+        headers=response_headers,
     )
 
 
@@ -354,6 +357,7 @@ async def _payload_too_large(scope: Scope, receive: Receive, send: Send) -> None
             "code": "PAYLOAD_TOO_LARGE",
             "message": "Ukuran request melebihi batas yang diizinkan.",
         },
+        headers={"Cache-Control": "no-store"},
     )
     await response(scope, receive, send)
 

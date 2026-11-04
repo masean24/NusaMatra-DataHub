@@ -33,6 +33,29 @@ async def test_health_has_standard_headers(client):
 
 
 @pytest.mark.asyncio
+async def test_health_is_not_cached(client):
+    """Health probes must never be cached by browsers or CDNs."""
+    resp = await client.get("/api/v1/health")
+    assert resp.headers.get("Cache-Control") == "no-store"
+
+
+@pytest.mark.asyncio
+async def test_route_errors_are_not_cached(client):
+    """404 responses must not receive the successful-response cache policy."""
+    resp = await client.get("/api/v1/regions/0000")
+    assert resp.status_code == 404
+    assert resp.headers.get("Cache-Control") == "no-store"
+
+
+@pytest.mark.asyncio
+async def test_middleware_errors_are_not_cached(client):
+    """Errors returned directly by ModeSelector must also be uncacheable."""
+    resp = await client.get("/api/v1/health?mode=foo")
+    assert resp.status_code == 422
+    assert resp.headers.get("Cache-Control") == "no-store"
+
+
+@pytest.mark.asyncio
 async def test_invalid_mode_returns_422(client):
     """C1: Invalid mode query param must return 422."""
     resp = await client.get("/api/v1/health?mode=foo")
@@ -94,3 +117,4 @@ async def test_live_mode_returns_503(client):
     assert data["code"] == "LIVE_UNAVAILABLE"
     assert resp.headers.get("X-NusaMatra-Mode") == "LIVE"
     assert resp.headers.get("X-Data-Fallback") == "UNAVAILABLE"
+    assert resp.headers.get("Cache-Control") == "no-store"

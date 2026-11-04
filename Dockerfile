@@ -34,7 +34,7 @@ EXPOSE 8000
 
 # Container healthcheck for Coolify / Docker orchestration
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8000'); urllib.request.urlopen(f'http://localhost:{port}/api/v1/health')" || exit 1
+    CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8000'); urllib.request.urlopen(f'http://localhost:{port}/api/v1/health?mode=live')" || exit 1
 
 # Seed LIVE when the persistent volume is empty or its active snapshot predates
 # the current SSGI 2024 / education 2025 / IPM 2025 / DIBI 2025 series, then retire
