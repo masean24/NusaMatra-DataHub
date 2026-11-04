@@ -304,7 +304,7 @@ Backend menyediakan polygon batas wilayah hasil simplifikasi topologi resmi dari
 
 | Endpoint | Kegunaan di 3D Map | Parameter |
 |---|---|---|
-| `GET /api/v1/boundaries/kabupaten` | Poligon 514 Kabupaten / Kota | `resolution=low` (default, cepat) / `high` (zoom detail)<br/>`province_id=32` (filter 1 provinsi)<br/>`format=geojson` |
+| `GET /api/v1/boundaries/kabupaten` | Poligon 514 Kabupaten / Kota | `resolution=low` (default, cepat) / `mobile` (simplifikasi untuk HP) / `high` (zoom detail)<br/>`province_id=32` (filter 1 provinsi)<br/>`format=geojson` |
 | `GET /api/v1/boundaries/provinsi` | Poligon 38 Provinsi | `resolution=low` / `high`<br/>`format=geojson` |
 
 ### Kebijakan Caching:

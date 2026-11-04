@@ -5,7 +5,7 @@ Matches API_CONTRACT_DRAFT.md Section 3.
 Backed by official Badan Informasi Geospasial (BIG) 2026 polygon geometries:
 - 38 Provinsi (including 4 new Papua provinces)
 - 514 Kabupaten / Kota
-- Optimized with 'low' (~6MB / ~1.6MB gzipped) and 'high' resolutions.
+- Optimized with 'low' (~6MB / ~1.6MB gzipped), 'mobile' (<500KB gzipped), and 'high' resolutions.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -90,7 +90,7 @@ def _load_boundary_geojson(filename: str) -> Optional[dict[str, Any]]:
 async def get_kabupaten_boundaries(
     request: Request,
     format: str = Query("geojson", pattern="^(geojson)$", description="Output format. Only ``geojson`` is currently supported."),
-    resolution: str = Query("low", pattern="^(low|high)$"),
+    resolution: str = Query("low", pattern="^(low|mobile|high)$"),
     province_id: Optional[str] = Query(None, description="2-digit province filter"),
     mode: Optional[Literal["demo", "live"]] = _mode_param,
     snapshot_id: Optional[str] = _snapshot_param,
@@ -100,7 +100,7 @@ async def get_kabupaten_boundaries(
     Serve kabupaten/kota boundary geometries.
 
     Default format is GeoJSON (compatible with 3D renderer).
-    Supports 'low' (fast web 3D map) and 'high' (detailed zoom) resolutions.
+    Supports 'low' (fast web 3D map), 'mobile' (smaller simplified geometry for phones), and 'high' (detailed zoom) resolutions.
     Backed by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.
 
     > **Note:** ``topojson`` format is not yet implemented. Use ``geojson``.

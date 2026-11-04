@@ -127,7 +127,7 @@ Mengambil profil lengkap satu wilayah (contoh: `3201`), mencakup skor komposit p
 Menyajikan geometri batas wilayah 514 Kabupaten/Kota yang telah disimplifikasi secara topologis untuk dirender pada peta 3D.
 * **Query Parameters:**
   * `format`: `topojson` (default, ukuran ringan $< 1,8\text{ MB}$ gzipped) | `geojson`
-  * `resolution`: `low` (default untuk tampilan nasional) | `high` (untuk tampilan *zoom* provinsi/kabupaten)
+  * `resolution`: `low` (default untuk tampilan nasional) | `mobile` (GeoJSON teredam untuk perangkat mobile) | `high` (untuk tampilan *zoom* provinsi/kabupaten)
   * `province_id`: Filter opsional kode provinsi 2 digit (contoh: `32`)
 * **Atribut Properti pada Setiap Poligon Fitur:**
 ```json

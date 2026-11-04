@@ -184,6 +184,29 @@ async def test_boundaries_kabupaten_default_geojson(client):
 
 
 @pytest.mark.asyncio
+async def test_boundaries_kabupaten_mobile_resolution(client):
+    """Mobile boundaries must keep all 514 regions and their properties."""
+    low_resp = await client.get("/api/v1/boundaries/kabupaten?resolution=low")
+    mobile_resp = await client.get("/api/v1/boundaries/kabupaten?resolution=mobile")
+    assert low_resp.status_code == 200
+    assert mobile_resp.status_code == 200
+
+    low = low_resp.json()["data"]
+    mobile = mobile_resp.json()["data"]
+    assert len(low["features"]) == 514
+    assert len(mobile["features"]) == 514
+    assert mobile["request_params"]["resolution"] == "mobile"
+
+    low_by_id = {feature["properties"]["region_id"]: feature for feature in low["features"]}
+    mobile_ids = {feature["properties"]["region_id"] for feature in mobile["features"]}
+    assert mobile_ids == set(low_by_id)
+    for feature in mobile["features"]:
+        region_id = feature["properties"]["region_id"]
+        assert feature["geometry"] is not None
+        assert feature["properties"] == low_by_id[region_id]["properties"]
+
+
+@pytest.mark.asyncio
 async def test_boundaries_kabupaten_province_filter(client):
     """GET /boundaries/kabupaten?province_id=32 should filter to Jawa Barat."""
     resp = await client.get("/api/v1/boundaries/kabupaten?province_id=32")

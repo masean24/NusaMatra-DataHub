@@ -721,7 +721,7 @@
           "Boundaries"
         ],
         "summary": "Get Kabupaten Boundaries",
-        "description": "Serve kabupaten/kota boundary geometries.\n\nDefault format is GeoJSON (compatible with 3D renderer).\nSupports 'low' (fast web 3D map) and 'high' (detailed zoom) resolutions.\nBacked by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.\n\n> **Note:** ``topojson`` format is not yet implemented. Use ``geojson``.",
+        "description": "Serve kabupaten/kota boundary geometries.\n\nDefault format is GeoJSON (compatible with 3D renderer).\nSupports 'low' (fast web 3D map), 'mobile' (smaller simplified geometry for phones), and 'high' (detailed zoom) resolutions.\nBacked by official 2026 Badan Informasi Geospasial (BIG) polygon boundaries.\n\n> **Note:** ``topojson`` format is not yet implemented. Use ``geojson``.",
         "operationId": "get_kabupaten_boundaries",
         "parameters": [
           {
@@ -743,7 +743,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "pattern": "^(low|high)$",
+              "pattern": "^(low|mobile|high)$",
               "default": "low",
               "title": "Resolution"
             }
