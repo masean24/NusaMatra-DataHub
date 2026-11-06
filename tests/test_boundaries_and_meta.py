@@ -32,6 +32,9 @@ async def test_stats_html_dashboard(client):
     assert resp.status_code == 200
     assert "<!DOCTYPE html>" in resp.text
     assert "All Systems Operational" in resp.text
+    assert "Kontak &amp; akses API" in resp.text
+    assert "halo@nusamatra.site" in resp.text
+    assert "konfigurasi CORS" in resp.text
 
 
 @pytest.mark.asyncio
