@@ -12,6 +12,7 @@ from app.models.common import ApiResponse, ResponseMeta, LiveUnavailableError
 from app.models.health import DatasetInfo
 from app.services.snapshot_registry import snapshot_meta_fields
 from app.services.snapshot_service import list_datasets
+from app.services.source_link_registry import REFERENCE_VERSION
 
 router = APIRouter(prefix="/datasets", tags=["Datasets"])
 
@@ -53,6 +54,7 @@ async def get_datasets(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=len(datasets),
+            reference_version=REFERENCE_VERSION,
             **snapshot_meta_fields(request),
         ),
         data=datasets,

@@ -54,6 +54,9 @@ class ResponseMeta(BaseModel):
     snapshot_immutable: Optional[bool] = None
     snapshot_reproducible: Optional[bool] = None
     methodology_version: Optional[str] = None
+    reference_version: Optional[str] = Field(
+        None, description="Version of the reference source-link overlay."
+    )
     data_origin: Optional[str] = Field(None, description="bmkg_live | bmkg_cache | fixture")
     last_success_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last successful upstream fetch")
     is_stale: Optional[bool] = Field(None, description="True if data is beyond cache TTL or upstream is unavailable")

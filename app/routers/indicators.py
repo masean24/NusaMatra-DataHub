@@ -25,6 +25,7 @@ from app.models.indicators import (
 )
 from app.services.indicator_service import list_indicators, get_indicator_values
 from app.services.snapshot_registry import snapshot_meta_fields
+from app.services.source_link_registry import REFERENCE_VERSION
 from app.services.composite_service import (
     COMPOSITE_PRESETS,
     compute_composite_scores_cached,
@@ -81,6 +82,7 @@ async def get_indicators(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
             total_count=len(indicators),
+            reference_version=REFERENCE_VERSION,
             **snapshot_meta_fields(request),
         ),
         data=grouped,
@@ -277,6 +279,7 @@ async def get_indicator_values_endpoint(
             mode=request.state.data_mode,
             total_count=available,
             coverage=coverage_meta,
+            reference_version=REFERENCE_VERSION,
             **snapshot_meta_fields(request),
         ),
         data=result,

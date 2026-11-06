@@ -16,6 +16,9 @@ class IndicatorProvenance(BaseModel):
     agency_code: str
     dataset_title: Optional[str] = None
     official_portal_url: Optional[str] = None
+    source_link_level: Optional[str] = None
+    source_note_idn: Optional[str] = None
+    source_note_en: Optional[str] = None
 
 
 class IndicatorStats(BaseModel):

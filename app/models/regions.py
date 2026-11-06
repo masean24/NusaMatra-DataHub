@@ -47,6 +47,10 @@ class IndicatorProvenance(BaseModel):
     dataset_id: str
     agency_code: str
     official_url: Optional[str] = None
+    official_portal_url: Optional[str] = None
+    source_link_level: Optional[str] = None
+    source_note_idn: Optional[str] = None
+    source_note_en: Optional[str] = None
 
 
 class RegionIndicatorValue(BaseModel):

@@ -15,6 +15,7 @@ from app.models.regions import (
     RegionSummary,
 )
 from app.services.region_area_reference import reference_area_km2
+from app.services.source_link_registry import indicator_source, resolved_dataset_id
 
 
 async def list_regions(
@@ -123,6 +124,13 @@ async def get_region_detail(
         [region_id, snapshot_id],
     )
     ind_rows = await cursor.fetchall()
+    dataset_cursor = await db.execute(
+        "SELECT dataset_id, agency_code, dataset_title, official_portal_url "
+        "FROM dim_datasets"
+    )
+    dataset_meta = {
+        row["dataset_id"]: dict(row) for row in await dataset_cursor.fetchall()
+    }
 
     indicators = []
     category_scores: dict[str, list[float]] = {}
@@ -133,9 +141,19 @@ async def get_region_detail(
         if ns is not None:
             category_scores.setdefault(cat, []).append(ns)
 
+        indicator_id = ir["indicator_id"]
+        dataset_id = resolved_dataset_id(
+            indicator_id, region_id, ir["dataset_id"]
+        )
+        link = indicator_source(indicator_id)
+        meta = dataset_meta.get(dataset_id) or {
+            "agency_code": ir["agency_code"],
+            "official_portal_url": ir["official_portal_url"],
+        }
+        source_url = link.url if link is not None else meta["official_portal_url"]
         indicators.append(
             RegionIndicatorValue(
-                indicator_id=ir["indicator_id"],
+                indicator_id=indicator_id,
                 indicator_name=ir["indicator_name"],
                 category=cat,
                 raw_value=ir["raw_value"],
@@ -147,9 +165,13 @@ async def get_region_detail(
                 reference_year=ir["reference_year"],
                 quality_flag=ir["quality_flag"],
                 provenance=IndicatorProvenance(
-                    dataset_id=ir["dataset_id"],
-                    agency_code=ir["agency_code"] or "UNKNOWN",
-                    official_url=ir["official_portal_url"],
+                    dataset_id=dataset_id,
+                    agency_code=meta["agency_code"] or "UNKNOWN",
+                    official_url=source_url,
+                    official_portal_url=source_url,
+                    source_link_level=link.level if link else None,
+                    source_note_idn=link.note_idn if link else None,
+                    source_note_en=link.note_en if link else None,
                 ),
             )
         )

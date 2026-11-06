@@ -13,6 +13,7 @@ from app.models.indicators import (
     IndicatorValuesData,
     RegionIndicatorValue,
 )
+from app.services.source_link_registry import indicator_source, resolved_dataset_id
 
 
 async def list_indicators(
@@ -60,38 +61,67 @@ async def list_indicators(
         [snapshot_id, snapshot_id, snapshot_id],
     )
     rows = await cursor.fetchall()
+    dataset_meta = await _dataset_metadata(db)
 
-    return [
-        IndicatorCatalogItem(
-            indicator_id=r["indicator_id"],
-            indicator_name=r["indicator_name"],
-            category=r["category"],
-            unit=r["unit"],
-            polarity=r["polarity"],
-            availability_status=r["availability_status"],
-            derivation_formula=r["derivation_formula"],
-            description=r["indicator_name"],  # Use name as description fallback
-            stats=IndicatorStats(
-                min=r["national_min"],
-                mean=r["national_mean"],
-                median=r["national_median"],
-                max=r["national_max"],
-            ),
-            provenance=(
-                IndicatorProvenance(
-                    dataset_id=r["dataset_id"],
-                    agency_code=r["agency_code"],
-                    dataset_title=r["dataset_title"],
-                    official_portal_url=r["official_portal_url"],
-                )
-                if r["dataset_id"]
-                else None
-            ),
-            live_available=bool(r["coverage_count"] and r["coverage_count"] > 0),
-            live_coverage_count=r["coverage_count"] or 0,
+    catalog = []
+    for r in rows:
+        link = indicator_source(r["indicator_id"])
+        dataset_id = (
+            link.dataset_id_override
+            if link and link.dataset_id_override
+            else r["dataset_id"]
         )
-        for r in rows
-    ]
+        meta = dataset_meta.get(dataset_id) or {
+            "agency_code": r["agency_code"],
+            "dataset_title": r["dataset_title"],
+            "official_portal_url": r["official_portal_url"],
+        }
+        provenance = None
+        if dataset_id:
+            provenance = IndicatorProvenance(
+                dataset_id=dataset_id,
+                agency_code=meta["agency_code"],
+                dataset_title=meta["dataset_title"],
+                official_portal_url=(
+                    link.url if link is not None else meta["official_portal_url"]
+                ),
+                source_link_level=link.level if link else None,
+                source_note_idn=link.note_idn if link else None,
+                source_note_en=link.note_en if link else None,
+            )
+        catalog.append(
+            IndicatorCatalogItem(
+                indicator_id=r["indicator_id"],
+                indicator_name=r["indicator_name"],
+                category=r["category"],
+                unit=r["unit"],
+                polarity=r["polarity"],
+                availability_status=r["availability_status"],
+                derivation_formula=r["derivation_formula"],
+                description=r["indicator_name"],
+                stats=IndicatorStats(
+                    min=r["national_min"],
+                    mean=r["national_mean"],
+                    median=r["national_median"],
+                    max=r["national_max"],
+                ),
+                provenance=provenance,
+                live_available=bool(r["coverage_count"] and r["coverage_count"] > 0),
+                live_coverage_count=r["coverage_count"] or 0,
+            )
+        )
+    return catalog
+
+
+async def _dataset_metadata(db: aiosqlite.Connection) -> dict[str, dict]:
+    cursor = await db.execute(
+        "SELECT dataset_id, agency_code, dataset_title, official_portal_url "
+        "FROM dim_datasets"
+    )
+    return {
+        row["dataset_id"]: dict(row)
+        for row in await cursor.fetchall()
+    }
 
 
 async def get_indicator_values(
@@ -153,6 +183,7 @@ async def get_indicator_values(
 
     # Pick reference year from first row (all same for a snapshot indicator)
     ref_year = value_rows[0]["reference_year"] if value_rows else 2025
+    dataset_meta = await _dataset_metadata(db)
 
     values_by_region = {}
     for vr in value_rows:
@@ -162,10 +193,23 @@ async def get_indicator_values(
             pct=vr["national_percentile"],
             rank=vr["national_rank"],
             flag=vr["quality_flag"],
-            dataset_id=vr["dataset_id"],
+            dataset_id=resolved_dataset_id(
+                indicator_id, vr["region_id"], vr["dataset_id"]
+            ),
             source_record_ref=vr["source_record_ref"],
         )
 
+    link = indicator_source(indicator_id)
+    dataset_id = (
+        link.dataset_id_override
+        if link and link.dataset_id_override
+        else ind_row["dataset_id"]
+    )
+    meta = dataset_meta.get(dataset_id) or {
+        "agency_code": ind_row["agency_code"],
+        "dataset_title": ind_row["dataset_title"],
+        "official_portal_url": ind_row["official_portal_url"],
+    }
     indicator_meta = IndicatorMeta(
         indicator_id=ind_row["indicator_id"],
         indicator_name=ind_row["indicator_name"],
@@ -182,12 +226,17 @@ async def get_indicator_values(
         ),
         provenance=(
             IndicatorProvenance(
-                dataset_id=ind_row["dataset_id"],
-                agency_code=ind_row["agency_code"],
-                dataset_title=ind_row["dataset_title"],
-                official_portal_url=ind_row["official_portal_url"],
+                dataset_id=dataset_id,
+                agency_code=meta["agency_code"],
+                dataset_title=meta["dataset_title"],
+                official_portal_url=(
+                    link.url if link is not None else meta["official_portal_url"]
+                ),
+                source_link_level=link.level if link else None,
+                source_note_idn=link.note_idn if link else None,
+                source_note_en=link.note_en if link else None,
             )
-            if ind_row["dataset_id"]
+            if dataset_id
             else None
         ),
     )

@@ -9,6 +9,7 @@ from typing import Any, Optional
 import aiosqlite
 
 from app.models.health import DatasetInfo, SnapshotInfo
+from app.services.source_link_registry import dataset_source
 
 
 def _iso_timestamp(value: Optional[str]) -> Optional[str]:
@@ -238,19 +239,27 @@ async def list_datasets(db: aiosqlite.Connection) -> list[DatasetInfo]:
     )
     rows = await cursor.fetchall()
 
-    return [
-        DatasetInfo(
-            dataset_id=r["dataset_id"],
-            agency_code=r["agency_code"],
-            agency_name=r["agency_name"],
-            dataset_title=r["dataset_title"],
-            official_portal_url=r["official_portal_url"],
-            api_or_download_url=r["api_or_download_url"],
-            access_method=r["access_method"],
-            license_name=r["license_name"],
-            update_frequency=r["update_frequency"],
-            last_ingested_at=r["last_ingested_at"],
-            raw_sha256=r["raw_sha256"],
+    datasets = []
+    for r in rows:
+        link = dataset_source(r["dataset_id"])
+        datasets.append(
+            DatasetInfo(
+                dataset_id=r["dataset_id"],
+                agency_code=r["agency_code"],
+                agency_name=r["agency_name"],
+                dataset_title=r["dataset_title"],
+                official_portal_url=(
+                    link.url if link is not None else r["official_portal_url"]
+                ),
+                source_link_level=link.level if link else None,
+                source_note_idn=link.note_idn if link else None,
+                source_note_en=link.note_en if link else None,
+                api_or_download_url=r["api_or_download_url"],
+                access_method=r["access_method"],
+                license_name=r["license_name"],
+                update_frequency=r["update_frequency"],
+                last_ingested_at=r["last_ingested_at"],
+                raw_sha256=r["raw_sha256"],
+            )
         )
-        for r in rows
-    ]
+    return datasets

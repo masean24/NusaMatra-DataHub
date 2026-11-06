@@ -12,6 +12,7 @@ from app.models.common import ApiResponse, ResponseMeta, LiveUnavailableError
 from app.models.regions import RegionSummary, RegionDetail
 from app.services.region_service import list_regions, get_region_detail
 from app.services.snapshot_registry import snapshot_meta_fields
+from app.services.source_link_registry import REFERENCE_VERSION
 
 router = APIRouter(prefix="/regions", tags=["Regions"])
 
@@ -100,6 +101,7 @@ async def get_region(
         meta=ResponseMeta(
             snapshot_id=_snapshot_id,
             mode=request.state.data_mode,
+            reference_version=REFERENCE_VERSION,
             **snapshot_meta_fields(request),
         ),
         data=detail,
