@@ -100,7 +100,7 @@ OFFICIAL_DATASETS = [
      "REST_API", "Data Terbuka BMKG", "Event-Driven"),
     ("nusa_matra_internal_audit", "NUSAMATRA", "Nusa Matra Data Hub",
      "Internal Ingestion Audit (completeness & freshness derived from active snapshot)",
-     "https://api.nusamatra.site",
+     "https://api.orangkeren.me",
      "internal://ingestion-audit",
      "INTERNAL_DERIVATION", "Internal", "Per Snapshot"),
     ("bps_sdgs_kabkota_2025", "BPS", "Badan Pusat Statistik",

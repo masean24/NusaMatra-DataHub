@@ -68,6 +68,19 @@ try:
         "AND raw_value IS NOT NULL",
         (snapshot_id,),
     ).fetchone()[0]
+    landslide_values = dict(
+        con.execute(
+            "SELECT region_id, raw_value FROM fact_indicator_values "
+            "WHERE snapshot_id = ? AND indicator_id = 'dis_landslide_hazard_idx' "
+            "AND region_id IN ('3201', '3271')",
+            (snapshot_id,),
+        ).fetchall()
+    )
+    # Detect the pre-fix same-name crosswalk (Kabupaten Bogor received 4.9).
+    landslide_crosswalk_fixed = (
+        abs(float(landslide_values.get("3201") or 0) - 13.74) < 0.01
+        and abs(float(landslide_values.get("3271") or 0) - 4.9) < 0.01
+    )
     ready = (
         has_dataset
         and stunting_count == 514
@@ -79,6 +92,7 @@ try:
         and ipm_counts.get("hlt_life_expectancy") == 514
         and affected_dataset
         and affected_count == 514
+        and landslide_crosswalk_fixed
     )
     # Shell convention: exit 0 means "needs seed"; exit 1 means "ready".
     sys.exit(0 if not ready else 1)

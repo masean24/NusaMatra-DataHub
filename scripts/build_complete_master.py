@@ -11,6 +11,31 @@ def norm(s):
     s = re.sub(r'[^A-Z0-9]', '', s)
     return s
 
+
+def region_level(name):
+    return "kota" if str(name or "").upper().startswith("KOTA") else "kabupaten"
+
+
+PROVINCE_ALIASES = {
+    "DAERAHISTIMEWAYOGYAKARTA": "DIYOGYAKARTA",
+    "KEPULAUANBANGKABELITUNG": "KEPBANGKABELITUNG",
+    "KEPULAUANRIAU": "KEPRIAU",
+}
+
+
+def load_province_prefixes():
+    prefixes = {}
+    with open("data/bps_provincial_sdgs_2025.csv", "r", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            prefixes[norm(row["province_name"])] = str(row["bps_prov_code"])[:2]
+    return prefixes
+
+
+def province_prefix(name, prefixes):
+    key = norm(name)
+    return prefixes.get(PROVINCE_ALIASES.get(key, key))
+
+
 def build_complete_master():
     print("Compiling complete verified indicators master...")
     
@@ -29,10 +54,22 @@ def build_complete_master():
             irbi_map[norm(r["region_name"])] = r
             
     # 3. BNPB Specific Hazards (Banjir, Gempa, Longsor)
+    # Keep the legacy name-only map for flood/earthquake (the public flood and
+    # earthquake indicators use the 2025 region_id file). Landslide still comes
+    # from this 2024 file, so join it by province + level + name to avoid the
+    # 26 same-name Kabupaten/Kota collisions.
     hazards_map = {}
+    province_prefixes = load_province_prefixes()
+    landslides_map = {}
     with open("data/bnpb_irbi_specific_hazards_2024.csv", "r", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             hazards_map[norm(r["region_name"])] = r
+            key = (
+                province_prefix(r.get("province_name"), province_prefixes),
+                region_level(r["region_name"]),
+                norm(r["region_name"]),
+            )
+            landslides_map[key] = r
             
     # 4. Kemenkes SKI Stunting
     ski_map = {}
@@ -78,6 +115,7 @@ def build_complete_master():
         k = norm(name)
         lk = aliases.get(k, k)
         prov_prefix = code[:2]
+        level = region_level(name)
         
         # Helper finder
         def find_in(d):
@@ -96,12 +134,16 @@ def build_complete_master():
         
         # BNPB Specific
         haz_m = find_in(hazards_map)
+        landslide_m = landslides_map.get((prov_prefix, level, k))
+        if landslide_m is None and lk != k:
+            landslide_m = landslides_map.get((prov_prefix, level, lk))
+        landslide_m = landslide_m or haz_m
         r["dis_flood_score"] = haz_m["dis_flood_score"] if haz_m else ""
         r["dis_flood_class"] = haz_m["dis_flood_class"] if haz_m else ""
         r["dis_earthquake_score"] = haz_m["dis_earthquake_score"] if haz_m else ""
         r["dis_earthquake_class"] = haz_m["dis_earthquake_class"] if haz_m else ""
-        r["dis_landslide_score"] = haz_m["dis_landslide_score"] if haz_m else ""
-        r["dis_landslide_class"] = haz_m["dis_landslide_class"] if haz_m else ""
+        r["dis_landslide_score"] = landslide_m["dis_landslide_score"] if landslide_m else ""
+        r["dis_landslide_class"] = landslide_m["dis_landslide_class"] if landslide_m else ""
         
         # SKI Stunting
         ski_m = find_in(ski_map)
