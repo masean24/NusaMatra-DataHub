@@ -4,6 +4,8 @@ Tests for GET /api/v1/regions and GET /api/v1/regions/{region_id}
 
 import pytest
 
+from app.services.region_area_reference import reference_area_km2
+
 
 @pytest.mark.asyncio
 async def test_list_regions_returns_514(client):
@@ -58,6 +60,38 @@ async def test_list_regions_search_wildcard_escaping(client):
 
     data = resp.json()
     assert data["meta"]["total_count"] == 0
+
+
+@pytest.mark.asyncio
+async def test_region_area_reference_covers_all_regions(client):
+    """Every region gets a positive geodesic reference area."""
+    assert reference_area_km2("1674") == 446.89
+
+    resp = await client.get("/api/v1/regions")
+    assert resp.status_code == 200
+    regions = resp.json()["data"]
+    assert len(regions) == 514
+    assert all(region["area_km2"] and region["area_km2"] > 0 for region in regions)
+
+    province_resp = await client.get("/api/v1/regions?level=provinsi")
+    assert province_resp.status_code == 200
+    provinces = province_resp.json()["data"]
+    assert len(provinces) == 38
+    assert all(province["area_km2"] and province["area_km2"] > 0 for province in provinces)
+
+
+@pytest.mark.asyncio
+async def test_region_area_is_returned_in_list_and_detail(client):
+    """Both region list and region detail expose the same reference area."""
+    list_resp = await client.get("/api/v1/regions?q=1674")
+    assert list_resp.status_code == 200
+    rows = list_resp.json()["data"]
+    assert len(rows) == 1
+    assert rows[0]["area_km2"] == 446.89
+
+    detail_resp = await client.get("/api/v1/regions/1674")
+    assert detail_resp.status_code == 200
+    assert detail_resp.json()["data"]["region"]["area_km2"] == 446.89
 
 
 @pytest.mark.asyncio

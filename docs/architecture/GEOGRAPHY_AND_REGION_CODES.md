@@ -73,6 +73,7 @@ Untuk menjaga konsistensi antara database, API, dan engine peta 3D:
 2. **Standarisasi Sistem Koordinat (CRS):**
    * Penyimpanan dan pengiriman API menggunakan **WGS 84 (`EPSG:4326`)** dengan pembulatan presisi koordinat hingga $6$ angka desimal ($\approx 11\text{ cm}$).
    * Perhitungan luas wilayah (`area_km2`) dilakukan menggunakan proyeksi *equal-area* / `ST_Area(geom::geography) / 1000000.0`.
+   * **Implementasi API:** nilai `area_km2` yang disajikan berasal dari `data/region_areas.csv`, dihitung geodesik dari GeoJSON high-resolution BIG dan dibulatkan 2 desimal. File ini adalah referensi tampilan di luar `dim_regions`/`content_sha256`; regenerasi dilakukan dengan `python scripts/build_region_areas.py` (butuh `pyproj`). Nilai ini bukan angka luas resmi BPS.
 3. **Simplifikasi Berbasis Topologi (Mencegah Celah Antar-Kabupaten):**
    * Dilarang menggunakan `ST_Simplify` per baris poligon secara terpisah karena akan menciptakan celah (*slivers*) atau tumpang tindih pada batas antar-kabupaten di peta 3D.
    * Gunakan `ST_CoverageSimplify` (PostGIS 3.4+) atau `mapshaper -simplify visvalingam 8% keep-shapes` sehingga batas bersama antar-kabupaten tetap terkunci rapat dan pulau-pulau kecil (`keep-shapes`) tidak hilang:

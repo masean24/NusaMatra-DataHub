@@ -65,6 +65,8 @@ Mengambil daftar seluruh wilayah administrasi (38 Provinsi dan/atau 514 Kabupate
 }
 ```
 
+> **Catatan `area_km2`:** Nilai ini adalah data referensi geodesik dari batas BIG resolusi tinggi (`data/boundaries/*_high.geojson`), dibulatkan ke 2 desimal. Ini **bukan** angka luas resmi BPS dan **tidak termasuk** `content_sha256` snapshot. Nilai referensi tersedia untuk snapshot lama maupun baru tanpa mengubah digest; jangan gunakan field ini sebagai bagian dari klaim reproduksibilitas snapshot. Angka dikirim sebagai number, bukan string; satuan dan format desimal ditangani frontend.
+
 ### 2.2 `GET /api/v1/regions/{region_id}`
 Mengambil profil lengkap satu wilayah (contoh: `3201`), mencakup skor komposit per kategori, nilai seluruh indikator beserta peringkat nasionalnya, dan metadata sumber resmi (*provenance*) per indikator.
 * **Contoh Respons (`200 OK`):**

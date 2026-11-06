@@ -14,6 +14,7 @@ from app.models.regions import (
     RegionIndicatorValue,
     RegionSummary,
 )
+from app.services.region_area_reference import reference_area_km2
 
 
 async def list_regions(
@@ -176,6 +177,7 @@ async def get_region_detail(
 
 def _row_to_summary(row) -> RegionSummary:
     """Convert a database row to a RegionSummary model."""
+    reference_area = reference_area_km2(row["region_id"])
     return RegionSummary(
         region_id=row["region_id"],
         parent_region_id=row["parent_region_id"],
@@ -189,7 +191,7 @@ def _row_to_summary(row) -> RegionSummary:
             kemendikdasmen=row["kemendikdasmen_code"],
         ),
         island_group=row["island_group"],
-        area_km2=row["area_km2"],
+        area_km2=reference_area if reference_area is not None else row["area_km2"],
         anchor_point=AnchorPoint(lng=row["label_lng"], lat=row["label_lat"]),
         bbox=[
             row["bbox_min_lng"] or 0,

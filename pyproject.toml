@@ -20,6 +20,7 @@ dev = [
 data = [
     "openpyxl>=3.1.0",
     "pypdf>=5.0.0",
+    "pyproj>=3.7.0",
 ]
 
 [tool.pytest.ini_options]
