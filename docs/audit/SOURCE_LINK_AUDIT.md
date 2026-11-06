@@ -9,12 +9,12 @@ Status: **matrix untuk review**. API/overlay belum diubah. Keputusan kontrak ada
 - Matrix dataset: `docs/audit/DATASET_LINK_AUDIT.csv`
 - Nilai sampel: `3201` / Kabupaten Bogor; 26/27 indikator non-internal cocok dengan file ingest setelah koreksi crosswalk longsor.
 - `inf_safe_water_pct` punya satu pengecualian: `9507` Lanny Jaya, `32.89`, `IMPUTED_PROVINCE`, dataset `bps_provincial_sdgs_2025`; 513 baris lainnya `bps_sdgs_kabkota_2025`.
-- Verifikasi browser: **13 indikator terverifikasi** (11 lewat Chrome + 2 BNPB manual); 3 masalah sudah ditangani; 11 masih pending/parsial.
+- Verifikasi browser: **15 indikator terverifikasi** (13 lewat Chrome + 2 BNPB manual); 1 masalah belum selesai; 11 masih pending/parsial.
 - BPS dapat dibuka dengan Chrome headless; timeout sebelumnya berasal dari request otomatis, bukan situs.
-- `hlt_jkn_coverage_pct`: 70.62 berasal dari WebAPI var 2279 / tabel JKN provinsi, bukan tabel 9.18 publikasi kesejahteraan (70.26).
-- `soc_poverty_severity_p2`: URL diganti ke tabel P2 kab/kota langsung.
-- `hlt_facilities_per_10k`: URL indikator dibuat `null`; `rekap_rs_all` hanya JSON rumah sakit dan tidak memuat puskesmas.
-- `dis_affected_pop_per_10k`: formula menjumlahkan affected + displaced. Belum ada bukti eksplisit bahwa displaced adalah subset affected; catatan konfirmasi sudah dimasukkan ke matrix.
+- `hlt_jkn_coverage_pct`: terverifikasi Chrome—tabel var 2279 menulis Jawa Barat 70,62; tabel 9.18 publikasi kesejahteraan menulis 70,26 (definisi berbeda).
+- `soc_poverty_severity_p2`: terverifikasi Chrome—tabel P2 kab/kota menulis Bogor 0,23.
+- `hlt_facilities_per_10k`: URL indikator `null`; dataset fallback tetap dashboard. Dashboard tidak memuat 0.2309 dan tidak mencakup puskesmas.
+- `dis_affected_pop_per_10k`: formula menjumlahkan affected + displaced. Empat kasus 2025 menunjukkan displaced > affected, jadi displaced bukan selalu subset; tumpang tindih sebagian belum bisa dipastikan. Catatan konfirmasi ada di matrix.
 
 ## Temuan crosswalk nilai
 

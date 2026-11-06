@@ -12,7 +12,7 @@ edu_net_enrollment_sma,https://data.kemendikdasmen.go.id/publikasi/p/vokasi-buku
 edu_net_enrollment_smp,https://data.kemendikdasmen.go.id/publikasi/p/vokasi-buku-analisis/apk-apm-paud-sd-smp-dan-sm-tahun-2024-2025-termasuk-madrasah-dan-sederajat-2025,publication,3201,Kabupaten Bogor,81.46,verified_browser
 edu_student_teacher_ratio_sd,https://npd.kemendikdasmen.go.id/grafik?tahun=2025,dashboard,3201,Kabupaten Bogor,28.0,pending_dashboard_filter
 hlt_doctors_per_10k,https://satusehat.kemkes.go.id/data/dataset/65cff906-5fd1-4f8d-baad-9f6ad837f5b8,dataset,3201,Kabupaten Bogor,2.0352,pending_partial
-hlt_jkn_coverage_pct,https://www.bps.go.id/id/statistics-table/2/MjI3OSMy/persentase-penduduk-yang-memiliki-jaminan-kesehatan-nasional--jkn--menurut-provinsi--persen-.html,table,3201,Kabupaten Bogor,70.62,fixed_pending_browser
+hlt_jkn_coverage_pct,https://www.bps.go.id/id/statistics-table/2/MjI3OSMy/persentase-penduduk-yang-memiliki-jaminan-kesehatan-nasional--jkn--menurut-provinsi--persen-.html,table,3201,Kabupaten Bogor,70.62,verified_browser
 hlt_life_expectancy,https://www.bps.go.id/id/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html,publication,3201,Kabupaten Bogor,75.23,verified_browser
 hlt_stunting_prevalence,https://www.badankebijakan.kemkes.go.id/perpustakaanbkpkkemkes/index.php?id=40008&p=show_detail,publication,3201,Kabupaten Bogor,18.9,pending_pdf
 inf_electrification_pct,https://www.bps.go.id/id/publication/2025/12/30/8ffdc46aa817bf0c4c47e105/indikator-tujuan-pembangunan-berkelanjutan-indonesia-2025.html,publication,3201,Kabupaten Bogor,100.0,pending_pdf
@@ -23,5 +23,5 @@ soc_dependency_ratio,https://www.bps.go.id/id/statistics-table/2/Mjc5MCMy/-jumla
 soc_expenditure_per_capita,https://www.bps.go.id/id/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html,publication,3201,Kabupaten Bogor,11933.0,verified_browser
 soc_hdi,https://www.bps.go.id/id/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html,publication,3201,Kabupaten Bogor,74.53,verified_browser
 soc_poverty_rate,https://www.bps.go.id/id/statistics-table/2/NjIxIzI=/persentase-penduduk-miskin-menurut-kabupaten-kota.html,table,3201,Kabupaten Bogor,6.26,verified_browser
-soc_poverty_severity_p2,https://www.bps.go.id/id/statistics-table/2/NjIzIzI=/indeks-keparahan-kemiskinan--p2--menurut-kabupaten-kota.html,table,3201,Kabupaten Bogor,0.23,fixed_pending_browser
+soc_poverty_severity_p2,https://www.bps.go.id/id/statistics-table/2/NjIzIzI=/indeks-keparahan-kemiskinan--p2--menurut-kabupaten-kota.html,table,3201,Kabupaten Bogor,0.23,verified_browser
 soc_unemployment_rate,https://www.bps.go.id/id/statistics-table/2/MjgyNCMy/tingkat-pengangguran-terbuka-menurut-jenis-kelamin-dan-kabupaten-kota-.html,table,3201,Kabupaten Bogor,7.69,verified_browser

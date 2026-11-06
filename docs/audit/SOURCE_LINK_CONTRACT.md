@@ -1,6 +1,6 @@
 # Kontrak Tautan Sumber — Keputusan Final
 
-Status: **untuk implementasi overlay setelah verifikasi browser**.
+Status: **implemented and live** with `reference_version=2026-11-sources-1`; pending source checks remain marked in the matrix.
 
 ## Field dan enum
 
