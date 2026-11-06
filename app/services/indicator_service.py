@@ -87,6 +87,7 @@ async def list_indicators(
                 ),
                 source_link_level=link.level if link else None,
                 source_verification=link.verification if link else None,
+                verification_scope=link.verification_scope if link else None,
                 source_note_idn=link.note_idn if link else None,
                 source_note_en=link.note_en if link else None,
             )
@@ -235,6 +236,7 @@ async def get_indicator_values(
                 ),
                 source_link_level=link.level if link else None,
                 source_verification=link.verification if link else None,
+                verification_scope=link.verification_scope if link else None,
                 source_note_idn=link.note_idn if link else None,
                 source_note_en=link.note_en if link else None,
             )

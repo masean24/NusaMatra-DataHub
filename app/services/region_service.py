@@ -171,6 +171,7 @@ async def get_region_detail(
                     official_portal_url=source_url,
                     source_link_level=link.level if link else None,
                     source_verification=link.verification if link else None,
+                    verification_scope=link.verification_scope if link else None,
                     source_note_idn=link.note_idn if link else None,
                     source_note_en=link.note_en if link else None,
                 ),

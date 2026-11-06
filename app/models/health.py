@@ -40,6 +40,7 @@ class DatasetInfo(BaseModel):
     official_portal_url: Optional[str] = None
     source_link_level: Optional[str] = None
     source_verification: Optional[str] = None
+    verification_scope: Optional[str] = None
     source_note_idn: Optional[str] = None
     source_note_en: Optional[str] = None
     api_or_download_url: str

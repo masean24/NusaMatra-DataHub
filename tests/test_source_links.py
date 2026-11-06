@@ -164,6 +164,10 @@ async def test_catalog_uses_resolved_source_links(client):
     assert facilities["source_link_level"] is None
     assert facilities["source_verification"] == "problem_unresolved"
     assert rows["dis_landslide_hazard_idx"]["provenance"]["source_verification"] == "pending"
+    assert rows["dis_events_5yr_freq"]["provenance"]["verification_scope"] == "all_rows"
+    assert rows["edu_net_enrollment_sma"]["provenance"]["verification_scope"] == "all_rows"
+    assert rows["hlt_jkn_coverage_pct"]["provenance"]["verification_scope"] == "sample"
+    assert rows["dis_affected_pop_per_10k"]["provenance"]["verification_scope"] == "province_level"
 
 
 @pytest.mark.asyncio
@@ -198,6 +202,8 @@ async def test_dataset_catalog_uses_dataset_registry(live_client):
     assert rows["bps_susenas_sakernas_2025"]["official_portal_url"] is None
     assert rows["bps_sdgs_kabkota_2025"]["source_verification"] == "pending"
     assert rows["bps_ipm_2025"]["source_verification"] == "verified"
+    assert rows["bps_ipm_2025"]["verification_scope"] == "sample"
+    assert rows["kemendikdasmen_apm_2024_2025"]["verification_scope"] == "all_rows"
 
 
 def test_retired_sources_do_not_use_old_portals():
@@ -252,6 +258,23 @@ def test_public_notes_do_not_leak_sample_region_values():
         "Jawa Barat",
     ):
         assert token not in joined, token
+
+
+def test_verified_records_label_their_scope():
+    all_rows = indicator_source("dis_events_5yr_freq")
+    assert all_rows.verification == "verified"
+    assert all_rows.verification_scope == "all_rows"
+    assert "seluruh baris" in all_rows.note_idn.lower()
+
+    sample = indicator_source("soc_poverty_severity_p2")
+    assert sample.verification == "verified"
+    assert sample.verification_scope == "sample"
+    assert "satu baris contoh" in sample.note_idn.lower()
+
+    province = indicator_source("dis_affected_pop_per_10k")
+    assert province.verification == "verified"
+    assert province.verification_scope == "province_level"
+    assert "nilai provinsi cocok" in province.note_idn.lower()
 
 
 def test_all_registry_records_have_honest_verification_status():
