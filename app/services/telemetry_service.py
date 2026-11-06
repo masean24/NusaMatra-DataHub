@@ -522,15 +522,20 @@ class TelemetryCollector:
         )
 
         # Sort endpoints by popularity, keeping only known API routes.
+        trackable_endpoints = [
+            {"path": p, "count": c}
+            for p, c in endpoint_counts.items()
+            if self.is_trackable_path(p)
+        ]
         top_endpoints = sorted(
-            [
-                {"path": p, "count": c}
-                for p, c in endpoint_counts.items()
-                if self.is_trackable_path(p)
-            ],
+            trackable_endpoints,
             key=lambda x: x["count"],
             reverse=True,
         )[:8]
+        other_requests_count = max(
+            0, total_requests - sum(row["count"] for row in top_endpoints)
+        )
+        other_endpoint_count = max(0, len(trackable_endpoints) - len(top_endpoints))
 
         # Calculate success rate (2xx)
         success_count = sum(
@@ -574,6 +579,8 @@ class TelemetryCollector:
             "status_codes": status_counts,
             "modes": mode_counts,
             "top_endpoints": top_endpoints,
+            "other_requests_count": other_requests_count,
+            "other_endpoint_count": other_endpoint_count,
             "recent_requests": recent_requests,
         }
 

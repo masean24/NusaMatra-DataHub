@@ -92,6 +92,27 @@ async def test_latency_percentiles_and_range_summary(tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_endpoint_distribution_accounts_for_other_routes(tmp_path):
+    collector = TelemetryCollector(
+        db_path=str(tmp_path / "telemetry.db"),
+        persistence_enabled=False,
+    )
+    await collector.initialize()
+    for index in range(10):
+        for _ in range(index + 1):
+            collector.record_request(
+                "GET", f"/api/v1/regions/sample-{index}", 200, 1.0, "DEMO"
+            )
+
+    summary = collector.get_summary()
+    displayed = sum(row["count"] for row in summary["top_endpoints"])
+    assert summary["total_requests"] == 55
+    assert len(summary["top_endpoints"]) == 8
+    assert summary["other_endpoint_count"] == 2
+    assert summary["other_requests_count"] == 55 - displayed == 3
+
+
+@pytest.mark.asyncio
 async def test_scanner_paths_are_ignored_and_time_is_wib(tmp_path):
     collector = TelemetryCollector(
         db_path=str(tmp_path / "telemetry.db"),
