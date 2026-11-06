@@ -252,6 +252,7 @@ async def list_datasets(db: aiosqlite.Connection) -> list[DatasetInfo]:
                     link.url if link is not None else r["official_portal_url"]
                 ),
                 source_link_level=link.level if link else None,
+                source_verification=link.verification if link else None,
                 source_note_idn=link.note_idn if link else None,
                 source_note_en=link.note_en if link else None,
                 api_or_download_url=r["api_or_download_url"],

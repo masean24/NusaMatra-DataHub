@@ -1,6 +1,6 @@
 # Kontrak Tautan Sumber — Keputusan Final
 
-Status: **implemented and live** with `reference_version=2026-11-sources-1`; pending source checks remain marked in the matrix.
+Status: **implemented and live** with `reference_version=2026-11-sources-2`; pending source checks remain marked both in the matrix and in `source_verification`.
 
 ## Field dan enum
 
@@ -9,18 +9,24 @@ Status: **implemented and live** with `reference_version=2026-11-sources-1`; pen
 - `source_link_level`: `table | dataset | publication | dashboard | portal | null`.
   - `dashboard`: halaman dashboard yang menampilkan angka tetapi bukan tabel ekspor langsung (mis. InaRISK IRBI dan NPD).
   - `portal`: hanya untuk dataset yang memang tidak punya halaman lebih spesifik; tidak dipakai untuk indikator individual.
-- `source_note_idn`: catatan bahasa Indonesia, opsional.
-- `source_note_en`: catatan bahasa Inggris, opsional.
+- `source_verification`: `verified | pending | partial | problem_unresolved | not_applicable | null`.
+  - `verified`: angka sudah dicocokkan dengan tabel/file/browser sumber.
+  - `pending`: angka belum dicocokkan karena sumbernya dashboard, flipbook, PDF terpotong, atau tautan belum dapat dibaca.
+  - `partial`: sebagian komponen/tingkat wilayah sudah tersedia atau dicocokkan, sebagian belum.
+  - `problem_unresolved`: sumber yang tersedia tidak dapat memverifikasi indikator.
+  - `not_applicable`: indikator internal/pensiun atau dataset referensi tanpa pemeriksaan angka.
+- `source_note_idn`: catatan publik bahasa Indonesia; tidak memuat angka contoh wilayah.
+- `source_note_en`: catatan publik bahasa Inggris; tidak memuat angka contoh wilayah.
 - `source_link_level` harus `null` bila URL `null`.
 
 ## Cakupan overlay
 
 Overlay berlaku pada:
 
-- `GET /indicators` — `provenance.official_portal_url`, `provenance.dataset_id`, `source_link_level`, `source_note_idn`, `source_note_en`.
+- `GET /indicators` — `provenance.official_portal_url`, `provenance.dataset_id`, `source_link_level`, `source_verification`, `source_note_idn`, `source_note_en`.
 - `GET /indicators/{id}/values` — `values_by_region.dataset_id` untuk koreksi yang disetujui.
-- `GET /regions` dan `GET /regions/{id}` — `provenance.official_url`, `provenance.official_portal_url`.
-- `GET /datasets` — URL dan metadata tautan dataset.
+- `GET /regions` dan `GET /regions/{id}` — `provenance.official_url`, `provenance.official_portal_url`, `source_verification`.
+- `GET /datasets` — URL, `source_verification`, dan metadata tautan dataset.
 
 Resolver precedence: registry indikator → registry dataset → nilai database.
 
@@ -28,7 +34,7 @@ Resolver precedence: registry indikator → registry dataset → nilai database.
 
 - `dim_datasets`, `dim_indicators`, `dim_regions`, `fact_indicator_values`, dan `content_sha256` **tidak diubah** oleh overlay.
 - Field hasil overlay adalah **reference metadata di luar digest**.
-- Setiap respons yang memakai overlay menambahkan `meta.reference_version`, misalnya `2026-11-sources-1`.
+- Setiap respons yang memakai overlay menambahkan `meta.reference_version`, misalnya `2026-11-sources-2`.
 - FE menyimpan `content_sha256` + `reference_version` di Paspor dan JSON.
 - Snapshot lama dan baru dapat menampilkan tautan hasil overlay yang sama; digest tetap membuktikan isi observasi aslinya.
 
@@ -58,5 +64,7 @@ Resolver precedence: registry indikator → registry dataset → nilai database.
    - Indikator yang memang tidak punya dataset fakta/URL.
 3. `official_url` dan `official_portal_url` selalu sama bila tidak `null`.
 4. `source_link_level` hanya dari enum di atas; URL air/sanitasi bukan `table`.
-5. `meta.reference_version` ada pada respons yang memakai overlay dan tidak mengubah `meta.content_sha256`.
-6. `9507` tetap `raw=32.89`, flag `IMPUTED_PROVINCE`, dataset `bps_provincial_sdgs_2025`.
+5. `source_verification` hanya dari enum di atas dan tidak boleh `verified` untuk baris yang masih `pending`/`partial`.
+6. `source_note_idn`/`source_note_en` tidak memuat angka contoh wilayah; contoh verifikasi hanya ada di `docs/audit`.
+7. `meta.reference_version` ada pada respons yang memakai overlay dan tidak mengubah `meta.content_sha256`.
+8. `9507` tetap `raw=32.89`, flag `IMPUTED_PROVINCE`, dataset `bps_provincial_sdgs_2025`; angka contoh ini hanya untuk tes, bukan catatan publik.

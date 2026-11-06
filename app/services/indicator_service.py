@@ -86,6 +86,7 @@ async def list_indicators(
                     link.url if link is not None else meta["official_portal_url"]
                 ),
                 source_link_level=link.level if link else None,
+                source_verification=link.verification if link else None,
                 source_note_idn=link.note_idn if link else None,
                 source_note_en=link.note_en if link else None,
             )
@@ -233,6 +234,7 @@ async def get_indicator_values(
                     link.url if link is not None else meta["official_portal_url"]
                 ),
                 source_link_level=link.level if link else None,
+                source_verification=link.verification if link else None,
                 source_note_idn=link.note_idn if link else None,
                 source_note_en=link.note_en if link else None,
             )

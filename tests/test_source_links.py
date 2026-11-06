@@ -116,6 +116,13 @@ async def five_snapshot_client(tmp_path, monkeypatch):
 def test_registry_contract_exceptions():
     assert indicator_source("hlt_facilities_per_10k").url is None
     assert (
+        indicator_source("hlt_facilities_per_10k").verification
+        == "problem_unresolved"
+    )
+    assert indicator_source("dis_landslide_hazard_idx").verification == "pending"
+    assert indicator_source("hlt_jkn_coverage_pct").verification == "verified"
+    assert indicator_source("meta_freshness_lag_years").verification == "not_applicable"
+    assert (
         resolved_dataset_id(
             "inf_safe_water_pct", "9507", "bps_provincial_sdgs_2025"
         )
@@ -155,6 +162,8 @@ async def test_catalog_uses_resolved_source_links(client):
     facilities = rows["hlt_facilities_per_10k"]["provenance"]
     assert facilities["official_portal_url"] is None
     assert facilities["source_link_level"] is None
+    assert facilities["source_verification"] == "problem_unresolved"
+    assert rows["dis_landslide_hazard_idx"]["provenance"]["source_verification"] == "pending"
 
 
 @pytest.mark.asyncio
@@ -173,6 +182,7 @@ async def test_region_detail_uses_aliases_and_fact_dataset(client):
     facilities = rows["hlt_facilities_per_10k"]["provenance"]
     assert facilities["official_url"] is None
     assert facilities["official_portal_url"] is None
+    assert facilities["source_verification"] == "problem_unresolved"
 
 
 @pytest.mark.asyncio
@@ -186,6 +196,8 @@ async def test_dataset_catalog_uses_dataset_registry(live_client):
     assert rows["big_batas_2026"]["official_portal_url"].endswith("/MapServer")
     assert rows["nusa_matra_internal_audit"]["official_portal_url"] is None
     assert rows["bps_susenas_sakernas_2025"]["official_portal_url"] is None
+    assert rows["bps_sdgs_kabkota_2025"]["source_verification"] == "pending"
+    assert rows["bps_ipm_2025"]["source_verification"] == "verified"
 
 
 def test_retired_sources_do_not_use_old_portals():
@@ -206,6 +218,55 @@ def test_sanitation_note_does_not_describe_water_exception():
     note = indicator_source("inf_safe_sanitation_pct").note_idn
     assert "9507" not in note
     assert "air" not in note.lower()
+
+
+def test_public_notes_do_not_leak_sample_region_values():
+    notes = []
+    for record_type, record_id in (
+        ("indicator", "dis_landslide_hazard_idx"),
+        ("indicator", "hlt_jkn_coverage_pct"),
+        ("indicator", "soc_poverty_severity_p2"),
+        ("indicator", "hlt_facilities_per_10k"),
+        ("indicator", "soc_dependency_ratio"),
+        ("indicator", "inf_safe_water_pct"),
+    ):
+        link = (
+            indicator_source(record_id)
+            if record_type == "indicator"
+            else dataset_source(record_id)
+        )
+        notes.extend([link.note_idn or "", link.note_en or ""])
+    joined = " ".join(notes)
+    for token in (
+        "70,62",
+        "70.62",
+        "0,23",
+        "0.23",
+        "13,74",
+        "13.74",
+        "0.2309",
+        "3201",
+        "9507",
+        "1229",
+        "Bogor",
+        "Jawa Barat",
+    ):
+        assert token not in joined, token
+
+
+def test_all_registry_records_have_honest_verification_status():
+    for record_type, record_id in (
+        ("indicator", "dis_earthquake_hazard_idx"),
+        ("indicator", "dis_flood_hazard_idx"),
+        ("indicator", "dis_multihazard_index"),
+        ("indicator", "hlt_stunting_prevalence"),
+        ("indicator", "edu_damaged_classrooms_pct"),
+        ("indicator", "inf_safe_sanitation_pct"),
+        ("indicator", "inf_safe_water_pct"),
+    ):
+        link = indicator_source(record_id)
+        assert link.verification in {"pending", "partial"}
+        assert "belum" in link.note_idn.lower()
 
 
 @pytest.mark.asyncio

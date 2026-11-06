@@ -13,10 +13,17 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-REFERENCE_VERSION = "2026-11-sources-1"
+REFERENCE_VERSION = "2026-11-sources-2"
 REGISTRY_PATH = Path(__file__).resolve().parents[2] / "data" / "source_links.csv"
 
 VALID_LEVELS = {"table", "dataset", "publication", "dashboard", "portal"}
+VALID_VERIFICATIONS = {
+    "verified",
+    "pending",
+    "partial",
+    "problem_unresolved",
+    "not_applicable",
+}
 
 
 @dataclass(frozen=True)
@@ -25,6 +32,7 @@ class SourceLink:
     level: Optional[str]
     note_idn: Optional[str]
     note_en: Optional[str]
+    verification: Optional[str] = None
     dataset_id_override: Optional[str] = None
 
 
@@ -39,11 +47,15 @@ def _registry() -> dict[tuple[str, str], SourceLink]:
             level = (row.get("source_link_level") or "").strip() or None
             if level is not None and level not in VALID_LEVELS:
                 raise ValueError(f"Invalid source_link_level: {level}")
+            verification = (row.get("source_verification") or "").strip() or None
+            if verification is not None and verification not in VALID_VERIFICATIONS:
+                raise ValueError(f"Invalid source_verification: {verification}")
             records[(row["record_type"], row["record_id"])] = SourceLink(
                 url=(row.get("official_portal_url") or "").strip() or None,
                 level=level,
                 note_idn=(row.get("source_note_idn") or "").strip() or None,
                 note_en=(row.get("source_note_en") or "").strip() or None,
+                verification=verification,
                 dataset_id_override=(
                     (row.get("dataset_id_override") or "").strip() or None
                 ),

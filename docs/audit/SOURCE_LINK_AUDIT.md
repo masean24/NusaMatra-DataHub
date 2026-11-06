@@ -75,7 +75,8 @@ Keduanya boleh `null`. FE dapat memakai `source_note_idn`/`source_note_en` sesua
 - `content_sha256` tetap dihitung dari data warehouse asli: observasi, scoring, metadata indikator, dan metadata dataset yang tersimpan.
 - URL, `source_link_level`, `source_note_*`, dan **resolved `provenance.dataset_id`** adalah **reference overlay di luar digest**.
 - `values_by_region.dataset_id` juga di-overlay untuk koreksi yang disetujui; provenance dan dataset fakta harus sama.
-- `meta.reference_version` (mis. `2026-11-sources-1`) ditambahkan ke respons yang memakai overlay. FE menyimpan `content_sha256` + `reference_version`.
+- `meta.reference_version` (mis. `2026-11-sources-2`) ditambahkan ke respons yang memakai overlay. FE menyimpan `content_sha256` + `reference_version`.
+- `source_verification` menyatakan `verified | pending | partial | problem_unresolved | not_applicable`; catatan publik tidak memuat angka contoh wilayah.
 - Pengecualian air: `9507` tetap memakai dataset fakta `bps_provincial_sdgs_2025`, sementara provenance indikator `bps_sdgs_kabkota_2025`.
 
 ### Fallback dataset
